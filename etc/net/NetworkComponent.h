@@ -1,18 +1,9 @@
 #pragma once
 #include "etc.h"
-#include "NetDefines.h"
+#include "Session.h"
 
 
-class Service;
-class Session;
 
-// 网络类型
-enum class NetWorkType : uint8_t
-{
-	Empty,
-	Server,
-	Clinet,
-};
 
 
 // 网络组件
@@ -28,11 +19,11 @@ public:
 
 	bool Listen(const uint16_t port);
 
-	bool Connect(const std::string& ip, const uint16_t port);
+	std::shared_ptr<Session> Connect(const std::string& ip, const uint16_t port);
 
 	
 
-
+	virtual void OnConnectComplete(const std::shared_ptr<Session>& session);
 
 	virtual void OnAccept(const std::shared_ptr<Session>& session);
 
@@ -41,7 +32,10 @@ public:
 	virtual void OnDisconnect(const std::shared_ptr<Session>& session);
 
 
+private:
 
+	bool __AddSession(const std::shared_ptr<Session>& session);
+	bool __RemoveSession(const std::shared_ptr<Session>& session);
 
 
 

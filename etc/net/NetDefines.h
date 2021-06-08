@@ -20,4 +20,13 @@ using SessionId = uint64_t;
 // }
 
 
+// ÍøÂçÀàĞÍ
+enum class NetworkType : uint8_t
+{
+	Empty,
+	Server,
+	Clinet,
+};
+
+
 

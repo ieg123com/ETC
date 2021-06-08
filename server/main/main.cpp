@@ -46,14 +46,29 @@ class ClientNetworkComponent : public NetworkComponent
 
 void network_client()
 {
-	co_sleep(1000);
-	if (g_scene->AddComponent<ClientNetworkComponent>()->Connect("127.0.0.1",81))
-	{
-		LOG_INFO("连接成功");
-	}
-	else {
-		LOG_ERROR("连接失败");
-	}
+	auto client_net = g_scene->AddComponent<ClientNetworkComponent>();
+
+	client_net->Connect("127.0.0.1", 81);
+	client_net->Connect("127.0.0.1", 81);
+	client_net->Connect("127.0.0.1", 81);
+	client_net->Connect("127.0.0.1", 81);
+	client_net->Connect("127.0.0.1", 81);
+	client_net->Connect("127.0.0.1", 81);
+	client_net->Connect("127.0.0.1", 81);
+	client_net->Connect("127.0.0.1", 81);
+	client_net->Connect("127.0.0.1", 81);
+	client_net->Connect("127.0.0.1", 81);
+	client_net->Connect("127.0.0.1", 81);
+	client_net->Connect("127.0.0.1", 81);
+	client_net->Connect("127.0.0.1", 81);
+	client_net->Connect("127.0.0.1", 81);
+	client_net->Connect("127.0.0.1", 81);
+	client_net->Connect("127.0.0.1", 81);
+	client_net->Connect("127.0.0.1", 81);
+	client_net->Connect("127.0.0.1", 81);
+	client_net->Connect("127.0.0.1", 81);
+
+
 }
 
 
@@ -75,7 +90,7 @@ int main()
 {
 	g_scene = ObjectFactory::Create<Scene>();
 
-	go network_server;
+	//go network_server;
 	go network_client;
 	//go echo_server;
 	go test;

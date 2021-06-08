@@ -14,20 +14,19 @@ class Session :
 	friend class Service;
 public:
 
-	static std::shared_ptr<Session> Create(std::shared_ptr<Service> ser, FD fd, const std::string& ip);;
-
-
 	int32_t		RpcId;
 
 	FD			Fd;
 
 	std::string	Ip;
 
+	uint16_t	Port;
+
 	std::shared_ptr<Service>	__service;
 
 
 	// 消息到达
-	/*void OnRead(const char* data, const size_t len);*/
+	void OnRead(const char* data, const size_t len);
 
 	// 发送消息
 	void Send(const char* data, const size_t len);
@@ -39,7 +38,7 @@ protected:
 
 private:
 
-	co::Channel<std::function<void()>>	m_channel;
+	//co::Channel<std::function<void()>>	m_channel;
 
 
 

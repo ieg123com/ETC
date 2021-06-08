@@ -63,6 +63,7 @@ public:
 
 	~stSocketContext()
 	{
+
 	}
 };
 
@@ -75,7 +76,7 @@ public:
 
 	virtual bool Listen(const uint16_t port) override;
 
-	virtual bool Connect(const std::string& ip, const uint16_t port) override;
+	virtual std::shared_ptr<Session> Connect(const std::string& ip, const uint16_t port) override;
 
 
 
@@ -94,10 +95,10 @@ private:
 	int OnEpollReadableEvent(stSocketContext* ctx, epoll_event& epoll_event);
 	int OnEpollWriteableEvent(stSocketContext* ctx);
 	int OnEpollCloseEvent(stSocketContext* ctx);
+
 private:
 
 	int SetNonBlocking(FD fd);
-
 
 	bool BindOnAddress(const stAddressInfo& addressInfo);
 
@@ -107,17 +108,20 @@ private:
 	FD AcceptConnectSocket(FD sockfd, std::string& client_ip);
 
 	void HandleAcceptEvent(FD& epollfd, epoll_event& event);
-
 	void HandleEpollReadableEvent(epoll_event& event);
-
 	void HandleWriteableEvent(FD& epollfd, epoll_event& event);
 	void DisconnectOneClient(FD clientFD);
+
 	bool AddListenSocketToEpoll();
 	void HandleEpollEvent(epoll_event& e);
 	bool CreateEpoll();
-	void StartEpollEventLoop();
 
-	bool StartEpoll(const bool is_connect = false);
+	void StartEpollEventLoop();
+	void StartClientEventLoop(std::shared_ptr<Session> session);
+
+	bool StartEpollServer();
+
+
 
 	void CloseAndReleaseOneEvent(epoll_event& epoll_event);
 
@@ -132,11 +136,6 @@ private:
 #else
 	HANDLE m_epollfd;
 #endif
-
-
-	
-
-
 
 
 };
