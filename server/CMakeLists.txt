@@ -7,6 +7,7 @@ link_directories(../libs/mysql)
 
 include_directories(../etc/etc ../etc/etc/common ../etc/etc/interface ../etc/etc/kernel ../etc/etc/system)
 include_directories(../etc/base)
+include_directories(../etc/config)
 
 
 #=================================基础服务加载================================
@@ -32,17 +33,11 @@ include_directories(./config)
 set(CONFIG_FILES "")
 FILE(GLOB CONFIG_FILES "./config/*.cpp" "./config/*.h")
 
-#buff配置
-set(CONFIG_BUFF_FILES "")
-FILE(GLOB CONFIG_BUFF_FILES "./config/buff/*.cpp" "./config/buff/*.h")
-
 
 source_group(config						FILES ${CONFIG_FILES})
-source_group(config\\buff				FILES ${CONFIG_BUFF_FILES})
 
 LIST(APPEND ALL_OBJECT
 	${CONFIG_FILES}
-	${CONFIG_BUFF_FILES}
 	)
 
 
