@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <stdint.h>
 #include <time.h>
 #include <string>
@@ -47,7 +47,7 @@ public:
 public:
 	time_t to_milliseconds_count() const;
 	time_t to_seconds_count() const;
-	// Êä³öÈÕÆÚ¸ñÊ½ 
+	// è¾“å‡ºæ—¥æœŸæ ¼å¼ 
 	std::string to_date_format() const;
 private:
 	tm	m_time;

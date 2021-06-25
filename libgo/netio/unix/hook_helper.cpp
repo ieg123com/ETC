@@ -1,4 +1,4 @@
-#include "hook_helper.h"
+﻿#include "hook_helper.h"
 #include "hook.h"
 
 namespace co {

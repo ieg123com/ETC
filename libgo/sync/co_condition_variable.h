@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../common/config.h"
 #include "../scheduler/processer.h"
 #include <list>
@@ -8,8 +8,8 @@
 namespace co
 {
 
-/// 协程条件变量
-// 1.与std::condition_variable_any的区别在于析构时不能有正在等待的协程, 否则抛异常
+/// 鍗忕▼鏉′欢鍙橀噺
+// 1.涓巗td::condition_variable_any镄勫尯鍒湪浜庢瀽鏋勬椂涓嶈兘链夋鍦ㄧ瓑寰呯殑鍗忕▼, 鍚﹀垯鎶涘纾甯?
 
 template <typename T>
 class ConditionVariableAnyT
@@ -20,7 +20,7 @@ public:
     enum class cv_status { no_timeout, timeout, no_queued };
 
 private:
-    // 兼容原生线程
+    // 鍏煎铡熺敓绾跨▼
     struct NativeThreadEntry
     {
         std::mutex mtx;
@@ -40,7 +40,7 @@ private:
 
     struct Entry : public WaitQueueHook, public RefObject
     {
-        // 控制是否超时的标志位
+        // 鎺у埗鏄惁瓒呮椂镄勬爣蹇椾綅
         LFLock noTimeoutLock;
 
         atomic_t<int> suspendFlags {0};
@@ -68,12 +68,12 @@ private:
 
                 if (flag & eSuspendFlag::suspend_begin) {
                     DebugPrint(dbg_channel, "cv::notify -> flag = suspend_begin");
-                    // 已在挂起中
+                    // 宸插湪鎸傝捣涓?
                     while ((suspendFlags.load(std::memory_order_acquire) & eSuspendFlag::suspend_end) == 0);
                     break;
                 }
 
-                // 还未挂起, 可以直接唤醒
+                // 杩樻湭鎸傝捣, 鍙互鐩存帴鍞ら啋
                 if (suspendFlags.compare_exchange_weak(flag,
                             flag | eSuspendFlag::wakeup_begin,
                             std::memory_order_acq_rel, std::memory_order_relaxed))
@@ -302,11 +302,11 @@ private:
 
             if (flag & eSuspendFlag::wakeup_begin) {
                 DebugPrint(dbg_channel, "cv::wait -> flag = wakeup_begin");
-                // 已在被唤醒
+                // 宸插湪琚敜阅?
                 while ((entry->suspendFlags.load(std::memory_order_acquire) & eSuspendFlag::wakeup_end) == 0);
                 return cv_status::no_timeout;
             } else {
-                // 无人唤醒, 先自旋等一等再真正挂起
+                // 镞犱汉鍞ら啋, 鍏堣嚜镞嬬瓑涓€绛夊啀鐪熸鎸傝捣
                 if (++spinA <= 0) {
                     continue;
                 }
@@ -335,7 +335,7 @@ private:
 
         DebugPrint(dbg_channel, "cv::wait -> suspend_begin");
         if (Processer::IsCoroutine()) {
-            // 协程
+            // 鍗忕▼
             coroSuspend(entry->coroEntry, time);
             entry->suspendFlags.store(flag, std::memory_order_release);   // release
             DebugPrint(dbg_channel, "cv::wait -> suspend_end");
@@ -344,7 +344,7 @@ private:
                 cv_status::timeout :
                 cv_status::no_timeout;
         } else {
-            // 原生线程
+            // 铡熺敓绾跨▼
             entry->nativeThreadEntry = new NativeThreadEntry;
             std::unique_lock<std::mutex> threadLock(entry->nativeThreadEntry->mtx);
             entry->suspendFlags.store(flag, std::memory_order_release);   // release

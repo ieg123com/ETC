@@ -1,4 +1,4 @@
-#include "hook.h"
+﻿#include "hook.h"
 #include <dlfcn.h>
 #include <fcntl.h>
 #include <sys/select.h>
@@ -25,7 +25,7 @@
 #endif
 using namespace co;
 
-// 设置阻塞式connect超时时间(-1无限时)
+// 璁剧疆阒诲寮廲onnect瓒呮椂镞堕棿(-1镞犻檺镞?
 static thread_local CoMutex g_dns_mtx;
 
 namespace co {
@@ -87,7 +87,7 @@ namespace co {
             return poll_f(fds, nfds, timeout);
 
         // --------------------------------
-        // 全部是负数fd时, 等价于sleep
+        // 鍏ㄩ儴鏄礋鏁癴d镞? 绛変环浜巗leep
         nfds_t negative_fd_n = 0;
         for (nfds_t i = 0; i < nfds; ++i)
             if (fds[i].fd < 0)
@@ -104,7 +104,7 @@ namespace co {
         // --------------------------------
 
         if (nonblocking_check) {
-            // 执行一次非阻塞的poll, 检测异常或无效fd.
+            // 镓ц涓€娆￠潪阒诲镄刾oll, 妫€娴嫔纾甯告垨镞犳晥fd.
             int res = poll_f(fds, nfds, 0);
             if (res != 0) {
                 DebugPrint(dbg_hook, "poll returns %d immediately.", res);
@@ -140,7 +140,7 @@ namespace co {
         }
 
         if (!added) {
-            // 全部fd都无法加入epoll
+            // 鍏ㄩ儴fd閮芥棤娉曞姞鍏poll
             for (nfds_t i = 0; i < nfds; ++i)
                 fds[i].revents = arrRevents[i];
             errno = 0;
@@ -191,7 +191,7 @@ eintr:
     if (-1 == triggers) {
         if (errno == EINTR) goto eintr;
         return -1;
-    } else if (0 == triggers) {  // poll等待超时
+    } else if (0 == triggers) {  // poll绛夊緟瓒呮椂
         errno = EAGAIN;
         return -1;
     }
@@ -677,7 +677,7 @@ int select(int nfds, fd_set *readfds, fd_set *writefds,
 
     nfds = std::min<int>(nfds, FD_SETSIZE);
 
-    // 执行一次非阻塞的select, 检测异常或无效fd.
+    // 镓ц涓€娆￠潪阒诲镄剆elect, 妫€娴嫔纾甯告垨镞犳晥fd.
     fd_set rfs, wfs, efs;
     FD_ZERO(&rfs);
     FD_ZERO(&wfs);
@@ -1103,7 +1103,7 @@ ATTRIBUTE_WEAK extern int __epoll_wait_nocancel(int epfd, struct epoll_event *ev
 #elif defined(LIBGO_SYS_FreeBSD)
 #endif
 
-// 某些版本libc.a中没有__usleep.
+// 镆愪簺鐗堟湰libc.a涓病链埙_usleep.
 ATTRIBUTE_WEAK int __usleep(useconds_t usec)
 {
     timespec req = {usec / 1000000, usec * 1000};
@@ -1213,7 +1213,7 @@ static int doInitHook()
             || !epoll_wait_f
 #elif defined(LIBGO_SYS_FreeBSD)
 #endif
-            // 老版本linux中没有dup3, 无需校验
+            // 钥佺増链琹inux涓病链塪up3, 镞犻渶镙￠獙
             // || !dup3_f
             )
     {

@@ -1,4 +1,4 @@
-// Copyright (c) 2015 Amanieu d'Antras
+﻿// Copyright (c) 2015 Amanieu d'Antras
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ namespace detail {
 // Dynamic Circular Work-Stealing Deque
 // http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.170.1097&rep=rep1&type=pdf
 //
-// Correct and Efﬁcient Work-Stealing for Weak Memory Models
+// Correct and Ef铿乧ient Work-Stealing for Weak Memory Models
 // http://www.di.ens.fr/~zappa/readings/ppopp13.pdf
 class work_steal_queue {
 	// Circular array of void*

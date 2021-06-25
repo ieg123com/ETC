@@ -1,4 +1,4 @@
-#ifndef WEPOLL_SOCK_H_
+﻿#ifndef WEPOLL_SOCK_H_
 #define WEPOLL_SOCK_H_
 
 #include <stdint.h>

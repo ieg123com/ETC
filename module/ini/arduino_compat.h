@@ -1,4 +1,4 @@
-#ifndef _ARDUINO_COMPAT_H
+﻿#ifndef _ARDUINO_COMPAT_H
 #define _ARDUINO_COMPAT_H
 
 #include <stdio.h>

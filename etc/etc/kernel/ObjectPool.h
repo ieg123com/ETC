@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <memory>
 #include <queue>
 #include <unordered_map>
@@ -11,7 +11,7 @@ public:
 
 	template<typename T>
 	std::shared_ptr<T> Fetch() {
-		// È¡³öµÄ¶ÔÏó±ØĞë¼Ì³Ğ Object
+		// å–å‡ºçš„å¯¹è±¡å¿…é¡»ç»§æ‰¿ Object
 		static_assert(std::is_base_of<Object, T>::value,
 			"The fetch object must inherit Object!");
 		std::shared_ptr<T> obj;

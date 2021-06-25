@@ -1,4 +1,4 @@
-#ifndef WEPOLL_UTIL_H_
+﻿#ifndef WEPOLL_UTIL_H_
 #define WEPOLL_UTIL_H_
 
 #include <assert.h>

@@ -1,4 +1,4 @@
-#ifndef WEPOLL_QUEUE_H_
+﻿#ifndef WEPOLL_QUEUE_H_
 #define WEPOLL_QUEUE_H_
 
 #include <stdbool.h>

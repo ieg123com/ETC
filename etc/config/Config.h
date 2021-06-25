@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <stdint.h>
 #include <memory>
 #include <unordered_map>
@@ -38,7 +38,7 @@ public:
 		{
 			t_ptr cfg = std::make_shared<T>();
 			if (!cfg->Parse(json[i])) {
-				LOG_ERROR("¼ÓÔØÅäÖÃ³ö´í!({})", path);
+				LOG_ERROR("åŠ è½½é…ç½®å‡ºé”™!({})", path);
 				return false;
 			}
 			Insert(cfg);
@@ -50,7 +50,7 @@ public:
 	void Insert(t_ptr cfg) {
 		if (!AllConfig.insert(std::make_pair(cfg->Id, cfg)).second)
 		{
-			LOG_WARN("¼ÓÔØÅäÖÃÊ±,·¢ÏÖÖØ¸´ID ({})", 
+			LOG_WARN("åŠ è½½é…ç½®æ—¶,å‘ç°é‡å¤ID ({})", 
 				(const char*)"null");
 		}
 	}
@@ -70,7 +70,7 @@ public:
 
 
 private:
-	// ËùÓĞÅäÖÃ
+	// æ‰€æœ‰é…ç½®
 	std::unordered_map<ConfigId, t_ptr>	AllConfig;
 
 	std::string	ConfigPath;

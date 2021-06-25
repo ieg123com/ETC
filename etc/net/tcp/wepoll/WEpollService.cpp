@@ -1,4 +1,4 @@
-#include "WEpollService.h"
+ï»¿#include "WEpollService.h"
 
 #ifndef _WIN32
 #include <netinet/in.h>
@@ -21,7 +21,7 @@
 #include "net/Session.h"
 
 
-// Òì²½ epoll wait
+// å¼‚æ­¥ epoll wait
 int co_epoll_wait(int socket,
 	HANDLE ephnd,
 	struct epoll_event* events,
@@ -77,7 +77,7 @@ std::shared_ptr<Session> WEpollService::Connect(const std::string& ip, const uin
 {
 	if (m_listened_socket != -1)
 	{
-		LOG_ERROR("µ±Ç°×é¼şÒÑ¾­ÔÚÔË×÷ÁË");
+		LOG_ERROR("å½“å‰ç»„ä»¶å·²ç»åœ¨è¿ä½œäº†");
 		return false;
 	}
 
@@ -89,7 +89,7 @@ std::shared_ptr<Session> WEpollService::Connect(const std::string& ip, const uin
 		return nullptr;
 	}
 
-	// ´´½¨ĞÂ»á»°
+	// åˆ›å»ºæ–°ä¼šè¯
 	stSocketContext* ctx = new stSocketContext();
 	ctx->session = ObjectFactory::Create<Session>();
 	ctx->session->Fd = m_listened_socket;
@@ -161,7 +161,7 @@ void WEpollService::Destroy()
 
 		if (m_network_type == NetworkType::Server)
 		{
-			// ¶Ï¿ªËùÓĞÁ¬½Ó
+			// æ–­å¼€æ‰€æœ‰è¿æ¥
 
 			auto all_socket = m_all_socket_ctx;
 			stSocketContext* ctx = nullptr;
@@ -257,7 +257,7 @@ int WEpollService::SetNonBlocking(FD fd)
 		flags = 0;
 	return fcntl(fd, F_SETFL, flags | O_NONBLOCK);
 #else
-	unsigned long flags = 1; /* ÕâÀï¸ù¾İĞèÒªÉèÖÃ³É0»ò1 */
+	unsigned long flags = 1; /* è¿™é‡Œæ ¹æ®éœ€è¦è®¾ç½®æˆ0æˆ–1 */
 	return ioctlsocket(fd, FIONBIO, &flags);
 #endif
 };
@@ -289,7 +289,7 @@ bool WEpollService::BindOnAddress(const stAddressInfo& addressInfo)
 	{
 		my_addr.sin_addr.s_addr = inet_addr(addressInfo.serverIp.c_str());
 	}
-	// ¼àÌıµØÖ·
+	// ç›‘å¬åœ°å€
 	if (::bind(m_listened_socket, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) == SOCKET_ERROR)
 	{
 		LOG_ERROR("bind error: {}", strerror(errno));
@@ -331,7 +331,7 @@ bool WEpollService::ConnectAddress(const stAddressInfo& addressInfo)
 	{
 		my_addr.sin_addr.s_addr = inet_addr(addressInfo.serverIp.c_str());
 	}
-	// Á¬½ÓµØÖ·
+	// è¿æ¥åœ°å€
 	if (connect(m_listened_socket, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) == SOCKET_ERROR)
 	{
 		LOG_ERROR("connect error:{} {}", WSAGetLastError(), strerror(errno));
@@ -374,7 +374,7 @@ void WEpollService::HandleAcceptEvent(FD& epollfd, epoll_event& event)
 	}
 
 
-	// ´´½¨ĞÂ»á»°
+	// åˆ›å»ºæ–°ä¼šè¯
 	stSocketContext* ctx = new stSocketContext();
 	ctx->session = ObjectFactory::Create<Session>();
 	ctx->session->Fd = conn_sock;
@@ -509,7 +509,7 @@ bool WEpollService::AddListenSocketToEpoll()
 
 void WEpollService::HandleEpollEvent(epoll_event& e)
 {
-	if (e.data.fd == m_listened_socket)		// ½ö½ö½¨Á¢Á¬½ÓµÄÊ±ºò½øĞĞÅĞ¶Ï£¬ÒòÎªÖ»ÓĞ´ËÊ±fd²ÅºÍserver µÄ¼àÌıfd ÏàµÈ
+	if (e.data.fd == m_listened_socket)		// ä»…ä»…å»ºç«‹è¿æ¥çš„æ—¶å€™è¿›è¡Œåˆ¤æ–­ï¼Œå› ä¸ºåªæœ‰æ­¤æ—¶fdæ‰å’Œserver çš„ç›‘å¬fd ç›¸ç­‰
 	{
 		// accept connection
 		this->HandleAcceptEvent((int&)m_epollfd, e);
@@ -527,7 +527,7 @@ void WEpollService::HandleEpollEvent(epoll_event& e)
 	else
 	{
 		LOG_WARN("unknown events : {}", e.events);
-		CloseAndReleaseOneEvent(e);		//ÎŞ·¨Ê¶±ğµÄ event ¶¼Ö±½Ó¶ÏÏß
+		CloseAndReleaseOneEvent(e);		//æ— æ³•è¯†åˆ«çš„ event éƒ½ç›´æ¥æ–­çº¿
 	}
 }
 
@@ -558,7 +558,7 @@ void WEpollService::StartEpollEventLoop()
 	{
 		//LOG_INFO("while start");
 		/*
-			·şÎñÆ÷Ö¡Ñ­»· 100 ms
+			æœåŠ¡å™¨å¸§å¾ªç¯ 100 ms
 		*/
 		int fds_num = co_epoll_wait(m_listened_socket,m_epollfd, events, m_address_info.maxEvents, 100);
 
@@ -627,7 +627,7 @@ void WEpollService::StartClientEventLoop(std::shared_ptr<Session> session)
 		int read_size = recv(sock, read_buffer, READ_BUFFER_SIZE, 0);
 		if (read_size == 0)
 		{
-			// Á¬½ÓÒÑ¶Ï¿ª
+			// è¿æ¥å·²æ–­å¼€
 			break;
 		}
 		if (read_size == SOCKET_ERROR)
@@ -637,17 +637,17 @@ void WEpollService::StartClientEventLoop(std::shared_ptr<Session> session)
 				WSAGetLastError() == WSAECONNRESET ||
 				m_epoll_status == EpollStatus::EPOLL_STOPPED)
 			{
-				// ¹Ø±ÕÁ¬½Ó
+				// å…³é—­è¿æ¥
 				break;
 			}
 			else {
-				// ÆäËû´íÎó
+				// å…¶ä»–é”™è¯¯
 				LOG_ERROR("recv error {}", WSAGetLastError());
 				continue;
 			}
 #else
-			// ¶ÁÈ¡Êı¾İÊ±·¢Éú´íÎó
-			// Á¬½ÓÒÑ¶Ï¿ª
+			// è¯»å–æ•°æ®æ—¶å‘ç”Ÿé”™è¯¯
+			// è¿æ¥å·²æ–­å¼€
 			break;
 #endif
 		}
@@ -681,7 +681,7 @@ bool WEpollService::StartEpollServer()
 {
 	if (m_listened_socket != -1)
 	{
-		LOG_ERROR("µ±Ç°×é¼şÒÑ¾­ÔÚÔË×÷ÁË");
+		LOG_ERROR("å½“å‰ç»„ä»¶å·²ç»åœ¨è¿ä½œäº†");
 		return false;
 	}
 	bool ret = true;

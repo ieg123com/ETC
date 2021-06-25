@@ -1,4 +1,4 @@
-#ifndef WEPOLL_POLL_GROUP_H_
+﻿#ifndef WEPOLL_POLL_GROUP_H_
 #define WEPOLL_POLL_GROUP_H_
 
 #include "error.h"

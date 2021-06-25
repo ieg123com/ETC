@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../../common/config.h"
 #include <mutex>
 #include "fd_context.h"
@@ -32,14 +32,14 @@ public:
     FdContextPtr GetFdContext(int fd);
 
 public:
-    // 有些socket的close行为hook不到, 创建时如果有旧的context直接close掉即可.
+    // 链変簺socket镄刢lose琛屼负hook涓嶅埌, 鍒涘缓镞跺鏋沧湁镞х殑context鐩存帴close鎺夊嵆鍙?
     void OnCreate(int fd, eFdType fdType, bool isNonBlocking = false,
             SocketAttribute sockAttr = SocketAttribute());
 
-    // 在syscall之前调用
+    // 鍦╯yscall涔嫔墠璋幂敤
     void OnClose(int fd);
 
-    // 在syscall之后调用
+    // 鍦╯yscall涔嫔悗璋幂敤
     void OnDup(int from, int to);
 
 private:

@@ -1,4 +1,4 @@
-#include <stdbool.h>
+﻿#include <stdbool.h>
 
 #include "afd.h"
 #include "api.h"

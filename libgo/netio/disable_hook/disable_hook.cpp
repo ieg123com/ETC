@@ -1,3 +1,3 @@
-namespace co {
+﻿namespace co {
     void initHook() {}
 }

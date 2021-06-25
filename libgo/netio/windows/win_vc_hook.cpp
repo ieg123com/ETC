@@ -1,4 +1,4 @@
-#include "win_vc_hook.h"
+﻿#include "win_vc_hook.h"
 #include <mswsock.h>
 #include <Ws2ipdef.h>
 #include "xhook/xhook.h"

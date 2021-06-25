@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <memory>
 #include <queue>
 #include <unordered_map>
@@ -13,32 +13,32 @@ class GameSystem
 {
 public:
 
-	// ¶ÔÏóµ÷ÊÔ
+	// å¯¹è±¡è°ƒè¯•
 	ObjectDebug m_ObjectDebug;
 
 	GameSystem();
 	~GameSystem();
 
-	// Ìí¼ÓÏµÍ³¶ÔÏó
+	// æ·»åŠ ç³»ç»Ÿå¯¹è±¡
 	void AddSystem(const std::shared_ptr<Object>& object);
 
 
-	// ÒÆ³ıÏµÍ³¶ÔÏó
+	// ç§»é™¤ç³»ç»Ÿå¯¹è±¡
 	void RemoveSystem(const std::shared_ptr<Object>& object);
 
 
-	// »ñÈ¡ÏµÍ³¶ÔÏó
+	// è·å–ç³»ç»Ÿå¯¹è±¡
 	std::shared_ptr<Object> GetSystem(const ObjectID id);
 
 	
 	void Awake(const std::shared_ptr<Object>& object);
 
 	void Start();
-	// Ã¿Ö¡¸üĞÂ
+	// æ¯å¸§æ›´æ–°
 	void Update();
-	// ×îºó¸üĞÂ
+	// æœ€åæ›´æ–°
 	void LateUpdate();
-	// Ã¿Ãë¸üĞÂ
+	// æ¯ç§’æ›´æ–°
 	void SecondsUpdate();
 
 

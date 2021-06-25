@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../common/config.h"
 #include "../scheduler/processer.h"
 #include <queue>
@@ -7,7 +7,7 @@
 namespace co
 {
 
-/// 协程锁
+/// 鍗忕▼阌?
 class CoMutex
 {
     typedef std::mutex lock_t;

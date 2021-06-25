@@ -1,4 +1,4 @@
-#include "task.h"
+﻿#include "task.h"
 #include "../common/config.h"
 #include <iostream>
 #include <string.h>
@@ -35,7 +35,7 @@ void Task::Run()
 #endif
 
         this->fn_();
-        this->fn_ = TaskF(); //让协程function对象的析构也在协程中执行
+        this->fn_ = TaskF(); //璁╁岗绋媐unction瀵硅薄镄勬瀽鏋勪篃鍦ㄥ岗绋嬩腑镓ц
 
 #if ENABLE_DEBUGGER
         if (Listener::GetTaskListener()) {

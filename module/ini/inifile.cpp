@@ -1,4 +1,4 @@
-#include "inifile.h"
+﻿#include "inifile.h"
 
 #if defined(_MSC_VER)
 #define strcasecmp _stricmp

@@ -1,10 +1,10 @@
-#pragma once
+ï»¿#pragma once
 #include "Object.h"
 #include <unordered_map>
 
 class Component;
 
-class GEntity :
+class Entity :
 	public Object
 {
 public:
@@ -14,7 +14,7 @@ public:
 
 		if (m_component.find(&typeid(T)) != m_component.end())
 		{
-			throw std::exception("Ìí¼ÓµÄ×é¼þÒÑ´æÔÚ!");
+			throw std::exception("æ·»åŠ çš„ç»„ä»¶å·²å­˜åœ¨!");
 		}
 		auto obj = ObjectFactory::CreateWithHost<T>(shared_from_this());
 

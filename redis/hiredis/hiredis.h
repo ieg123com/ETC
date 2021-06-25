@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 2009-2011, Salvatore Sanfilippo <antirez at gmail dot com>
  * Copyright (c) 2010-2011, Pieter Noordhuis <pcnoordhuis at gmail dot com>
  *
@@ -149,7 +149,7 @@ redisReader *redisReaderCreate(void);
 void redisReaderFree(redisReader *r);
 int redisReaderFeed(redisReader *r, const char *buf, size_t len);
 int redisReaderGetReply(redisReader *r, void **reply);
-/* reader 剩余可解析大小 */
+/* reader 鍓╀綑鍙В鏋愬ぇ灏?*/
 int redisReaderParseSize(redisReader* r);
 
 /* Backwards compatibility, can be removed on big version bump. */

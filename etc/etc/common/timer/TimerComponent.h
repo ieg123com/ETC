@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <map>
 #include <vector>
 #include <queue>
@@ -6,7 +6,7 @@
 #include "Component.h"
 
 
-// ¼ÆÊ±Æ÷
+// è®¡æ—¶å™¨
 class TimerComponent:
 	public Component
 {
@@ -27,7 +27,7 @@ protected:
 
 public:
 
-	// ×¢²áÖ¸¶¨Ê±¼ä»Øµ÷
+	// æ³¨å†ŒæŒ‡å®šæ—¶é—´å›žè°ƒ
 	template<typename T>
 	void RegisterTimeCallBack(const int64_t time,T&& t) {
 		m_timer_enter.emplace(time, t);

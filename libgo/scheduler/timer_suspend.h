@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../common/config.h"
 #include "../common/clock.h"
 #include "processer.h"
@@ -13,7 +13,7 @@ public:
 
     void ThreadRun();
 
-    // 挂起当前协程并在指定时间后唤醒
+    // 鎸傝捣褰揿墠鍗忕▼骞跺湪鎸囧畾镞堕棿鍚庡敜阅?
     void CoSuspend(FastSteadyClock::time_point tp);
 
     template<typename Clock, typename Duration>

@@ -1,4 +1,4 @@
-#include "reactor_element.h"
+﻿#include "reactor_element.h"
 #include <poll.h>
 #include <algorithm>
 #include "fd_context.h"
@@ -27,7 +27,7 @@ bool ReactorElement::Add(Reactor * reactor, short int pollEvent, Entry const& en
         addEvent |= POLLERR;
 
     short int promiseEvent = event_ | addEvent;
-    addEvent = promiseEvent & ~event_; // 计算event真实的差异
+    addEvent = promiseEvent & ~event_; // 璁＄畻event鐪熷疄镄勫樊寮?
 
     if (promiseEvent != event_) {
         if (!reactor->AddEvent(fd_, addEvent, promiseEvent)) {

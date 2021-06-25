@@ -1,4 +1,4 @@
-#define FD_SETSIZE 1024
+﻿#define FD_SETSIZE 1024
 #include "reactor.h"
 #include "win_vc_hook.h"
 

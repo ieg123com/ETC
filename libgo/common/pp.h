@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 # /* LIBGO_PP_DEC */
 #

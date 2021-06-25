@@ -1,4 +1,4 @@
-#include "GEvent.h"
+ï»¿#include "GEvent.h"
 #include "Object.h"
 #include "Game.h"
 #include "EventSystem.h"
@@ -27,7 +27,7 @@ void GEvent::EventEnter(const uint32_t id, const std::shared_ptr<Delegate>& del,
 	auto self = static_cast<Object*>(this);
 	if (self->IsDisposed())
 	{
-		// ¶ÔÏóÒÑ¾­±»Ïú»Ù
+		// å¯¹è±¡å·²ç»è¢«é”€æ¯
 		return;
 	}
 	del->set_objectid(obj->GetObjectID());
@@ -44,7 +44,7 @@ void GEvent::EventLeave(const uint32_t id, const DelegateID& del_id, const std::
 	auto self = static_cast<Object*>(this);
 	if (self->IsDisposed())
 	{
-		// ¶ÔÏóÒÑ¾­±»Ïú»Ù
+		// å¯¹è±¡å·²ç»è¢«é”€æ¯
 		return;
 	}
 	DelegateID del = del_id;
@@ -61,18 +61,18 @@ void GEvent::AddEventByDelegate(const uint32_t id, const std::shared_ptr<Delegat
 	auto found = m_all_event.find(id);
 	if (found == m_all_event.end())
 	{
-		// Ã»ÓĞ´´½¨ÊÂ¼ş
+		// æ²¡æœ‰åˆ›å»ºäº‹ä»¶
 		found = m_all_event.insert(std::make_pair(id,std::make_shared<Action>())).first;
 	}
 	found->second->Increase(del);
 
 	if (obj && obj->IsDisposed() == false)
 	{
-		// ÔÚº¯Êı¶ÔÏóÖĞÌí¼Ó
+		// åœ¨å‡½æ•°å¯¹è±¡ä¸­æ·»åŠ 
 		obj->m_registered_event[EventID(id, del->id(), this)] = del;
 // 		if (obj->m_registered_event.insert(std::make_pair(EventID(id, del->id(), this), del)).second == false)
 // 		{
-// 			LOG_ERROR("Ìí¼ÓÊÂ¼şÊ§°Ü {}", id);
+// 			LOG_ERROR("æ·»åŠ äº‹ä»¶å¤±è´¥ {}", id);
 // 		}
 	}
 }
@@ -82,13 +82,13 @@ void GEvent::RemoveEventByDelegateID(const uint32_t id, const DelegateID& del_id
 	auto found = m_all_event.find(id);
 	if (found != m_all_event.end())
 	{
-		// ÕÒµ½ÊÂ¼ş
+		// æ‰¾åˆ°äº‹ä»¶
 		found->second->Remove(del_id);
 	}
 
 	if (obj && obj->IsDisposed() == false)
 	{
-		// ÔÚº¯Êı¶ÔÏóÖĞÇå³ı
+		// åœ¨å‡½æ•°å¯¹è±¡ä¸­æ¸…é™¤
 		obj->m_registered_event.erase(EventID(id, del_id,this));
 	}
 }

@@ -1,4 +1,4 @@
-#include "hex.h"
+﻿#include "hex.h"
 #include <string.h>
 
 char buf_str[] = "0123456789ABCDEF";

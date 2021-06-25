@@ -1,4 +1,4 @@
-#ifndef _ETHERNET_H
+﻿#ifndef _ETHERNET_H
 #define _ETHERNET_H
 
 

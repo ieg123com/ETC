@@ -1,4 +1,4 @@
-#include "ObjectFactory.h"
+ï»¿#include "ObjectFactory.h"
 #include "ObjectRef.h"
 #include "Object.h"
 
@@ -19,7 +19,7 @@ std::shared_ptr<Object> ObjectFactory::TryCreate(const std::string& type_name, c
 		Game::System.Awake(obj);
 		return obj;
 	}
-	throw std::exception(("Ã»ÕÒµ½ĞèÒª´´½¨µÄ¶ÔÏó " + type_name).c_str());
+	throw std::exception(("æ²¡æ‰¾åˆ°éœ€è¦åˆ›å»ºçš„å¯¹è±¡ " + type_name).c_str());
 }
 
 std::shared_ptr<Object> ObjectFactory::CreateWithHost(const std::shared_ptr<Object>& host, const std::string& type_name, const bool from_pool)
@@ -41,7 +41,7 @@ std::shared_ptr<Object> ObjectFactory::TryCreateWithHost(const std::shared_ptr<O
 		Game::System.Awake(obj);
 		return obj;
 	}
-	throw std::exception(("Ã»ÕÒµ½ĞèÒª´´½¨µÄ¶ÔÏó " + type_name).c_str());
+	throw std::exception(("æ²¡æ‰¾åˆ°éœ€è¦åˆ›å»ºçš„å¯¹è±¡ " + type_name).c_str());
 }
 
 std::shared_ptr<Object> ObjectFactory::InternalCreate(const std::string& type_name, const bool from_pool)

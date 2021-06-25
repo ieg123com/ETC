@@ -1,11 +1,11 @@
-#pragma once
+﻿#pragma once
 #include "config.h"
 #include <string.h>
 
 namespace co
 {
 
-// 可被优化的lock guard
+// 鍙浼桦寲镄刲ock guard
 struct fake_lock_guard
 {
     template <typename Mutex>
@@ -14,16 +14,16 @@ struct fake_lock_guard
 
 ///////////////////////////////////////
 /*
-* 这里构建了一个半侵入式的引用计数体系, 使用shared_ptr语意的同时,
-* 又可以将对象放入侵入式容器, 得到极佳的性能.
+* 杩欓噷鏋勫缓浜嗕竴涓崐渚靛叆寮忕殑寮旷敤璁℃暟浣撶郴, 浣跨敤shared_ptr璇剰镄勫悓镞?
+* 鍙埚彲浠ュ皢瀵硅薄鏀惧叆渚靛叆寮忓鍣? 寰楀埌鏋佷匠镄勬€ц兘.
 */
 
-// 侵入式引用计数对象基类
+// 渚靛叆寮忓紩鐢ㄨ鏁板璞″熀绫?
 struct RefObject;
 struct RefObjectImpl;
 struct SharedRefObject;
 
-// 自定义delete
+// 镊畾涔塪elete
 struct Deleter
 {
     typedef void (*func_t)(RefObject* ptr, void* arg);
@@ -140,7 +140,7 @@ inline void Deleter::operator()(RefObject* ptr) {
         delete ptr;
 }
 
-// 侵入式引用计数智能指针
+// 渚靛叆寮忓紩鐢ㄨ鏁版櫤鑳芥寚阍?
 template <typename T>
 class IncursivePtr
 {
@@ -212,7 +212,7 @@ private:
     T* ptr_;
 };
 
-// 侵入式引用计数智能指针
+// 渚靛叆寮忓紩鐢ㄨ鏁版櫤鑳芥寚阍?
 template <typename T>
 class AutoRelease
 {
@@ -230,8 +230,8 @@ public:
     }
 };
 
-// 弱指针
-// 注意：弱指针和对象池不可一起使用, 弱指针无法区分已经归还到池的对象.
+// 寮辨寚阍?
+// 娉ㄦ剰锛氩急鎸囬拡鍜屽璞℃睁涓嶅彲涓€璧蜂娇鐢? 寮辨寚阍堟棤娉曞尯鍒嗗凡缁忓綊杩桦埌姹犵殑瀵硅薄.
 template <typename T>
 class WeakPtr
 {
@@ -322,7 +322,7 @@ private:
     T* ptr_;
 };
 
-// 裸指针 -> shared_ptr
+// 瑁告寚阍?-> shared_ptr
 template <typename T>
 typename std::enable_if<std::is_base_of<RefObject, T>::value, std::shared_ptr<T>>::type
 SharedFromThis(T * ptr)
@@ -363,7 +363,7 @@ DecrementRef(T * ptr)
 {
 }
 
-// 引用计数guard
+// 寮旷敤璁℃暟guard
 class RefGuard
 {
 public:
@@ -389,7 +389,7 @@ private:
     RefObject *ptr_;
 };
 
-// 全局对象计数器
+// 鍏ㄥ眬瀵硅薄璁℃暟鍣?
 template <typename T>
 struct ObjectCounter
 {
@@ -432,7 +432,7 @@ private:
 
 ///////////////////////////////////////
 
-// 创建协程的源码文件位置
+// 鍒涘缓鍗忕▼镄勬簮镰佹枃浠朵綅缃?
 struct SourceLocation
 {
     const char* file_ = nullptr;

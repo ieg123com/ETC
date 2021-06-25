@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../../common/config.h"
 #include "reactor_element.h"
 

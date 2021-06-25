@@ -1,28 +1,28 @@
-#include "GEntity.h"
+ï»¿#include "Entity.h"
 #include "Component.h"
 #include "ObjectFactory.h"
 
 
 
-std::shared_ptr<Component> GEntity::AddComponent(const std::string& name)
+std::shared_ptr<Component> Entity::AddComponent(const std::string& name)
 {
 	auto obj = ObjectFactory::TryCreateWithHost(shared_from_this(), name);
 	if (auto com = obj->Get<Component>())
 	{
 		if (m_component.find(com->GetObjectType().m_type) != m_component.end())
 		{
-			throw std::exception("Ìí¼ÓµÄ×é¼þÒÑ´æÔÚ!");
+			throw std::exception("æ·»åŠ çš„ç»„ä»¶å·²å­˜åœ¨!");
 		}
 		m_component.insert(std::make_pair(com->GetObjectType().m_type, com));
 		return com;
 	}
 	else {
 		obj->Dispose();
-		throw std::exception(("ÎÞ·¨Ìí¼ÓÕâ¸öÖ÷¼ü!("+ name +")").c_str());
+		throw std::exception(("æ— æ³•æ·»åŠ è¿™ä¸ªä¸»é”®!("+ name +")").c_str());
 	}
 }
 
-void GEntity::Dispose() {
+void Entity::Dispose() {
 	if (Object::IsDisposed()) {
 		return;
 	}

@@ -1,4 +1,4 @@
-#include "error.h"
+﻿#include "error.h"
 #include "config.h"
 
 namespace co

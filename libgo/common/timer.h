@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "config.h"
 #include <chrono>
 #include "clock.h"
@@ -37,7 +37,7 @@ public:
             cb_();
         }
 
-        // 删除时可能正在切换齿轮, 无法立即回收, 不过没关系, 下一次切换齿轮的时候会回收
+        // 鍒犻櫎镞跺彲鑳芥鍦ㄥ垏鎹㈤娇杞? 镞犳硶绔嫔嵆锲炴敹, 涓嶈绷娌″叧绯? 涓嬩竴娆″垏鎹㈤娇杞殑镞跺€欎细锲炴敹
         inline bool cancel() {
             if (!active_.try_lock()) return false;
             if (slot_) {
@@ -85,21 +85,21 @@ public:
 
     std::size_t GetPoolSize();
 
-    // 设置定时器
+    // 璁剧疆瀹氭椂鍣?
     TimerId StartTimer(FastSteadyClock::duration dur, F const& cb);
     TimerId StartTimer(FastSteadyClock::time_point tp, F const& cb);
     
-    // 循环执行触发检查
+    // 寰幆镓ц瑙﹀彂妫€镆?
     void ThreadRun();
 
-    // 执行一次触发检查
+    // 镓ц涓€娆¤Е鍙戞镆?
     void RunOnce();
 
-    // 检查下一次触发还需要多久
+    // 妫€镆ヤ笅涓€娆¤Е鍙戣缮闇€瑕佸涔?
     FastSteadyClock::time_point NextTrigger(FastSteadyClock::duration max);
 
     std::string DebugInfo();
-    // 设置结束标志位, 用于安全退出
+    // 璁剧疆缁撴潫镙囧织浣? 鐢ㄤ簬瀹夊叏阃€鍑?
     void Stop();
 
 private:
@@ -115,8 +115,8 @@ private:
 
     void Dispatch(Slot & slot, FastSteadyClock::time_point now);
 
-    // 将Element插入时间轮中
-    // @mainloop: 是否在触发线程, 如果为true, 则无需检验是否需要加入completeSlot_.
+    // 灏咵lement鎻掑叆镞堕棿杞腑
+    // @mainloop: 鏄惁鍦ㄨЕ鍙戠嚎绋? 濡傛灉涓篓rue, 鍒欐棤闇€妫€楠屾槸鍚﹂渶瑕佸姞鍏ompleteSlot_.
     void Dispatch(Element * element, bool mainloop);
 
 //private:
@@ -128,23 +128,23 @@ public:
     int maxPoolSize_ = 0;
     Pool pool_;
 
-    // 起始时间
+    // 璧峰镞堕棿
     FastSteadyClock::time_point begin_;
 
-    // 精度
+    // 绮惧害
     FastSteadyClock::duration precision_;
 
-    // 齿轮
+    // 榻胯疆
     Slot slots_[8][256];
 
-    // 指针
+    // 鎸囬拡
     union Point {
         uint64_t p64;
         uint8_t p8[8];
     };
     volatile Point point_;
 
-    // 需要立即执行的slot位
+    // 闇€瑕佺珛鍗虫墽琛岀殑slot浣?
     Slot completeSlot_;
 };
 
@@ -275,10 +275,10 @@ void Timer<F>::RunOnce()
             );
     DBG_TIMER_CHECK(dt);
 
-    // 未扫完的级别 
+    // 链壂瀹岀殑绾у埆 
     int triggerLevel = 0;
 
-    // 每级Wheel扫过了几个slot
+    // 姣忕骇Wheel镓绷浜嗗嚑涓狲lot
     int triggerSlots[8] = {};
 
     const uint64_t additions[8] = {(uint64_t)1, (uint64_t)1 << 8, (uint64_t)1 << 16, (uint64_t)1 << 32, (uint64_t)1 << 40,
@@ -301,7 +301,7 @@ void Timer<F>::RunOnce()
             ++triggerLevel;
 
         while (pos.p64 > 0 && slotIdx == 0) {
-            // 升级
+            // 鍗囩骇
             ++lv;
             slotIdx = pos.p8[lv];
             DebugPrint(dbg_timer, "[id=%ld]RunOnce Dispatch [L=%d][%d]", this->getId(), lv, slotIdx);
@@ -348,7 +348,7 @@ FastSteadyClock::time_point Timer<F>::NextTrigger(FastSteadyClock::duration max)
     auto lastTime = last.p64 * precision_ + begin_;
     if (last.p64 >= p.p64) return FastSteadyClock::now();
 
-    // 寻找此次需要检查的最大刻度
+    // 瀵绘垒姝ゆ闇€瑕佹镆ョ殑链€澶у埢搴?
     int topLevel = 0;
     for (int i = 7; i >= 0; --i) {
         if (last.p8[i] < p.p8[i]) {
@@ -357,7 +357,7 @@ FastSteadyClock::time_point Timer<F>::NextTrigger(FastSteadyClock::duration max)
         }
     }
 
-    // 从小刻度到大刻度依次检查
+    // 浠庡皬鍒诲害鍒板ぇ鍒诲害渚濇妫€镆?
     for (int i = 0; i < topLevel; ++i) {
         for (int k = 0; k < 256; ++k) {
             int j = (k + last.p8[i]) & 0xff;
@@ -368,7 +368,7 @@ FastSteadyClock::time_point Timer<F>::NextTrigger(FastSteadyClock::duration max)
                     p.p8[m] = last.p8[m] = 0;
                 }
 
-                // 进位
+                // 杩涗綅
                 if (j < last.p8[i])
                     p.p8[i+1] = 1;
 

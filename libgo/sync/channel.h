@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../common/config.h"
 #include "../scheduler/processer.h"
 #include "../scheduler/scheduler.h"
@@ -114,7 +114,7 @@ public:
         impl_->Close();
     }
 
-    // ------------- 兼容旧版接口
+    // ------------- 鍏煎镞х増鎺ュ彛
     bool empty() const
     {
         return impl_->Empty();

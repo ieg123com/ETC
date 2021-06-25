@@ -1,4 +1,4 @@
-// Formatting library for C++ - chrono support
+﻿// Formatting library for C++ - chrono support
 //
 // Copyright (c) 2012 - present, Victor Zverovich
 // All rights reserved.
@@ -447,7 +447,7 @@ template <> FMT_CONSTEXPR const char* get_units<std::atto>() { return "as"; }
 template <> FMT_CONSTEXPR const char* get_units<std::femto>() { return "fs"; }
 template <> FMT_CONSTEXPR const char* get_units<std::pico>() { return "ps"; }
 template <> FMT_CONSTEXPR const char* get_units<std::nano>() { return "ns"; }
-template <> FMT_CONSTEXPR const char* get_units<std::micro>() { return "µs"; }
+template <> FMT_CONSTEXPR const char* get_units<std::micro>() { return "碌s"; }
 template <> FMT_CONSTEXPR const char* get_units<std::milli>() { return "ms"; }
 template <> FMT_CONSTEXPR const char* get_units<std::centi>() { return "cs"; }
 template <> FMT_CONSTEXPR const char* get_units<std::deci>() { return "ds"; }
@@ -469,7 +469,7 @@ template <> FMT_CONSTEXPR const char* get_units<std::ratio<3600>>() {
 
 enum class numeric_system {
   standard,
-  // Alternative numeric system, e.g. 十二 instead of 12 in ja_JP locale.
+  // Alternative numeric system, e.g. 鍗佷簩 instead of 12 in ja_JP locale.
   alternative
 };
 

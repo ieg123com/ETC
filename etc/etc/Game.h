@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file	Game.h
  * @author	ieg123
  */

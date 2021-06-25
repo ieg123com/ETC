@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <deque>
 
@@ -7,6 +7,6 @@ namespace co
     template <typename T, typename Alloc = std::allocator<T>>
     using Deque = std::deque<T, Alloc>;
 
-    // TODO: 实现多读一写线程安全的deque
+    // TODO: 瀹炵幇澶氲涓€鍐欑嚎绋嫔畨鍏ㄧ殑deque
 
 } // namespace co

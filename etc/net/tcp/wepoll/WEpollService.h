@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "net/Service.h"
 #include "error/error_content.h"
 
@@ -51,7 +51,7 @@ struct stAddressInfo
 	}
 };
 
-// epoll µ½ ÏûÏ¢·Ö·¢²ã µÄ¿Í»§¶ËÊı¾İ
+// epoll åˆ° æ¶ˆæ¯åˆ†å‘å±‚ çš„å®¢æˆ·ç«¯æ•°æ®
 struct stSocketContext
 {
 public:

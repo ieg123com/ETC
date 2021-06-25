@@ -1,4 +1,4 @@
-#ifndef _INIFILE_H
+﻿#ifndef _INIFILE_H
 #define _INIFILE_H
 
 #define INIFILE_VERSION "1.2.2"

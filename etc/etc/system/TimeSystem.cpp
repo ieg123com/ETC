@@ -1,4 +1,4 @@
-#include "TimeSystem.h"
+ï»¿#include "TimeSystem.h"
 #include <chrono>
 
 TimeSystem::TimeSystem()
@@ -17,7 +17,7 @@ int64_t TimeSystem::NowServerSeconds()
 	return std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
-// Ë¢ÐÂ¸üÐÂÊ±¼ä
+// åˆ·æ–°æ›´æ–°æ—¶é—´
 void TimeSystem::RefreshLastTime()
 {
 	int64_t now_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();

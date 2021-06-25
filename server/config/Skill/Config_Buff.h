@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "config/Config.h"
 
 
@@ -7,21 +7,21 @@ class Config_Buff:
 {
 public:
 
-	// buff名
+	// buff鍚?
 	std::string	Name;
 
-	// 介绍
+	// 浠嬬粛
 	std::string	Content;
 
 	std::string	UI;
 
-	// 使用方法名
+	// 浣跨敤鏂规硶鍚?
 	std::string	BuffMethod;
 
-	// 影响的属性id
+	// 褰卞搷镄勫睘镐d
 	int32_t	PropID0;
 
-	// 影响值
+	// 褰卞搷链?
 	int32_t	Value0;
 
 	int32_t	PropID1;

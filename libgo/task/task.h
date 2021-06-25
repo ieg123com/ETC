@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../common/config.h"
 #include "../common/ts_queue.h"
 #include "../common/anys.h"
@@ -32,7 +32,7 @@ struct Task
     Processer* proc_ = nullptr;
     Context ctx_;
     TaskF fn_;
-    std::exception_ptr eptr_;           // 保存exception的指针
+    std::exception_ptr eptr_;           // 淇濆瓨exception镄勬寚阍?
     TaskAnys anys_;
 
     uint64_t yieldCount_ = 0;

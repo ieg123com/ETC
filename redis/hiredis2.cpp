@@ -1,4 +1,4 @@
-#include "hiredis2.h"
+﻿#include "hiredis2.h"
 
 void NetRedisInit(net::NetRedis_t* pNetRedis);
 
@@ -12,7 +12,7 @@ net::NetRedis_t* net::NetRedisConnectNonBlock(const char* sIp, const int iPort, 
 	_c = redisConnectNonBlockWithTimeout(sIp, iPort, _time);
 	if (_c && _c->err == REDIS_OK)
 	{
-		// 连接成功
+		// 杩炴帴鎴愬姛
 		_redis = new net::NetRedis_t;
 		NetRedisInit(_redis);
 		_redis->pRedisContext = _c;
@@ -124,7 +124,7 @@ bool net::NetRedisAuth(net::NetRedis_t* pNetRedis, const char* sPassword)
 		return false;
 	}
 	freeReplyObject(_reply);
-	// 记录认证密码
+	// 璁板綍璁よ瘉瀵嗙爜
 	pNetRedis->Password = sPassword;
 	return true;
 }
@@ -176,7 +176,7 @@ void net::NetRedisSetCallBack(net::NetRedis_t* pNetRedis, NetRedis_CallBack cb)
 void net::NetRedisReadAndParse(net::NetRedis_t* pNetRedis)
 {
 	redisBufferReadWithTimeOut(pNetRedis->pRedisContext, 0);
-	// 循环解析缓存中的数据
+	// 寰幆瑙ｆ瀽缂揿瓨涓殑鏁版嵁
 	redisReply* _ret = nullptr;
 	while (redisReaderParseSize(pNetRedis->pRedisContext->reader))
 	{
