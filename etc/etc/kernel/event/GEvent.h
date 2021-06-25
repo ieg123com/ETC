@@ -1,3 +1,7 @@
+ï»¿/**
+ * @file	GEvent.h
+ * @brief	å¯¹è±¡äº‹ä»¶Event
+ */
 #pragma once
 #include <vector>
 #include <unordered_set>
@@ -7,20 +11,22 @@
 
 class Object;
 
-
-// ÊÂ¼şid
+/** @brief äº‹ä»¶id*/
 class EventID
 {
 public:
 	uint32_t	type;
 	DelegateID	delegate_id;
+	const void* self;
 
 	EventID() {
 		type = 0;
+		self = nullptr;
 	}
-	EventID(const uint32_t t, const DelegateID& id) {
+	EventID(const uint32_t t, const DelegateID& id,const void* s) {
 		type = t;
 		delegate_id = id;
+		self = s;
 	}
 
 	~EventID() {
@@ -30,12 +36,14 @@ public:
 	EventID& operator = (const EventID& val) {
 		this->type = val.type;
 		this->delegate_id = val.delegate_id;
+		this->self = val.self;
 		return *this;
 	}
 
 	bool operator == (const EventID& val) const {
 		if (this->type == val.type &&
-			this->delegate_id == val.delegate_id)
+			this->delegate_id == val.delegate_id &&
+			this->self == val.self)
 		{
 			return true;
 		}
@@ -45,28 +53,30 @@ public:
 	void clear() {
 		type = 0;
 		delegate_id.clear();
+		self = nullptr;
 	}
 };
 
-// ½øÈëµÄÊÂ¼ş
+/** @brief è¿›å…¥çš„äº‹ä»¶*/
 struct stEnteredEvent
 {
-	// ÊÂ¼şÒªÌí¼Óµ½µÄÄ¿±ê¶ÔÏó
+	/** @brief äº‹ä»¶è¦æ·»åŠ åˆ°çš„ç›®æ ‡å¯¹è±¡*/
 	std::shared_ptr<Object>	target_obj;
-	// »Øµ÷º¯ÊıËùÔÚ¶ÔÏó
-	// µ±Ç°¶ÔÏóÎª¿ÕÊ±£¬½«²»ÄÜ°ó¶¨¶ÔÏóº¯Êı
+	/** 
+	* @brief å›è°ƒå‡½æ•°æ‰€åœ¨å¯¹è±¡ã€‚å½“å‰å¯¹è±¡ä¸ºç©ºæ—¶ï¼Œå°†ä¸èƒ½ç»‘å®šå¯¹è±¡å‡½æ•°
+	*/
 	std::shared_ptr<Object>	self_obj;
 
 	EventID						id;
 	std::shared_ptr<Delegate>	del;
 };
 
-// Àë¿ªµÄÊÂ¼ş
+/** @brief ç¦»å¼€çš„äº‹ä»¶*/
 struct stLeavedEvent
 {
-	// ÊÂ¼şËùÔÚµÄÄ¿±ê¶ÔÏó
+	/** @brief äº‹ä»¶æ‰€åœ¨çš„ç›®æ ‡å¯¹è±¡*/
 	std::shared_ptr<Object>	target_obj;
-	// »Øµ÷º¯ÊıËùÔÚ¶ÔÏó
+	/** @brief å›è°ƒå‡½æ•°æ‰€åœ¨å¯¹è±¡*/
 	std::shared_ptr<Object>	self_obj;
 
 	EventID						id;
@@ -80,13 +90,16 @@ namespace std
 		size_t operator()(const EventID& s) const noexcept
 		{
 			return hash<decltype(s.type)>()(s.type) +
-				hash<decltype(s.delegate_id)>()(s.delegate_id);
+				hash<decltype(s.delegate_id)>()(s.delegate_id) +
+				hash<decltype(s.self)>()(s.self);
 		}
 	};
 }
 
 
-// ÊÂ¼ş¹ÜÀí
+/**
+ * @brief	äº‹ä»¶ç®¡ç†ï¼Œç”¨äºå¯¹è±¡äº‹ä»¶æ³¨å†Œä¸åˆ†å‘
+ */
 class GEvent
 {
 public:
@@ -94,7 +107,13 @@ public:
 
 	~GEvent();
 
-	// Ìí¼ÓÊÂ¼ş
+	/** 
+	* @brief		æ·»åŠ äº‹ä»¶
+	* @param[in]	id : äº‹ä»¶ID
+	* @param[in]	f : æ¥æ”¶äº‹ä»¶çš„å‡½æ•°
+	* @retval	nullptr : æ³¨å†Œäº‹ä»¶å¤±è´¥
+	* @retval	Delegate : æ³¨å†Œäº‹ä»¶æˆåŠŸ
+	*/
 	template<typename ... _Types, typename _E, typename _F>
 	std::shared_ptr<Delegate> AddEvent(const _E id, _F&& f) {
 		auto new_event = std::make_shared<Delegate>();
@@ -106,7 +125,7 @@ public:
 
 	template<typename ... _Types,typename _E, typename _F, typename _C>
 	std::shared_ptr<Delegate> AddEvent(const _E id, _F&& f, const std::shared_ptr<_C>& obj) {
-		// ÊÂ¼ş¶ÔÏó±ØĞë¼Ì³Ğ Object
+		// äº‹ä»¶å¯¹è±¡å¿…é¡»ç»§æ‰¿ Object
 		static_assert(std::is_base_of<Object, _C>::value,
 			"The event object must inherit Object!");
 
@@ -116,7 +135,7 @@ public:
 		return new_event;
 	}
 
-	// ¹ã²¥ÊÂ¼ş
+	// å¹¿æ’­äº‹ä»¶
 	template<typename ... _Types,typename _E>
 	void BrocastEvent(const _E id, _Types..._Agrs) {
 
@@ -125,14 +144,14 @@ public:
 		auto found = m_all_event.find((uint32_t)id);
 		if (found != m_all_event.end())
 		{
-			// ÓĞÕâ¸öÊÂ¼ş
+			// æœ‰è¿™ä¸ªäº‹ä»¶
 			auto atn = found->second;
-			// ·ÀÖ¹ÔÚÏÂÃæÊÂ¼şµ÷ÓÃÆÚ¼ä£¬Action ±»Ïú»Ù
+			// é˜²æ­¢åœ¨ä¸‹é¢äº‹ä»¶è°ƒç”¨æœŸé—´ï¼ŒAction è¢«é”€æ¯
 			atn->Call<_Types...>(_Agrs...);
 		}
 	}
 
-	// ÒÆ³ıÊÂ¼ş
+	// ç§»é™¤äº‹ä»¶
 	template<typename ... _Types, typename _E, typename _F>
 	void RemoveEvent(const _E id, _F&& f) {
 		EventLeave((uint32_t)id, DelegateID(DEL_PVOID(&f), nullptr), nullptr);
@@ -140,7 +159,7 @@ public:
 
 	template<typename ... _Types, typename _E, typename _F, typename _C>
 	void RemoveEvent(const _E id, _F&& f, const std::shared_ptr<_C>& obj) {
-		// ÊÂ¼ş¶ÔÏó±ØĞë¼Ì³Ğ Object
+		// äº‹ä»¶å¯¹è±¡å¿…é¡»ç»§æ‰¿ Object
 		static_assert(std::is_base_of<Object, _C>::value, 
 			"The event object must inherit Object!");
 
@@ -160,11 +179,11 @@ private:
 
 	void RemoveEventByDelegateID(const uint32_t id, const DelegateID& del_id, const std::shared_ptr<Object>& obj);
 
-	// ´¦ÀíÊÂ¼ş
+	// å¤„ç†äº‹ä»¶
 	void HandleEvent();
 
 private:
-	// Ìí¼ÓµÄÊÂ¼ş
+	// æ·»åŠ çš„äº‹ä»¶
 	std::unordered_map<uint32_t,std::shared_ptr<Action>>	m_all_event;
 
 	std::queue<stEnteredEvent>	m_event_enter;
@@ -176,8 +195,8 @@ private:
 
 
 private:
-	// ÔÚÆäËû¶ÔÏóÉÏ×¢²áµÄÊÂ¼ş
-	// ×ÔÉíÏú»ÙÊ±£¬ÊÂ¼ş½«»áÊ§Ğ§
+	// åœ¨å…¶ä»–å¯¹è±¡ä¸Šæ³¨å†Œçš„äº‹ä»¶
+	// è‡ªèº«é”€æ¯æ—¶ï¼Œäº‹ä»¶å°†ä¼šå¤±æ•ˆ
 	std::unordered_map<EventID, std::shared_ptr<Delegate>>	m_registered_event;
 
 	friend class EventSystem;
@@ -189,6 +208,5 @@ private:
 #define COMPILE_INT_TO_STR(_num) COMPILE_TO_STR(_num)
 #endif
 
-// ±ê¼ÇÊÂ¼ş
-// ÊÂ¼ş·¢ËÍÒì³£Ê±£¬·½±ã²éÕÒ
+/** brief æ ‡è®°äº‹ä»¶,äº‹ä»¶å‘é€å¼‚å¸¸æ—¶ï¼Œæ–¹ä¾¿æŸ¥æ‰¾*/
 #define MARK_EVENT ->m_code_path=__FILE__ ":" COMPILE_INT_TO_STR(__LINE__)

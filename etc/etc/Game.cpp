@@ -18,4 +18,6 @@ namespace Game
 
 	std::atomic<uint64_t> object_count = 0;
 	std::atomic<uint64_t> item_count = 0;
+
+	bool Stopping = false;
 }

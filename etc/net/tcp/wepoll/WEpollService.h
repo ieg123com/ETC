@@ -82,6 +82,8 @@ public:
 
 	virtual void Send(const FD fd, const char* data, const size_t len) override;
 
+	virtual void Close(const FD fd) override;
+
 protected:
 
 	virtual void Awake() override;
@@ -127,6 +129,13 @@ private:
 
 private:
 
+	bool __AddSocketCtx(const FD fd, stSocketContext* ctx);
+	bool __RemoveSocketCtx(const FD fd);
+	stSocketContext* __GetSocketCtx(const FD fd) const;
+
+
+private:
+
 	EpollStatus		m_epoll_status;
 	stAddressInfo	m_address_info;
 	int				m_listened_socket;
@@ -137,5 +146,6 @@ private:
 	HANDLE m_epollfd;
 #endif
 
+	std::unordered_map<FD, stSocketContext*>	m_all_socket_ctx;
 
 };

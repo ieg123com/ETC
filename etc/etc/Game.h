@@ -1,3 +1,7 @@
+/**
+ * @file	Game.h
+ * @author	ieg123
+ */
 #pragma once
 #include "system/GameSystem.h"
 #include "system/TimeSystem.h"
@@ -20,4 +24,5 @@ namespace Game
 	extern std::atomic<uint64_t> object_count;
 	extern std::atomic<uint64_t> item_count;
 
+	extern bool Stopping;
 };

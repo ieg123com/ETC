@@ -1,21 +1,33 @@
+ï»¿/**
+* @file		Object.h
+* @author	ieg123
+* @date		2021-06-23
+* @brief	åŸºç±»â€œObjectâ€ï¼Œæ‰€æœ‰å¯¹è±¡éƒ½éœ€è¦ç»§æ‰¿æ­¤ç±»
+*/
 #pragma once
 #include <memory>
 #include <unordered_set>
 #include "event/GEvent.h"
 #include "ObjectType.h"
 
-
+/** @brief åŸºç¡€ç±» */
 class Object:
 	public GEvent,
 	public std::enable_shared_from_this<Object>
 {
 public:
 
+	/** @brief	çˆ¶ç±»å¯¹è±¡*/
 	std::shared_ptr<Object> m_host;
 
 	Object();
 	~Object();
 
+	/**	
+	* @brief	è·å–å¯¹è±¡æ˜¯å¦è¢«é”€æ¯
+	* @retval	true : å·²è¢«é”€æ¯
+	* @retval	false : æ²¡æœ‰è¢«é”€æ¯
+	*/
 	bool IsDisposed()const {
 		return m_disposed;
 	}
@@ -24,15 +36,30 @@ public:
 		return m_obj_id;
 	}
 
+	/** @brief	è‡ªèº«å¯¹è±¡*/
 	std::shared_ptr<Object> Self() {
 		return shared_from_this();
 	}
-
+	/** 
+	* @brief	è·å–è‡ªèº«å¯¹è±¡
+	* @return	è¿”å›æŒ‡å®šç±»å‹çš„å¯¹è±¡
+	* @par Sample
+	* @code
+	*	obj->Get<Entity>();
+	* @endcode
+	*/
 	template<typename T>
 	std::shared_ptr<T> Get() {
 		return std::dynamic_pointer_cast<T>(shared_from_this());
 	}
-
+	/**
+	* @brief	è·å–çˆ¶ç±»å¯¹è±¡
+	* @return	è¿”å›æŒ‡å®šç±»å‹çš„å¯¹è±¡
+	* @par Sample
+	* @code
+	*	obj->GetHost<Entity>();
+	* @endcode
+	*/
 	template<typename T>
 	std::shared_ptr<T> GetHost() const {
 		return std::dynamic_pointer_cast<T>(m_host);
@@ -41,28 +68,29 @@ public:
 	const ObjectType& GetObjectType() { return m_object_type; }
 
 public:
+	/** @brief	é”€æ¯å¯¹è±¡*/
 	virtual void Dispose();
 
 
-	// ·½±ã½«¶ÔÏó·¢ËÍµ½ÆäËû·şÎñÆ÷
-	// ·şÎñÆ÷¼ä´«ËÍ¶ÔÏó£¬ËùÓĞ¼Ì³ĞObjectµÄ¶ÔÏó±ØĞë´¦ÀíÏÂÁĞ½Ó¿Ú
-	// ´ÓJsonÖĞ½âÎö¶ÔÏó
+	// æ–¹ä¾¿å°†å¯¹è±¡å‘é€åˆ°å…¶ä»–æœåŠ¡å™¨
+	// æœåŠ¡å™¨é—´ä¼ é€å¯¹è±¡ï¼Œæ‰€æœ‰ç»§æ‰¿Objectçš„å¯¹è±¡å¿…é¡»å¤„ç†ä¸‹åˆ—æ¥å£
+	// ä»Jsonä¸­è§£æå¯¹è±¡
 	virtual bool ParseFromJson(const Json& json) { return false; };
-	// ĞòÁĞ»¯¶ÔÏóµ½Json
+	// åºåˆ—åŒ–å¯¹è±¡åˆ°Json
 	virtual bool SerializeToJson(const Json& json) const { return false; };
 
 private:
-	// debug ÓÃ
+	// debug ç”¨
 	void DebugIncreaseSelf();
 
-	// Ë¢ĞÂ¶ÔÏóid
+	// åˆ·æ–°å¯¹è±¡id
 	void RefreshObjectID();
 
 private:
 	
 
 	ObjectID	m_obj_id;
-	// ¶ÔÏóÀàĞÍ
+	// å¯¹è±¡ç±»å‹
 	ObjectType	m_object_type;
 
 	bool		m_is_from_pool;
@@ -70,32 +98,32 @@ private:
 	bool		m_disposed;
 
 protected:
-	// »½ĞÑÍ¨Öª Ä¬ÈÏ²»¿ªÆô
+	/** @brief	å”¤é†’é€šçŸ¥ é»˜è®¤ä¸å¼€å¯*/
 	bool CanEverAwake;
-	// »½ĞÑÍ¨Öª
+	/** @brief	å”¤é†’é€šçŸ¥*/
 	virtual void Awake() {}
 
-	// ¿ªÊ¼Í¨Öª Ä¬ÈÏ²»¿ªÆô
+	/** @brief	å¼€å§‹é€šçŸ¥ é»˜è®¤ä¸å¼€å¯*/
 	bool CanEverStart;
-	// ¿ªÊ¼Í¨Öª
+	/** @brief	å¼€å§‹é€šçŸ¥*/
 	virtual void Start() {}
 
-	// ¸üĞÂÍ¨Öª Ä¬ÈÏ²»¿ªÆô
+	/** @brief	æ›´æ–°é€šçŸ¥ é»˜è®¤ä¸å¼€å¯*/
 	bool CanEverUpdate;
-	// ¸üĞÂÍ¨Öª
+	/** @brief	æ›´æ–°é€šçŸ¥*/
 	virtual void Update() {}
 
-	// ¸üĞÂºóÍ¨Öª Ä¬ÈÏ²»¿ªÆô
+	/** @brief	æ›´æ–°åé€šçŸ¥ é»˜è®¤ä¸å¼€å¯*/
 	bool CanEverLateUpdate;
-	// ¸üĞÂºóÍ¨Öª
+	/** @brief	æ›´æ–°åé€šçŸ¥*/
 	virtual void LateUpdate() {}
 
-	// Ã¿Ãë¸üĞÂÍ¨Öª Ä¬ÈÏ²»¿ªÆô
+	/** @brief	æ¯ç§’æ›´æ–°é€šçŸ¥ é»˜è®¤ä¸å¼€å¯*/
 	bool CanEverSecondsUpdate;
-	// Ã¿Ãë¸üĞÂÍ¨Öª
+	/** @brief	æ¯ç§’æ›´æ–°é€šçŸ¥*/
 	virtual void SecondsUpdate() {}
 
-	// Ïú»ÙÊ±Í¨Öª
+	/** @brief	é”€æ¯æ—¶é€šçŸ¥*/
 	virtual void Destroy() {}
 
 private:

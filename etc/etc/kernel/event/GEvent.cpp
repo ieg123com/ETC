@@ -30,10 +30,11 @@ void GEvent::EventEnter(const uint32_t id, const std::shared_ptr<Delegate>& del,
 		// 对象已经被销毁
 		return;
 	}
+	del->set_objectid(obj->GetObjectID());
 	stEnteredEvent eevent;
 	eevent.target_obj = static_cast<Object*>(this)->Self();
 	eevent.self_obj = obj;
-	eevent.id = EventID(id, del->id());
+	eevent.id = EventID(id, del->id(),this);
 	eevent.del = del;
 	m_event_enter.emplace(std::move(eevent));
 }
@@ -46,10 +47,12 @@ void GEvent::EventLeave(const uint32_t id, const DelegateID& del_id, const std::
 		// 对象已经被销毁
 		return;
 	}
+	DelegateID del = del_id;
+	del.object_id = obj->GetObjectID();
 	stLeavedEvent eevent;
 	eevent.target_obj = static_cast<Object*>(this)->Self();
 	eevent.self_obj = obj;
-	eevent.id = EventID(id, del_id);
+	eevent.id = EventID(id, del,this);
 	m_event_leave.emplace(std::move(eevent));
 }
 
@@ -66,7 +69,11 @@ void GEvent::AddEventByDelegate(const uint32_t id, const std::shared_ptr<Delegat
 	if (obj && obj->IsDisposed() == false)
 	{
 		// 在函数对象中添加
-		obj->m_registered_event.insert(std::make_pair(EventID(id, del->id()), del));
+		obj->m_registered_event[EventID(id, del->id(), this)] = del;
+// 		if (obj->m_registered_event.insert(std::make_pair(EventID(id, del->id(), this), del)).second == false)
+// 		{
+// 			LOG_ERROR("添加事件失败 {}", id);
+// 		}
 	}
 }
 
@@ -82,7 +89,7 @@ void GEvent::RemoveEventByDelegateID(const uint32_t id, const DelegateID& del_id
 	if (obj && obj->IsDisposed() == false)
 	{
 		// 在函数对象中清除
-		obj->m_registered_event.erase(EventID(id, del_id));
+		obj->m_registered_event.erase(EventID(id, del_id,this));
 	}
 }
 

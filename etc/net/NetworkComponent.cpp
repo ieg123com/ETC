@@ -6,7 +6,7 @@
 
 bool NetworkComponent::Listen(const uint16_t port)
 {
-	m_service = ObjectFactory::Create<WEpollService>();
+	m_service = Service::Create<WEpollService>(NetworkType::Server);
 
 
 	m_service->OnAccept = std::bind(&NetworkComponent::OnAccept, this, std::placeholders::_1);
@@ -26,7 +26,7 @@ bool NetworkComponent::Listen(const uint16_t port)
 
 std::shared_ptr<Session> NetworkComponent::Connect(const std::string& ip, const uint16_t port)
 {
-	m_service = ObjectFactory::Create<WEpollService>();
+	m_service = Service::Create<WEpollService>(NetworkType::Client);
 
 	m_service->OnConnectComplete = std::bind(&NetworkComponent::OnConnectComplete, this, std::placeholders::_1);
 	m_service->OnAccept = std::bind(&NetworkComponent::OnAccept, this, std::placeholders::_1);

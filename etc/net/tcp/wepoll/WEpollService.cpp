@@ -67,6 +67,7 @@ bool WEpollService::Listen(const uint16_t port)
 		return false;
 	}
 
+	m_epoll_status = EpollStatus::EPOLL_RUNNING;
 	go std::bind(&WEpollService::StartEpollEventLoop, this);
 
 	return true;
@@ -88,16 +89,19 @@ std::shared_ptr<Session> WEpollService::Connect(const std::string& ip, const uin
 		return nullptr;
 	}
 
+	// 创建新会话
+	stSocketContext* ctx = new stSocketContext();
+	ctx->session = ObjectFactory::Create<Session>();
+	ctx->session->Fd = m_listened_socket;
+	ctx->session->Ip = ip;
+	ctx->session->Port = port;
+	ctx->session->__service = Get<Service>();
+	__AddSocketCtx(m_listened_socket, ctx);
 
-	auto session = ObjectFactory::Create<Session>();
-	session->Fd = m_listened_socket;
-	session->Ip = ip;
-	session->Port = port;
-	session->__service = Get<Service>();
+	m_epoll_status = EpollStatus::EPOLL_RUNNING;
+	go std::bind(&WEpollService::StartClientEventLoop, this, ctx->session);
 
-	go std::bind(&WEpollService::StartClientEventLoop, this, session);
-
-	return session;
+	return ctx->session;
 }
 
 
@@ -107,26 +111,92 @@ void WEpollService::Send(const FD fd, const char* data, const size_t len)
 	send(fd, data, len,0);
 }
 
+void WEpollService::Close(const FD fd)
+{
+	if (m_network_type == NetworkType::Server)
+	{
+		auto ctx = __GetSocketCtx(fd);
+		if (!ctx)
+		{
+			LOG_ERROR("close fd failed! fd:{}", fd);
+			return;
+		}
+		if (OnDisconnect)
+		{
+			OnDisconnect(ctx->session);
+		}
+
+		__RemoveSocketCtx(fd);
+
+		DisconnectOneClient(fd);
+	}
+	else if (m_network_type == NetworkType::Client)
+	{
+
+	}
+
+}
+
 
 void WEpollService::Awake()
 {
-	m_epoll_status = EpollStatus::EPOLL_RUNNING;
+	Service::Awake();
+
+	m_epoll_status = EpollStatus::EPOLL_STOPPED;
 #ifdef _WIN32
 	m_epollfd = INVALID_HANDLE_VALUE;
 #else
 	m_epollfd = -1;
 #endif // _WIN32
 
-	m_listened_socket = -1;
+	m_listened_socket = SOCKET_ERROR;
 }
 
 void WEpollService::Destroy()
 {
-	if (m_epollfd)
+
+	if (m_epoll_status == EpollStatus::EPOLL_RUNNING)
 	{
-		epoll_close(m_epollfd);
+		m_epoll_status = EpollStatus::EPOLL_STOPPED;
+
+		if (m_network_type == NetworkType::Server)
+		{
+			// 断开所有连接
+
+			auto all_socket = m_all_socket_ctx;
+			stSocketContext* ctx = nullptr;
+			for (auto& item : all_socket)
+			{
+				ctx = item.second;
+
+				OnEpollCloseEvent(ctx);
+
+				DisconnectOneClient(item.first);
+
+				__RemoveSocketCtx(item.first);
+				delete ctx;
+			}
+
+
+			if (m_epollfd)
+			{
+				epoll_close(m_epollfd);
+			}
+		}
+		else if (m_network_type == NetworkType::Client)
+		{
+
+#ifdef _WIN32
+			int ret = closesocket(m_listened_socket);
+#else
+			int ret = close(m_listened_socket);
+#endif
+		}
+		WaitClose();
+		m_epollfd = INVALID_HANDLE_VALUE;
+		m_listened_socket = SOCKET_ERROR;
 	}
-	m_epollfd = INVALID_HANDLE_VALUE;
+	Service::Destroy();
 }
 
 int WEpollService::OnEpollAcceptEvent(stSocketContext* ctx)
@@ -147,10 +217,10 @@ int WEpollService::OnEpollReadableEvent(stSocketContext* ctx, epoll_event& epoll
 	//memset(read_buffer, 0, READ_BUFFER_SIZE);
 
 	int read_size = recv(fd, read_buffer, READ_BUFFER_SIZE, 0);
-	if (read_size == -1 && errno == EINTR) {
+	if (read_size == SOCKET_ERROR && errno == EINTR) {
 		return READ_CONTINUE;
 	}
-	if (read_size == -1 /* io err*/ || read_size == 0 /* close */)
+	if (read_size == SOCKET_ERROR /* io err*/ || read_size == 0 /* close */)
 	{
 		return READ_CLOSE;
 	}
@@ -220,12 +290,12 @@ bool WEpollService::BindOnAddress(const stAddressInfo& addressInfo)
 		my_addr.sin_addr.s_addr = inet_addr(addressInfo.serverIp.c_str());
 	}
 	// 监听地址
-	if (::bind(m_listened_socket, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) == -1)
+	if (::bind(m_listened_socket, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) == SOCKET_ERROR)
 	{
 		LOG_ERROR("bind error: {}", strerror(errno));
 		return false;
 	}
-	if (listen(m_listened_socket, addressInfo.backlog) == -1)
+	if (listen(m_listened_socket, addressInfo.backlog) == SOCKET_ERROR)
 	{
 		LOG_ERROR("listen error: {}", strerror(errno));
 		return false;
@@ -262,7 +332,7 @@ bool WEpollService::ConnectAddress(const stAddressInfo& addressInfo)
 		my_addr.sin_addr.s_addr = inet_addr(addressInfo.serverIp.c_str());
 	}
 	// 连接地址
-	if (connect(m_listened_socket, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) == -1)
+	if (connect(m_listened_socket, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) == SOCKET_ERROR)
 	{
 		LOG_ERROR("connect error:{} {}", WSAGetLastError(), strerror(errno));
 		return false;
@@ -310,6 +380,12 @@ void WEpollService::HandleAcceptEvent(FD& epollfd, epoll_event& event)
 	ctx->session->Fd = conn_sock;
 	ctx->session->Ip = std::move(client_ip);
 	ctx->session->__service = Get<Service>();
+
+	if (!__AddSocketCtx(conn_sock, ctx))
+	{
+		LOG_ERROR("abnormal fd allocation!");
+		return;
+	}
 
 	OnEpollAcceptEvent(ctx);
 
@@ -478,7 +554,7 @@ void WEpollService::StartEpollEventLoop()
 {
 	LOG_INFO("StartEpollEventLoop");
 	epoll_event* events = new epoll_event[m_address_info.maxEvents];
-	while (m_epoll_status != EpollStatus::EPOLL_STOPPED)
+	while (m_epoll_status == EpollStatus::EPOLL_RUNNING)
 	{
 		//LOG_INFO("while start");
 		/*
@@ -513,7 +589,7 @@ void WEpollService::StartEpollEventLoop()
 		events = NULL;
 		LOG_WARN("still have events not handle, and loop end");
 	}
-
+	CloseComplete();
 }
 
 void WEpollService::StartClientEventLoop(std::shared_ptr<Session> session)
@@ -529,23 +605,25 @@ void WEpollService::StartClientEventLoop(std::shared_ptr<Session> session)
 	int sock = m_listened_socket + 1;
 #endif
 
+
 	if (OnConnectComplete)
 	{
 		OnConnectComplete(session);
 	}
 
-	for (;;)
+	while(m_epoll_status == EpollStatus::EPOLL_RUNNING)
 	{
 		fd_set fd;
 		FD_ZERO(&fd);
 		FD_SET(sock, &fd);
-
+		LOG_INFO("sockA {}",sock);
 		int ret = select(sock, &fd, NULL, NULL, &timeout);
 		if (ret <= 0)
 		{
 			continue;
 		}
 
+		LOG_INFO("sockB {}", sock);
 		int read_size = recv(sock, read_buffer, READ_BUFFER_SIZE, 0);
 		if (read_size == 0)
 		{
@@ -556,7 +634,8 @@ void WEpollService::StartClientEventLoop(std::shared_ptr<Session> session)
 		{
 #ifdef _WIN32
 			if (WSAGetLastError() == WSAESHUTDOWN ||
-				WSAGetLastError() == WSAECONNRESET)
+				WSAGetLastError() == WSAECONNRESET ||
+				m_epoll_status == EpollStatus::EPOLL_STOPPED)
 			{
 				// 关闭连接
 				break;
@@ -579,21 +658,23 @@ void WEpollService::StartClientEventLoop(std::shared_ptr<Session> session)
 		}
 
 	}
-	
-	if (OnDisconnect)
+
+	if (auto ctx = __GetSocketCtx(m_listened_socket))
 	{
-		OnDisconnect(session);
-	}
+		if (OnDisconnect)
+		{
+			OnDisconnect(ctx->session);
+		}
 #ifdef _WIN32
-	int ret = closesocket(sock);
+			int ret = closesocket(m_listened_socket);
 #else
-	int ret = close(sock);
+			int ret = close(m_listened_socket);
 #endif
-	if (ret != 0)
-	{
-		LOG_ERROR("connect close complete which fd: {}, ret: {}", sock, ret);
-		return;
+		__RemoveSocketCtx(m_listened_socket);
+		delete ctx;
 	}
+
+	CloseComplete();
 }
 
 bool WEpollService::StartEpollServer()
@@ -641,6 +722,8 @@ void WEpollService::CloseAndReleaseOneEvent(epoll_event& epoll_event)
 	epoll_event.events = EPOLLIN | EPOLLOUT;
 	epoll_ctl(m_epollfd, EPOLL_CTL_DEL, fd, &epoll_event);
 
+
+	__RemoveSocketCtx(fd);
 	delete ctx;
 	epoll_event.data.ptr = NULL;
 
@@ -655,4 +738,31 @@ void WEpollService::CloseAndReleaseOneEvent(epoll_event& epoll_event)
 		LOG_ERROR("connect close complete which fd: {}, ret: {}", fd, ret);
 		return;
 	}
+}
+
+
+bool WEpollService::__AddSocketCtx(const FD fd, stSocketContext* ctx)
+{
+	return m_all_socket_ctx.insert(std::make_pair(fd, ctx)).second;
+}
+
+bool WEpollService::__RemoveSocketCtx(const FD fd)
+{
+	auto found = m_all_socket_ctx.find(fd);
+	if (found == m_all_socket_ctx.end())
+	{
+		return false;
+	}
+	m_all_socket_ctx.erase(found);
+	return true;
+}
+
+stSocketContext* WEpollService::__GetSocketCtx(const FD fd) const
+{
+	auto found = m_all_socket_ctx.find(fd);
+	if (found == m_all_socket_ctx.end())
+	{
+		return nullptr;
+	}
+	return found->second;
 }

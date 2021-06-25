@@ -33,10 +33,14 @@ public:
 
 protected:
 
+	virtual void Awake() override;
+
 	virtual void Destroy() override;
 
 
 private:
+
+
 
 	//co::Channel<std::function<void()>>	m_channel;
 

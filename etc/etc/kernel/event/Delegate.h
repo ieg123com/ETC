@@ -1,3 +1,7 @@
+ï»¿/**
+ * @file	Delegate.h
+ * @brief	ç”¨äºå‡½æ•°å°è£…
+ */
 #pragma once
 #include <functional>
 
@@ -7,21 +11,24 @@
 #define DEL_PVOID(p) (void*)*(unsigned int*)(p)
 #endif
 
-
+/** @brief å‡½æ•°ID*/
 class DelegateID
 {
 public:
 	const void* method;
 	const void* object;
+	long long	object_id;
 
 	DelegateID() {
 		method = nullptr;
 		object = nullptr;
+		object_id = 0;
 	}
 
 	DelegateID(const void* md, const void* obj) {
 		method = md;
 		object = obj;
+		object_id = 0;
 	}
 
 	~DelegateID() {
@@ -29,14 +36,16 @@ public:
 	}
 
 	DelegateID& operator = (const DelegateID& val) {
-		this->method = val.method;
-		this->object = val.object;
+		method = val.method;
+		object = val.object;
+		object_id = val.object_id;
 		return *this;
 	}
 
 	bool operator == (const DelegateID& val) const {
-		if (this->method == val.method &&
-			this->object == val.object)
+		if (method == val.method &&
+			object == val.object &&
+			object_id == val.object_id)
 		{
 			return true;
 		}
@@ -46,9 +55,11 @@ public:
 	void clear() {
 		method = nullptr;
 		object = nullptr;
+		object_id = 0;
 	}
 };
 
+/** @internal */
 namespace std
 {
 	template<>
@@ -57,14 +68,16 @@ namespace std
 		size_t operator()(const DelegateID& s) const noexcept
 		{
 			return hash<decltype(s.method)>()(s.method) +
-				hash<decltype(s.object)>()(s.object);
+				hash<decltype(s.object)>()(s.object) +
+				hash<decltype(s.object_id)>()(s.object_id);
 		}
 	};
 }
 
 
-// º¯Êı·â×°£¬ÓÃÓÚ¼ÇÂ¼¸÷ÖÖ²ÎÊıµÄº¯Êı
-// ¿ÉÒÔÓÃÓÚÊÂ¼şÍ¨Öª£¬Ïß³Ì²»°²È«
+/**
+ * @brief	å‡½æ•°å°è£…ï¼Œç”¨äºè®°å½•å„ç§å‚æ•°çš„å‡½æ•°ã€‚å¯ä»¥ç”¨äºäº‹ä»¶é€šçŸ¥ï¼Œçº¿ç¨‹ä¸å®‰å…¨
+ */
 class Delegate
 {
 public:
@@ -232,6 +245,10 @@ public:
 		m_func = nullptr;
 		m_type = nullptr;
 	}
+
+	void set_objectid(const long long id) {
+		m_id.object_id = id;
+	}
 	
 	const DelegateID& id()const {
 		return m_id;
@@ -253,16 +270,16 @@ public:
 	}
 
 private:
-	// ×ÔÉíid ¿ÉÓÃÓÚhash¼ÇÂ¼
+	// è‡ªèº«id å¯ç”¨äºhashè®°å½•
 	DelegateID					m_id;
-	// ¼ÇÂ¼º¯ÊıÀàĞÍ
+	// è®°å½•å‡½æ•°ç±»å‹
 	const type_info*			m_type;
-	// ¼ÇÂ¼»Øµ÷º¯ÊıÖ¸Õë
+	// è®°å½•å›è°ƒå‡½æ•°æŒ‡é’ˆ
 	void*						m_func;
-	// ¼ÇÂ¼Ïú»Ùº¯Êı
+	// è®°å½•é”€æ¯å‡½æ•°
 	std::function<void(void)>	m_close;
 public:
-	// debugÓÃ
+	/** @internal ç”¨äºè®°å½•æ³¨å†Œå‡½æ•°è°ƒç”¨çš„ä½ç½®ï¼Œæ–¹ä¾¿Debugè°ƒè¯•*/
 	const char* m_code_path;
 
 };

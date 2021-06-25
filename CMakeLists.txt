@@ -15,6 +15,7 @@ add_subdirectory(etc)
 add_subdirectory(server)
 add_subdirectory(redis)
 add_subdirectory(module)
+add_subdirectory(test)
 
 if(MSVC)
 	add_subdirectory(wepoll)

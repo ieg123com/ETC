@@ -1,4 +1,4 @@
-#include "Object.h"
+ï»¿#include "Object.h"
 #include "ObjectPool.h"
 #include "Game.h"
 #include <atomic>
@@ -22,7 +22,8 @@ Object::Object()
 Object::~Object()
 {
 	Game::object_count--;
-	Game::System.m_ObjectDebug.DeductObject(m_object_type.GetName());
+	if(Game::Stopping == false)
+		Game::System.m_ObjectDebug.DeductObject(m_object_type.GetName());
 }
 
 void Object::Dispose() {
@@ -39,8 +40,8 @@ void Object::Dispose() {
 
 	if (m_is_from_pool == true)
 	{
-		// ÊÇ´Ó¶ÔÏó³ØÖĞÈ¡³öµÄ¶ÔÏó
-		// ÏÖÔÚ°ÑËü»¹»ØÈ¥
+		// æ˜¯ä»å¯¹è±¡æ± ä¸­å–å‡ºçš„å¯¹è±¡
+		// ç°åœ¨æŠŠå®ƒè¿˜å›å»
 		Game::ObjPool.Recycle(shared_from_this());
 	}
 }
