@@ -1,4 +1,4 @@
-# ETC C++服务端框架
+# ETC C++服务端框架 （不完整的）
 采用 ECS架构、协程，可以进行单线程无阻塞的方式进行开发。
 ECS 参考了 [ET](https://github.com/egametang/ET) 设计思路。
 
@@ -22,5 +22,5 @@ Win [下载Cmake](https://cmake.org/download/)
 
     安装 cmake 3.0+ 进行编译
 
-Linux(后续会支持)
+Linux(未来会支持)
 

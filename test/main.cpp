@@ -105,21 +105,25 @@ void channel_test()
 {
 	{
 		//co_chan<std::string> g_channel;
-		co::Channel<std::string>	g_channel(10);
+		co::Channel<std::string>	g_channel(1);
 		//A a;
-		LOG_INFO("1");
-		g_channel << "123";
-		LOG_INFO("2");
-		std::string str;
-		g_channel >> str;
+		//LOG_INFO("1");
+		LOG_INFO("ok {}", g_channel.TryPush("123"));
+		LOG_INFO("ok {}", g_channel.TryPush("123"));
 
-		LOG_INFO("str {}", str.c_str());
+		//LOG_INFO("2");
+		//std::string str;
+		
+		//std::mutex lock;
+		//lock.lock();
+		//LOG_INFO("str {}", str.c_str());
 		//LOG_INFO("lock");
-		//g_lock.lock();
-		//assert(g_lock.try_lock());
+		//lock.lock();
+		//LOG_INFO("try_lock {}", );
+		//assert(false);
 		//LOG_INFO("unlock");
 
-
+		//lock.unlock();
 	}
 
 
@@ -133,7 +137,7 @@ int main()
 	go network_server;
 	go network_client;
 	//go echo_server;
-	go test;
+	//go test;
 	//go channel_test;
 	//go client;
 

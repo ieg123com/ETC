@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿/**
+ * @file	WEpollService.h
+ * @author	ieg123
+ * @create	2021-06-25 5:48 PM
+ */
+#pragma once
 #include "net/Service.h"
 #include "error/error_content.h"
 
@@ -67,17 +72,29 @@ public:
 	}
 };
 
+/** @brief 用 wepoll 封装的网络服务对象，win、linux 下分别使用 iocp、epoll*/
 class WEpollService :
 	public Service
 {
 public:
 	WEpollService();
 
-
+	/**
+	 * @brief		打开并监听指定端口
+	 * @param[in]	port : 需要监听的端口
+	 * @retval		true : 监听端口成功
+	 * @retval		false : 开启端口失败
+	 */
 	virtual bool Listen(const uint16_t port) override;
 
+	/**
+	 * @brief		连接指定服务器
+	 * @param[in]	ip : 要连接的服务器地址
+	 * @param[in]	prot ： 端口
+	 * @retval		Session : 连接服务器成功，返回会话
+	 * @retval		nullptr	: 连接服务器失败
+	 */
 	virtual std::shared_ptr<Session> Connect(const std::string& ip, const uint16_t port) override;
-
 
 
 	virtual void Send(const FD fd, const char* data, const size_t len) override;

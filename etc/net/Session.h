@@ -21,14 +21,14 @@ public:
 	std::string	Ip;
 
 	uint16_t	Port;
-
+	/** @brief 网络服务*/
 	std::shared_ptr<Service>	__service;
 
 
-	// 消息到达
+	/** @brief 消息到达*/
 	void OnRead(const char* data, const size_t len);
 
-	// 发送消息
+	/** @brief 发送消息*/
 	void Send(const char* data, const size_t len);
 
 protected:

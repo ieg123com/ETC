@@ -183,6 +183,7 @@ public:
         DebugPrint(dbg_mask_ & dbg_channel, "[id=%ld] Channel destory.", this->getId());
 
         assert(lock_.try_lock());
+        lock_.unlock();
     }
 
     void SetDbgMask(uint64_t mask) {

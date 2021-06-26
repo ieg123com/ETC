@@ -121,14 +121,13 @@ void WEpollService::Close(const FD fd)
 			LOG_ERROR("close fd failed! fd:{}", fd);
 			return;
 		}
-		if (OnDisconnect)
-		{
-			OnDisconnect(ctx->session);
-		}
-
 		__RemoveSocketCtx(fd);
 
+		OnEpollCloseEvent(ctx);
+
 		DisconnectOneClient(fd);
+
+		delete ctx;
 	}
 	else if (m_network_type == NetworkType::Client)
 	{
@@ -552,14 +551,9 @@ bool WEpollService::CreateEpoll()
 
 void WEpollService::StartEpollEventLoop()
 {
-	LOG_INFO("StartEpollEventLoop");
 	epoll_event* events = new epoll_event[m_address_info.maxEvents];
 	while (m_epoll_status == EpollStatus::EPOLL_RUNNING)
 	{
-		//LOG_INFO("while start");
-		/*
-			服务器帧循环 100 ms
-		*/
 		int fds_num = co_epoll_wait(m_listened_socket,m_epollfd, events, m_address_info.maxEvents, 100);
 
 		if (fds_num == -1)
@@ -616,14 +610,12 @@ void WEpollService::StartClientEventLoop(std::shared_ptr<Session> session)
 		fd_set fd;
 		FD_ZERO(&fd);
 		FD_SET(sock, &fd);
-		LOG_INFO("sockA {}",sock);
 		int ret = select(sock, &fd, NULL, NULL, &timeout);
 		if (ret <= 0)
 		{
 			continue;
 		}
 
-		LOG_INFO("sockB {}", sock);
 		int read_size = recv(sock, read_buffer, READ_BUFFER_SIZE, 0);
 		if (read_size == 0)
 		{
@@ -717,27 +709,8 @@ void WEpollService::CloseAndReleaseOneEvent(epoll_event& epoll_event)
 	stSocketContext *ctx = (stSocketContext*)epoll_event.data.ptr;
 	FD fd = ctx->session->Fd;
 
-	OnEpollCloseEvent(ctx);
+	Close(fd);
 
-	epoll_event.events = EPOLLIN | EPOLLOUT;
-	epoll_ctl(m_epollfd, EPOLL_CTL_DEL, fd, &epoll_event);
-
-
-	__RemoveSocketCtx(fd);
-	delete ctx;
-	epoll_event.data.ptr = NULL;
-
-#ifndef _WIN32
-	int ret = close(fd);
-#else
-	int ret = closesocket(fd);
-#endif
-
-	if (ret != 0)
-	{
-		LOG_ERROR("connect close complete which fd: {}, ret: {}", fd, ret);
-		return;
-	}
 }
 
 
