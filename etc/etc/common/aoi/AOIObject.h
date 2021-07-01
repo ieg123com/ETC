@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "AOIDef.h"
 #include "Vector3.h"
 #include "skip_list/skip_list.h"
@@ -8,12 +8,12 @@
 template<typename T>
 class AOI;
 
-// ³¡¾°ÖĞµÄÊµÌå
+// åœºæ™¯ä¸­çš„å®ä½“
 template<typename T>
 class AOIObject
 {
 public:
-	// ÔÚaoiÖĞµÄ×ø±ê
+	// åœ¨aoiä¸­çš„åæ ‡
 	Vector3 position;
 
 	T		statue;
@@ -29,26 +29,26 @@ public:
 	}
 
 
-	// ÉèÖÃ×Ô¼ºËùÊô±êÇ©
+	// è®¾ç½®è‡ªå·±æ‰€å±æ ‡ç­¾
 	void SetTag(const ETagType tag) {m_tag = tag;}
 
-	// Ìí¼ÓÄÜ¿´µ½µÄ±êÇ©
+	// æ·»åŠ èƒ½çœ‹åˆ°çš„æ ‡ç­¾
 	void AddInsightTag(const ETagType tag){ m_insight_tag |= (uint32_t)tag; }
-	// ÒÆ³ıÄÜ¿´µ½µÄ±êÇ©
+	// ç§»é™¤èƒ½çœ‹åˆ°çš„æ ‡ç­¾
 	void RemoveInsightTag(const ETagType tag){ m_insight_tag &= ~(uint32_t)tag; }
 
 
-	// ¿ÉÒÔ¿´µ½ÓµÓĞÕâ¸ö±êÇ©µÄ¶ÔÏó
+	// å¯ä»¥çœ‹åˆ°æ‹¥æœ‰è¿™ä¸ªæ ‡ç­¾çš„å¯¹è±¡
 	bool IsInsightTag(const ETagType tag) const{ return (m_insight_tag & (uint32_t)tag); }
 
 
 
 
-	// ÉèÖÃÊÓÒ°·¶Î§
+	// è®¾ç½®è§†é‡èŒƒå›´
 	void SetInsightRange(const uint32_t val){ m_insight_range = val; }
 
 
-	// »ñÈ¡×ÔÉíËùÔÚÊÇ³¡¾°
+	// è·å–è‡ªèº«æ‰€åœ¨æ˜¯åœºæ™¯
 	AOI<T>* GetAOI() const { return m_aoi; }
 	bool InAOI()const { return (m_aoi != nullptr); }
 	
@@ -61,54 +61,54 @@ public:
 		m_aoi = nullptr;
 	}
 protected:
-	// È¡³ö×Ô¼º¿ÉÒÔ¿´µ½µÄ¶ÔÏó
+	// å–å‡ºè‡ªå·±å¯ä»¥çœ‹åˆ°çš„å¯¹è±¡
 	const std::unordered_map<AOIObjectID, AOIObject<T>*>& GetInsightObject()const {
 		return m_insight_obj;
 	}
 
 private:
-	// ½«¶ÔÏóÌí¼ÓµÄÊÓÒ°ÖĞ
+	// å°†å¯¹è±¡æ·»åŠ çš„è§†é‡ä¸­
 	void AddObjectToInsight(AOIObject<T>* obj) {
 		m_insight_obj.insert(std::make_pair(obj->m_id, obj));
 	}
 
-	// ½«¶ÔÏó´ÓÊÓÒ°ÖĞÒÆ³ı
+	// å°†å¯¹è±¡ä»è§†é‡ä¸­ç§»é™¤
 	void RemoveObjectFromInsight(AOIObject<T>* obj) {
 		m_insight_obj.erase(obj->m_id);
 	}
 
-	// ÔÚÊÓÒ°ÖĞ
+	// åœ¨è§†é‡ä¸­
 	bool InInight(const AOIObject<T>* obj) const {
 		return (m_insight_obj.find(obj->m_id) != m_insight_obj.end());
 	}
 private:
 	AOIObjectID	m_id;
-	// ×Ô¼ºËùÊô±êÇ©
+	// è‡ªå·±æ‰€å±æ ‡ç­¾
 	ETagType	m_tag;
-	// ¿ÉÊÓ±êÇ©
+	// å¯è§†æ ‡ç­¾
 	uint32_t	m_insight_tag;
-	// ÊÓÒ°·¶Î§
+	// è§†é‡èŒƒå›´
 	uint32_t	m_insight_range;
 
 	using pos_iterator = typename skip_list<int32_t, AOIObject<T>*>::iterator;
 	
 	pos_iterator m_x_pos;
 
-	// ÎÒ¿ÉÒÔ¿´µ½µÄ¶ÔÏó
+	// æˆ‘å¯ä»¥çœ‹åˆ°çš„å¯¹è±¡
 	std::unordered_map<AOIObjectID, AOIObject<T>*> m_insight_obj;
-	// ÉÏ´Î¿ÉÒÔ¿´µ½µÄ¶ÔÏó
+	// ä¸Šæ¬¡å¯ä»¥çœ‹åˆ°çš„å¯¹è±¡
 	std::unordered_map<AOIObjectID, AOIObject<T>*> m_insight_obj_back;
 
 
 
-	// ÏÖÔÚÕâ¸öAOIÀï
+	// ç°åœ¨è¿™ä¸ªAOIé‡Œ
 	AOI<T>*	m_aoi;
 
 	friend class AOI<T>;
 };
 
 
-// ¶ÔÏó³Ø
+// å¯¹è±¡æ± 
 template<typename T>
 class AOIObjectPool
 {

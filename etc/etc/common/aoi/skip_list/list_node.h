@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 
 template<typename K, typename V>
@@ -24,7 +24,7 @@ public:
 	}
 
 	~list_node() {
-		// ÊÍ·ÅÖ¸Õë
+		// é‡Šæ”¾æŒ‡é’ˆ
 		delete[]next;
 		delete[]prev;
 	}
@@ -37,9 +37,9 @@ public:
 
 private:
 	size_t level;
-	// ÏÂÒ»¸ö½Úµã up[0]
+	// ä¸‹ä¸€ä¸ªèŠ‚ç‚¹ up[0]
 	list_node<K,V>** next;
-	// ÉÏÒ»¸ö½Úµã
+	// ä¸Šä¸€ä¸ªèŠ‚ç‚¹
 	list_node<K, V>** prev;
 
 	friend class skip_list<K, V>;

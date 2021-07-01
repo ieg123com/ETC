@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <queue>
 #include <string>
 #include "list_node.h"
@@ -86,7 +86,7 @@ public:
 		return std::move(std::make_pair(add_node(new_node), true));
 	}
 	
-	// ĞŞ¸Ä key
+	// ä¿®æ”¹ key
 	void modify(iterator iter, const K& key) {
 		remove_node(iter.m_node);
 		iter.m_node->key = key;
@@ -143,16 +143,16 @@ private:
 		delete pnode;
 	}
 
-	// Ìí¼Ó½Úµã
+	// æ·»åŠ èŠ‚ç‚¹
 	list_node<K, V>* add_node(list_node<K, V>* new_node) {
 
 		{
 			if (m_node_level < new_node->level)
 			{
-				// ±êÍ·½ÚµãÔö¼Ó¸ß¶È
+				// æ ‡å¤´èŠ‚ç‚¹å¢åŠ é«˜åº¦
 				m_node_level = new_node->level;
 				auto new_header = node_new(m_node_level);
-				// »»µôÔ­ÀíµÄ½Úµã
+				// æ¢æ‰åŸç†çš„èŠ‚ç‚¹
 				replace_node(m_header, new_header);
 
 				node_delete(m_header);
@@ -169,12 +169,12 @@ private:
 
 				node = node->next[i];
 			}
-			// ¼ÇÂ¼£¬Õâ¸ö½ÚµãÒª²åÈëÊ±£¬Ã¿¸ö¸ß¶ÈµÄÇ°ºóµÄ½Úµã
+			// è®°å½•ï¼Œè¿™ä¸ªèŠ‚ç‚¹è¦æ’å…¥æ—¶ï¼Œæ¯ä¸ªé«˜åº¦çš„å‰åçš„èŠ‚ç‚¹
 			if (node->key == new_node->key &&
 				node != m_header)
 			{
-				// ÓĞÖØ¸´µÄkey
-				// ÔÚÕâ¸ö½ÚµãÇ°Ãæ²å½øÈ¥
+				// æœ‰é‡å¤çš„key
+				// åœ¨è¿™ä¸ªèŠ‚ç‚¹å‰é¢æ’è¿›å»
 				for (int hig = i; hig >= 0; --hig) 
 				{
 					if (hig < new_node->level)
@@ -192,12 +192,12 @@ private:
 			}
 		}
 
-		// ¿ªÊ¼²åÈë£¬¸æËßÇ°ºóµÄ½Úµã£¬»»ÈËÁË
+		// å¼€å§‹æ’å…¥ï¼Œå‘Šè¯‰å‰åçš„èŠ‚ç‚¹ï¼Œæ¢äººäº†
 		for (int i = 0; i < new_node->level; ++i)
 		{
-			// ¸æËßÉÏÒ»¸ö½Úµã£¬ÏÂÒ»¸ö½Úµã»»ÈËÁË
+			// å‘Šè¯‰ä¸Šä¸€ä¸ªèŠ‚ç‚¹ï¼Œä¸‹ä¸€ä¸ªèŠ‚ç‚¹æ¢äººäº†
 			new_node->prev[i]->next[i] = new_node;
-			// ¸æËßÏÂÒ»¸ö½Úµã£¬ÉÏÒ»¸ö½Úµã»»ÈËÁË
+			// å‘Šè¯‰ä¸‹ä¸€ä¸ªèŠ‚ç‚¹ï¼Œä¸Šä¸€ä¸ªèŠ‚ç‚¹æ¢äººäº†
 			if (new_node->next[i] != nullptr)
 			{
 				new_node->next[i]->prev[i] = new_node;
@@ -210,7 +210,7 @@ private:
 		return new_node;
 	}
 
-	// ²éÕÒ½Úµã
+	// æŸ¥æ‰¾èŠ‚ç‚¹
 	list_node<K, V>* find_node(const K& key) {
 		list_node<K, V>* node = m_header;
 		for (int i = node->level - 1; i >= 0; --i) {
@@ -226,7 +226,7 @@ private:
 		return (node->key == key) ? node : nullptr;
 	}
 
-	// ÒÆ³ı½Úµã
+	// ç§»é™¤èŠ‚ç‚¹
 	list_node<K, V>* remove_node(list_node<K, V>* del_node) {
 		if (del_node == nullptr)
 		{
@@ -236,10 +236,10 @@ private:
 
 		for (int i = 0; i < del_node->level; ++i) 
 		{
-			// ½«½ÚµãÒÆ³ö
-			// ¸æËßÉÏÒ»¸ö½Úµã£¬ÏÂÒ»¸ö½Úµã±äÁË
+			// å°†èŠ‚ç‚¹ç§»å‡º
+			// å‘Šè¯‰ä¸Šä¸€ä¸ªèŠ‚ç‚¹ï¼Œä¸‹ä¸€ä¸ªèŠ‚ç‚¹å˜äº†
 			del_node->prev[i]->next[i] = del_node->next[i];
-			// ¸æËßÏÂÒ»¸ö½Úµã£¬ÉÏÒ»¸ö½Úµã±äÁË
+			// å‘Šè¯‰ä¸‹ä¸€ä¸ªèŠ‚ç‚¹ï¼Œä¸Šä¸€ä¸ªèŠ‚ç‚¹å˜äº†
 			if (del_node->next[i] != nullptr)
 			{
 				del_node->next[i]->prev[i] = del_node->prev[i];
@@ -252,7 +252,7 @@ private:
 		return next_node;
 	}
 
-	// Ìæ»»½Úµã
+	// æ›¿æ¢èŠ‚ç‚¹
 	void replace_node(list_node<K, V>* origin_node, list_node<K, V>* new_node) {
 		for (int i = 0; i < origin_node->level; ++i)
 		{
@@ -260,14 +260,14 @@ private:
 			{
 				new_node->next[i] = origin_node->next[i];
 				new_node->prev[i] = origin_node->prev[i];
-				// ¸æËßÏÂÒ»¸ö½Úµã£¬ÉÏÒ»¸ö½Úµã»»ÈËÁË
+				// å‘Šè¯‰ä¸‹ä¸€ä¸ªèŠ‚ç‚¹ï¼Œä¸Šä¸€ä¸ªèŠ‚ç‚¹æ¢äººäº†
 				if (new_node->next[i] != nullptr)
 				{
 					new_node->next[i]->prev[i] = new_node;
 				}
 			}
 		}
-		// ½Úµã½»½ÓÍê³É
+		// èŠ‚ç‚¹äº¤æ¥å®Œæˆ
 	}
 
 public:
@@ -296,9 +296,9 @@ private:
 	list_node<K, V>* m_header;
 
 
-	// µ±Ç°½Úµã¿É´´½¨µÄ×î¸ßµÈ¼¶
+	// å½“å‰èŠ‚ç‚¹å¯åˆ›å»ºçš„æœ€é«˜ç­‰çº§
 	size_t		m_node_level;
-	// ½ÚµãÊı
+	// èŠ‚ç‚¹æ•°
 	size_t		m_count;
 
 	Random		m_rand;

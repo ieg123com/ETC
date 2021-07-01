@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <stdint.h>
 
 class TimeSystem
@@ -6,7 +6,7 @@ class TimeSystem
 public:
 	TimeSystem();
 
-	// ÉÏÒ»Ö¡Ë¢ĞÂÊ±¼äÔöÁ¿ ºÁÃë
+	// ä¸Šä¸€å¸§åˆ·æ–°æ—¶é—´å¢é‡ æ¯«ç§’
 	int64_t DeltaTime;
 
 
@@ -17,10 +17,10 @@ public:
 
 
 private:
-	// Ë¢ĞÂ¸üĞÂÊ±¼ä
+	// åˆ·æ–°æ›´æ–°æ—¶é—´
 	void RefreshLastTime();
 private:
-	// ÉÏ´Î¸üĞÂÊ±¼ä
+	// ä¸Šæ¬¡æ›´æ–°æ—¶é—´
 	int64_t	m_last_time;
 
 	friend class GameSystem;

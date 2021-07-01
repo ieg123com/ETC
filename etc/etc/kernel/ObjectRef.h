@@ -1,11 +1,11 @@
-#pragma once
+ï»¿#pragma once
 #include <memory>
 #include <unordered_map>
 #include <string>
 
 class Object;
 
-// ·´Éä³õ°æ
+// åå°„åˆç‰ˆ
 class ObjectRef
 {
 public:
@@ -15,15 +15,15 @@ public:
 		return self;
 	}
 
-	// ×¢²á¶ÔÏó
+	// æ³¨å†Œå¯¹è±¡
 	void RegisterObject(const std::string& type_name, std::shared_ptr<Object>(*func)(const bool));
 
-	// ´´½¨¶ÔÏó
+	// åˆ›å»ºå¯¹è±¡
 	std::shared_ptr<Object> CreateObject(const std::string& type_name, const bool from_pool = true);
 
 private:
 
-	// ·´Éä¶ÔÏó¼ÇÂ¼
+	// åå°„å¯¹è±¡è®°å½•
 	std::unordered_map<std::string, std::shared_ptr<Object>(*)(const bool)>	m_ref_objects;
 
 	

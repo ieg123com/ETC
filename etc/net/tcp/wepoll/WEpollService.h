@@ -1,4 +1,4 @@
-ï»¿/**
+/**
  * @file	WEpollService.h
  * @author	ieg123
  * @create	2021-06-25 5:48 PM
@@ -56,7 +56,7 @@ struct stAddressInfo
 	}
 };
 
-// epoll åˆ° æ¶ˆæ¯åˆ†å‘å±‚ çš„å®¢æˆ·ç«¯æ•°æ®
+// epoll µ½ ÏûÏ¢·Ö·¢²ã µÄ¿Í»§¶ËÊı¾İ
 struct stSocketContext
 {
 public:
@@ -72,7 +72,7 @@ public:
 	}
 };
 
-/** @brief ç”¨ wepoll å°è£…çš„ç½‘ç»œæœåŠ¡å¯¹è±¡ï¼Œwinã€linux ä¸‹åˆ†åˆ«ä½¿ç”¨ iocpã€epoll*/
+/** @brief ÓÃ wepoll ·â×°µÄÍøÂç·şÎñ¶ÔÏó£¬win¡¢linux ÏÂ·Ö±ğÊ¹ÓÃ iocp¡¢epoll*/
 class WEpollService :
 	public Service
 {
@@ -80,19 +80,19 @@ public:
 	WEpollService();
 
 	/**
-	 * @brief		æ‰“å¼€å¹¶ç›‘å¬æŒ‡å®šç«¯å£
-	 * @param[in]	port : éœ€è¦ç›‘å¬çš„ç«¯å£
-	 * @retval		true : ç›‘å¬ç«¯å£æˆåŠŸ
-	 * @retval		false : å¼€å¯ç«¯å£å¤±è´¥
+	 * @brief		´ò¿ª²¢¼àÌıÖ¸¶¨¶Ë¿Ú
+	 * @param[in]	port : ĞèÒª¼àÌıµÄ¶Ë¿Ú
+	 * @retval		true : ¼àÌı¶Ë¿Ú³É¹¦
+	 * @retval		false : ¿ªÆô¶Ë¿ÚÊ§°Ü
 	 */
 	virtual bool Listen(const uint16_t port) override;
 
 	/**
-	 * @brief		è¿æ¥æŒ‡å®šæœåŠ¡å™¨
-	 * @param[in]	ip : è¦è¿æ¥çš„æœåŠ¡å™¨åœ°å€
-	 * @param[in]	prot ï¼š ç«¯å£
-	 * @retval		Session : è¿æ¥æœåŠ¡å™¨æˆåŠŸï¼Œè¿”å›ä¼šè¯
-	 * @retval		nullptr	: è¿æ¥æœåŠ¡å™¨å¤±è´¥
+	 * @brief		Á¬½ÓÖ¸¶¨·şÎñÆ÷
+	 * @param[in]	ip : ÒªÁ¬½ÓµÄ·şÎñÆ÷µØÖ·
+	 * @param[in]	prot £º ¶Ë¿Ú
+	 * @retval		Session : Á¬½Ó·şÎñÆ÷³É¹¦£¬·µ»Ø»á»°
+	 * @retval		nullptr	: Á¬½Ó·şÎñÆ÷Ê§°Ü
 	 */
 	virtual std::shared_ptr<Session> Connect(const std::string& ip, const uint16_t port) override;
 

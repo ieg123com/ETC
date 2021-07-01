@@ -68,7 +68,7 @@ add_executable(server
 
 
 if(MSVC)
-	target_link_libraries(server libmysql libgo_static ws2_32 wepoll redis module etc protobuf)
+	target_link_libraries(server libmysql libgo_static ws2_32 wepoll redis module etc)
 	ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS -D_WINSOCK_DEPRECATED_NO_WARNINGS -D_SPDLOG_ACTIVE_LEVEL)
 	
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")

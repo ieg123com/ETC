@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "etc.h"
 #include "NetDefines.h"
 #include "coroutine.h"
@@ -7,7 +7,7 @@
 
 
 class Service:
-	public GEntity
+	public Entity
 {
 	friend class Session;
 	friend class NetworkComponent;
@@ -44,26 +44,26 @@ protected:
 
 	virtual void Destroy() override;
 
-	// ·şÎñÀàĞÍ
+	// æœåŠ¡ç±»å‹
 	NetworkType	m_network_type;
 
 	
-	// »Øµ÷
+	// å›è°ƒ
 	std::function<void(std::shared_ptr<Session>&)>					OnConnectComplete;
 	std::function<void(std::shared_ptr<Session>&)>					OnAccept;
 	std::function<void(std::shared_ptr<Session>&, char*, size_t)>	OnRead;
 	std::function<void(std::shared_ptr<Session>&)>					OnDisconnect;
 
 protected:
-	// µÈ´ı¹Ø±Õ
-	// µ÷ÓÃºó£¬µ±Ç°Ğ­³Ì½«»á¹ÒÆğ¡£
-	// Ö»ÓĞÔÙ´Îµ÷ÓÃ CloseComplete ºó£¬²Å»á»Ö¸´ÔËĞĞ
+	// ç­‰å¾…å…³é—­
+	// è°ƒç”¨åï¼Œå½“å‰åç¨‹å°†ä¼šæŒ‚èµ·ã€‚
+	// åªæœ‰å†æ¬¡è°ƒç”¨ CloseComplete åï¼Œæ‰ä¼šæ¢å¤è¿è¡Œ
 	void WaitClose();
-	// ¹Ø±ÕÍê³É£¬µ±socket¹Ø±Õ´¦ÀíÍê³Éºóµ÷ÓÃ
+	// å…³é—­å®Œæˆï¼Œå½“socketå…³é—­å¤„ç†å®Œæˆåè°ƒç”¨
 	void CloseComplete();
 
 private:
-	// ÉèÖÃÎª¹Ø±ÕµÄ
+	// è®¾ç½®ä¸ºå…³é—­çš„
 	bool	m_closed;
 
 	cond_t	m_cq;

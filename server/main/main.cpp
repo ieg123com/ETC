@@ -1,4 +1,4 @@
-/************************************************
+ï»¿/************************************************
  * libgo sample15 debug
 *************************************************/
 #include "coroutine.h"
@@ -16,7 +16,7 @@
 using namespace std;
 
 class Scene :
-	public GEntity
+	public Entity
 {
 
 };
@@ -31,10 +31,10 @@ void network_server()
 {
 	if (g_scene->AddComponent<NetworkComponent>()->Listen(81))
 	{
-		LOG_INFO("¿ªÆô³É¹¦");
+		LOG_INFO("å¼€å¯æˆåŠŸ");
 	}
 	else {
-		LOG_ERROR("Ê§°Ü");
+		LOG_ERROR("å¤±è´¥");
 	}
 }
 
