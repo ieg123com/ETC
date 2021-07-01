@@ -1,4 +1,4 @@
-ï»¿#pragma once
+#pragma once
 #include "Game.h"
 
 class ObjectFactory
@@ -7,7 +7,7 @@ public:
 
 	template<typename T>
 	static std::shared_ptr<T> Create(const bool from_pool = true) {
-		// å¯¹è±¡å¿…é¡»ç»§æ‰¿ Object
+		// ¶ÔÏó±ØĞë¼Ì³Ğ Object
 		static_assert(std::is_base_of<Object, T>::value,
 			"The create object must inherit Object!");
 		auto obj = InternalCreate<T>(from_pool);
@@ -20,7 +20,7 @@ public:
 
 	template<typename T>
 	static std::shared_ptr<T> CreateWithHost(const std::shared_ptr<Object>& host,const bool from_pool = true) {
-		// å¯¹è±¡å¿…é¡»ç»§æ‰¿ Object
+		// ¶ÔÏó±ØĞë¼Ì³Ğ Object
 		static_assert(std::is_base_of<Object, T>::value,
 			"The create object must inherit Object!");
 		auto obj = InternalCreate<T>(from_pool);
@@ -36,11 +36,11 @@ public:
 
 	template<typename T>
 	static std::shared_ptr<T> InternalCreate(const bool from_pool) {
-		// å¯¹è±¡å¿…é¡»ç»§æ‰¿ Object
+		// ¶ÔÏó±ØĞë¼Ì³Ğ Object
 		static_assert(std::is_base_of<Object, T>::value,
 			"The create object must inherit Object!");
 		std::shared_ptr<T> obj;
-		// å…ˆä¸å¼€å¯å¯¹è±¡æ± ï¼Œé˜²æ­¢ç©å®¶æ•°æ®å‡ºé—®é¢˜
+		// ÏÈ²»¿ªÆô¶ÔÏó³Ø£¬·ÀÖ¹Íæ¼ÒÊı¾İ³öÎÊÌâ
 //  		if (from_pool)
 //  		{
 //  			obj = Game::ObjPool.Fetch<T>();

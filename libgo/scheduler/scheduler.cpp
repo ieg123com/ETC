@@ -1,4 +1,4 @@
-﻿#include "scheduler.h"
+#include "scheduler.h"
 #include "../common/error.h"
 #include "../common/clock.h"
 #include <stdio.h>
@@ -128,7 +128,7 @@ void Scheduler::Start(int minThreadNumber, int maxThreadNumber)
         NewProcessThread();
     }
 
-    // 鍞ら啋鍗忕▼镄勫畾镞跺櫒绾跨▼
+    // 唤醒协程的定时器线程
     if (timer_) {
         timer_->SetPoolSize(1000, 100);
         std::thread t([this]{ 
@@ -138,7 +138,7 @@ void Scheduler::Start(int minThreadNumber, int maxThreadNumber)
         timerThread_.swap(t);
     }
 
-    // 璋冨害绾跨▼
+    // 调度线程
     if (maxThreadNumber_ > 1) {
         DebugPrint(dbg_scheduler, "---> Create DispatcherThread");
         std::thread t([this]{
@@ -238,10 +238,10 @@ void Scheduler::DispatcherThread()
     DebugPrint(dbg_scheduler, "---> Start DispatcherThread");
     typedef std::size_t idx_t;
     while (!stop_) {
-        // TODO: 鐢╟ondition_variable闄崭绠cpu浣跨敤鐜?
+        // TODO: 用condition_variable降低cpu使用率
         std::this_thread::sleep_for(std::chrono::microseconds(CoroutineOptions::getInstance().dispatcher_thread_cycle_us));
 
-        // 1.鏀堕泦璐熻浇链? 鏀堕泦阒诲钟舵€? 镓挞樆濉炴爣璁? 鍞ら啋澶勪簬绛夊緟钟舵€佷絾鏄湁浠诲姟镄凯
+        // 1.收集负载值, 收集阻塞状态, 打阻塞标记, 唤醒处于等待状态但是有任务的P
         idx_t pcount = processers_.size();
         std::size_t totalLoadaverage = 0;
         typedef std::multimap<std::size_t, idx_t> ActiveMap;
@@ -263,7 +263,7 @@ void Scheduler::DispatcherThread()
                 isActiveCount++;
         }
 
-        // 杩桦彲婵€娲诲嚑涓狿
+        // 还可激活几个P
         int activeQuota = isActiveCount < minThreadNumber_ ? (minThreadNumber_ - isActiveCount) : 0;
 
         for (std::size_t i = 0; i < pcount; i++) {
@@ -291,18 +291,18 @@ void Scheduler::DispatcherThread()
         }
 
         if (actives.empty() && (int)pcount < maxThreadNumber_) {
-            // 鍏ㄩ儴阒诲, 骞朵笖杩樻湁鍗忕▼寰呮墽琛? 璧锋柊绾跨▼
+            // 全部阻塞, 并且还有协程待执行, 起新线程
             NewProcessThread();
             actives.insert(ActiveMap::value_type{0, pcount});
             ++pcount;
         }
 
-        // 鍏ㄩ儴阒诲骞朵笖涓嶈兘璧锋柊绾跨▼, 镞犻渶璋冨害, 绛夊緟鍗冲彲
+        // 全部阻塞并且不能起新线程, 无需调度, 等待即可
         if (actives.empty())
             continue;
 
-        // 2.璐熻浇鍧囱　
-        // 阒诲绾跨▼镄勪换锷teal鍑烘潵
+        // 2.负载均衡
+        // 阻塞线程的任务steal出来
         {
             SList<Task> tasks;
             for (auto &kv : blockings) {
@@ -310,7 +310,7 @@ void Scheduler::DispatcherThread()
                 tasks.append(p->Steal(0));
             }
             if (!tasks.empty()) {
-                // 浠诲姟链€灏戠殑鍑犱釜绾跨▼骞冲潎鍒?
+                // 任务最少的几个线程平均分
                 auto range = actives.equal_range(actives.begin()->first);
                 std::size_t avg = tasks.size() / std::distance(range.first, range.second);
                 if (avg == 0)
@@ -342,12 +342,12 @@ void Scheduler::DispatcherThread()
             }
         }
 
-        // 濡傛灉杩樻湁鍦ㄧ瓑寰呯殑绾跨▼, 浠庝换锷″镄勭嚎绋嬩腑鎷夸竴浜涚粰瀹?
+        // 如果还有在等待的线程, 从任务多的线程中拿一些给它
         if (actives.begin()->first == 0) {
             auto range = actives.equal_range(actives.begin()->first);
             std::size_t waitN = std::distance(range.first, range.second);
             if (waitN == actives.size()) {
-                // 閮芥病浠诲姟浜? 涓岖敤锅蜂简
+                // 都没任务了, 不用偷了
                 continue;
             }
 

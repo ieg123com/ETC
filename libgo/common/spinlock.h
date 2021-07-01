@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "config.h"
 #include <exception>
 
@@ -36,7 +36,7 @@ struct BooleanFakeLock
     }
 };
 
-// 镐ц兘楂树簬LFLock2
+// 性能高于LFLock2
 struct LFLock
 {
     std::atomic_flag flag;
@@ -68,7 +68,7 @@ struct FakeLock {
     void unlock() {}
 };
 
-// atomic_bool鍙兘涓嶆槸镞犻挛
+// atomic_bool可能不是无锁
 struct LFLock2
 {
     std::atomic_bool state;

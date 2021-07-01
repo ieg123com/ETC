@@ -1,4 +1,4 @@
-ï»¿#pragma once
+#pragma once
 #include <unordered_map>
 #include "Vector3.h"
 #include "AOIDef.h"
@@ -6,9 +6,9 @@
 
 
 
-// åœ°å›¾aoi
-// Move ä¼šç­‰ä¸‹ä¸€æ—¶é’Ÿå‘¨æœŸç»Ÿä¸€åˆ·æ–°
-// Enterã€Leave ä¼šç«‹å³åˆ·æ–°
+// µØÍ¼aoi
+// Move »áµÈÏÂÒ»Ê±ÖÓÖÜÆÚÍ³Ò»Ë¢ĞÂ
+// Enter¡¢Leave »áÁ¢¼´Ë¢ĞÂ
 template<typename T>
 class AOI
 {
@@ -20,16 +20,16 @@ public:
 		clear();
 	}
 
-	// å®ä½“è¿›å…¥åœºæ™¯
+	// ÊµÌå½øÈë³¡¾°
 	AOIObject<T>* Enter(AOIObjectID id, const Vector3& vec) {
 		auto obj = GetObject(id);
 		if (obj != nullptr)
 		{
-			// è¿™ä¸ªå¯¹è±¡å·²ç»è¿›å…¥ AOI ä¸­
+			// Õâ¸ö¶ÔÏóÒÑ¾­½øÈë AOI ÖĞ
 			return nullptr;
 		}
 		else {
-			// æ²¡æ‰¾åˆ°è¿™ä¸ªå¯¹è±¡
+			// Ã»ÕÒµ½Õâ¸ö¶ÔÏó
 			obj = NewObject(id);
 			obj->position = vec;
 		}
@@ -38,7 +38,7 @@ public:
 
 		obj->m_x_pos = m_x_axis.insert(std::make_pair(obj->position.x, obj)).first;
 
-		// è®¾ç½®å¯¹è±¡æ‰€åœ¨aoi
+		// ÉèÖÃ¶ÔÏóËùÔÚaoi
 		obj->m_aoi = this;
 
 		UpdateObject(obj);
@@ -46,12 +46,12 @@ public:
 		return obj;
 	}
 
-	// å®ä½“åœ¨åœºæ™¯å†…ç§»åŠ¨
+	// ÊµÌåÔÚ³¡¾°ÄÚÒÆ¶¯
 	bool Move(AOIObjectID id, const Vector3& vec){
 		auto obj = GetObject(id);
 		if (obj == nullptr)
 		{
-			// æ²¡æ‰¾åˆ°è¿™ä¸ªå¯¹è±¡
+			// Ã»ÕÒµ½Õâ¸ö¶ÔÏó
 			return false;
 		}
 
@@ -64,12 +64,12 @@ public:
 		return true;
 	}
 
-	// å®ä½“ç¦»å¼€åœºæ™¯
+	// ÊµÌåÀë¿ª³¡¾°
 	bool Leave(AOIObjectID id){
 		auto obj = GetObject(id);
 		if (obj == nullptr)
 		{
-			// æ²¡æ‰¾åˆ°è¿™ä¸ªå¯¹è±¡
+			// Ã»ÕÒµ½Õâ¸ö¶ÔÏó
 			return false;
 		}
 
@@ -82,19 +82,19 @@ public:
 
 		UpdateObject(obj);
 		
-		// åˆ é™¤è¿™ä¸ªå¯¹è±¡
+		// É¾³ıÕâ¸ö¶ÔÏó
 		DeleteObject(obj);
 		return true;
 	}
 
 
 
-	// æœ‰ç›¸åŒçš„å¯¹è±¡
+	// ÓĞÏàÍ¬µÄ¶ÔÏó
 	bool IsHaveSameObject(const AOIObject<T>* obj) const {
 		return (m_objs.find(obj->m_id) != m_objs.end());
 	}
 
-	// æ›´æ–°æ ‡è®°è¿‡çš„å¯¹è±¡
+	// ¸üĞÂ±ê¼Ç¹ıµÄ¶ÔÏó
 	void UpdateMarkedObject() {
 		for (auto& item : m_changed_obj) {
 			UpdateObject(item.second);
@@ -102,7 +102,7 @@ public:
 		m_changed_obj.clear();
 	}
 
-	// ä¸ä¼šæ¨é€ç¦»å¼€äº‹ä»¶
+	// ²»»áÍÆËÍÀë¿ªÊÂ¼ş
 	void clear() {
 		m_x_axis.clear();
 		m_changed_obj.clear();
@@ -114,7 +114,7 @@ public:
 		m_objs.clear();
 	}
 protected:
-	// å–å‡ºä¸€ä¸ªå¯¹è±¡
+	// È¡³öÒ»¸ö¶ÔÏó
 	AOIObject<T>* GetObject(const AOIObjectID id)const {
 		auto found = m_objs.find(id);
 		if (found == m_objs.end())
@@ -125,7 +125,7 @@ protected:
 	}
 
 public:
-	// åœ¨ä¸€å®šèŒƒå›´å†…ï¼Œå–å‡ºå…¶ä»–å®ä½“
+	// ÔÚÒ»¶¨·¶Î§ÄÚ£¬È¡³öÆäËûÊµÌå
 	void GetObjectsInRange(const AOIObjectID id, std::unordered_map<AOIObjectID, AOIObject<T>*>& set) const {
 		if (auto obj = GetObject(id))
 		{
@@ -144,15 +144,15 @@ public:
 	void GetObjectsInRange(const AOIObject<T>* obj, std::unordered_map<AOIObjectID, AOIObject<T>*>& set, const uint32_t range) const {
 		if (obj->m_aoi != this)
 		{
-			// å®ä½“ä¸åœ¨è¿™aoiä¸­
+			// ÊµÌå²»ÔÚÕâaoiÖĞ
 			return;
 		}
 		static skip_list<int32_t, AOIObject<T>*>::iterator axis_iter;
 		const Vector3& vec = obj->position;
 		int diff = 0;
 
-		// X è½´æŸ¥è¯¢
-		// å‘ x è½´å·¦è¾¹
+		// X Öá²éÑ¯
+		// Ïò x Öá×ó±ß
 		if ((axis_iter = obj->m_x_pos) != m_x_axis.begin())
 			--axis_iter;
 		while (axis_iter != m_x_axis.begin())
@@ -172,7 +172,7 @@ public:
 
 			--axis_iter;
 		}
-		// å‘ x è½´å³è¾¹
+		// Ïò x ÖáÓÒ±ß
 		if ((axis_iter = obj->m_x_pos) != m_x_axis.end())
 			++axis_iter;
 		while (axis_iter != m_x_axis.end())
@@ -194,17 +194,17 @@ public:
 	}
 
 private:
-	// æ·»åŠ å¯¹è±¡
+	// Ìí¼Ó¶ÔÏó
 	void AddObject(AOIObject<T>* obj) {
 		m_objs.insert(std::make_pair(obj->m_id, obj));
 	}
 
-	// ç§»é™¤å¯¹è±¡
+	// ÒÆ³ı¶ÔÏó
 	void RemoveObject(const AOIObject<T>* obj) {
 		m_objs.erase(obj->m_id);
 	}
 
-	// å–å‡ºå¯¹è±¡
+	// È¡³ö¶ÔÏó
 	AOIObject<T>* GetObject(const AOIObjectID id) {
 		auto found = m_objs.find(id);
 		if (found == m_objs.end())
@@ -214,50 +214,50 @@ private:
 		return found->second;
 	}
 
-	// æœ‰è¿™ä¸ªå¯¹è±¡
+	// ÓĞÕâ¸ö¶ÔÏó
 	void HaveObject(const AOIObject<T>* obj) {
 		return (m_objs.find(obj->m_id) != m_objs.end());
 	}
 	
-	// æ ‡è®°å¯¹è±¡ï¼Œå‘Šè¯‰aoiæ¨¡å—ï¼Œè¿™ä¸ªå¯¹è±¡æœ‰å˜åŒ–
+	// ±ê¼Ç¶ÔÏó£¬¸æËßaoiÄ£¿é£¬Õâ¸ö¶ÔÏóÓĞ±ä»¯
 	void MarkObject(AOIObject<T>* obj) {
 		m_changed_obj.insert(std::make_pair(obj->m_id, obj));
 	}
 
-	// å–æ¶ˆæ ‡è®°å¯¹è±¡
+	// È¡Ïû±ê¼Ç¶ÔÏó
 	void UnMarkObject(AOIObject<T>* obj) {
 		m_changed_obj.erase(obj->m_id);
 	}
 	
-	// æ–°å»ºå¯¹è±¡
+	// ĞÂ½¨¶ÔÏó
 	AOIObject<T>* NewObject(const AOIObjectID id) {
 		auto obj = m_obj_pool.Fetch();
 		obj->m_id = id;
 		return obj;
 	}
 
-	// åˆ é™¤å¯¹è±¡
+	// É¾³ı¶ÔÏó
 	void DeleteObject(AOIObject<T>* obj) {
 		m_obj_pool.Recycle(obj);
 	}
 
 
-	// æ›´æ–°å¯¹è±¡ä½ç½®
+	// ¸üĞÂ¶ÔÏóÎ»ÖÃ
 	void UpdateObjectPosition(const AOIObject<T>* obj) {
 		m_x_axis.modify(obj->m_x_pos, obj->position.x);
 	}
 
 
 
-	// åˆ·æ–°å¯¹è±¡
+	// Ë¢ĞÂ¶ÔÏó
 	void UpdateObject(AOIObject<T>* obj) {
-		// å®šæ—¶æ›´æ–°
-		// å¯¹è±¡ç±»å‹æ—¶ï¼Œç«‹å³æ›´æ–°
+		// ¶¨Ê±¸üĞÂ
+		// ¶ÔÏóÀàĞÍÊ±£¬Á¢¼´¸üĞÂ
 
 		obj->m_insight_obj_back = std::move(obj->m_insight_obj);
 		GetObjectsInRange(obj, obj->m_insight_obj);
 
-		// å–å‡ºè¿›å…¥çš„å®ä½“
+		// È¡³ö½øÈëµÄÊµÌå
 		auto& insight_obj = obj->m_insight_obj;
 		auto& insight_obj_back = obj->m_insight_obj_back;
 		for (auto& item : insight_obj)
@@ -270,7 +270,7 @@ private:
 		}
 
 
-		// å–å‡ºç¦»å¼€çš„å®ä½“
+		// È¡³öÀë¿ªµÄÊµÌå
 		for (auto& item : insight_obj_back)
 		{
 			if (insight_obj.find(item.first) == insight_obj.end())
@@ -300,23 +300,23 @@ private:
 
 	AOIObjectPool<T>	m_obj_pool;
 
-	// æ‰€æœ‰çš„å¯¹è±¡ åœ¨ X è½´çš„æ’åˆ—
+	// ËùÓĞµÄ¶ÔÏó ÔÚ X ÖáµÄÅÅÁĞ
 	skip_list<int32_t,AOIObject<T>*>	m_x_axis;	
 
-	// AOI ä¸­çš„å…¨éƒ¨å¯¹è±¡
+	// AOI ÖĞµÄÈ«²¿¶ÔÏó
 	std::unordered_map<AOIObjectID, AOIObject<T>*>	m_objs;					
 
 
-	// åˆ·æ–°å‘¨æœŸå†…ï¼Œä½ç½®æœ‰å˜åŠ¨çš„å®ä½“
+	// Ë¢ĞÂÖÜÆÚÄÚ£¬Î»ÖÃÓĞ±ä¶¯µÄÊµÌå
 	std::unordered_map<AOIObjectID, AOIObject<T>*>	m_changed_obj;		
 	
 	std::vector<T>	m_enter_notify;
 	std::vector<T>	m_leave_notify;
 
 
-	// è¿›å…¥å›è°ƒ
+	// ½øÈë»Øµ÷
 	call_enter	m_call_enter;
-	// ç¦»å¼€å›è°ƒ
+	// Àë¿ª»Øµ÷
 	call_leave	m_call_leave;
 
 };

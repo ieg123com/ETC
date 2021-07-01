@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2009-2011, Salvatore Sanfilippo <antirez at gmail dot com>
  * Copyright (c) 2010-2011, Pieter Noordhuis <pcnoordhuis at gmail dot com>
  *
@@ -1133,7 +1133,7 @@ int redisBufferReadWithTimeOut(redisContext *c, int iiTimeOut) {
 
     if (!(c->flags & REDIS_BLOCK))
     {
-        // 锟斤拷锟斤拷锟斤拷模式 锟斤拷锟诫超时锟斤拷锟斤拷
+        // ������ģʽ ���볬ʱ����
 		struct timeval _waitTime;
 		_waitTime.tv_sec = iiTimeOut / 1000;
 		_waitTime.tv_usec = iiTimeOut % 1000 * 1000;

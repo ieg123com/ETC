@@ -1,4 +1,4 @@
-﻿#include "reactor.h"
+#include "reactor.h"
 #include "fd_context.h"
 #include "hook_helper.h"
 #include <poll.h>

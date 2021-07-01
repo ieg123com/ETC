@@ -1,4 +1,4 @@
-﻿/*
+/*
 Special config for MSVC build of hiredis
 
 Does absolutely nothing for Unix!

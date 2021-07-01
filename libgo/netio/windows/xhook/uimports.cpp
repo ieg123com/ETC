@@ -1,4 +1,4 @@
-﻿#define XHOOKS_INTERNAL 1
+#define XHOOKS_INTERNAL 1
 #include <Windows.h>
 #include "xhook.h"
 

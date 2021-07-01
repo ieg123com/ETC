@@ -1,4 +1,4 @@
-﻿#ifndef MY_BYTEORDER_INCLUDED
+#ifndef MY_BYTEORDER_INCLUDED
 #define MY_BYTEORDER_INCLUDED
 
 /* Copyright (c) 2001, 2014, Oracle and/or its affiliates. All rights reserved.

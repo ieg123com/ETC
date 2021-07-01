@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "../scheduler/scheduler.h"
 
 namespace co

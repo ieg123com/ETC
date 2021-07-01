@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "../../common/config.h"
 #include <unistd.h>
 #include <resolv.h>
@@ -143,7 +143,7 @@ extern gethostbyaddr_r_t gethostbyaddr_r_f;
 namespace co {
     extern bool setTcpConnectTimeout(int fd, int milliseconds);
 
-    // libgo鎻愪緵镄勫岗绋嬬増epoll_wait鎺ュ彛
+    // libgo提供的协程版epoll_wait接口
     extern int libgo_epoll_wait(int epfd, struct epoll_event *events,
             int maxevents, int timeout);
 

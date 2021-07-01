@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "../common/config.h"
 #include "../common/clock.h"
 #include "../task/task.h"
@@ -15,8 +15,8 @@ namespace co {
 
 class Scheduler;
 
-// 鍗忕▼镓ц鍣?
-// 瀵瑰簲涓€涓嚎绋? 璐熻矗链嚎绋嬬殑鍗忕▼璋冨害, 闱炵嚎绋嫔畨鍏?
+// 协程执行器
+// 对应一个线程, 负责本线程的协程调度, 非线程安全.
 class Processer
 {
     friend class Scheduler;
@@ -24,28 +24,28 @@ class Processer
 private:
     Scheduler * scheduler_;
 
-    // 绾跨▼ID
+    // 线程ID
     int id_;
 
-    // 婵€娲绘€?
-    // 闱炴縺娲荤殑P浠呬粎鏄笉鑳芥帴鍙楁柊镄勫岗绋嫔姞鍏? 浠岖劧鍙互寮鸿AddTask骞舵甯稿鐞?
+    // 激活态
+    // 非激活的P仅仅是不能接受新的协程加入, 仍然可以强行AddTask并正常处理.
     volatile bool active_ = true;
 
-    // 褰揿墠姝ｅ湪杩愯镄勫岗绋?
+    // 当前正在运行的协程
     Task* runningTask_{nullptr};
     Task* nextTask_{nullptr};
 
-    // 姣忚疆璋冨害鍙姞链夐檺娆℃暟鏂板岗绋? 阒叉鏂板岗绋嫔垱寤烘柊鍗忕▼浜х敓姝诲惊鐜?
+    // 每轮调度只加有限次数新协程, 防止新协程创建新协程产生死循环
     int addNewQuota_ = 0;
 
-    // 褰揿墠姝ｅ湪杩愯镄勫岗绋嬫湰娆¤皟搴﹀紑濮嬬殑镞堕棿鎴?Dispatch绾跨▼涓撶敤)
+    // 当前正在运行的协程本次调度开始的时间戳(Dispatch线程专用)
     volatile int64_t markTick_ = 0;
     volatile uint64_t markSwitch_ = 0;
 
-    // 鍗忕▼璋冨害娆℃暟
+    // 协程调度次数
     volatile uint64_t switchCount_ = 0;
 
-    // 鍗忕▼阒熷垪
+    // 协程队列
     typedef TSQueue<Task, true> TaskQueue;
     TaskQueue runnableQueue_;
     TaskQueue waitQueue_;
@@ -53,7 +53,7 @@ private:
 
     TaskQueue newQueue_;
 
-    // 绛夊緟镄勬浔浠跺彉閲?
+    // 等待的条件变量
     std::condition_variable_any cv_;
     std::atomic_bool waiting_{false};
     bool notified_ = false;
@@ -69,16 +69,16 @@ public:
 
     inline Scheduler* GetScheduler() { return scheduler_; }
 
-    // 銮峰彇褰揿墠姝ｅ湪镓ц镄勫岗绋?
+    // 获取当前正在执行的协程
     static Task* GetCurrentTask();
 
-    // 鏄惁鍦ㄥ岗绋嬩腑
+    // 是否在协程中
     static bool IsCoroutine();
 
-    // 鍗忕▼鍒囧嚭
+    // 协程切出
     ALWAYS_INLINE static void StaticCoYield();
 
-    // 鎸傝捣镙囱瘑
+    // 挂起标识
     struct SuspendEntry {
         WeakPtr<Task> tk_;
         uint64_t id_;
@@ -100,17 +100,17 @@ public:
         }
     };
 
-    // 鎸傝捣褰揿墠鍗忕▼
+    // 挂起当前协程
     static SuspendEntry Suspend();
 
-    // 鎸傝捣褰揿墠鍗忕▼, 骞跺湪鎸囧畾镞堕棿鍚庤嚜锷ㄥ敜阅?
+    // 挂起当前协程, 并在指定时间后自动唤醒
     static SuspendEntry Suspend(FastSteadyClock::duration dur);
     static SuspendEntry Suspend(FastSteadyClock::time_point timepoint);
 
-    // 鍞ら啋鍗忕▼
+    // 唤醒协程
     static bool Wakeup(SuspendEntry const& entry, std::function<void()> const& functor = NULL);
 
-    // 娴嬭瘯涓€涓猄uspendEntry鏄惁杩桦彲鑳芥湁鏁?
+    // 测试一个SuspendEntry是否还可能有效
     static bool IsExpire(SuspendEntry const& entry);
 
     /// --------------------------------------
@@ -118,32 +118,32 @@ public:
 private:
     explicit Processer(Scheduler * scheduler, int id);
 
-    // 寰呮墽琛岀殑鍗忕▼鏁伴噺
-    // 鏆傚寸鐢ㄤ簬璐熻浇鎸囨暟
+    // 待执行的协程数量
+    // 暂兼用于负载指数
     std::size_t RunnableSize();
 
     ALWAYS_INLINE void CoYield();
 
-    // 鏂板垱寤恒€侀樆濉炲悗瑙﹀彂镄勫岗绋媋dd杩涙潵
+    // 新创建、阻塞后触发的协程add进来
     void AddTask(Task *tk);
 
-    // 璋冨害
+    // 调度
     void Process();
 
-    // 锅锋潵镄勫岗绋媋dd杩涙潵
+    // 偷来的协程add进来
     void AddTask(SList<Task> && slist);
 
     void NotifyCondition();
 
-    // 鏄惁澶勪簬绛夊緟钟舵€?镞爎unnable鍗忕▼)
-    // 璋冨害绾跨▼浼氩敖閲忓垎閰嶅岗绋嬭绷鏉?
+    // 是否处于等待状态(无runnable协程)
+    // 调度线程会尽量分配协程过来
     ALWAYS_INLINE bool IsWaiting() { return waiting_; }
 
-    // 鍗曚釜鍗忕▼镓ц镞堕昵瓒呰绷棰勮链? 鍒椤垽瀹氢负阒诲钟舵€?
-    // 阒诲钟舵€佷笉鍐嶅姞鍏ユ柊镄勫岗绋? 骞剁敱璋冨害绾跨▼steal璧版墍链夊岗绋?姝ｅ湪镓ц镄勯櫎澶?
+    // 单个协程执行时长超过预设值, 则判定为阻塞状态
+    // 阻塞状态不再加入新的协程, 并由调度线程steal走所有协程(正在执行的除外)
     bool IsBlocking();
 
-    // 锅峰岗绋?
+    // 偷协程
     SList<Task> Steal(std::size_t n);
     /// --------------------------------------
 
@@ -154,7 +154,7 @@ private:
 
     bool AddNewTasks();
 
-    // 璋冨害绾跨▼镓撴爣璁? 鐢ㄤ簬妫€娴嬮樆濉?
+    // 调度线程打标记, 用于检测阻塞
     void Mark();
 
     int64_t NowMicrosecond();

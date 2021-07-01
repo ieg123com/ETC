@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "../common/config.h"
 #include "../common/any.h"
 #include "../scheduler/processer.h"

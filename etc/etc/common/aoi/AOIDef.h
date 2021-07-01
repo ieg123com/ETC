@@ -1,24 +1,24 @@
-ï»¿#pragma once
+#pragma once
 #include <stdint.h>
 
-// aoi å¯¹è±¡
+// aoi ¶ÔÏó
 using AOIObjectID = uint64_t;
 
 
-// æ ‡ç­¾ç±»å‹
+// ±êÇ©ÀàĞÍ
 enum class ETagType : unsigned int
 {
 	INVALID			= 1 << 31,
-	PLAYER			= 1 << 0,	// ç©å®¶
-	MONSTER			= 1 << 1,	// æ€ªç‰©
-	ITEM			= 1 << 2,	// ç‰©å“
+	PLAYER			= 1 << 0,	// Íæ¼Ò
+	MONSTER			= 1 << 1,	// ¹ÖÎï
+	ITEM			= 1 << 2,	// ÎïÆ·
 	NPC				= 1 << 3,	// NPC
-	PET				= 1 << 4,	// å® ç‰©
-	SUMMON_BEAST	= 1 << 5,	// å¬å”¤æ€ªç‰©
+	PET				= 1 << 4,	// ³èÎï
+	SUMMON_BEAST	= 1 << 5,	// ÕÙ»½¹ÖÎï
 	BOSS			= 1 << 6,	// Boss
-	PUPPET			= 1 << 7,	// é©¬ç”²(å¸ƒå¶ã€å‚€å„¡)	
+	PUPPET			= 1 << 7,	// Âí¼×(²¼Å¼¡¢¿şÀÜ)	
 
-	ALL				= 0xFFFFFFFF,	// å…¨éƒ¨
+	ALL				= 0xFFFFFFFF,	// È«²¿
 };
 
 

@@ -1,4 +1,4 @@
-ï»¿#pragma once
+#pragma once
 #include "etc.h"
 #include "coroutine.h"
 #include "NetDefines.h"
@@ -9,7 +9,7 @@ class Service;
 
 
 class Session :
-	public Entity
+	public GEntity
 {
 	friend class Service;
 public:
@@ -25,10 +25,10 @@ public:
 	std::shared_ptr<Service>	__service;
 
 
-	/** @brief æ¶ˆæ¯åˆ°è¾¾*/
+	// ÏûÏ¢µ½´ï
 	void OnRead(const char* data, const size_t len);
 
-	/** @brief å‘é€æ¶ˆæ¯*/
+	// ·¢ËÍÏûÏ¢
 	void Send(const char* data, const size_t len);
 
 protected:

@@ -1,11 +1,11 @@
-ï»¿#include "ObjectDebug.h"
+#include "ObjectDebug.h"
 #include "Game.h"
 #include "Object.h"
 
 
 ObjectDebug::~ObjectDebug()
 {
-	printf("ææ„ ObjectDebug\n");
+	printf("Îö¹¹ ObjectDebug\n");
 }
 
 
@@ -82,10 +82,10 @@ std::string ObjectDebug::DebugObjectInfo()const
 
 
 	std::string info_str;
-	info_str = "å…¨éƒ¨å¯¹è±¡æ•°: " + std::to_string(object_count) + " | " + std::to_string(Game::System.m_objects.size());
+	info_str = "È«²¿¶ÔÏóÊı: " + std::to_string(object_count) + " | " + std::to_string(Game::System.m_objects.size());
 	for (auto& item : object_info)
 	{
-		info_str += "\n[" + item.first + "] å¯¹è±¡æ•°: " + std::to_string(item.second.first) + " | " + std::to_string(item.second.second);
+		info_str += "\n[" + item.first + "] ¶ÔÏóÊı: " + std::to_string(item.second.first) + " | " + std::to_string(item.second.second);
 	}
 	return std::move(info_str);
 }

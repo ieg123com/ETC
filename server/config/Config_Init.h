@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Skill/Config_Buff.h"
 
 

@@ -1,4 +1,4 @@
-﻿//
+//
 //  base64 encoding and decoding with C++.
 //  Version: 1.01.00
 //

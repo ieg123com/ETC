@@ -1,11 +1,11 @@
-﻿/* 
+/* 
    base64.cpp and base64.h
 
    base64 encoding and decoding with C++.
 
    Version: 1.01.00
 
-   Copyright (C) 2004-2017 Ren茅 Nyffenegger
+   Copyright (C) 2004-2017 René Nyffenegger
 
    This source code is provided 'as-is', without any express or implied
    warranty. In no event will the author be held liable for any damages
@@ -25,7 +25,7 @@
 
    3. This notice may not be removed or altered from any source distribution.
 
-   Ren茅 Nyffenegger rene.nyffenegger@adp-gmbh.ch
+   René Nyffenegger rene.nyffenegger@adp-gmbh.ch
 
 */
 

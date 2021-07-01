@@ -1,4 +1,4 @@
-﻿#ifndef WEPOLL_H_
+#ifndef WEPOLL_H_
 #define WEPOLL_H_
 
 #ifndef WEPOLL_EXPORT

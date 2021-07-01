@@ -1,4 +1,4 @@
-﻿#include "fcontext.h"
+#include "fcontext.h"
 #include <memory>
 #include <string.h>
 

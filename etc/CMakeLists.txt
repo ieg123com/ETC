@@ -37,6 +37,10 @@ FILE(GLOB ETC_COMMON_TIMER_FILES "./etc/common/timer/*.cpp" "./etc/common/timer/
 set(ETC_COMMON_COROUTINE_FILES "")
 FILE(GLOB ETC_COMMON_COROUTINE_FILES "./etc/common/coroutine/*.cpp" "./etc/common/coroutine/*.h")
 
+#协程(异步)
+set(ETC_COMMON_COROUTINE_ASYNC_FILES "")
+FILE(GLOB ETC_COMMON_COROUTINE_ASYNC_FILES "./etc/common/coroutine/async/*.cpp" "./etc/common/coroutine/async/*.h")
+
 #AOI
 set(ETC_COMMON_AOI_FILES "")
 FILE(GLOB ETC_COMMON_AOI_FILES "./etc/common/aoi/*.cpp" "./etc/common/aoi/*.h")
@@ -56,6 +60,7 @@ source_group(etc\\system					FILES ${ETC_SYSTEM_FILES})
 source_group(etc\\kernel\\event				FILES ${ETC_COMMON_EVENT_FILES})
 source_group(etc\\common\\timer				FILES ${ETC_COMMON_TIMER_FILES})
 source_group(etc\\common\\coroutine			FILES ${ETC_COMMON_COROUTINE_FILES})
+source_group(etc\\common\\coroutine\\async	FILES ${ETC_COMMON_COROUTINE_ASYNC_FILES})
 source_group(etc\\common\\aoi				FILES ${ETC_COMMON_AOI_FILES})
 source_group(etc\\common\\aoi\\skip_list	FILES ${ETC_COMMON_SKIP_LIST_FILES})
 
@@ -66,6 +71,7 @@ LIST(APPEND ALL_OBJECT
 	${ETC_COMMON_EVENT_FILES}
 	${ETC_COMMON_TIMER_FILES}
 	${ETC_COMMON_COROUTINE_FILES}
+	${ETC_COMMON_COROUTINE_ASYNC_FILES}
 	${ETC_COMMON_AOI_FILES}
 	${ETC_COMMON_SKIP_LIST_FILES})
 
@@ -117,6 +123,23 @@ LIST(APPEND ALL_OBJECT
 	${NET_WEPOLL_FILES})
 
 
+#========================Module==============================
+
+# 基础网络组件
+set(MODULE_FILES "")
+FILE(GLOB MODULE_FILES "./module/*.cpp" "./module/*.h")
+
+# actor
+set(MODULE_ACTOR_FILES "")
+FILE(GLOB MODULE_ACTOR_FILES "./module/actor/*.cpp" "./module/actor/*.h")
+
+
+source_group(module						FILES ${MODULE_FILES})
+source_group(module\\actor				FILES ${MODULE_ACTOR_FILES})
+
+LIST(APPEND ALL_OBJECT
+	${MODULE_FILES}
+	${MODULE_ACTOR_FILES})
 
 
 # Target

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "../../common/config.h"
 
 #if defined(LIBGO_SYS_Linux)

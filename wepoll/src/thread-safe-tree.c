@@ -1,4 +1,4 @@
-﻿#include <stdint.h>
+#include <stdint.h>
 
 #include "reflock.h"
 #include "thread-safe-tree.h"

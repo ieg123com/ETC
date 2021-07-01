@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "config.h"
 #include "util.h"
 #include "spinlock.h"
@@ -6,7 +6,7 @@
 namespace co
 {
 
-// 渚靛叆寮忔暟鎹粨鏋凥ook鍩虹被
+// 侵入式数据结构Hook基类
 struct TSQueueHook
 {
     TSQueueHook* prev = nullptr;
@@ -28,7 +28,7 @@ struct TSQueueHook
     }
 };
 
-// 渚靛叆寮忓弻鍚戦摼琛?
+// 侵入式双向链表
 // moveable, noncopyable, foreachable
 // erase, size, empty: O(1)
 template <typename T>
@@ -37,7 +37,7 @@ class SList
     static_assert((std::is_base_of<TSQueueHook, T>::value), "T must be baseof TSQueueHook");
 
 public:
-    // !! 鏀寔杈归亶铡呜竟鍒犻櫎 !!
+    // !! 支持边遍历边删除 !!
     struct iterator
     {
         T* ptr;
@@ -190,7 +190,7 @@ public:
     ALWAYS_INLINE TSQueueHook* tail() { return tail_; }
 };
 
-// 绾跨▼瀹夊叏镄勯槦鍒?鏀寔闅忔満鍒犻櫎)
+// 线程安全的队列(支持随机删除)
 template <typename T, bool ThreadSafe = true>
 class TSQueue
 {
@@ -208,7 +208,7 @@ public:
     TSQueueHook* head_;
     TSQueueHook* tail_;
     volatile std::size_t count_;
-    void *check_; // 鍙€夌殑erase妫€娴?
+    void *check_; // 可选的erase检测
 
 public:
     TSQueue()
@@ -314,7 +314,7 @@ public:
 #endif
     }
 
-    // O(n), 鎱庣敤.
+    // O(n), 慎用.
     ALWAYS_INLINE SList<T> pop_front(uint32_t n)
     {
         if (head_ == tail_) return SList<T>();
@@ -340,7 +340,7 @@ public:
         return SList<T>(first, last, c);
     }
 
-    // O(n), 鎱庣敤.
+    // O(n), 慎用.
     ALWAYS_INLINE SList<T> pop_back(uint32_t n)
     {
         if (head_ == tail_) return SList<T>();

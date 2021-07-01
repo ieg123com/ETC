@@ -1,4 +1,4 @@
-﻿/* SDSLib, A C dynamic strings library
+/* SDSLib, A C dynamic strings library
  *
  * Copyright (c) 2006-2010, Salvatore Sanfilippo <antirez at gmail dot com>
  * All rights reserved.

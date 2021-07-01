@@ -1,4 +1,4 @@
-﻿#include "debugger.h"
+#include "debugger.h"
 #include "../scheduler/ref.h"
 #include "../scheduler/scheduler.h"
 #include "../scheduler/processer.h"

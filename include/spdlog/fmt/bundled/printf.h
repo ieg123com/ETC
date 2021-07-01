@@ -1,4 +1,4 @@
-﻿// Formatting library for C++ - legacy printf implementation
+// Formatting library for C++ - legacy printf implementation
 //
 // Copyright (c) 2012 - 2016, Victor Zverovich
 // All rights reserved.

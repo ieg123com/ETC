@@ -1,9 +1,9 @@
-ï»¿#pragma once
+#pragma once
 #include <unordered_map>
 #include <string>
 #include <mutex>
 
-// å¯¹è±¡è°ƒè¯•
+// ¶ÔÏóµ÷ÊÔ
 class ObjectDebug
 {
 public:

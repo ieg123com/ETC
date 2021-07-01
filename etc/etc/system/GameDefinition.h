@@ -1,11 +1,11 @@
-ï»¿#pragma once
+#pragma once
 #include "log/log.h"
 
 
-// åç»­æ¥å…¥json
+// ºóĞø½ÓÈëjson
 typedef long Json;
 
 typedef long long ObjectID;
 
-// ä½¿ç”¨è¿™ä¸ªï¼Œæ²¡æ³•æŸ¥æ‰¾å¼•ç”¨
+// Ê¹ÓÃÕâ¸ö£¬Ã»·¨²éÕÒÒıÓÃ
 //typedef EntityEventType EventType;

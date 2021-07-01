@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "../../common/config.h"
 #include "../../common/error.h"
 #include <WinSock2.h>

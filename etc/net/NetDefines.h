@@ -1,4 +1,4 @@
-ï»¿#pragma once
+#pragma once
 #include <stdint.h>
 
 
@@ -20,7 +20,7 @@ using SessionId = uint64_t;
 // }
 
 
-// ç½‘ç»œç±»å‹
+// ÍøÂçÀàĞÍ
 enum class NetworkType : uint8_t
 {
 	Server,

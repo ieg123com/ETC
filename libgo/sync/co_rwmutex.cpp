@@ -1,4 +1,4 @@
-﻿#include "co_rwmutex.h"
+#include "co_rwmutex.h"
 #include "../scheduler/scheduler.h"
 
 namespace co
@@ -23,13 +23,13 @@ void CoRWMutex::RLock()
 
 retry:
     if (writePriority_) {
-        // 鍐欎紭鍏?
+        // 写优先
         if (lockState_ >= 0 && wCv_.empty()) {
             ++lockState_;
             return ;
         }
     } else {
-        // 璇讳紭鍏?
+        // 读优先
         if (lockState_ >= 0) {
             ++lockState_;
             return ;
@@ -91,11 +91,11 @@ void CoRWMutex::WUnlock()
 
 void CoRWMutex::TryWakeUp()
 {
-    // 浼桦厛鍞ら啋鍐欑瓑寰?
+    // 优先唤醒写等待
     if (wCv_.notify_one())
         return ;
 
-    // 鍞ら啋璇荤瓑寰?
+    // 唤醒读等待
     rCv_.notify_all();
 }
 

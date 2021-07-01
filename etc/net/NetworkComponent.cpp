@@ -1,4 +1,4 @@
-ï»¿#include "NetworkComponent.h"
+#include "NetworkComponent.h"
 #include "tcp/wepoll/WEpollService.h"
 #include "Session.h"
 #include "log/log.h"
@@ -15,7 +15,7 @@ bool NetworkComponent::Listen(const uint16_t port)
 
 	if (!m_service->Listen(port))
 	{
-		// å¼€å¯ç«¯å£å¤±è´¥
+		// ¿ªÆô¶Ë¿ÚÊ§°Ü
 		return false;
 	}
 
@@ -35,11 +35,11 @@ std::shared_ptr<Session> NetworkComponent::Connect(const std::string& ip, const 
 
 	if (auto session = m_service->Connect(ip,port))
 	{
-		// è¿æ¥æˆåŠŸ
+		// Á¬½Ó³É¹¦
 		return session;
 	}
 
-	// è¿æ¥å¤±è´¥
+	// Á¬½ÓÊ§°Ü
 	return nullptr;
 }
 
@@ -47,21 +47,21 @@ std::shared_ptr<Session> NetworkComponent::Connect(const std::string& ip, const 
 
 void NetworkComponent::OnConnectComplete(const std::shared_ptr<Session>& session)
 {
-	LOG_INFO("å®Œæˆè¿æ¥:{}:{} fd:{}", session->Ip.c_str(),session->Port, session->Fd);
+	LOG_INFO("Íê³ÉÁ¬½Ó:{}:{} fd:{}", session->Ip.c_str(),session->Port, session->Fd);
 	if (!__AddSession(session))
 	{
-		LOG_ERROR("è¿æ¥çš„ä¼šè¯fdç›¸åŒ");
+		LOG_ERROR("Á¬½ÓµÄ»á»°fdÏàÍ¬");
 	}
 }
 
 
 void NetworkComponent::OnAccept(const std::shared_ptr<Session>& session)
 {
-	LOG_INFO("ä¼šè¯è¿æ¥:{} fd:{}", session->Ip.c_str(),session->Fd);
+	LOG_INFO("»á»°Á¬½Ó:{} fd:{}", session->Ip.c_str(),session->Fd);
 
 	if (!__AddSession(session))
 	{
-		LOG_ERROR("è¿æ¥çš„ä¼šè¯fdç›¸åŒ");
+		LOG_ERROR("Á¬½ÓµÄ»á»°fdÏàÍ¬");
 	}
 	else {
 		session->Send("Welcome ETC", 11);
@@ -80,7 +80,7 @@ void NetworkComponent::OnRead(const std::shared_ptr<Session>& session, const cha
 
 void NetworkComponent::OnDisconnect(const std::shared_ptr<Session>& session)
 {
-	LOG_INFO("ä¼šè¯æ–­å¼€:{} fd:{}", session->Ip.c_str(), session->Fd);
+	LOG_INFO("»á»°¶Ï¿ª:{} fd:{}", session->Ip.c_str(), session->Fd);
 	if (__RemoveSession(session))
 	{
 		session->Dispose();

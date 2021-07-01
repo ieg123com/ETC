@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "../common/config.h"
 #include "../common/spinlock.h"
 #include "../common/util.h"
@@ -16,7 +16,7 @@
 namespace co
 {
 
-// libgo璋冭瘯宸ュ叿
+// libgo调试工具
 class CoDebugger
 {
 public:
@@ -67,22 +67,22 @@ public:
 public:
     static CoDebugger& getInstance();
 
-    // 銮峰彇褰揿墠镓€链変俊鎭?
+    // 获取当前所有信息
     std::string GetAllInfo();
 
-    // 褰揿墠鍗忕▼镐绘暟閲?
+    // 当前协程总数量
     int TaskCount();
 
-    // 褰揿墠鍗忕▼ID, ID浠?寮€濮嬶纸涓嶅湪鍗忕▼涓垯杩斿洖0锛?
+    // 当前协程ID, ID从1开始（不在协程中则返回0）
     unsigned long GetCurrentTaskID();
 
-    // 褰揿墠鍗忕▼鍒囨崲镄勬鏁?
+    // 当前协程切换的次数
     unsigned long GetCurrentTaskYieldCount();
 
-    // 璁剧疆褰揿墠鍗忕▼璋冭瘯淇℃伅, 镓揿嵃璋冭瘯淇℃伅镞跺皢锲炴樉
+    // 设置当前协程调试信息, 打印调试信息时将回显
     void SetCurrentTaskDebugInfo(std::string const& info);
 
-    // 銮峰彇褰揿墠鍗忕▼镄勮皟璇曚俊鎭? 杩斿洖镄勫唴瀹瑰寘鎷敤鎴疯嚜瀹氢箟镄勪俊鎭拰鍗忕▼ID
+    // 获取当前协程的调试信息, 返回的内容包括用户自定义的信息和协程ID
     const char* GetCurrentTaskDebugInfo();
 
 private:

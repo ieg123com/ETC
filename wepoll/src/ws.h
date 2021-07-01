@@ -1,4 +1,4 @@
-﻿#ifndef WEPOLL_WS_H_
+#ifndef WEPOLL_WS_H_
 #define WEPOLL_WS_H_
 
 #include "internal.h"

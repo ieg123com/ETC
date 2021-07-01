@@ -1,4 +1,4 @@
-﻿#include "timer.h"
+#include "timer.h"
 #include "../scheduler/scheduler.h"
 #include "../scheduler/processer.h"
 #include "../libgo.h"
@@ -62,7 +62,7 @@ CoTimer::CoTimerImpl::ExpireAt(FastSteadyClock::duration dur, func_t const& cb)
 
     auto id = StartTimer(dur, cb);
 
-    // 寮哄埗鍞ら啋, 鎻愰佩绮惧嗳搴?
+    // 强制唤醒, 提高精准度
     if (dur <= precision_) {
         std::unique_lock<LFLock> lock(lock_, std::defer_lock);
         if (lock.try_lock()) return id;

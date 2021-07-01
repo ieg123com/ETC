@@ -1,12 +1,12 @@
-﻿#pragma once
+#pragma once
 #include "../common/config.h"
 #include "../common/clock.h"
 #include "../sync/channel.h"
 
 namespace co {
 
-// 杩炴帴姹?
-// @typename Connection: 杩炴帴绫诲瀷
+// 连接池
+// @typename Connection: 连接类型
 template <typename Connection>
 class ConnectionPool
 {
@@ -16,11 +16,11 @@ public:
     typedef std::function<void(Connection*)> Deleter;
     typedef std::function<bool(Connection*)> CheckAlive;
 
-    // @Factory: 鍒涘缓杩炴帴镄勫伐铡?
-    // @Deleter: 阌€姣佽繛鎺? 浼犻€扤ULL镞朵细浣跨敤delete鍒犻櫎杩炴帴.
-    // @maxConnection: 链€澶ц繛鎺ユ暟, 0琛ㄧず涓嶉檺鏁伴噺
-    // @maxIdleConnection: 链€澶х┖闂茶繛鎺ユ暟, 0琛ㄧず涓嶉檺鏁伴噺
-    // 娉ㄦ剰锛欶actory鍜娈eleter镄勮皟鐢ㄥ彲鑳戒细骞惰.
+    // @Factory: 创建连接的工厂
+    // @Deleter: 销毁连接, 传递NULL时会使用delete删除连接.
+    // @maxConnection: 最大连接数, 0表示不限数量
+    // @maxIdleConnection: 最大空闲连接数, 0表示不限数量
+    // 注意：Factory和Deleter的调用可能会并行.
     explicit ConnectionPool(Factory f, Deleter d = NULL, size_t maxConnection = 0, size_t maxIdleConnection = 0)
         : factory_(f), deleter_(d), count_(0),
         maxConnection_(maxConnection),
@@ -43,8 +43,8 @@ public:
         }
     }
 
-    // 棰勫垱寤轰竴浜涜繛鎺?
-    // @nConnection: 杩炴帴鏁伴噺, 澶т簬maxIdleConnection_镄勯儴鍒嗘棤鏁?
+    // 预创建一些连接
+    // @nConnection: 连接数量, 大于maxIdleConnection_的部分无效
     void Reserve(size_t nConnection)
     {
         for (size_t i = Count(); i < maxIdleConnection_; ++i)
@@ -58,9 +58,9 @@ public:
         }
     }
 
-    // 銮峰彇涓€涓繛鎺?
-    // 濡傛灉姹犵┖浜嗗苟涓旇繛鎺ユ暟杈惧埌涓婇檺, 鍒欎细绛夊緟
-    // 杩斿洖镄勬櫤鑳芥寚阍堥攒姣佹椂, 浼氲嚜锷ㄥ皢杩炴帴褰掕缮缁欐睁
+    // 获取一个连接
+    // 如果池空了并且连接数达到上限, 则会等待
+    // 返回的智能指针销毁时, 会自动将连接归还给池
     ConnectionPtr Get(CheckAlive checkAliveOnGet = NULL,
             CheckAlive checkAliveOnPut = NULL)
     {
@@ -90,13 +90,13 @@ retry_get:
         return Out(connection, checkAliveOnPut);
     }
 
-    // 銮峰彇涓€涓繛鎺?
-    // 濡傛灉姹犵┖浜嗗苟涓旇繛鎺ユ暟杈惧埌涓婇檺, 鍒欎细绛夊緟
-    // 杩斿洖镄勬櫤鑳芥寚阍堥攒姣佹椂, 浼氲嚜锷ㄥ皢杩炴帴褰掕缮缁欐睁
+    // 获取一个连接
+    // 如果池空了并且连接数达到上限, 则会等待
+    // 返回的智能指针销毁时, 会自动将连接归还给池
     //
-    // @timeout: 绛夊緟瓒呮椂镞堕棿, 浠呭湪鍗忕▼涓湁鏁? 渚? std::chrono::seconds(1)
-    // @checkAliveOnGet: 鐢宠镞舵镆ヨ繛鎺ユ槸鍚﹁缮链夋晥
-    // @checkAliveOnPut: 褰掕缮镞舵镆ヨ繛鎺ユ槸鍚﹁缮链夋晥
+    // @timeout: 等待超时时间, 仅在协程中有效, 例: std::chrono::seconds(1)
+    // @checkAliveOnGet: 申请时检查连接是否还有效
+    // @checkAliveOnPut: 归还时检查连接是否还有效
     ConnectionPtr Get(FastSteadyClock::duration timeout,
             CheckAlive checkAliveOnGet = NULL,
             CheckAlive checkAliveOnPut = NULL)

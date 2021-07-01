@@ -1,4 +1,4 @@
-﻿#include <errno.h>
+#include <errno.h>
 
 #include "error.h"
 #include "win.h"

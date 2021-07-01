@@ -1,4 +1,4 @@
-﻿#include "str.h"
+#include "str.h"
 #include <sstream>
 #include <stdarg.h>
 #include <windows.h>

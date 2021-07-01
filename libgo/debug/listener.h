@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <exception>
 
 namespace co
@@ -8,85 +8,85 @@ class Listener
 {
 public:
     /**
-     * 鍗忕▼浜嬩欢鐩戝惉鍣?
-     * 娉ㄦ剰锛氩叾涓墍链夌殑锲炶皟鏂规硶閮戒笉鍏佽鎶涘嚭寮傚父
+     * 协程事件监听器
+     * 注意：其中所有的回调方法都不允许抛出异常
      */
     class TaskListener {
     public:
         /**
-         * 鍗忕▼琚垱寤烘椂琚皟鐢?
-         * 锛堟敞镒忔镞跺苟链繍琛屽湪鍗忕▼涓级
+         * 协程被创建时被调用
+         * （注意此时并未运行在协程中）
          *
-         * @prarm task_id 鍗忕▼ID
+         * @prarm task_id 协程ID
          * @prarm eptr
          */
         virtual void onCreated(uint64_t task_id) noexcept {
         }
         
         /**
-         * 姣忔鍗忕▼鍒囧叆鍓嶈皟鐢?
-         * 锛堟敞镒忔镞跺苟链繍琛屽湪鍗忕▼涓级
+         * 每次协程切入前调用
+         * （注意此时并未运行在协程中）
          *
-         * @prarm task_id 鍗忕▼ID
+         * @prarm task_id 协程ID
          * @prarm eptr
          */
         virtual void onSwapIn(uint64_t task_id) noexcept {
         }
 
         /**
-         * 鍗忕▼寮€濮嬭繍琛?
-         * 锛堟湰鏂规硶杩愯鍦ㄥ岗绋嬩腑锛?
+         * 协程开始运行
+         * （本方法运行在协程中）
          *
-         * @prarm task_id 鍗忕▼ID
+         * @prarm task_id 协程ID
          * @prarm eptr
          */
         virtual void onStart(uint64_t task_id) noexcept {
         }
 
         /**
-         * 姣忔鍗忕▼鍒囧嚭鍓嶈皟鐢?
-         * 锛堟湰鏂规硶杩愯鍦ㄥ岗绋嬩腑锛?
+         * 每次协程切出前调用
+         * （本方法运行在协程中）
          *
-         * @prarm task_id 鍗忕▼ID
+         * @prarm task_id 协程ID
          * @prarm eptr
          */
         virtual void onSwapOut(uint64_t task_id) noexcept {
         }
         
         /**
-         * 鍗忕▼姝ｅ父杩愯缁撴潫锛堟棤寮傚父鎶涘嚭锛?
-         * 锛堟湰鏂规硶杩愯鍦ㄥ岗绋嬩腑锛?
+         * 协程正常运行结束（无异常抛出）
+         * （本方法运行在协程中）
          *
-         * @prarm task_id 鍗忕▼ID
+         * @prarm task_id 协程ID
          */
         virtual void onCompleted(uint64_t task_id) noexcept {
         }
 
         /**
-         * 鍗忕▼鎶涘嚭链鎹曡幏镄勫纾甯革纸链柟娉曡繍琛屽湪鍗忕▼涓级
-         * @prarm task_id 鍗忕▼ID
-         * @prarm eptr 鎶涘嚭镄勫纾甯稿璞℃寚阍堬紝鍙链寚阍堣祴链间互淇敼寮傚父瀵硅薄锛?
-         *             寮傚父灏嗕娇鐢?CoroutineOptions.exception_handle 涓?
-         *             閰岖疆镄勬柟寮忓鐞嗭绂璧嫔€间负nullptr鍒栾〃绀哄拷鐣ユ寮傚父
-         *             锛侊紒娉ㄦ剰锛氩綋 exception_handle 閰岖疆涓?immedaitely_throw 镞舵湰浜嬩欢
-         *             锛侊紒涓?onFinished() 鍧囧け鏁堬紝寮傚父鍙戠敓镞跺皢鐩存帴鎶涘嚭骞朵腑鏂▼搴忕殑杩愯锛屽悓镞剁敓鎴恈oredump
+         * 协程抛出未被捕获的异常（本方法运行在协程中）
+         * @prarm task_id 协程ID
+         * @prarm eptr 抛出的异常对象指针，可对本指针赋值以修改异常对象，
+         *             异常将使用 CoroutineOptions.exception_handle 中
+         *             配置的方式处理；赋值为nullptr则表示忽略此异常
+         *             ！！注意：当 exception_handle 配置为 immedaitely_throw 时本事件
+         *             ！！与 onFinished() 均失效，异常发生时将直接抛出并中断程序的运行，同时生成coredump
          */
         virtual void onException(uint64_t task_id, std::exception_ptr& eptr) noexcept {
         }
 
         /**
-         * 鍗忕▼杩愯瀹屾垚锛宨f(eptr) 涓篺alse璇存槑鍗忕▼姝ｅ父缁撴潫锛屼负true璇存槑鍗忕▼鎶涘嚭浜嗕简寮傚父
-         *锛堟湰鏂规硶杩愯鍦ㄥ岗绋嬩腑锛?
+         * 协程运行完成，if(eptr) 为false说明协程正常结束，为true说明协程抛出了了异常
+         *（本方法运行在协程中）
          *
-         * @prarm task_id 鍗忕▼ID
+         * @prarm task_id 协程ID
          */
         virtual void onFinished(uint64_t task_id) noexcept {
         }
 
         virtual ~TaskListener() noexcept = default;
 
-        // s: Scheduler锛岃〃绀鸿鏂规硶杩愯鍦ㄨ皟搴﹀櫒涓娄笅鏂囦腑
-        // c: Coroutine锛岃〃绀鸿鏂规硶杩愯鍦ㄥ岗绋嬩笂涓嬫枃涓?
+        // s: Scheduler，表示该方法运行在调度器上下文中
+        // c: Coroutine，表示该方法运行在协程上下文中
         //
         //                                           -->[c]onCompleted->
         //                                          |                   |

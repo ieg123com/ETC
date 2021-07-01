@@ -1,4 +1,4 @@
-ï»¿#include "GameSystem.h"
+#include "GameSystem.h"
 #include "Object.h"
 #include "EventSystem.h"
 #include "Game.h"
@@ -92,7 +92,7 @@ void GameSystem::Start()
 		}
 		catch (...)
 		{
-			LOG_ERROR("[{}] æ›´æ–°å¯¹è±¡å‡ºçŽ°æœªçŸ¥é”™è¯¯", obj->GetObjectType().GetName());
+			LOG_ERROR("[{}] ¸üÐÂ¶ÔÏó³öÏÖÎ´Öª´íÎó", obj->GetObjectType().GetName());
 		}
 	}
 }
@@ -108,7 +108,7 @@ void GameSystem::Update()
 		auto find_obj = m_objects.find(id);
 		if (find_obj == m_objects.end())
 		{
-			// æ²¡æ‰¾åˆ°è¿›å…¥çš„å¯¹è±¡
+			// Ã»ÕÒµ½½øÈëµÄ¶ÔÏó
 			continue;
 		}
 		m_updates.emplace(find_obj->first, find_obj->second);
@@ -133,7 +133,7 @@ void GameSystem::Update()
 		}
 		catch (...)
 		{
-			LOG_ERROR("[{}] æ›´æ–°å¯¹è±¡å‡ºçŽ°æœªçŸ¥é”™è¯¯", obj.second->GetObjectType().GetName());
+			LOG_ERROR("[{}] ¸üÐÂ¶ÔÏó³öÏÖÎ´Öª´íÎó", obj.second->GetObjectType().GetName());
 		}
 	}
 	Game::Time.RefreshLastTime();
@@ -150,7 +150,7 @@ void GameSystem::LateUpdate()
 		auto find_obj = m_objects.find(id);
 		if (find_obj == m_objects.end())
 		{
-			// æ²¡æ‰¾åˆ°è¿›å…¥çš„å¯¹è±¡
+			// Ã»ÕÒµ½½øÈëµÄ¶ÔÏó
 			continue;
 		}
 		m_late_updates.emplace(find_obj->first,find_obj->second);
@@ -175,7 +175,7 @@ void GameSystem::LateUpdate()
 		}
 		catch (...)
 		{
-			LOG_ERROR("[{}] æ›´æ–°å¯¹è±¡å‡ºçŽ°æœªçŸ¥é”™è¯¯", obj.second->GetObjectType().GetName());
+			LOG_ERROR("[{}] ¸üÐÂ¶ÔÏó³öÏÖÎ´Öª´íÎó", obj.second->GetObjectType().GetName());
 		}
 	}
 }
@@ -191,7 +191,7 @@ void GameSystem::SecondsUpdate()
 		auto find_obj = m_objects.find(id);
 		if (find_obj == m_objects.end())
 		{
-			// æ²¡æ‰¾åˆ°è¿›å…¥çš„å¯¹è±¡
+			// Ã»ÕÒµ½½øÈëµÄ¶ÔÏó
 			continue;
 		}
 		m_seconds_updates.emplace(find_obj->first,find_obj->second);
@@ -216,7 +216,7 @@ void GameSystem::SecondsUpdate()
 		}
 		catch (...)
 		{
-			LOG_ERROR("[{}] æ›´æ–°å¯¹è±¡å‡ºçŽ°æœªçŸ¥é”™è¯¯", obj.second->GetObjectType().GetName());
+			LOG_ERROR("[{}] ¸üÐÂ¶ÔÏó³öÏÖÎ´Öª´íÎó", obj.second->GetObjectType().GetName());
 		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "../common/config.h"
 #include "../common/spinlock.h"
 #include "../common/timer.h"
@@ -31,7 +31,7 @@ class CoTimer {
     private:
         LFLock lock_;
 
-        // 绮惧害
+        // 精度
         FastSteadyClock::duration precision_;
 
         Channel<void> trigger_{1};

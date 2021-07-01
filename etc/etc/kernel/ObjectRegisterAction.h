@@ -1,4 +1,4 @@
-ï»¿#pragma once
+#pragma once
 #include "ObjectRef.h"
 #include "ObjectFactory.h"
 
@@ -10,8 +10,8 @@ class ObjectRegisterAction
 public:
 
 	ObjectRegisterAction() {
-		// Winæµ‹è¯•èŽ·å–å¯¹è±¡åæ­£å¸¸
-		// å¦‚Linuxæ— æ³•èŽ·å–æ­£ç¡®çš„å¯¹è±¡åï¼Œè¯·åŒºåˆ†åˆ›å»º
+		// Win²âÊÔ»ñÈ¡¶ÔÏóÃûÕý³£
+		// ÈçLinuxÎÞ·¨»ñÈ¡ÕýÈ·µÄ¶ÔÏóÃû£¬ÇëÇø·Ö´´½¨
  		ObjectRef::Instance().RegisterObject(((&typeid(T))->name() + 6), [](const bool from_pool)->std::shared_ptr<Object> {
  			auto obj = ObjectFactory::InternalCreate<T>(from_pool);
  			return obj;

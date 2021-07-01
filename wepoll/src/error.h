@@ -1,4 +1,4 @@
-﻿#ifndef WEPOLL_ERROR_H_
+#ifndef WEPOLL_ERROR_H_
 #define WEPOLL_ERROR_H_
 
 #include "internal.h"

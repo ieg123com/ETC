@@ -1,4 +1,4 @@
-﻿#ifndef _IPADDRESS_H
+#ifndef _IPADDRESS_H
 #define _IPADDRESS_H
 
 #include "arduino_compat.h"

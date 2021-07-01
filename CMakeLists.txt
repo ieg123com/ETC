@@ -5,7 +5,7 @@ set(CMAKE_VERBOSE_MAKEFILE OFF)
 aux_source_directory(. DIRSRCS)
 
 # Add header file include directories
-include_directories(./ ./include ./server ./libgo ./redis ./module)
+include_directories(./ ./include ./server ./libgo ./redis ./module ./protobuf)
 include_directories(./wepoll/include ./wepoll/src ./wepoll/src/regular ./wepoll/src/combined ./etc)
 
 # Add block directories
@@ -13,6 +13,7 @@ include_directories(./wepoll/include ./wepoll/src ./wepoll/src/regular ./wepoll/
 add_subdirectory(libgo)
 add_subdirectory(etc)
 add_subdirectory(server)
+add_subdirectory(protobuf)
 add_subdirectory(redis)
 add_subdirectory(module)
 add_subdirectory(test)

@@ -1,4 +1,4 @@
-﻿#include "epoll_reactor.h"
+#include "epoll_reactor.h"
 #if defined(LIBGO_SYS_Linux)
 #include "reactor_element.h"
 #include "fd_context.h"

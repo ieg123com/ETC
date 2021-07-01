@@ -1,4 +1,4 @@
-﻿// Formatting library for C++ - implementation
+// Formatting library for C++ - implementation
 //
 // Copyright (c) 2012 - 2016, Victor Zverovich
 // All rights reserved.

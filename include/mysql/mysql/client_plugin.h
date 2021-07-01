@@ -1,4 +1,4 @@
-﻿#ifndef MYSQL_CLIENT_PLUGIN_INCLUDED
+#ifndef MYSQL_CLIENT_PLUGIN_INCLUDED
 /* Copyright (c) 2010, 2016, Oracle and/or its affiliates. All rights reserved.
 
    This program is free software; you can redistribute it and/or modify

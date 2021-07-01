@@ -1,4 +1,4 @@
-ï»¿#include "coroutine.h"
+#include "coroutine.h"
 #pragma comment(lib,"ws2_32.lib")
 #include "wepoll.h"
 #include <WinSock2.h>
@@ -12,7 +12,7 @@
 using namespace std;
 
 class Scene :
-	public Entity
+	public GEntity
 {
 
 };
@@ -27,10 +27,10 @@ void network_server()
 {
 	if (g_scene->AddComponent<NetworkComponent>()->Listen(81))
 	{
-		LOG_INFO("å¼€å¯æˆåŠŸ");
+		LOG_INFO("¿ªÆô³É¹¦");
 	}
 	else {
-		LOG_ERROR("å¤±è´¥");
+		LOG_ERROR("Ê§°Ü");
 	}
 }
 
@@ -73,7 +73,7 @@ void test()
 		co_sleep(2000);
 	}
 
-
+	go_stack ret_num;
 
 
 
@@ -134,8 +134,8 @@ void channel_test()
 int main()
 {
 	g_scene = ObjectFactory::Create<Scene>();
-	go network_server;
-	go network_client;
+	//go network_server;
+	//go network_client;
 	//go echo_server;
 	//go test;
 	//go channel_test;

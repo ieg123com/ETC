@@ -1,4 +1,4 @@
-﻿#include "defer.h"
+#include "defer.h"
 #include "../scheduler/scheduler.h"
 #include "../cls/co_local_storage.h"
 

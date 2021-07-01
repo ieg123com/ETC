@@ -1,22 +1,22 @@
-ï»¿#pragma once
+#pragma once
 #include <string>
 #include <vector>
 
 
 namespace std
 {
-	// åˆ†å‰²å­—ç¬¦
-	// @text		è¦åˆ†å‰²çš„å­—ç¬¦
-	// @target_text	åˆ†å‰²çš„å­—ç¬¦
+	// ·Ö¸î×Ö·û
+	// @text		Òª·Ö¸îµÄ×Ö·û
+	// @target_text	·Ö¸îµÄ×Ö·û
 	std::vector<std::string> Split(const std::string& text,const std::string& target_text);
 
-	// åˆ° int32_t
+	// µ½ int32_t
 	int32_t to_int32(const std::string& text);
 
-	// åˆ° int64_t
+	// µ½ int64_t
 	int64_t to_int64(const std::string& text);
 
-	// åˆ° double
+	// µ½ double
 	double to_duuble(const std::string& text);
 
 

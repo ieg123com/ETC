@@ -1,4 +1,4 @@
-﻿#ifndef _FILE_H
+#ifndef _FILE_H
 #define _FILE_H
 
 #include "arduino_compat.h"

@@ -1,4 +1,4 @@
-ï»¿#pragma once
+#pragma once
 #include "etc.h"
 #include "Session.h"
 
@@ -6,7 +6,7 @@
 
 
 
-// ç½‘ç»œç»„ä»¶
+// ÍøÂç×é¼þ
 class NetworkComponent:
 	public Component
 {
@@ -44,6 +44,6 @@ protected:
 	std::shared_ptr<Service>	m_service;
 
 private:
-	// å…¨éƒ¨è¿žæŽ¥
+	// È«²¿Á¬½Ó
 	std::unordered_map<FD, std::shared_ptr<Session>>	m_sessions;
 };

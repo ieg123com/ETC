@@ -1,4 +1,4 @@
-﻿#ifndef WEPOLL_REFLOCK_H_
+#ifndef WEPOLL_REFLOCK_H_
 #define WEPOLL_REFLOCK_H_
 
 /* The reflock is a special kind of lock that normally prevents a chunk of

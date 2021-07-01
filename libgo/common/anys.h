@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "config.h"
 #include "spinlock.h"
 #include <string>
@@ -29,8 +29,8 @@ public:
         }
     };
 
-    // 娉ㄥ唽涓€涓瓨鍌ㄥ埌Task涓殑kv, 杩斿洖鍙栨暟鎹敤镄刬ndex
-    // 娉ㄥ唽琛屼负蹇呴』鍦ㄥ垱寤虹涓€涓猅ask涔嫔墠鍏ㄩ儴瀹屾垚, 寤鸿鍦ㄥ叏灞€瀵硅薄鍒濆鍖栭桩娈靛畲鎴?
+    // 注册一个存储到Task中的kv, 返回取数据用的index
+    // 注册行为必须在创建第一个Task之前全部完成, 建议在全局对象初始化阶段完成
     template <typename T>
     static std::size_t Register()
     {
@@ -103,7 +103,7 @@ private:
     }
 
 private:
-    // TODO: 浼桦寲:绱у噾鍐呭瓨甯冨眬, 鎻愰佩鍒╃敤鐜?
+    // TODO: 优化:紧凑内存布局, 提高利用率
     char* hold_;
     std::size_t* offsets_;
     char* storage_;

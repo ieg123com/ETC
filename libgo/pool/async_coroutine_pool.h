@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "../common/config.h"
 #include "../common/spinlock.h"
 #include "../sync/channel.h"
@@ -6,8 +6,8 @@
 
 namespace co {
 
-// 鍗忕▼姹?
-// 鍙互镞犵绅涓庡纾姝ヤ唬镰佺粨鍚? 澶勭悊寮傛妗嗘灦涓殑阒诲浜嬩欢
+// 协程池
+// 可以无缝与异步代码结合, 处理异步框架中的阻塞事件
 class AsyncCoroutinePool
 {
 public:
@@ -15,10 +15,10 @@ public:
 
     typedef std::function<void()> Func;
 
-    // 鍒濆鍖栧岗绋嬫暟閲?
+    // 初始化协程数量
     void InitCoroutinePool(size_t maxCoroutineCount);
 
-    // 鍚姩鍗忕▼姹?
+    // 启动协程池 
     void Start(int minThreadNumber, int maxThreadNumber = 0);
 
     void Post(Func const& func, Func const& callback);
@@ -38,7 +38,7 @@ public:
         Post([=]{ *ctx = func(); }, [=]{ callback(*ctx); });
     }
 
-    // 瑙﹀彂镣?
+    // 触发点
     struct CallbackPoint
     {
         size_t Run(size_t maxTrigger = 0);
@@ -57,9 +57,9 @@ public:
         Func notify_;
     };
 
-    // 缁戝畾锲炶皟鍑芥暟瑙﹀彂镣? 鍙互缁戝畾澶氢釜瑙﹀彂镣? 杞祦浣跨敤.
-    // 濡傛灉涓岖粦瀹氲Е鍙戠偣, 鍒椤洖璋冨嚱鏁扮洿鎺ュ湪鍗忕▼姹犵殑宸ヤ綔绾跨▼涓Е鍙?
-    // 绾跨▼瀹夊叏鎺ュ彛
+    // 绑定回调函数触发点, 可以绑定多个触发点, 轮流使用.
+    // 如果不绑定触发点, 则回调函数直接在协程池的工作线程中触发.
+    // 线程安全接口
     bool AddCallbackPoint(CallbackPoint * point);
 
 private:

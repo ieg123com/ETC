@@ -1,4 +1,4 @@
-﻿#include "eredis.h"
+#include "eredis.h"
 #include <sstream>
 #include <chrono>
 
@@ -8,7 +8,7 @@
 #include <unistd.h>
 #endif
 
-#define DEFAULT_PING_TIME_GAP	20	//榛樿ping镞堕棿闂撮殧
+#define DEFAULT_PING_TIME_GAP	20	//默认ping时间间隔
 
 
 #define TO(_a,_b)\
@@ -47,13 +47,13 @@ bool eredis::ConnectRedis(const std::string& sIp, const int32_t iPort, const std
 {
 	if (m_NetRedis)
 		return false;
-	// 杩炴帴鍒癛edis
+	// 连接到Redis
 	m_NetRedis = net::NetRedisConnectNonBlock(sIp.c_str(), iPort, DEFAULT_COMMAND_EXECUTION_TIME);
 	if (!m_NetRedis)
 		return false;
 	if (!sPassword.empty())
 	{
-		// 瀵嗙爜璁よ瘉
+		// 密码认证
 		if (!net::NetRedisAuth(m_NetRedis, sPassword.c_str()))
 		{
 			net::NetRedisFree(m_NetRedis);
@@ -73,7 +73,7 @@ bool eredis::LoadLuaFile(const std::string& sFileName)
 	if (!m_NetRedis)
 		return false;
 	std::string _luaName,_luaCode;
-	// 铡婚櫎鐩綍 鍙缭鐣欐枃浠跺悕
+	// 去除目录 只保留文件名
 	int _pos = sFileName.rfind('/');
 	if (_pos == -1)
 	{
@@ -88,11 +88,11 @@ bool eredis::LoadLuaFile(const std::string& sFileName)
 		_luaName = sFileName.substr(_pos, sFileName.size() - _pos);
 	}
 	// end
-	// 銮峰彇鑴氭湰浠ｇ爜
+	// 获取脚本代码
 	_luaCode = OpenFileWord(sFileName.c_str());
 	if (_luaCode.empty())
 		return false;
-	// 鎻愪氦鑴氭湰鍒皉edis
+	// 提交脚本到redis
 	redisReply* _reply = net::NetRedisCommand(m_NetRedis, DEFAULT_COMMAND_EXECUTION_TIME, REDIS_COMMAND_SCRIPT_LOAD " %s", _luaCode.c_str());
 	if (!_reply || _reply->type == REDIS_REPLY_ERROR)
 	{
@@ -105,7 +105,7 @@ bool eredis::LoadLuaFile(const std::string& sFileName)
 		freeReplyObject(_reply);
 		return false;
 	}
-	// 涓烘寚瀹氭枃浠跺悕璁剧疆sha1
+	// 为指定文件名设置sha1
 	m_luaScript_umap[_luaName] = _reply->str;
 	freeReplyObject(_reply);
 	return true;
@@ -193,7 +193,7 @@ redisReply* eredis::EvalSha(const std::string& sLuaName, const int32_t iTimeOut,
 	auto _findSha1 = m_luaScript_umap.find(sLuaName);
 	if (_findSha1 == m_luaScript_umap.end())
 		return nullptr;
-	// 鎷兼帴锻戒护
+	// 拼接命令
 	std::string _script = REDIS_COMMAND_EVALSHA " ";
 	_script += _findSha1->second;
 	_script += " ";
@@ -202,7 +202,7 @@ redisReply* eredis::EvalSha(const std::string& sLuaName, const int32_t iTimeOut,
 	vsprintf(m_buffer, format, ap);
 	_script += m_buffer;
 	// end
-	// 镓ц锻戒护
+	// 执行命令
 	return net::NetRedisCommand(m_NetRedis, iTimeOut, _script.c_str());
 }
 
@@ -222,7 +222,7 @@ bool eredis::Subscribe(const std::list<std::string>& AllChannel, const int32_t i
 {
 	if (AllChannel.empty() || !m_NetRedis)
 		return false;
-	// 鐢熸垚锻戒护
+	// 生成命令
 	std::string _StrCommand = REDIS_COMMAND_SUBSCRIBE " ";
 	int32_t _i = 0;
 	for (auto OneChannel : AllChannel)
@@ -233,7 +233,7 @@ bool eredis::Subscribe(const std::list<std::string>& AllChannel, const int32_t i
 		++_i;
 	}
 	// end
-	// 镓ц锻戒护
+	// 执行命令
 	redisReply* _reply;
 	_reply = net::NetRedisCommand(m_NetRedis, iTimeOut, _StrCommand.c_str());
 	if (!_reply)
@@ -246,7 +246,7 @@ bool eredis::Subscribe(const std::list<std::string>& AllChannel, const int32_t i
 		return false;
 	}
 	freeReplyObject(_reply);
-	// 璁板綍宸茶阒呯殑棰戦亾
+	// 记录已订阅的频道
 	for (auto OneChannel : AllChannel)
 		m_SubscribeAllChannel.insert(OneChannel);
 	return true;
@@ -261,7 +261,7 @@ bool eredis::Publish(const std::string& sChannel, const std::string& sWord, cons
 {
 	if (!m_NetRedis)
 		return false;
-	// 镓ц锻戒护
+	// 执行命令
 	redisReply* _reply;
 	_reply = net::NetRedisCommand(m_NetRedis, iTimeOut, REDIS_COMMAND_PUBLISH " %s %s",
 		sChannel.c_str(), sWord.c_str());
@@ -302,7 +302,7 @@ bool eredis::Unsubscribe(const std::list<std::string>& AllChannel, const int32_t
 {
 	if (AllChannel.empty() || !m_NetRedis)
 		return false;
-	// 鐢熸垚锻戒护
+	// 生成命令
 	std::string _StrCommand = REDIS_COMMAND_UNSUBSCRIBE " ";
 	int32_t _i = 0;
 	for (auto OneChannel : AllChannel)
@@ -313,7 +313,7 @@ bool eredis::Unsubscribe(const std::list<std::string>& AllChannel, const int32_t
 		++_i;
 	}
 	// end
-	// 镓ц锻戒护
+	// 执行命令
 	redisReply* _reply;
 	_reply = net::NetRedisCommand(m_NetRedis, iTimeOut, _StrCommand.c_str());
 	if (!_reply)
@@ -326,7 +326,7 @@ bool eredis::Unsubscribe(const std::list<std::string>& AllChannel, const int32_t
 		return false;
 	}
 	freeReplyObject(_reply);
-	// 绉婚櫎宸茶阒呯殑棰戦亾
+	// 移除已订阅的频道
 	for (auto OneChannel : AllChannel)
 		m_SubscribeAllChannel.erase(OneChannel);
 	return true;
@@ -348,26 +348,26 @@ void eredis::Ping()
 	}
 	m_lastPingTime_s = _time;
 	if (!m_NetRedis)
-		goto reconnect;		// 璺宠浆鍒皉edis閲嶈繛
+		goto reconnect;		// 跳转到redis重连
 
 	if (!net::NetRedisPing(m_NetRedis))
 	{
-		// 涓岩edis鏂紑杩炴帴
+		// 与redis断开连接
 		net::NetRedisFree(m_NetRedis);
 		m_NetRedis = nullptr;
-		goto reconnect;		// 璺宠浆鍒皉edis閲嶈繛
+		goto reconnect;		// 跳转到redis重连
 	}
 
 	return;
 
 reconnect:
-	// 閲嶈繛redis
+	// 重连redis
 	{
 		if (m_Ip.empty())
 			return;
 		if (!ConnectRedis(m_Ip, m_Port, m_Passward))
 			return;
-		// 閲嶆柊璁㈤槄棰戦亾
+		// 重新订阅频道
 		std::list<std::string> _allChannel;
 		for (auto OneChannel : m_SubscribeAllChannel)
 			_allChannel.push_back(OneChannel);
@@ -383,7 +383,7 @@ void eredis::NetRedisCallBack(redisReply* pReply, net::NetRedis_t* pSelf)
 	{
 	case REDIS_REPLY_ARRAY:
 	{
-		// 棰戦亾娑堟伅鍒拌揪澶勭悊
+		// 频道消息到达处理
 		if (pReply->elements == 3)
 		{
 			

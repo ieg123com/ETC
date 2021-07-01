@@ -1,4 +1,4 @@
-﻿#include "processer.h"
+#include "processer.h"
 #include "scheduler.h"
 #include "../common/error.h"
 #include "../common/clock.h"

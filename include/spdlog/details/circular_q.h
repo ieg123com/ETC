@@ -1,4 +1,4 @@
-﻿// Copyright(c) 2015-present, Gabi Melman & spdlog contributors.
+// Copyright(c) 2015-present, Gabi Melman & spdlog contributors.
 // Distributed under the MIT License (http://opensource.org/licenses/MIT)
 
 // circular q view of std::vector.
@@ -87,7 +87,7 @@ public:
     }
 
     // Return const reference to item by index.
-    // If index is out of range 0钬ize()-1, the behavior is undefined.
+    // If index is out of range 0…size()-1, the behavior is undefined.
     const T &at(size_t i) const
     {
         assert(i < size());

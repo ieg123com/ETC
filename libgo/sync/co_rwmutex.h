@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "../common/config.h"
 #include "../scheduler/processer.h"
 #include <queue>
@@ -7,17 +7,17 @@
 namespace co
 {
 
-/// 璇诲啓阌?
+/// 读写锁
 class CoRWMutex
 {
     LFLock lock_;
-    long lockState_;  // 0:镞犻挛, >=1:璇婚挛, -1:鍐欓挛
+    long lockState_;  // 0:无锁, >=1:读锁, -1:写锁
 
-    // 鍏煎铡熺敓绾跨▼
+    // 兼容原生线程
     ConditionVariableAny rCv_;
     ConditionVariableAny wCv_;
 
-    // 鏄惁鍐欎紭鍏?
+    // 是否写优先
     bool writePriority_;
 
 public:
@@ -73,7 +73,7 @@ public:
     ReadView& Reader();
     WriteView& Writer();
 
-    // 鍏煎镞х増鎺ュ彛
+    // 兼容旧版接口
     ReadView& reader();
     WriteView& writer();
 
