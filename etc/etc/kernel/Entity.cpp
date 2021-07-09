@@ -4,7 +4,7 @@
 
 
 
-std::shared_ptr<Component> Entity::AddComponent(const std::string& name)
+std::shared_ptr<Component> GEntity::AddComponent(const std::string& name)
 {
 	auto obj = ObjectFactory::TryCreateWithHost(shared_from_this(), name);
 	if (auto com = obj->Get<Component>())
@@ -22,7 +22,7 @@ std::shared_ptr<Component> Entity::AddComponent(const std::string& name)
 	}
 }
 
-void Entity::Dispose() {
+void GEntity::Dispose() {
 	if (Object::IsDisposed()) {
 		return;
 	}

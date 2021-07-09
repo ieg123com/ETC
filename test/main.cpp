@@ -7,12 +7,13 @@
 #include "log/log.h"
 #include "etc.h"
 #include "net/NetworkComponent.h"
+#include "module/memory/MemorySplit.h"
 #include <stdio.h>
 
 using namespace std;
 
 class Scene :
-	public Entity
+	public GEntity
 {
 
 };
@@ -45,13 +46,15 @@ void network_client()
 	co_sleep(1000);
 	auto client_net = g_scene->AddComponent<ClientNetworkComponent>();
 
-	auto session_1 = client_net->Connect("127.0.0.1", 81);
-	auto session_2 = client_net->Connect("127.0.0.1", 81);
-	auto session_3 = client_net->Connect("127.0.0.1", 81);
+	for (int i = 0; i < 10; ++i)
+	{
+		client_net->Connect("127.0.0.1", 81);
+	}
+
 	
-	session_3->Dispose();
-	session_2->Dispose();
-	session_1->Dispose();
+// 	session_3->Dispose();
+// 	session_2->Dispose();
+// 	session_1->Dispose();
 
 	
 }
@@ -67,6 +70,34 @@ int ret_num()
 
 void test()
 {
+	MemorySplit	split;
+
+	char str[] = "Test MemorySplit!";
+
+	uint16_t pack_size = sizeof(str);
+
+	for (int row = 0; row < 10; ++row)
+	{
+		for (int i = 0; i < 10; ++i)
+		{
+			split.AddData((char*)&pack_size, sizeof(pack_size));
+			split.AddData(str, sizeof(str));
+			split.AddData(str, sizeof(str));
+		}
+		while (split.Unpack())
+		{
+			LOG_INFO(" [{}] size:{}",row, split.Data->size());
+		}
+	}
+
+
+	
+
+
+
+
+
+
 	while (true)
 	{
 		LOG_INFO("wait...");
@@ -134,10 +165,10 @@ void channel_test()
 int main()
 {
 	g_scene = ObjectFactory::Create<Scene>();
-	go network_server;
-	go network_client;
+	//go network_server;
+	//go network_client;
 	//go echo_server;
-	//go test;
+	go test;
 	//go channel_test;
 	//go client;
 

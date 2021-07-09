@@ -2,6 +2,7 @@
 #include "etc.h"
 #include "coroutine.h"
 #include "NetDefines.h"
+#include "module/memory/MemorySplit.h"
 #include <string>
 
 
@@ -9,9 +10,10 @@ class Service;
 
 
 class Session :
-	public Entity
+	public GEntity
 {
 	friend class Service;
+
 public:
 
 	int32_t		RpcId;
@@ -42,8 +44,8 @@ private:
 
 
 
-	//co::Channel<std::function<void()>>	m_channel;
+	co::Channel<std::function<void()>>	m_channel;
 
-
+	MemorySplit	m_memory_split;
 
 };

@@ -4,7 +4,7 @@
 
 void MailBoxComponent::Awake()
 {
-
+	__StartLoop();
 }
 
 void MailBoxComponent::Destroy()
@@ -22,7 +22,7 @@ void MailBoxComponent::__StartLoop()
 	m_stopped = false;
 	go[this]{
 		std::function<void()> func;
-	while (m_stopped != true)
+		while (m_stopped != true)
 		{
 			m_channel >> func;
 			try {

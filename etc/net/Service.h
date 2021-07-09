@@ -7,7 +7,7 @@
 
 
 class Service:
-	public Entity
+	public GEntity
 {
 	friend class Session;
 	friend class NetworkComponent;

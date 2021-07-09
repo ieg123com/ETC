@@ -21,6 +21,9 @@ public:
 	/** @brief	通信地址，通过次地址， */
 	IPEndPoint	Address;
 
+	uint32_t	RpcId;
+
+
 
 
 

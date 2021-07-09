@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+// Model 消息,框架内部消息
+package Model;
+
+
+// 消息头
+message MessageHead	// IResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	int64 ActorId = 93;
+}
+
+
+
+

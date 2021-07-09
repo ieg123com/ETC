@@ -133,13 +133,26 @@ FILE(GLOB MODULE_FILES "./module/*.cpp" "./module/*.h")
 set(MODULE_ACTOR_FILES "")
 FILE(GLOB MODULE_ACTOR_FILES "./module/actor/*.cpp" "./module/actor/*.h")
 
+# memory
+set(MODULE_MEMORY_FILES "")
+FILE(GLOB MODULE_MEMORY_FILES "./module/memory/*.cpp" "./module/memory/*.h")
+
+
+# message
+set(MODULE_MESSAGE_FILES "")
+FILE(GLOB MODULE_MESSAGE_FILES "./module/message/*.cpp" "./module/message/*.h")
 
 source_group(module						FILES ${MODULE_FILES})
 source_group(module\\actor				FILES ${MODULE_ACTOR_FILES})
+source_group(module\\memory				FILES ${MODULE_MEMORY_FILES})
+source_group(module\\message			FILES ${MODULE_MESSAGE_FILES})
+
 
 LIST(APPEND ALL_OBJECT
 	${MODULE_FILES}
-	${MODULE_ACTOR_FILES})
+	${MODULE_ACTOR_FILES}
+	${MODULE_MEMORY_FILES}
+	${MODULE_MESSAGE_FILES})
 
 
 # Target

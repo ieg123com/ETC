@@ -4,7 +4,7 @@
 
 class Component;
 
-class Entity :
+class GEntity :
 	public Object
 {
 public:

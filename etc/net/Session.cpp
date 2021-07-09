@@ -1,5 +1,6 @@
 ﻿#include "Session.h"
 #include "Service.h"
+#include "module/message/MessageDefines.h"
 
 
 
@@ -33,6 +34,20 @@ void Session::Destroy()
 
 void Session::OnRead(const char* data, const size_t len)
 {
+
+	m_memory_split.AddData(data, len);
+	if (!m_memory_split.Unpack())
+	{
+		return;
+	}
+
+	// 消息解析完成
+	auto pack = m_memory_split.Data;
+	stMessageHead head;
+	memmove(&head, pack->data(), sizeof(head));
+
+	
+
 
 }
 

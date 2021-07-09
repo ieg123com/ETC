@@ -16,7 +16,7 @@
 using namespace std;
 
 class Scene :
-	public Entity
+	public GEntity
 {
 
 };
