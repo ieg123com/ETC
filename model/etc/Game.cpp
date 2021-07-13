@@ -4,20 +4,17 @@
 #include "ObjectFactory.h"
 #include <atomic>
 
-
-
-namespace Game
+namespace Model
 {
-	GameSystem System;
+	GlobalGame::GlobalGame()
+	{
+		m_Event = ObjectFactory::Create<EventSystem>();
+		m_object_count = 0;
+		m_item_count = 0;
+		m_Stopping = false;
+	}
 
-	TimeSystem Time;
-
-	ObjectPool ObjPool;
-
-	std::shared_ptr<EventSystem> Event = ObjectFactory::Create<EventSystem>();
-
-	std::atomic<uint64_t> object_count = 0;
-	std::atomic<uint64_t> item_count = 0;
-
-	bool Stopping = false;
+	GlobalGame* g_game = nullptr;
 }
+
+

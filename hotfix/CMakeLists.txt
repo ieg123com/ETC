@@ -17,7 +17,6 @@ set(ALL_OBJECT "")
 set(BASE_FILES "")
 FILE(GLOB BASE_FILES "./base/*.cpp" "./base/*.h")
 
-
 source_group(base FILES ${BASE_FILES} )
 
 

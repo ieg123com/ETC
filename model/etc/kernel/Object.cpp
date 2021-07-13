@@ -16,14 +16,14 @@ Object::Object()
 	CanEverLateUpdate = false;
 	CanEverSecondsUpdate = false;
 
-	Game::object_count++;
+	Game::object_count()++;
 }
 
 Object::~Object()
 {
-	Game::object_count--;
+	Game::object_count()--;
 	if(Game::Stopping == false)
-		Game::System.m_ObjectDebug.DeductObject(m_object_type.GetName());
+		Game::System().m_ObjectDebug.DeductObject(m_object_type.GetName());
 }
 
 void Object::Dispose() {
@@ -31,7 +31,7 @@ void Object::Dispose() {
 	m_disposed = true;
 	Destroy();
 
-	Game::System.RemoveSystem(shared_from_this());
+	Game::System().RemoveSystem(shared_from_this());
 	GEvent::Clear();
 
 	m_host.reset();
@@ -42,13 +42,13 @@ void Object::Dispose() {
 	{
 		// 是从对象池中取出的对象
 		// 现在把它还回去
-		Game::ObjPool.Recycle(shared_from_this());
+		Game::ObjPool().Recycle(shared_from_this());
 	}
 }
 
 void Object::DebugIncreaseSelf()
 {
-	Game::System.m_ObjectDebug.IncreaseObject(m_object_type.GetName());
+	Game::System().m_ObjectDebug.IncreaseObject(m_object_type.GetName());
 }
 
 void Object::RefreshObjectID()

@@ -1,7 +1,16 @@
 #pragma once
+#include "helper/hotfix/HotfixHelper.h"
+
 
 
 #define API extern "C" __declspec(dllexport)
 
 
-API bool Init();
+
+API void Awake();
+
+
+API void Init(const Model::stGlobalVar& global);
+
+
+API void Destroy();

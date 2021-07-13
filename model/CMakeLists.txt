@@ -82,14 +82,49 @@ LIST(APPEND ALL_OBJECT
 include_directories(./base)
 
 #日志
+set(BASE_FILES "")
+FILE(GLOB BASE_FILES "./base/*.cpp" "./base/*.h")
+
+#日志
 set(BASE_LOG_FILES "")
 FILE(GLOB BASE_LOG_FILES "./base/log/*.cpp" "./base/log/*.h")
 
+#单例模式
+set(BASE_SINGLE_FILES "")
+FILE(GLOB BASE_SINGLE_FILES "./base/single/*.cpp" "./base/single/*.h")
 
+#对象类型
+set(BASE_TYPE_FILES "")
+FILE(GLOB BASE_TYPE_FILES "./base/type/*.cpp" "./base/type/*.h")
+
+#helper
+set(BASE_HELPER_FILES "")
+FILE(GLOB BASE_HELPER_FILES "./base/helper/*.cpp" "./base/helper/*.h")
+
+#dll helper
+set(BASE_HELPER_DLL_FILES "")
+FILE(GLOB BASE_HELPER_DLL_FILES "./base/helper/dll/*.cpp" "./base/helper/dll/*.h")
+
+#hotfix helper
+set(BASE_HELPER_HOTFIX_FILES "")
+FILE(GLOB BASE_HELPER_HOTFIX_FILES "./base/helper/hotfix/*.cpp" "./base/helper/hotfix/*.h")
+
+source_group(base						FILES ${BASE_FILES})
 source_group(base\\log					FILES ${BASE_LOG_FILES})
+source_group(base\\type					FILES ${BASE_TYPE_FILES})
+source_group(base\\single				FILES ${BASE_SINGLE_FILES})
+source_group(base\\helper				FILES ${BASE_HELPER_FILES})
+source_group(base\\helper\\dll			FILES ${BASE_HELPER_DLL_FILES})
+source_group(base\\helper\\hotfix		FILES ${BASE_HELPER_HOTFIX_FILES})
 
 LIST(APPEND ALL_OBJECT
-	${BASE_LOG_FILES})
+	${BASE_FILES}
+	${BASE_LOG_FILES}
+	${BASE_TYPE_FILES}
+	${BASE_SINGLE_FILES}
+	${BASE_HELPER_FILES}
+	${BASE_HELPER_DLL_FILES}
+	${BASE_HELPER_HOTFIX_FILES})
 
 #========================Config加载==============================
 
@@ -154,6 +189,18 @@ LIST(APPEND ALL_OBJECT
 	${MODULE_MEMORY_FILES}
 	${MODULE_MESSAGE_FILES})
 
+#========================协议==============================
+
+# 通信协议
+set(PROTO_FILES "")
+FILE(GLOB PROTO_FILES "./proto/*.cc" "./proto/*.h")
+
+
+source_group(proto						FILES ${PROTO_FILES})
+
+
+LIST(APPEND ALL_OBJECT
+	${PROTO_FILES})
 
 #========================其他==============================
 

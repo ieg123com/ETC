@@ -1,8 +1,30 @@
 #include "dll.h"
 #include <stdio.h>
+#include "single/ISingletonHandle.h"
+#include "type/type.h"
+#include "Game.h"
+#include "base/start.h"
 
-bool Init()
+
+
+void Awake()
 {
-	printf("加载成功!\n");
-	return true;
+	
+}
+
+void Init(const Model::stGlobalVar& global)
+{
+	Model::g_type_factory = global.type_factory;
+	Model::g_singleton_factory = global.single_factory;
+	Model::g_game = global.game;
+
+
+	// 加载完成
+	Hotfix::Start();
+}
+
+
+void Destroy()
+{
+
 }

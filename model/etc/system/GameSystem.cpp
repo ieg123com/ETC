@@ -136,7 +136,7 @@ void GameSystem::Update()
 			LOG_ERROR("[{}] 更新对象出现未知错误", obj.second->GetObjectType().GetName());
 		}
 	}
-	Game::Time.RefreshLastTime();
+	Game::Time().RefreshLastTime();
 }
 
 void GameSystem::LateUpdate()

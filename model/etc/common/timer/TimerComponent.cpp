@@ -17,7 +17,7 @@ void TimerComponent::Awake()
 
 void TimerComponent::Update()
 {
-	int64_t now_time = Game::Time.NowServerMilliseconds();
+	int64_t now_time = Game::Time().NowServerMilliseconds();
 
 	std::pair<int64_t, std::function<void()>> timer;
 	while (!m_timer_enter.empty())

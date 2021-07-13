@@ -11,7 +11,7 @@ public:
 		static_assert(std::is_base_of<Object, T>::value,
 			"The create object must inherit Object!");
 		auto obj = InternalCreate<T>(from_pool);
-		Game::System.Awake(obj);
+		Game::System().Awake(obj);
 		return obj;
 	}
 
@@ -25,7 +25,7 @@ public:
 			"The create object must inherit Object!");
 		auto obj = InternalCreate<T>(from_pool);
 		obj->m_host = host;
-		Game::System.Awake(obj);
+		Game::System().Awake(obj);
 		return obj;
 	}
 
@@ -51,7 +51,7 @@ public:
 			obj->m_object_type.m_type = &typeid(T);
 			obj->DebugIncreaseSelf();
 		}
-		Game::System.AddSystem(obj);
+		Game::System().AddSystem(obj);
 		return obj;
 	}
 

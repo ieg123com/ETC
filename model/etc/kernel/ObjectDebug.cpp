@@ -54,7 +54,7 @@ uint64_t ObjectDebug::ObjectCount(const std::string& name)
 std::string ObjectDebug::DebugObjectInfo()const
 {
 	std::unordered_map<std::string, std::pair<uint64_t,uint64_t>>	object_info;
-	for (auto& item : Game::System.m_objects)
+	for (auto& item : Game::System().m_objects)
 	{
 		auto found = object_info.find(item.second->GetObjectType().GetName());
 		if (found == object_info.end())
@@ -82,7 +82,7 @@ std::string ObjectDebug::DebugObjectInfo()const
 
 
 	std::string info_str;
-	info_str = "全部对象数: " + std::to_string(object_count) + " | " + std::to_string(Game::System.m_objects.size());
+	info_str = "全部对象数: " + std::to_string(object_count) + " | " + std::to_string(Game::System().m_objects.size());
 	for (auto& item : object_info)
 	{
 		info_str += "\n[" + item.first + "] 对象数: " + std::to_string(item.second.first) + " | " + std::to_string(item.second.second);
