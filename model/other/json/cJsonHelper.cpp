@@ -2,6 +2,25 @@
 
 
 
+cJSON* cJSON_ParseFromPath(const char* path)
+{
+	FILE* file = fopen(path, "rb");
+	if (NULL == file)
+		return nullptr;
+
+	struct stat file_state;
+	fstat(fileno(file), &file_state);
+	char* data = new char[file_state.st_size];
+
+	fread(data, file_state.st_size, 1, file);
+	cJSON* json = cJSON_Parse(data);
+	fclose(file);
+	delete[]data;
+	data = NULL;
+	return json;
+}
+
+
 cJSON* cJSON_Create(const std::string& val)
 {
 	return cJSON_CreateString(val.c_str());
@@ -402,7 +421,7 @@ cJSON* cJSON_Get(cJSON* json, const char* key)
 
 cJSON* cJSON_Next(cJSON* json)
 {
-	return cJSON_GetArrayItem(json, 0);
+	return json->next;
 }
 
 std::string cJSON_ToString(cJSON* json)

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.9)
-project(etc)
+project(model)
 
 
 include_directories(./ ../libgo)
@@ -155,19 +155,32 @@ LIST(APPEND ALL_OBJECT
 	${MODULE_MESSAGE_FILES})
 
 
+#========================其他==============================
+
+set(OTHER_FILES "")
+FILE(GLOB OTHER_FILES "./other/*.cpp" "./other/*.c" "./other/*.h" "./other/*.hpp"
+"./other/*/*.cpp" "./other/*/*.c" "./other/*/*.h" "./other/*/*.hpp"
+"./other/*/*/*.cpp" "./other/*/*/*.c" "./other/*/*/*.h" "./other/*/*/*.hpp")
+
+source_group(other						FILES ${OTHER_FILES})
+
+LIST(APPEND ALL_OBJECT
+	${OTHER_FILES})
+
+
 # Target
-add_library(etc
+add_library(model
 	${ALL_OBJECT})
 
 
 if(MSVC)
-	target_link_libraries(etc libmysql libgo_static ws2_32 wepoll redis module)
+	target_link_libraries(model libmysql libgo_static ws2_32 wepoll redis)
 	ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS -D_WINSOCK_DEPRECATED_NO_WARNINGS -D_SPDLOG_ACTIVE_LEVEL)
 	
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
 else()
-	target_link_libraries(etc mysqlclient libgo)
+	target_link_libraries(model mysqlclient libgo)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX)

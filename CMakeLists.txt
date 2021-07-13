@@ -5,24 +5,31 @@ set(CMAKE_VERBOSE_MAKEFILE OFF)
 aux_source_directory(. DIRSRCS)
 
 # Add header file include directories
-include_directories(./ ./include ./server ./libgo ./redis ./module ./protobuf)
-include_directories(./wepoll/include ./wepoll/src ./wepoll/src/regular ./wepoll/src/combined ./etc)
+include_directories(./ ./include ./hotfix ./libgo ./redis ./module ./protobuf)
+include_directories(./wepoll/include ./wepoll/src ./wepoll/src/regular ./wepoll/src/combined ./model)
 
 # Add block directories
-#add_subdirectory(server)
 add_subdirectory(libgo)
-add_subdirectory(etc)
-add_subdirectory(server)
+add_subdirectory(model)
+add_subdirectory(hotfix)
+add_subdirectory(app)
 add_subdirectory(protobuf)
 add_subdirectory(redis)
-add_subdirectory(module)
 add_subdirectory(test)
+
 
 if(MSVC)
 	add_subdirectory(wepoll)
 
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
+	SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY
+    ${PROJECT_BINARY_DIR}/bin CACHE
+    PATH "Directory where all the .lib files are
+	dumped." FORCE)
+	SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY
+    ${PROJECT_BINARY_DIR}/bin CACHE
+    PATH "Directory where .exe and .dll files are dumped." FORCE)
 #	add_subdirectory(hiredis/win)
 else()
 #	add_subdirectory(hiredis/linux)

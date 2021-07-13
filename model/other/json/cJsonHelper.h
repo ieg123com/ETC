@@ -3,6 +3,8 @@
 #include <string>
 
 
+cJSON* cJSON_ParseFromPath(const char* path);
+
 cJSON* cJSON_Create(const std::string& val);
 cJSON* cJSON_Create(const char* val);
 cJSON* cJSON_Create(const int32& val);

@@ -3,12 +3,12 @@
 #include <memory>
 #include <unordered_map>
 #include <string>
-#include "json/ejson.h"
-#include "ServerLog.h"
+#include "other/json/cJsonHelper.h"
+#include "log/ServerLog.h"
 
 
 using ConfigId = int64_t;
-using cJson = neb::CJsonObject;
+using Json = cJSON*;
 
 
 class Config:
@@ -16,7 +16,7 @@ class Config:
 {
 	friend class Category;
 	
-	virtual bool Parse(const cJson& json) = 0;
+	virtual bool Parse(Json json) = 0;
 public:
 	ConfigId	Id;
 };
@@ -28,22 +28,25 @@ public:
 	template<typename T>
 	bool Load(const char* path) {
 		ConfigPath = path;
-		ejson json;
-		if (!json.open(path))
+		Json json = cJSON_ParseFromPath(path);
+		if (!json)
 		{
 			return false;
 		}
-		size_t size = json.GetArraySize();
-		for (int i = 0; i < size; ++i)
+		bool ret = true;
+		Json new_json = json->child;
+		while(new_json = cJSON_Next(new_json))
 		{
 			t_ptr cfg = std::make_shared<T>();
-			if (!cfg->Parse(json[i])) {
+			if (!cfg->Parse(new_json)) {
 				LOG_ERROR("加载配置出错!({})", path);
-				return false;
+				ret = false;
+				break;
 			}
 			Insert(cfg);
 		}
-		return true;
+		cJSON_Delete(json);
+		return ret;
 	}
 
 
