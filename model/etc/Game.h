@@ -14,7 +14,6 @@ namespace Model
 	class GlobalGame
 	{
 	public:
-		GlobalGame();
 
 		GameSystem m_System;
 
@@ -28,6 +27,8 @@ namespace Model
 		std::atomic<uint64_t> m_item_count;
 
 		bool m_Stopping;
+
+		void Init();
 	};
 
 	extern GlobalGame* g_game;

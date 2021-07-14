@@ -12,6 +12,7 @@ namespace Model
 		g_type_factory = new TypeFactory();
 		g_singleton_factory = new ISingletonFactory();
 		g_game = new GlobalGame();
+		g_game->Init();
 	}
 
 	stGlobalVar GetGlobalVar()
@@ -21,5 +22,12 @@ namespace Model
 		global.single_factory = g_singleton_factory;
 		global.game = g_game;
 		return global;
+	}
+
+	void SetGlobalVar(const stGlobalVar& global)
+	{
+		g_type_factory = global.type_factory;
+		g_singleton_factory = global.single_factory;
+		g_game = global.game;
 	}
 }

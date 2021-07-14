@@ -6,7 +6,8 @@
 
 namespace Model
 {
-	GlobalGame::GlobalGame()
+
+	void GlobalGame::Init()
 	{
 		m_Event = ObjectFactory::Create<EventSystem>();
 		m_object_count = 0;
