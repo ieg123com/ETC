@@ -203,6 +203,7 @@ LIST(APPEND ALL_OBJECT
 	${PROTO_FILES})
 
 #========================其他==============================
+include_directories(./other)
 
 set(OTHER_FILES "")
 FILE(GLOB OTHER_FILES "./other/*.cpp" "./other/*.c" "./other/*.h" "./other/*.hpp"

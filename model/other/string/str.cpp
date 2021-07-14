@@ -5,7 +5,7 @@
 #include <winnls.h>
 
 
-std::vector<std::string> std::Split(const std::string& text, const std::string& target_text)
+std::vector<std::string> std::split(const std::string& text, const std::string& target_text)
 {
 	std::vector<std::string> all_text;
 	if (text.empty())
@@ -39,24 +39,6 @@ std::vector<std::string> std::Split(const std::string& text, const std::string& 
 	return all_text;
 }
 
-int32_t std::to_int32(const std::string& text)
-{
-	return atoi(text.c_str());
-}
-
-int64_t std::to_int64(const std::string& text)
-{
-	return atoll(text.c_str());
-}
-
-double std::to_duuble(const std::string& text)
-{
-	double ret_num = 0.f;
-	std::stringstream ss;
-	ss << text;
-	ss >> ret_num;
-	return ret_num;
-}
 
 std::string std::Print(const char* format, ...)
 {
