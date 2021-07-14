@@ -3,10 +3,9 @@
 
 
 
-using FD = int32_t;
+using SessionID = int32_t;
 
 
-using SessionId = uint64_t;
 
 // namespace net
 // {
@@ -18,6 +17,8 @@ using SessionId = uint64_t;
 // 		return (Fd)((id >> 32) && 0xffffffff);
 // 	}
 // }
+
+
 
 
 // 网络类型

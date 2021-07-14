@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 
 ###################################################################################
-project(libgo_static)
+project(libgo)
 
 include_directories(
     "${PROJECT_SOURCE_DIR}"
@@ -71,7 +71,7 @@ else()
 endif()
 
 set(TARGET "libgo")
-set(STATIC_T "libgo_static")
+set(STATIC_T "libgo")
 set(STATIC_HOOK "static_hook")
 
 list(APPEND CO_SRC_LIST ${jump_asm_file})

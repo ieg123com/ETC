@@ -221,7 +221,7 @@ add_library(model
 
 
 if(MSVC)
-	target_link_libraries(model libmysql libgo_static ws2_32 wepoll redis)
+	target_link_libraries(model libmysql libgo ws2_32 wepoll redis protobuf)
 	ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS -D_WINSOCK_DEPRECATED_NO_WARNINGS -D_SPDLOG_ACTIVE_LEVEL)
 	
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")

@@ -48,7 +48,7 @@ public:
 // 		else
 		{
 			obj = std::make_shared<T>();
-			obj->m_object_type.m_type = &typeid(T);
+			obj->m_object_type.m_type = typeof(T);
 			obj->DebugIncreaseSelf();
 		}
 		Game::System().AddSystem(obj);

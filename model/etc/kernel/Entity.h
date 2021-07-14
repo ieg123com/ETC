@@ -12,13 +12,13 @@ public:
 	template<typename T>
 	std::shared_ptr<T> AddComponent() {
 
-		if (m_component.find(&typeid(T)) != m_component.end())
+		if (m_component.find(typeof(T)) != m_component.end())
 		{
 			throw std::exception("添加的组件已存在!");
 		}
 		auto obj = ObjectFactory::CreateWithHost<T>(shared_from_this());
 
-		m_component.insert(std::make_pair(&typeid(T), obj));
+		m_component.insert(std::make_pair(typeof(T), obj));
 
 		return obj;
 	}
@@ -27,7 +27,7 @@ public:
 
 	template<typename T>
 	std::shared_ptr<T> GetComponent() {
-		auto find_obj = m_component.find(&typeid(T));
+		auto find_obj = m_component.find(typeof(T));
 		if (find_obj == m_component.end())
 		{
 			return nullptr;
@@ -37,7 +37,7 @@ public:
 
 	template<typename T>
 	void RemoveComponent() {
-		auto find_obj = m_component.find(&typeid(T));
+		auto find_obj = m_component.find(typeof(T));
 		if (find_obj != m_component.end())
 		{
 			auto obj = find_obj->second;
@@ -51,7 +51,7 @@ public:
 	virtual void Dispose() override;
 
 private:
-	std::unordered_map<const type_info*, std::shared_ptr<Component>>	m_component;
+	std::unordered_map<Type, std::shared_ptr<Component>>	m_component;
 
 
 

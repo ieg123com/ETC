@@ -15,7 +15,7 @@ public:
 		static_assert(std::is_base_of<Object, T>::value,
 			"The fetch object must inherit Object!");
 		std::shared_ptr<T> obj;
-		auto found = m_pool.find(&typeid(T));
+		auto found = m_pool.find(typeof(T));
 		if (found != m_pool.end())
 		{
 			if (!found->second.empty())
@@ -29,7 +29,7 @@ public:
 		if (!obj)
 		{
 			obj = std::make_shared<T>();
-			obj->m_object_type.m_type = &typeid(T);
+			obj->m_object_type.m_type = typeof(T);
 			obj->DebugIncreaseSelf();
 		}
 		obj->m_is_from_pool = true;
@@ -51,7 +51,7 @@ public:
 		for (auto& item : m_pool)
 		{
 			ctx += "[";
-			ctx += (item.first->name() + 6);
+			ctx += (item.first.name() + 6);
 			ctx += "] (";
 			ctx += std::to_string(item.second.size());
 			ctx += ")\n";
@@ -61,5 +61,5 @@ public:
 
 private:
 
-	std::unordered_map<const type_info*, std::queue<std::shared_ptr<Object>>>	m_pool;
+	std::unordered_map<Type, std::queue<std::shared_ptr<Object>>>	m_pool;
 };

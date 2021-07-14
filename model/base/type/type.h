@@ -37,7 +37,7 @@ class Type
 public:
 
 	std::shared_ptr<TypeInfo> m_info;
-
+	Type(){}
 	Type(std::shared_ptr<TypeInfo> info)
 	{
 		m_info = info;
@@ -123,4 +123,4 @@ namespace Model
 
 
 
-#define typeof(T)  Type(Model::g_type_factory->Get<T>());
+#define typeof(T)  Type(Model::g_type_factory->Get<T>())

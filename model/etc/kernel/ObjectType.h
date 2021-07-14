@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <memory>
+#include "type/type.h"
 
 
 
@@ -7,12 +8,12 @@ class ObjectType
 {
 public:
 	ObjectType() {
-		m_type = &typeid(ObjectType);
+		m_type = typeof(ObjectType);
 	}
 
 	const char* GetName() const {
-		return (m_type->name() + 6);
+		return (m_type.name() + 6);
 	}
 
-	const type_info* m_type;
+	Type m_type;
 };

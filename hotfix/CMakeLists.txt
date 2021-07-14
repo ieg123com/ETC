@@ -66,7 +66,7 @@ add_library(hotfix SHARED
 
 
 if(MSVC)
-	target_link_libraries(hotfix libmysql libgo_static ws2_32 wepoll redis model)
+	target_link_libraries(hotfix libmysql libgo ws2_32 wepoll redis model)
 	ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS -D_WINSOCK_DEPRECATED_NO_WARNINGS -D_SPDLOG_ACTIVE_LEVEL)
 	
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")

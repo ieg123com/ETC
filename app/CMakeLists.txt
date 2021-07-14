@@ -32,7 +32,7 @@ add_executable(app
 
 
 if(MSVC)
-	target_link_libraries(app libmysql libgo_static ws2_32 wepoll redis model hotfix)
+	target_link_libraries(app libmysql libgo ws2_32 wepoll redis model hotfix)
 	ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS -D_WINSOCK_DEPRECATED_NO_WARNINGS -D_SPDLOG_ACTIVE_LEVEL)
 	
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")

@@ -28,141 +28,143 @@
 
 #define READ_BUFFER_SIZE 1024
 
-
-enum class EpollStatus : uint8_t
+namespace Model
 {
-	EPOLL_RUNNING = 0,
-	EPOLL_STOPPED
-};
-
-// local server info
-struct stAddressInfo
-{
-	std::string serverIp;
-	uint16_t port;
-	uint32_t maxEvents;
-	uint32_t backlog;
-	uint32_t WorkerThreadTaskMax;
-	uint32_t timeCheckAcceptClient;
-
-	stAddressInfo()
+	enum class EpollStatus : uint8_t
 	{
-		serverIp = "";
-		port = 0;
-		maxEvents = 1024;
-		backlog = 1000;
-		WorkerThreadTaskMax = 0;
-		timeCheckAcceptClient = 60;
-	}
-};
+		EPOLL_RUNNING = 0,
+		EPOLL_STOPPED
+	};
 
-// epoll 到 消息分发层 的客户端数据
-struct stSocketContext
-{
-public:
-	std::shared_ptr<Session> session;
-
-	stSocketContext()
+	// local server info
+	struct stAddressInfo
 	{
-	}
+		std::string serverIp;
+		uint16_t port;
+		uint32_t maxEvents;
+		uint32_t backlog;
+		uint32_t WorkerThreadTaskMax;
+		uint32_t timeCheckAcceptClient;
 
-	~stSocketContext()
+		stAddressInfo()
+		{
+			serverIp = "";
+			port = 0;
+			maxEvents = 1024;
+			backlog = 1000;
+			WorkerThreadTaskMax = 0;
+			timeCheckAcceptClient = 60;
+		}
+	};
+
+	// epoll 到 消息分发层 的客户端数据
+	struct stSocketContext
 	{
+	public:
+		std::shared_ptr<Session> session;
 
-	}
-};
+		stSocketContext()
+		{
+		}
 
-/** @brief 用 wepoll 封装的网络服务对象，win、linux 下分别使用 iocp、epoll*/
-class WEpollService :
-	public Service
-{
-public:
-	WEpollService();
+		~stSocketContext()
+		{
 
-	/**
-	 * @brief		打开并监听指定端口
-	 * @param[in]	port : 需要监听的端口
-	 * @retval		true : 监听端口成功
-	 * @retval		false : 开启端口失败
-	 */
-	virtual bool Listen(const uint16_t port) override;
+		}
+	};
 
-	/**
-	 * @brief		连接指定服务器
-	 * @param[in]	ip : 要连接的服务器地址
-	 * @param[in]	prot ： 端口
-	 * @retval		Session : 连接服务器成功，返回会话
-	 * @retval		nullptr	: 连接服务器失败
-	 */
-	virtual std::shared_ptr<Session> Connect(const std::string& ip, const uint16_t port) override;
+	/** @brief 用 wepoll 封装的网络服务对象，win、linux 下分别使用 iocp、epoll*/
+	class WEpollService :
+		public Service
+	{
+	public:
+		WEpollService();
 
+		/**
+		 * @brief		打开并监听指定端口
+		 * @param[in]	port : 需要监听的端口
+		 * @retval		true : 监听端口成功
+		 * @retval		false : 开启端口失败
+		 */
+		virtual bool Listen(const uint16_t port) override;
 
-	virtual void Send(const FD fd, const char* data, const size_t len) override;
-
-	virtual void Close(const FD fd) override;
-
-protected:
-
-	virtual void Awake() override;
-
-	virtual void Destroy() override;
-
-	
-private:
-
-	int OnEpollAcceptEvent(stSocketContext* ctx);
-	int OnEpollReadableEvent(stSocketContext* ctx, epoll_event& epoll_event);
-	int OnEpollWriteableEvent(stSocketContext* ctx);
-	int OnEpollCloseEvent(stSocketContext* ctx);
-
-private:
-
-	int SetNonBlocking(FD fd);
-
-	bool BindOnAddress(const stAddressInfo& addressInfo);
-
-	bool ConnectAddress(const stAddressInfo& addressInfo);
+		/**
+		 * @brief		连接指定服务器
+		 * @param[in]	ip : 要连接的服务器地址
+		 * @param[in]	prot ： 端口
+		 * @retval		Session : 连接服务器成功，返回会话
+		 * @retval		nullptr	: 连接服务器失败
+		 */
+		virtual std::shared_ptr<Session> Connect(const std::string& ip, const uint16_t port) override;
 
 
-	FD AcceptConnectSocket(FD sockfd, std::string& client_ip);
+		virtual void Send(const SessionID fd, const char* data, const size_t len) override;
 
-	void HandleAcceptEvent(FD& epollfd, epoll_event& event);
-	void HandleEpollReadableEvent(epoll_event& event);
-	void HandleWriteableEvent(FD& epollfd, epoll_event& event);
-	void DisconnectOneClient(FD clientFD);
+		virtual void Close(const SessionID fd) override;
 
-	bool AddListenSocketToEpoll();
-	void HandleEpollEvent(epoll_event& e);
-	bool CreateEpoll();
+	protected:
 
-	void StartEpollEventLoop();
-	void StartClientEventLoop(std::shared_ptr<Session> session);
+		virtual void Awake() override;
 
-	bool StartEpollServer();
+		virtual void Destroy() override;
 
 
+	private:
 
-	void CloseAndReleaseOneEvent(epoll_event& epoll_event);
+		int OnEpollAcceptEvent(stSocketContext* ctx);
+		int OnEpollReadableEvent(stSocketContext* ctx, epoll_event& epoll_event);
+		int OnEpollWriteableEvent(stSocketContext* ctx);
+		int OnEpollCloseEvent(stSocketContext* ctx);
 
-private:
+	private:
 
-	bool __AddSocketCtx(const FD fd, stSocketContext* ctx);
-	bool __RemoveSocketCtx(const FD fd);
-	stSocketContext* __GetSocketCtx(const FD fd) const;
+		int SetNonBlocking(SessionID fd);
+
+		bool BindOnAddress(const stAddressInfo& addressInfo);
+
+		bool ConnectAddress(const stAddressInfo& addressInfo);
 
 
-private:
+		SessionID AcceptConnectSocket(SessionID sockfd, std::string& client_ip);
 
-	EpollStatus		m_epoll_status;
-	stAddressInfo	m_address_info;
-	int				m_listened_socket;
+		void HandleAcceptEvent(SessionID& epollfd, epoll_event& event);
+		void HandleEpollReadableEvent(epoll_event& event);
+		void HandleWriteableEvent(SessionID& epollfd, epoll_event& event);
+		void DisconnectOneClient(SessionID clientFD);
+
+		bool AddListenSocketToEpoll();
+		void HandleEpollEvent(epoll_event& e);
+		bool CreateEpoll();
+
+		void StartEpollEventLoop();
+		void StartClientEventLoop(std::shared_ptr<Session> session);
+
+		bool StartEpollServer();
+
+
+
+		void CloseAndReleaseOneEvent(epoll_event& epoll_event);
+
+	private:
+
+		bool __AddSocketCtx(const SessionID session_id, stSocketContext* ctx);
+		bool __RemoveSocketCtx(const SessionID session_id);
+		stSocketContext* __GetSocketCtx(const SessionID session_id) const;
+
+
+	private:
+
+		EpollStatus		m_epoll_status;
+		stAddressInfo	m_address_info;
+		SessionID		m_listened_socket;
 
 #ifndef _WIN32
-	int m_epollfd;
+		int m_epollfd;
 #else
-	HANDLE m_epollfd;
+		HANDLE m_epollfd;
 #endif
 
-	std::unordered_map<FD, stSocketContext*>	m_all_socket_ctx;
+		std::unordered_map<SessionID, stSocketContext*>	m_all_socket_ctx;
 
-};
+	};
+}
