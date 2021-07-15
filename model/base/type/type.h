@@ -7,23 +7,24 @@
 class TypeInfo
 {
 public:
-	std::string raw_name;
-	std::string name;
+	const std::string name;
+	const std::string raw_name;
+	const size_t hash_code;
 
-	bool operator == (const TypeInfo& obj)const noexcept
-	{
-		if (raw_name == obj.raw_name &&
-			name == name)
+	TypeInfo():name(""),raw_name(""),hash_code(0) {}
+	TypeInfo(const type_info* ty):raw_name(ty->raw_name()),name(ty->name()),hash_code(ty->hash_code()){}
+
+
+	bool operator == (const TypeInfo& obj)const noexcept{
+		if (raw_name == obj.raw_name)
 		{
 			return true;
 		}
 		return false;
 	}
 
-	bool operator != (const TypeInfo& obj)const noexcept
-	{
-		if (raw_name != obj.raw_name ||
-			name != obj.name)
+	bool operator != (const TypeInfo& obj)const noexcept{
+		if (raw_name != obj.raw_name)
 		{
 			return true;
 		}
@@ -38,13 +39,11 @@ public:
 
 	std::shared_ptr<TypeInfo> m_info;
 	Type(){}
-	Type(std::shared_ptr<TypeInfo> info)
-	{
+	Type(std::shared_ptr<TypeInfo> info){
 		m_info = info;
 	}
 
-	bool operator == (const Type& obj) const noexcept
-	{
+	bool operator == (const Type& obj) const noexcept{
 		if (m_info == obj.m_info)
 		{
 			return true;
@@ -52,8 +51,7 @@ public:
 		return false;
 	}
 	
-	bool operator != (const Type& obj)const noexcept
-	{
+	bool operator != (const Type& obj)const noexcept{
 		if (m_info != obj.m_info)
 		{
 			return true;
@@ -61,13 +59,11 @@ public:
 		return false;
 	}
 	
-	const char* name()const
-	{
+	const char* name()const{
 		return m_info->name.c_str();
 	}
 
-	const char* row_name()const
-	{
+	const char* row_name()const{
 		return m_info->raw_name.c_str();
 	}
 
@@ -83,12 +79,7 @@ namespace std
 	{
 		size_t operator()(const Type& self) const noexcept
 		{
-			if (self.m_info == nullptr)
-			{
-				return (size_t)0;
-			}
-			return hash<decltype(self.m_info->name)>()(self.m_info->name) +
-				hash<decltype(self.m_info->raw_name)>()(self.m_info->raw_name);
+			return self.m_info->hash_code;
 		}
 	};
 }
@@ -105,9 +96,7 @@ namespace Model
 			auto found = m_all_type_info.find((&typeid(T))->raw_name());
 			if (found == m_all_type_info.end())
 			{
-				auto value = std::make_pair(std::string((&typeid(T))->raw_name()), std::make_shared<TypeInfo>());
-				value.second->name = (&typeid(T))->name();
-				value.second->raw_name = (&typeid(T))->raw_name();
+				auto value = std::make_pair(std::string((&typeid(T))->raw_name()), std::make_shared<TypeInfo>(&typeid(T)));
 				found = m_all_type_info.insert(value).first;
 			}
 			return found->second;

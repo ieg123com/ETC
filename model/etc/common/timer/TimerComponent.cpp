@@ -1,45 +1,44 @@
 ﻿#include "TimerComponent.h"
 #include "Game.h"
 
-
-TimerComponent* TimerComponent::Instance = nullptr;
-
-TimerComponent::TimerComponent()
+namespace Model
 {
-	CanEverAwake = true;
-	CanEverUpdate = true;
-}
+	TimerComponent* TimerComponent::Instance = nullptr;
 
-void TimerComponent::Awake()
-{
-	TimerComponent::Instance = this;
-}
-
-void TimerComponent::Update()
-{
-	int64_t now_time = Game::Time().NowServerMilliseconds();
-
-	std::pair<int64_t, std::function<void()>> timer;
-	while (!m_timer_enter.empty())
+	TimerComponent::TimerComponent()
 	{
-		timer = std::move(m_timer_enter.front());
-		m_timer_enter.pop();
-		m_timers[now_time + timer.first].emplace_back(timer.second);
+		CanEverAwake = true;
+		CanEverUpdate = true;
 	}
 
-	auto iter = m_timers.begin();
-	while (iter != m_timers.end())
+	void TimerComponent::Awake()
 	{
-		if (iter->first <= now_time)
+		TimerComponent::Instance = this;
+	}
+
+	void TimerComponent::Update()
+	{
+		int64_t now_time = Game::Time().NowServerMilliseconds();
+
+		std::pair<int64_t, std::function<void()>> timer;
+		while (!m_timer_enter.empty())
 		{
-			for (auto& callback : iter->second) callback();
-			iter = m_timers.erase(iter);
-			continue;
+			timer = std::move(m_timer_enter.front());
+			m_timer_enter.pop();
+			m_timers[now_time + timer.first].emplace_back(timer.second);
 		}
-		++iter;
+
+		auto iter = m_timers.begin();
+		while (iter != m_timers.end())
+		{
+			if (iter->first <= now_time)
+			{
+				for (auto& callback : iter->second) callback();
+				iter = m_timers.erase(iter);
+				continue;
+			}
+			++iter;
+		}
 	}
+
 }
-
-
-
-

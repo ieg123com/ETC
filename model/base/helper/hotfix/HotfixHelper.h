@@ -36,7 +36,6 @@ namespace Model
 
 		void Destroy();
 
-
 	private:
 
 		std::shared_ptr<Dll> m_dll;

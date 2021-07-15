@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include "etc.h"
-#include "coroutine.h"
 #include "NetDefines.h"
 #include "module/memory/MemorySplit.h"
 #include <string>
@@ -21,9 +20,7 @@ namespace Model
 
 		SessionID	SessionId;
 
-		std::string	Ip;
-
-		uint16_t	Port;
+		IPEndPoint	Address;
 		/** @brief 网络服务*/
 		std::shared_ptr<Service>	__service;
 
@@ -45,7 +42,7 @@ namespace Model
 
 
 
-		co::Channel<std::function<void()>>	m_channel;
+		//co::Channel<std::function<void()>>	m_channel;
 
 		MemorySplit	m_memory_split;
 

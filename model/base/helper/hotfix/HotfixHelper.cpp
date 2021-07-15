@@ -67,4 +67,5 @@ namespace Model
 	{
 		((void(*)(void))m_destroy)();
 	}
+
 }

@@ -20,7 +20,7 @@ namespace Model
 
 		bool Listen(const uint16_t port);
 
-		std::shared_ptr<Session> Connect(const std::string& ip, const uint16_t port);
+		std::shared_ptr<Session> Connect(const IPEndPoint& address);
 
 
 

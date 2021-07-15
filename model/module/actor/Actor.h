@@ -10,24 +10,26 @@
 #include "IPEndPoint.h"
 
 
-
-/** @brief Actor 对象，负责进行内网通信 */
-class Actor :
-	public Object
+namespace Model
 {
-public:
-	/** @brief	内网通信id */
-	ActorID	ActorId;
-	/** @brief	通信地址，通过次地址， */
-	IPEndPoint	Address;
+	/** @brief Actor 对象，负责进行内网通信 */
+	class Actor :
+		public Object
+	{
+	public:
+		/** @brief	内网通信id */
+		ActorID	ActorId;
+		/** @brief	通信地址，通过次地址， */
+		IPEndPoint	Address;
 
-	uint32_t	RpcId;
-
-
-
-
-
-
+		uint32_t	RpcId;
 
 
-};
+
+
+
+
+
+
+	};
+}

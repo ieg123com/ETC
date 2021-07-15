@@ -9,8 +9,6 @@ namespace Model
 	{
 		RpcId = 0;
 		SessionId = 0;
-		Ip = "";
-		Port = 0;
 	}
 
 	void Session::Destroy()

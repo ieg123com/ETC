@@ -25,6 +25,10 @@ FILE(GLOB ETC_KERNEL_FILES "./etc/kernel/*.cpp" "./etc/kernel/*.h")
 set(ETC_COMMON_EVENT_FILES "")
 FILE(GLOB ETC_COMMON_EVENT_FILES "./etc/kernel/event/*.cpp" "./etc/kernel/event/*.h")
 
+#接口
+set(ETC_INTERFACE_FILES "")
+FILE(GLOB ETC_INTERFACE_FILES "./etc/interface/*.cpp" "./etc/interface/*.h")
+
 #etc系统
 set(ETC_SYSTEM_FILES "")
 FILE(GLOB ETC_SYSTEM_FILES "./etc/system/*.cpp" "./etc/system/*.h")
@@ -57,6 +61,7 @@ FILE(GLOB ETC_COMMON_SKIP_LIST_FILES "./etc/common/aoi/skip_list/*.cpp" "./etc/c
 source_group(etc							FILES ${ETC_FILES})
 source_group(etc\\kernel					FILES ${ETC_KERNEL_FILES})
 source_group(etc\\system					FILES ${ETC_SYSTEM_FILES})
+source_group(etc\\interface					FILES ${ETC_INTERFACE_FILES})
 source_group(etc\\kernel\\event				FILES ${ETC_COMMON_EVENT_FILES})
 source_group(etc\\common\\timer				FILES ${ETC_COMMON_TIMER_FILES})
 source_group(etc\\common\\coroutine			FILES ${ETC_COMMON_COROUTINE_FILES})
@@ -68,6 +73,7 @@ LIST(APPEND ALL_OBJECT
 	${ETC_FILES}
 	${ETC_KERNEL_FILES}
 	${ETC_SYSTEM_FILES}
+	${ETC_INTERFACE_FILES}
 	${ETC_COMMON_EVENT_FILES}
 	${ETC_COMMON_TIMER_FILES}
 	${ETC_COMMON_COROUTINE_FILES}

@@ -9,7 +9,6 @@ namespace Model
 
 	void GlobalGame::Init()
 	{
-		m_Event = ObjectFactory::Create<EventSystem>();
 		m_object_count = 0;
 		m_item_count = 0;
 		m_Stopping = false;

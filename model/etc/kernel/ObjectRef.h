@@ -3,7 +3,10 @@
 #include <unordered_map>
 #include <string>
 
-class Object;
+namespace Model
+{
+	class Object;
+};
 
 // 反射初版
 class ObjectRef
@@ -16,15 +19,15 @@ public:
 	}
 
 	// 注册对象
-	void RegisterObject(const std::string& type_name, std::shared_ptr<Object>(*func)(const bool));
+	void RegisterObject(const std::string& type_name, std::shared_ptr<Model::Object>(*func)(const bool));
 
 	// 创建对象
-	std::shared_ptr<Object> CreateObject(const std::string& type_name, const bool from_pool = true);
+	std::shared_ptr<Model::Object> CreateObject(const std::string& type_name, const bool from_pool = true);
 
 private:
 
 	// 反射对象记录
-	std::unordered_map<std::string, std::shared_ptr<Object>(*)(const bool)>	m_ref_objects;
+	std::unordered_map<std::string, std::shared_ptr<Model::Object>(*)(const bool)>	m_ref_objects;
 
 	
 };

@@ -21,7 +21,7 @@ namespace Model
 
 		ObjectPool m_ObjPool;
 
-		std::shared_ptr<EventSystem> m_Event;
+		EventSystem m_Event;
 
 		std::atomic<uint64_t> m_object_count;
 		std::atomic<uint64_t> m_item_count;
@@ -32,16 +32,17 @@ namespace Model
 	};
 
 	extern GlobalGame* g_game;
+
+	class Game
+	{
+	public:
+		static inline GameSystem& System() { return Model::g_game->m_System; }
+		static inline TimeSystem& Time() { return Model::g_game->m_Time; }
+		static inline ObjectPool& ObjPool() { return Model::g_game->m_ObjPool; }
+		static inline EventSystem& Event() { return Model::g_game->m_Event; }
+		static inline std::atomic<uint64_t>& object_count() { return Model::g_game->m_object_count; }
+		static inline std::atomic<uint64_t>& item_count() { return Model::g_game->m_item_count; }
+		static inline bool& Stopping() { return Model::g_game->m_Stopping; }
+	};
 }
 
-namespace Game
-{
-
-	inline GameSystem& System() { return Model::g_game->m_System; }
-	inline TimeSystem& Time() { return Model::g_game->m_Time; }
-	inline ObjectPool& ObjPool() { return Model::g_game->m_ObjPool; }
-	inline std::shared_ptr<EventSystem>& Event() { return Model::g_game->m_Event; }
-	inline std::atomic<uint64_t>& object_count() { return Model::g_game->m_object_count; }
-	inline std::atomic<uint64_t>& item_count() { return Model::g_game->m_item_count; }
-	inline bool& Stopping() { return Model::g_game->m_Stopping; }
-};

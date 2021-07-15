@@ -61,7 +61,7 @@ namespace Model
 	bool WEpollService::Listen(const uint16_t port)
 	{
 
-		m_address_info.port = port;
+		m_address_info.address.Port = port;
 
 		if (!StartEpollServer())
 		{
@@ -74,7 +74,7 @@ namespace Model
 		return true;
 	}
 
-	std::shared_ptr<Session> WEpollService::Connect(const std::string& ip, const uint16_t port)
+	std::shared_ptr<Session> WEpollService::Connect(const IPEndPoint& address)
 	{
 		if (m_listened_socket != -1)
 		{
@@ -82,8 +82,7 @@ namespace Model
 			return false;
 		}
 
-		m_address_info.serverIp = ip;
-		m_address_info.port = port;
+		m_address_info.address = address;
 
 		if (!ConnectAddress(m_address_info))
 		{
@@ -94,8 +93,7 @@ namespace Model
 		stSocketContext* ctx = new stSocketContext();
 		ctx->session = ObjectFactory::Create<Session>();
 		ctx->session->SessionId = m_listened_socket;
-		ctx->session->Ip = ip;
-		ctx->session->Port = port;
+		ctx->session->Address = address;
 		ctx->session->__service = Get<Service>();
 		__AddSocketCtx(m_listened_socket, ctx);
 
@@ -280,14 +278,14 @@ namespace Model
 		struct sockaddr_in my_addr; /* my address information */
 		memset(&my_addr, 0, sizeof(my_addr));
 		my_addr.sin_family = AF_INET; /* host byte order */
-		my_addr.sin_port = htons(addressInfo.port); /* short, network byte order */
-		if ("" == addressInfo.serverIp || "localhost" == addressInfo.serverIp)
+		my_addr.sin_port = htons(addressInfo.address.Port); /* short, network byte order */
+		if ("" == addressInfo.address.Ip || "localhost" == addressInfo.address.Ip)
 		{
 			my_addr.sin_addr.s_addr = INADDR_ANY;
 		}
 		else
 		{
-			my_addr.sin_addr.s_addr = inet_addr(addressInfo.serverIp.c_str());
+			my_addr.sin_addr.s_addr = inet_addr(addressInfo.address.Ip.c_str());
 		}
 		// 监听地址
 		if (::bind(m_listened_socket, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) == SOCKET_ERROR)
@@ -322,14 +320,14 @@ namespace Model
 		struct sockaddr_in my_addr; /* my address information */
 		memset(&my_addr, 0, sizeof(my_addr));
 		my_addr.sin_family = AF_INET; /* host byte order */
-		my_addr.sin_port = htons(addressInfo.port); /* short, network byte order */
-		if ("" == addressInfo.serverIp || "localhost" == addressInfo.serverIp)
+		my_addr.sin_port = htons(addressInfo.address.Port); /* short, network byte order */
+		if ("" == addressInfo.address.Ip || "localhost" == addressInfo.address.Ip)
 		{
 			my_addr.sin_addr.s_addr = INADDR_ANY;
 		}
 		else
 		{
-			my_addr.sin_addr.s_addr = inet_addr(addressInfo.serverIp.c_str());
+			my_addr.sin_addr.s_addr = inet_addr(addressInfo.address.Ip.c_str());
 		}
 		// 连接地址
 		if (connect(m_listened_socket, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) == SOCKET_ERROR)
@@ -378,7 +376,7 @@ namespace Model
 		stSocketContext* ctx = new stSocketContext();
 		ctx->session = ObjectFactory::Create<Session>();
 		ctx->session->SessionId = conn_sock;
-		ctx->session->Ip = std::move(client_ip);
+		ctx->session->Address.Ip = std::move(client_ip);
 		ctx->session->__service = Get<Service>();
 
 		if (!__AddSocketCtx(conn_sock, ctx))

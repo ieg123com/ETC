@@ -39,8 +39,7 @@ namespace Model
 	// local server info
 	struct stAddressInfo
 	{
-		std::string serverIp;
-		uint16_t port;
+		IPEndPoint address;
 		uint32_t maxEvents;
 		uint32_t backlog;
 		uint32_t WorkerThreadTaskMax;
@@ -48,8 +47,6 @@ namespace Model
 
 		stAddressInfo()
 		{
-			serverIp = "";
-			port = 0;
 			maxEvents = 1024;
 			backlog = 1000;
 			WorkerThreadTaskMax = 0;
@@ -95,7 +92,7 @@ namespace Model
 		 * @retval		Session : 连接服务器成功，返回会话
 		 * @retval		nullptr	: 连接服务器失败
 		 */
-		virtual std::shared_ptr<Session> Connect(const std::string& ip, const uint16_t port) override;
+		virtual std::shared_ptr<Session> Connect(const IPEndPoint& address) override;
 
 
 		virtual void Send(const SessionID fd, const char* data, const size_t len) override;

@@ -43,7 +43,9 @@ namespace Model
 			Ip = "";
 			Port = 0;
 		}
-
+		IPEndPoint(const std::string& address) {
+			From(address);
+		}
 		IPEndPoint(const std::string& ip,const uint16_t port) {
 			Ip = ip;
 			Port = port;
@@ -66,6 +68,12 @@ namespace Model
 			Ip = std::move(obj.Ip);
 			Port = std::move(obj.Port);
 			return* this;
+		}
+
+		IPEndPoint& operator = (const IPEndPoint& obj) {
+			Ip = obj.Ip;
+			Port = obj.Port;
+			return*this;
 		}
 
 		void From(const std::string& address){

@@ -1,6 +1,8 @@
 ﻿#include "EventSystem.h"
 
-
-EventSystem::EventSystem()
+namespace Model
 {
+	EventSystem::EventSystem()
+	{
+	}
 }

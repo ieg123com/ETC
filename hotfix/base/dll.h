@@ -14,3 +14,4 @@ API void Init(const Model::stGlobalVar& global);
 
 
 API void Destroy();
+

@@ -24,5 +24,5 @@ void Init(const Model::stGlobalVar& global)
 
 void Destroy()
 {
-
+	Hotfix::Over();
 }

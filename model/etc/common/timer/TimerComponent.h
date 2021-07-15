@@ -5,40 +5,42 @@
 #include <functional>
 #include "Component.h"
 
-
-// 计时器
-class TimerComponent:
-	public Component
+namespace Model
 {
-public:
-	TimerComponent();
+	// 计时器
+	class TimerComponent :
+		public Component
+	{
+	public:
+		TimerComponent();
 
-	static TimerComponent* Instance;
+		static TimerComponent* Instance;
 
-// 	TimerComponent* GetInstance()
-// 	{
-// 		static TimerComponent* Instance = nullptr;
-// 		return Instance;
-// 	}
-protected:
-	virtual void Awake() override;
+		// 	TimerComponent* GetInstance()
+		// 	{
+		// 		static TimerComponent* Instance = nullptr;
+		// 		return Instance;
+		// 	}
+	protected:
+		virtual void Awake() override;
 
-	virtual void Update() override;
+		virtual void Update() override;
 
-public:
+	public:
 
-	// 注册指定时间回调
-	template<typename T>
-	void RegisterTimeCallBack(const int64_t time,T&& t) {
-		m_timer_enter.emplace(time, t);
-	}
-
-
-private:
-
-	std::map<int64_t, std::vector<std::function<void()>>>	m_timers;
-
-	std::queue<std::pair<int64_t, std::function<void()>>>	m_timer_enter;
+		// 注册指定时间回调
+		template<typename T>
+		void RegisterTimeCallBack(const int64_t time, T&& t) {
+			m_timer_enter.emplace(time, t);
+		}
 
 
-};
+	private:
+
+		std::map<int64_t, std::vector<std::function<void()>>>	m_timers;
+
+		std::queue<std::pair<int64_t, std::function<void()>>>	m_timer_enter;
+
+
+	};
+}

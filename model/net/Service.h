@@ -27,7 +27,7 @@ namespace Model
 
 		virtual bool Listen(const uint16_t port) = 0;
 
-		virtual std::shared_ptr<Session> Connect(const std::string& ip, const uint16_t port) = 0;
+		virtual std::shared_ptr<Session> Connect(const IPEndPoint& address) = 0;
 
 
 

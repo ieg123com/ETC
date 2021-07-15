@@ -1,21 +1,23 @@
 ﻿#pragma once
 #include "Object.h"
 
-
-class Component :
-	public Object
+namespace Model
 {
-public:
+	class Component :
+		public Object
+	{
+	public:
 
-	virtual void Dispose() {
-		if (Object::IsDisposed()) {
-			return;
+		virtual void Dispose() {
+			if (Object::IsDisposed()) {
+				return;
+			}
+			else {
+				Object::Dispose();
+			}
 		}
-		else {
-			Object::Dispose();
-		}
-	}
 
 
 
-};
+	};
+}

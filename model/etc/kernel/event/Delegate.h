@@ -1,6 +1,6 @@
-ï»¿/**
+/**
  * @file	Delegate.h
- * @brief	ç”¨äºå‡½æ•°å°è£…
+ * @brief	ÓÃÓÚº¯Êı·â×°
  */
 #pragma once
 #include <functional>
@@ -11,61 +11,65 @@
 #define DEL_PVOID(p) (void*)*(unsigned int*)(p)
 #endif
 
-/** @brief å‡½æ•°ID*/
-class DelegateID
+
+namespace Model
 {
-public:
-	const void* method;
-	const void* object;
-	long long	object_id;
 
-	DelegateID() {
-		method = nullptr;
-		object = nullptr;
-		object_id = 0;
-	}
+	/** @brief º¯ÊıID*/
+	class DelegateID
+	{
+	public:
+		const void* method;
+		const void* object;
+		long long	object_id;
 
-	DelegateID(const void* md, const void* obj) {
-		method = md;
-		object = obj;
-		object_id = 0;
-	}
-
-	~DelegateID() {
-		clear();
-	}
-
-	DelegateID& operator = (const DelegateID& val) {
-		method = val.method;
-		object = val.object;
-		object_id = val.object_id;
-		return *this;
-	}
-
-	bool operator == (const DelegateID& val) const {
-		if (method == val.method &&
-			object == val.object &&
-			object_id == val.object_id)
-		{
-			return true;
+		DelegateID() {
+			method = nullptr;
+			object = nullptr;
+			object_id = 0;
 		}
-		return false;
-	}
 
-	void clear() {
-		method = nullptr;
-		object = nullptr;
-		object_id = 0;
-	}
-};
+		DelegateID(const void* md, const void* obj) {
+			method = md;
+			object = obj;
+			object_id = 0;
+		}
 
+		~DelegateID() {
+			clear();
+		}
+
+		DelegateID& operator = (const DelegateID& val) {
+			method = val.method;
+			object = val.object;
+			object_id = val.object_id;
+			return *this;
+		}
+
+		bool operator == (const DelegateID& val) const {
+			if (method == val.method &&
+				object == val.object &&
+				object_id == val.object_id)
+			{
+				return true;
+			}
+			return false;
+		}
+
+		void clear() {
+			method = nullptr;
+			object = nullptr;
+			object_id = 0;
+		}
+	};
+}
 /** @internal */
 namespace std
 {
 	template<>
-	struct hash<DelegateID>
+	struct hash<Model::DelegateID>
 	{
-		size_t operator()(const DelegateID& s) const noexcept
+		size_t operator()(const Model::DelegateID& s) const noexcept
 		{
 			return hash<decltype(s.method)>()(s.method) +
 				hash<decltype(s.object)>()(s.object) +
@@ -74,212 +78,214 @@ namespace std
 	};
 }
 
-
-/**
- * @brief	å‡½æ•°å°è£…ï¼Œç”¨äºè®°å½•å„ç§å‚æ•°çš„å‡½æ•°ã€‚å¯ä»¥ç”¨äºäº‹ä»¶é€šçŸ¥ï¼Œçº¿ç¨‹ä¸å®‰å…¨
- */
-class Delegate
+namespace Model
 {
-public:
-	Delegate() {
-		m_type = nullptr;
-		m_func = nullptr;
-		m_code_path = "null";
-	}
+	/**
+	 * @brief	º¯Êı·â×°£¬ÓÃÓÚ¼ÇÂ¼¸÷ÖÖ²ÎÊıµÄº¯Êı¡£¿ÉÒÔÓÃÓÚÊÂ¼şÍ¨Öª£¬Ïß³Ì²»°²È«
+	 */
+	class Delegate
+	{
+	public:
+		Delegate() {
+			m_type = nullptr;
+			m_func = nullptr;
+			m_code_path = "null";
+		}
 
-	Delegate(Delegate&& val) noexcept {
-		m_id = val.m_id;
-		m_func = val.m_func;
-		m_type = val.m_type;
-		m_code_path = val.m_code_path;
-		m_close = std::move(val.m_close);
-		val.m_func = nullptr;
-		val.m_type = nullptr;
-		val.m_close = nullptr;
-		val.m_code_path = "null";
-	}
+		Delegate(Delegate&& val) noexcept {
+			m_id = val.m_id;
+			m_func = val.m_func;
+			m_type = val.m_type;
+			m_code_path = val.m_code_path;
+			m_close = ::std::move(val.m_close);
+			val.m_func = nullptr;
+			val.m_type = nullptr;
+			val.m_close = nullptr;
+			val.m_code_path = "null";
+		}
 
-	template<typename ... _Types, typename _F>
-	Delegate(_F&& f) {
-		bind<_Types...>(f);
-	}
+		template<typename ... _Types, typename _F>
+		Delegate(_F&& f) {
+			bind<_Types...>(f);
+		}
 
-	template<typename ... _Types, typename _F, typename _C>
-	Delegate(_F&& f, _C&& c) {
-		bind<_Types...>(f,c);
-	}
+		template<typename ... _Types, typename _F, typename _C>
+		Delegate(_F&& f, _C&& c) {
+			bind<_Types...>(f, c);
+		}
 
-	~Delegate() {
-		clear();
-	}
-
-	void operator = (Delegate&& val) noexcept {
-		m_id = val.m_id;
-		m_func = val.m_func;
-		m_type = val.m_type;
-		m_code_path = val.m_code_path;
-		m_close = std::move(val.m_close);
-		val.m_func = nullptr;
-		val.m_type = nullptr;
-		val.m_close = nullptr;
-		val.m_code_path = "null";
-	}
-
-
-	template< typename ... _Types, typename _F>
-	void set(_F&& f) {
-		if (!empty())
-		{
+		~Delegate() {
 			clear();
 		}
-		m_type = &typeid(void(_Types...));
-		m_func = new std::function<void(_Types...)>(f);
-		m_close = std::move([this] {
-			delete (std::function<void(_Types...)>*)this->m_func;
-			});
-	}
 
-
-	template<typename _F>
-	void bind(_F&& f) {
-		m_id.method = DEL_PVOID(&f);
-		set(std::bind(f));
-	}
-
-	template<typename _F,typename _C>
-	void bind(_F&& f,_C&& c) {
-		m_id.method = DEL_PVOID(&f);
-		m_id.object = c;
-		set(std::bind(f, c));
-	}
-
-	template<typename _A1,typename _F>
-	void bind(_F&& f) {
-		m_id.method = DEL_PVOID(&f);
-		set<_A1>(std::bind(f, std::placeholders::_1));
-	}
-
-	template<typename _A1,typename _F, typename _C>
-	void bind(_F&& f, _C&& c) {
-		m_id.method = DEL_PVOID(&f);
-		m_id.object = c;
-		set<_A1>(std::bind(f, c, std::placeholders::_1));
-	}
-
-	template<typename _A1, typename _A2, typename _F>
-	void bind(_F&& f) {
-		m_id.method = DEL_PVOID(&f);
-		set<_A1, _A2>(std::bind(f, std::placeholders::_1, std::placeholders::_2));
-	}
-
-	template<typename _A1, typename _A2, typename _F, typename _C>
-	void bind(_F&& f, _C&& c) {
-		m_id.method = DEL_PVOID(&f);
-		m_id.object = c;
-		set<_A1, _A2>(std::bind(f, c, std::placeholders::_1, std::placeholders::_2));
-	}
-
-	template<typename _A1, typename _A2, typename _A3, typename _F>
-	void bind(_F&& f) {
-		m_id.method = DEL_PVOID(&f);
-		set<_A1, _A2, _A3>(std::bind(f, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-	}
-
-	template<typename _A1, typename _A2, typename _A3, typename _F, typename _C>
-	void bind(_F&& f, _C&& c) {
-		m_id.method = DEL_PVOID(&f);
-		m_id.object = c;
-		set<_A1, _A2, _A3>(std::bind(f, c, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-	}
-
-	template<typename _A1, typename _A2, typename _A3, typename _A4, typename _F>
-	void bind(_F&& f) {
-		m_id.method = DEL_PVOID(&f);
-		set<_A1, _A2, _A3, _A4>(std::bind(f, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-	}
-
-	template<typename _A1, typename _A2, typename _A3, typename _A4, typename _F, typename _C>
-	void bind(_F&& f, _C&& c) {
-		m_id.method = DEL_PVOID(&f);
-		m_id.object = c;
-		set<_A1, _A2, _A3, _A4>(std::bind(f, c, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-	}
-
-	template<typename _A1, typename _A2, typename _A3, typename _A4, typename _A5, typename _F>
-	void bind(_F&& f) {
-		m_id.method = DEL_PVOID(&f);
-		set<_A1, _A2, _A3, _A4, _A5>(std::bind(f, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
-	}
-
-	template<typename _A1, typename _A2, typename _A3, typename _A4, typename _A5, typename _F, typename _C>
-	void bind(_F&& f, _C&& c) {
-		m_id.method = DEL_PVOID(&f);
-		m_id.object = c;
-		set<_A1, _A2, _A3, _A4, _A5>(std::bind(f, c, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
-	}
-
-
-
-	template<typename ... _Types>
-	inline void call(_Types..._Args) const {
-		//if (m_type == &typeid(void(_Types...)))
-		{
-			(*(std::function<void(_Types...)>*)m_func)(_Args...);
+		void operator = (Delegate&& val) noexcept {
+			m_id = val.m_id;
+			m_func = val.m_func;
+			m_type = val.m_type;
+			m_code_path = val.m_code_path;
+			m_close = ::std::move(val.m_close);
+			val.m_func = nullptr;
+			val.m_type = nullptr;
+			val.m_close = nullptr;
+			val.m_code_path = "null";
 		}
-		
-	}
 
 
-
-	bool empty()const {
-		return (m_func == nullptr) ? true : false;
-	}
-
-	void clear() {
-		if (m_close)
-		{
-			m_close();
-			m_close = nullptr;
+		template< typename ... _Types, typename _F>
+		void set(_F&& f) {
+			if (!empty())
+			{
+				clear();
+			}
+			m_type = &typeid(void(_Types...));
+			m_func = new std::function<void(_Types...)>(f);
+			m_close = std::move([this] {
+				delete (std::function<void(_Types...)>*)this->m_func;
+				});
 		}
-		m_id.clear();
-		m_func = nullptr;
-		m_type = nullptr;
-	}
 
-	void set_objectid(const long long id) {
-		m_id.object_id = id;
-	}
-	
-	const DelegateID& id()const {
-		return m_id;
-	}
 
-	void Dispose() {
-		if (m_close)
-		{
-			m_close();
-			m_close = nullptr;
+		template<typename _F>
+		void bind(_F&& f) {
+			m_id.method = DEL_PVOID(&f);
+			set(std::bind(f));
 		}
-		m_id.clear();
-		m_func = nullptr;
-		m_type = nullptr;
-	}
 
-	bool IsDisposed() const {
-		return (m_type == nullptr);
-	}
+		template<typename _F, typename _C>
+		void bind(_F&& f, _C&& c) {
+			m_id.method = DEL_PVOID(&f);
+			m_id.object = c;
+			set(std::bind(f, c));
+		}
 
-private:
-	// è‡ªèº«id å¯ç”¨äºhashè®°å½•
-	DelegateID					m_id;
-	// è®°å½•å‡½æ•°ç±»å‹
-	const type_info*			m_type;
-	// è®°å½•å›è°ƒå‡½æ•°æŒ‡é’ˆ
-	void*						m_func;
-	// è®°å½•é”€æ¯å‡½æ•°
-	std::function<void(void)>	m_close;
-public:
-	/** @internal ç”¨äºè®°å½•æ³¨å†Œå‡½æ•°è°ƒç”¨çš„ä½ç½®ï¼Œæ–¹ä¾¿Debugè°ƒè¯•*/
-	const char* m_code_path;
+		template<typename _A1, typename _F>
+		void bind(_F&& f) {
+			m_id.method = DEL_PVOID(&f);
+			set<_A1>(std::bind(f, std::placeholders::_1));
+		}
 
-};
+		template<typename _A1, typename _F, typename _C>
+		void bind(_F&& f, _C&& c) {
+			m_id.method = DEL_PVOID(&f);
+			m_id.object = c;
+			set<_A1>(std::bind(f, c, std::placeholders::_1));
+		}
+
+		template<typename _A1, typename _A2, typename _F>
+		void bind(_F&& f) {
+			m_id.method = DEL_PVOID(&f);
+			set<_A1, _A2>(std::bind(f, std::placeholders::_1, std::placeholders::_2));
+		}
+
+		template<typename _A1, typename _A2, typename _F, typename _C>
+		void bind(_F&& f, _C&& c) {
+			m_id.method = DEL_PVOID(&f);
+			m_id.object = c;
+			set<_A1, _A2>(std::bind(f, c, std::placeholders::_1, std::placeholders::_2));
+		}
+
+		template<typename _A1, typename _A2, typename _A3, typename _F>
+		void bind(_F&& f) {
+			m_id.method = DEL_PVOID(&f);
+			set<_A1, _A2, _A3>(std::bind(f, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+		}
+
+		template<typename _A1, typename _A2, typename _A3, typename _F, typename _C>
+		void bind(_F&& f, _C&& c) {
+			m_id.method = DEL_PVOID(&f);
+			m_id.object = c;
+			set<_A1, _A2, _A3>(std::bind(f, c, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+		}
+
+		template<typename _A1, typename _A2, typename _A3, typename _A4, typename _F>
+		void bind(_F&& f) {
+			m_id.method = DEL_PVOID(&f);
+			set<_A1, _A2, _A3, _A4>(std::bind(f, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+		}
+
+		template<typename _A1, typename _A2, typename _A3, typename _A4, typename _F, typename _C>
+		void bind(_F&& f, _C&& c) {
+			m_id.method = DEL_PVOID(&f);
+			m_id.object = c;
+			set<_A1, _A2, _A3, _A4>(std::bind(f, c, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+		}
+
+		template<typename _A1, typename _A2, typename _A3, typename _A4, typename _A5, typename _F>
+		void bind(_F&& f) {
+			m_id.method = DEL_PVOID(&f);
+			set<_A1, _A2, _A3, _A4, _A5>(std::bind(f, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
+		}
+
+		template<typename _A1, typename _A2, typename _A3, typename _A4, typename _A5, typename _F, typename _C>
+		void bind(_F&& f, _C&& c) {
+			m_id.method = DEL_PVOID(&f);
+			m_id.object = c;
+			set<_A1, _A2, _A3, _A4, _A5>(std::bind(f, c, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
+		}
+
+
+
+		template<typename ... _Types>
+		inline void call(_Types..._Args) const {
+			//if (m_type == &typeid(void(_Types...)))
+			{
+				(*(std::function<void(_Types...)>*)m_func)(_Args...);
+			}
+
+		}
+
+
+
+		bool empty()const {
+			return (m_func == nullptr) ? true : false;
+		}
+
+		void clear() {
+			if (m_close)
+			{
+				m_close();
+				m_close = nullptr;
+			}
+			m_id.clear();
+			m_func = nullptr;
+			m_type = nullptr;
+		}
+
+		void set_objectid(const long long id) {
+			m_id.object_id = id;
+		}
+
+		const DelegateID& id()const {
+			return m_id;
+		}
+
+		void Dispose() {
+			if (m_close)
+			{
+				m_close();
+				m_close = nullptr;
+			}
+			m_id.clear();
+			m_func = nullptr;
+			m_type = nullptr;
+		}
+
+		bool IsDisposed() const {
+			return (m_type == nullptr);
+		}
+
+	private:
+		// ×ÔÉíid ¿ÉÓÃÓÚhash¼ÇÂ¼
+		DelegateID					m_id;
+		// ¼ÇÂ¼º¯ÊıÀàĞÍ
+		const type_info* m_type;
+		// ¼ÇÂ¼»Øµ÷º¯ÊıÖ¸Õë
+		void* m_func;
+		// ¼ÇÂ¼Ïú»Ùº¯Êı
+		::std::function<void(void)>	m_close;
+	public:
+		/** @internal ÓÃÓÚ¼ÇÂ¼×¢²áº¯Êıµ÷ÓÃµÄÎ»ÖÃ£¬·½±ãDebugµ÷ÊÔ*/
+		const char* m_code_path;
+
+	};
+}

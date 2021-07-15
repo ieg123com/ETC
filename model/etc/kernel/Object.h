@@ -10,124 +10,126 @@
 #include "event/GEvent.h"
 #include "ObjectType.h"
 
-/** @brief 基础类 */
-class Object:
-	public GEvent,
-	public std::enable_shared_from_this<Object>
+namespace Model
 {
-public:
+	/** @brief 基础类 */
+	class Object :
+		public std::enable_shared_from_this<Object>
+	{
+	public:
 
-	/** @brief	父类对象*/
-	std::shared_ptr<Object> m_host;
+		/** @brief	父类对象*/
+		std::shared_ptr<Object> m_host;
 
-	Object();
-	~Object();
+		Object();
+		~Object();
 
-	/**	
-	* @brief	获取对象是否被销毁
-	* @retval	true : 已被销毁
-	* @retval	false : 没有被销毁
-	*/
-	bool IsDisposed()const {
-		return m_disposed;
-	}
+		/**
+		* @brief	获取对象是否被销毁
+		* @retval	true : 已被销毁
+		* @retval	false : 没有被销毁
+		*/
+		bool IsDisposed()const {
+			return m_disposed;
+		}
 
-	ObjectID GetObjectID()const {
-		return m_obj_id;
-	}
+		ObjectID GetObjectID()const {
+			return m_obj_id;
+		}
 
-	/** @brief	自身对象*/
-	std::shared_ptr<Object> Self() {
-		return shared_from_this();
-	}
-	/** 
-	* @brief	获取自身对象
-	* @return	返回指定类型的对象
-	* @par Sample
-	* @code
-	*	obj->Get<Entity>();
-	* @endcode
-	*/
-	template<typename T>
-	std::shared_ptr<T> Get() {
-		return std::dynamic_pointer_cast<T>(shared_from_this());
-	}
-	/**
-	* @brief	获取父类对象
-	* @return	返回指定类型的对象
-	* @par Sample
-	* @code
-	*	obj->GetHost<Entity>();
-	* @endcode
-	*/
-	template<typename T>
-	std::shared_ptr<T> GetHost() const {
-		return std::dynamic_pointer_cast<T>(m_host);
-	}
-	
-	const ObjectType& GetObjectType() { return m_object_type; }
+		/** @brief	自身对象*/
+		std::shared_ptr<Object> Self() {
+			return shared_from_this();
+		}
+		/**
+		* @brief	获取自身对象
+		* @return	返回指定类型的对象
+		* @par Sample
+		* @code
+		*	obj->Get<Entity>();
+		* @endcode
+		*/
+		template<typename T>
+		std::shared_ptr<T> Get() {
+			return std::dynamic_pointer_cast<T>(shared_from_this());
+		}
+		/**
+		* @brief	获取父类对象
+		* @return	返回指定类型的对象
+		* @par Sample
+		* @code
+		*	obj->GetHost<Entity>();
+		* @endcode
+		*/
+		template<typename T>
+		std::shared_ptr<T> GetHost() const {
+			return std::dynamic_pointer_cast<T>(m_host);
+		}
 
-public:
-	/** @brief	销毁对象*/
-	virtual void Dispose();
+		const ObjectType& GetObjectType() { return m_object_type; }
+
+	public:
+		/** @brief	销毁对象*/
+		virtual void Dispose();
 
 
-	// 方便将对象发送到其他服务器
-	// 服务器间传送对象，所有继承Object的对象必须处理下列接口
-	// 从Json中解析对象
-	virtual bool ParseFromJson(const Json& json) { return false; };
-	// 序列化对象到Json
-	virtual bool SerializeToJson(const Json& json) const { return false; };
+		// 方便将对象发送到其他服务器
+		// 服务器间传送对象，所有继承Object的对象必须处理下列接口
+		// 从Json中解析对象
+		virtual bool ParseFromJson(const Json& json) { return false; };
+		// 序列化对象到Json
+		virtual bool SerializeToJson(const Json& json) const { return false; };
 
-private:
-	// debug 用
-	void DebugIncreaseSelf();
+	private:
+		// debug 用
+		void DebugIncreaseSelf();
 
-	// 刷新对象id
-	void RefreshObjectID();
+		// 刷新对象id
+		void RefreshObjectID();
 
-private:
-	
+	private:
 
-	ObjectID	m_obj_id;
-	// 对象类型
-	ObjectType	m_object_type;
 
-	bool		m_is_from_pool;
+		ObjectID	m_obj_id;
+		// 对象类型
+		ObjectType	m_object_type;
 
-	bool		m_disposed;
+		bool		m_is_from_pool;
 
-protected:
-	/** @brief	唤醒通知 默认不开启*/
-	bool CanEverAwake;
-	/** @brief	唤醒通知*/
-	virtual void Awake() {}
+		bool		m_disposed;
 
-	/** @brief	开始通知 默认不开启*/
-	bool CanEverStart;
-	/** @brief	开始通知*/
-	virtual void Start() {}
+	protected:
+		/** @brief	唤醒通知 默认不开启*/
+		bool CanEverAwake;
+		/** @brief	唤醒通知*/
+		virtual void Awake() {}
 
-	/** @brief	更新通知 默认不开启*/
-	bool CanEverUpdate;
-	/** @brief	更新通知*/
-	virtual void Update() {}
+		/** @brief	开始通知 默认不开启*/
+		bool CanEverStart;
+		/** @brief	开始通知*/
+		virtual void Start() {}
 
-	/** @brief	更新后通知 默认不开启*/
-	bool CanEverLateUpdate;
-	/** @brief	更新后通知*/
-	virtual void LateUpdate() {}
+		/** @brief	更新通知 默认不开启*/
+		bool CanEverUpdate;
+		/** @brief	更新通知*/
+		virtual void Update() {}
 
-	/** @brief	每秒更新通知 默认不开启*/
-	bool CanEverSecondsUpdate;
-	/** @brief	每秒更新通知*/
-	virtual void SecondsUpdate() {}
+		/** @brief	更新后通知 默认不开启*/
+		bool CanEverLateUpdate;
+		/** @brief	更新后通知*/
+		virtual void LateUpdate() {}
 
-	/** @brief	销毁时通知*/
-	virtual void Destroy() {}
+		/** @brief	每秒更新通知 默认不开启*/
+		bool CanEverSecondsUpdate;
+		/** @brief	每秒更新通知*/
+		virtual void SecondsUpdate() {}
 
-private:
-	friend class GameSystem;
-	friend class ObjectFactory;
-	friend class ObjectPool;
-};
+		/** @brief	销毁时通知*/
+		virtual void Destroy() {}
+
+	private:
+		friend class GameSystem;
+		friend class ObjectFactory;
+		friend class ObjectPool;
+	};
+}
