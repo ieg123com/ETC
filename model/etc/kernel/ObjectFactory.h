@@ -14,7 +14,37 @@ namespace Model
 			static_assert(std::is_base_of<Object, T>::value,
 				"The create object must inherit Object!");
 			auto obj = InternalCreate<T>(from_pool);
-			Game::Event().Awake<T>(obj);
+			Game::Event().Awake(obj);
+			return obj;
+		}
+
+		template<typename T,typename A>
+		static std::shared_ptr<T> Create(A a,const bool from_pool = true) {
+			// 对象必须继承 Object
+			static_assert(std::is_base_of<Object, T>::value,
+				"The create object must inherit Object!");
+			auto obj = InternalCreate<T>(from_pool);
+			Game::Event().Awake<A>(obj,a);
+			return obj;
+		}
+
+		template<typename T, typename A,typename B>
+		static std::shared_ptr<T> Create(A a,B b, const bool from_pool = true) {
+			// 对象必须继承 Object
+			static_assert(std::is_base_of<Object, T>::value,
+				"The create object must inherit Object!");
+			auto obj = InternalCreate<T>(from_pool);
+			Game::Event().Awake<A,B>(obj, a,b);
+			return obj;
+		}
+
+		template<typename T, typename A, typename B,typename C>
+		static std::shared_ptr<T> Create(A a, B b,C c, const bool from_pool = true) {
+			// 对象必须继承 Object
+			static_assert(std::is_base_of<Object, T>::value,
+				"The create object must inherit Object!");
+			auto obj = InternalCreate<T>(from_pool);
+			Game::Event().Awake<A, B,C>(obj, a, b,c);
 			return obj;
 		}
 
@@ -28,7 +58,40 @@ namespace Model
 				"The create object must inherit Object!");
 			auto obj = InternalCreate<T>(from_pool);
 			obj->m_host = host;
-			Game::System().Awake(obj);
+			Game::Event().Awake(obj);
+			return obj;
+		}
+
+		template<typename T,typename A>
+		static std::shared_ptr<T> CreateWithHost(const std::shared_ptr<Object>& host,A a, const bool from_pool = true) {
+			// 对象必须继承 Object
+			static_assert(std::is_base_of<Object, T>::value,
+				"The create object must inherit Object!");
+			auto obj = InternalCreate<T>(from_pool);
+			obj->m_host = host;
+			Game::Event().Awake<A>(obj,a);
+			return obj;
+		}
+
+		template<typename T, typename A,typename B>
+		static std::shared_ptr<T> CreateWithHost(const std::shared_ptr<Object>& host, A a, B b, const bool from_pool = true) {
+			// 对象必须继承 Object
+			static_assert(std::is_base_of<Object, T>::value,
+				"The create object must inherit Object!");
+			auto obj = InternalCreate<T>(from_pool);
+			obj->m_host = host;
+			Game::Event().Awake<A,B>(obj, a,b);
+			return obj;
+		}
+
+		template<typename T, typename A, typename B,typename C>
+		static std::shared_ptr<T> CreateWithHost(const std::shared_ptr<Object>& host, A a, B b,C c, const bool from_pool = true) {
+			// 对象必须继承 Object
+			static_assert(std::is_base_of<Object, T>::value,
+				"The create object must inherit Object!");
+			auto obj = InternalCreate<T>(from_pool);
+			obj->m_host = host;
+			Game::Event().Awake<A, B,C>(obj, a, b,c);
 			return obj;
 		}
 

@@ -7,7 +7,6 @@
 #pragma once
 #include <memory>
 #include <unordered_set>
-#include "event/GEvent.h"
 #include "ObjectType.h"
 
 namespace Model
@@ -66,7 +65,7 @@ namespace Model
 			return std::dynamic_pointer_cast<T>(m_host);
 		}
 
-		const ObjectType& GetObjectType() { return m_object_type; }
+		inline const ObjectType& GetObjectType() { return m_object_type; }
 
 	public:
 		/** @brief	销毁对象*/

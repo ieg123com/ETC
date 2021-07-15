@@ -34,27 +34,19 @@ namespace Model
 		{
 			m_late_update_enter.push(object->m_obj_id);
 		}
-		if (object->CanEverSecondsUpdate)
-		{
-			m_seconds_update_enter.push(object->m_obj_id);
-		}
 	}
 
 	void GameSystem::RemoveSystem(const std::shared_ptr<Object>& object)
 	{
 		m_objects.erase(object->m_obj_id);
 
-		if (object->CanEverUpdate)
+		if (m_updates.find(object->m_obj_id) != m_updates.end())
 		{
 			m_update_leave.push(object->m_obj_id);
 		}
-		if (object->CanEverLateUpdate)
+		if (m_late_updates.find(object->m_obj_id) != m_late_updates.end())
 		{
 			m_late_update_leave.push(object->m_obj_id);
-		}
-		if (object->CanEverSecondsUpdate)
-		{
-			m_seconds_update_leave.push(object->m_obj_id);
 		}
 	}
 
@@ -69,13 +61,13 @@ namespace Model
 	}
 
 
-	void GameSystem::Awake(const std::shared_ptr<Object>& object)
-	{
-		if (object->CanEverAwake)
-		{
-			object->Awake();
-		}
-	}
+// 	void GameSystem::Awake(const std::shared_ptr<Object>& object)
+// 	{
+// 		if (object->CanEverAwake)
+// 		{
+// 			object->Awake();
+// 		}
+// 	}
 
 	void GameSystem::Start()
 	{
@@ -86,7 +78,7 @@ namespace Model
 			m_start_enter.pop();
 			if (obj->IsDisposed())continue;
 			try {
-				obj->Start();
+				Game::Event().Start(obj);
 			}
 			catch (std::exception& e)
 			{
@@ -127,7 +119,7 @@ namespace Model
 		{
 			if (obj.second->IsDisposed()) continue;
 			try {
-				obj.second->Update();
+				Game::Event().Update(obj.second);
 			}
 			catch (std::exception& e)
 			{
@@ -143,8 +135,6 @@ namespace Model
 
 	void GameSystem::LateUpdate()
 	{
-		Start();
-
 		while (!m_late_update_enter.empty())
 		{
 			ObjectID id = m_late_update_enter.front();
@@ -169,7 +159,7 @@ namespace Model
 		{
 			if (obj.second->IsDisposed()) continue;
 			try {
-				obj.second->LateUpdate();
+				Game::Event().LateUpdate(obj.second);
 			}
 			catch (std::exception& e)
 			{

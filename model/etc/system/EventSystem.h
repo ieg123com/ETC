@@ -18,53 +18,49 @@ namespace Model
 		EventSystem();
 
 
-		template<typename T,typename ...Arg>
-		void Awake(std::shared_ptr<T> self, Arg ...arg)
+		template<typename ...Arg>
+		void Awake(std::shared_ptr<Object> self, Arg ...arg)
 		{
-			auto found = m_awake_system.equal_range(typeof(self));
+			auto found = m_awake_system.equal_range(self->GetObjectType().m_type);
 			while (found.first != found.second)
 			{
-				((AwakeSystem<T, Arg...>*)found.first->second)->Run(self, arg...);
+				((IAwake<Arg...>*)found.first->second)->Run(self, arg...);
 			}
 		}
 
-		template<typename T>
-		void Start(std::shared_ptr<T> self)
+		void Start(std::shared_ptr<Object> self)
 		{
-			auto found = m_start_system.equal_range(typeof(self));
+			auto found = m_start_system.equal_range(self->GetObjectType().m_type);
 			while (found.first != found.second)
 			{
-				((StartSystem<T>*)found.first->second)->Run(self);
+				found.first->second->Run(self);
 			}
 		}
 
-		template<typename T>
-		void Update(std::shared_ptr<T> self)
+		void Update(std::shared_ptr<Object> self)
 		{
-			auto found = m_update_system.equal_range(typeof(self));
+			auto found = m_update_system.equal_range(self->GetObjectType().m_type);
 			while (found.first != found.second)
 			{
-				((UpdateSystem<T>*)found.first->second)->Run(self);
+				found.first->second->Run(self);
 			}
 		}
 		
-		template<typename T>
-		void LateUpdate(std::shared_ptr<T> self)
+		void LateUpdate(std::shared_ptr<Object> self)
 		{
-			auto found = m_late_update_system.equal_range(typeof(self));
+			auto found = m_late_update_system.equal_range(self->GetObjectType().m_type);
 			while (found.first != found.second)
 			{
-				((LateUpdateSystem<T>*)found.first->second)->Run(self);
+				found.first->second->Run(self);
 			}
 		}
 
-		template<typename T>
-		void Destroy(std::shared_ptr<T> self)
+		void Destroy(std::shared_ptr<Object> self)
 		{
-			auto found = m_destroy_system.equal_range(typeof(self));
+			auto found = m_destroy_system.equal_range(self->GetObjectType().m_type);
 			while (found.first != found.second)
 			{
-				((DestroySystem<T>*)found.first->second)->Run(self);
+				found.first->second->Run(self);
 			}
 		}
 

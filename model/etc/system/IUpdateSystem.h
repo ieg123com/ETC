@@ -3,8 +3,11 @@
 
 namespace Model
 {
+	class Object;
 	class IUpdateSystem
 	{
+	public:
+		virtual void Run(std::shared_ptr<Object> self) = 0;
 
 	};
 
@@ -13,6 +16,10 @@ namespace Model
 		public IUpdateSystem
 	{
 	public:
-		virtual void Run(T self) = 0;
+		virtual void Run(std::shared_ptr<Object> self) override {
+			Update(std::static_pointer_cast<T>(self));
+		}
+
+		virtual void Update(std::shared_ptr<T> self) = 0;
 	};
 }

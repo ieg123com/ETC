@@ -33,7 +33,7 @@ namespace Model
 		std::shared_ptr<Object> GetSystem(const ObjectID id);
 
 
-		void Awake(const std::shared_ptr<Object>& object);
+		//void Awake(const std::shared_ptr<Object>& object);
 
 		void Start();
 		// 每帧更新
