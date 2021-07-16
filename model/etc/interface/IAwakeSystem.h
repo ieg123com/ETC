@@ -1,14 +1,15 @@
 #pragma once
-
+#include "IEventSystem.h"
 
 
 namespace Model
 {
 	class Object;
 
-	class IAwakeSystem
+	class IAwakeSystem:
+		public IEventSystem
 	{
-
+	public:
 	};
 
 	template<typename ...Arg>
@@ -24,10 +25,13 @@ namespace Model
 		public IAwakeSystem
 	{
 	public:
+
 		virtual void Run(std::shared_ptr<Object> self, Arg...arg) override {
 			Awake(std::static_pointer_cast<T>(self), arg...);
 		}
 
-		virtual void Awake(std::shared_ptr<T> self,Arg...arg) = 0;
+		virtual const Type& GetType()const override { return typeof(T); }
+		virtual void Awake(std::shared_ptr<T> self, Arg...arg) = 0;
+
 	};
 }

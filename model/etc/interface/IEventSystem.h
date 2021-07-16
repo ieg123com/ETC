@@ -1,10 +1,12 @@
 #pragma once
-
+#include "type/type.h"
 
 namespace Model
 {
 	class IEventSystem
 	{
+	public:
+		virtual const Type& GetType()const = 0;
 
 	};
 
@@ -18,13 +20,13 @@ namespace Model
 	};
 
 
-	template<typename T,typename ...Arg>
-	class EventSystem
-	{
-	public:
-
-
-	};
+// 	template<typename T,typename ...Arg>
+// 	class EventSystem
+// 	{
+// 	public:
+// 
+// 
+// 	};
 
 }
 

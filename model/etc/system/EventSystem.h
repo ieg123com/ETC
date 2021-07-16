@@ -73,6 +73,25 @@ namespace Model
 		std::unordered_multimap<Type, IDestroySystem*>		m_destroy_system;
 
 
+	private:
+		std::unordered_map<ObjectID, std::shared_ptr<Object>> m_objects;
+
+
+		std::unordered_map<ObjectID, std::shared_ptr<Object>> m_updates;
+		std::unordered_map<ObjectID, std::shared_ptr<Object>> m_late_updates;
+		std::unordered_map<ObjectID, std::shared_ptr<Object>> m_seconds_updates;
+
+		std::queue<std::shared_ptr<Object>>	m_start_enter;
+	private:
+		std::queue<ObjectID>	m_update_enter;
+		std::queue<ObjectID>	m_update_leave;
+
+		std::queue<ObjectID>	m_late_update_enter;
+		std::queue<ObjectID>	m_late_update_leave;
+
+		std::queue<ObjectID>	m_seconds_update_enter;
+		std::queue<ObjectID>	m_seconds_update_leave;
+
 
 	};
 }

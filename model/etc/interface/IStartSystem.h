@@ -1,10 +1,12 @@
 #pragma once
+#include "IEventSystem.h"
 
 
 namespace Model
 {
 	class Object;
-	class IStartSystem
+	class IStartSystem:
+		public IEventSystem
 	{
 	public:
 		virtual void Run(std::shared_ptr<Object> self) = 0;
@@ -19,6 +21,7 @@ namespace Model
 			Start(std::static_pointer_cast<T>(self));
 		}
 
+		virtual const Type& GetType()const override { return typeof(T); }
 		virtual void Start(std::shared_ptr<T> self) = 0;
 	};
 }
