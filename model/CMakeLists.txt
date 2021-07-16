@@ -10,7 +10,7 @@ set(ALL_OBJECT "")
  
 
 #========================ETC加载==============================
-
+ 
 include_directories(./etc ./etc/common ./etc/interface ./etc/kernel ./etc/system)
 
 #etc
