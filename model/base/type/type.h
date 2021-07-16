@@ -37,9 +37,9 @@ class Type
 {
 public:
 
-	std::shared_ptr<TypeInfo> m_info;
-	Type(){}
-	Type(std::shared_ptr<TypeInfo> info){
+	TypeInfo* m_info;
+	Type() { m_info = nullptr; }
+	Type(TypeInfo* info){
 		m_info = info;
 	}
 
@@ -91,18 +91,18 @@ namespace Model
 	public:
 
 		template<typename T>
-		std::shared_ptr<TypeInfo> Get()
+		TypeInfo* Get()
 		{
 			auto found = m_all_type_info.find((&typeid(T))->raw_name());
 			if (found == m_all_type_info.end())
 			{
-				auto value = std::make_pair(std::string((&typeid(T))->raw_name()), std::make_shared<TypeInfo>(&typeid(T)));
+				auto value = std::make_pair(std::string((&typeid(T))->raw_name()), new TypeInfo(&typeid(T)));
 				found = m_all_type_info.insert(value).first;
 			}
 			return found->second;
 		}
 
-		std::unordered_map<std::string, std::shared_ptr<TypeInfo>>	m_all_type_info;
+		std::unordered_map<std::string, TypeInfo*>	m_all_type_info;
 	};
 
 

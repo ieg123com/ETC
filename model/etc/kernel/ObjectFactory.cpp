@@ -8,7 +8,7 @@ namespace Model
 	std::shared_ptr<Object> ObjectFactory::Create(const std::string& type_name, const bool from_pool) {
 		if (auto obj = InternalCreate(type_name, from_pool))
 		{
-			Game::System().Awake(obj);
+			Game::Event().Awake(obj);
 			return obj;
 		}
 		return nullptr;
@@ -18,7 +18,7 @@ namespace Model
 	{
 		if (auto obj = InternalCreate(type_name, from_pool))
 		{
-			Game::System().Awake(obj);
+			Game::Event().Awake(obj);
 			return obj;
 		}
 		throw std::exception(("没找到需要创建的对象 " + type_name).c_str());
@@ -29,7 +29,7 @@ namespace Model
 		if (auto obj = InternalCreate(type_name, from_pool))
 		{
 			obj->m_host = host;
-			Game::System().Awake(obj);
+			Game::Event().Awake(obj);
 			return obj;
 		}
 		return nullptr;
@@ -40,7 +40,7 @@ namespace Model
 		if (auto obj = InternalCreate(type_name, from_pool))
 		{
 			obj->m_host = host;
-			Game::System().Awake(obj);
+			Game::Event().Awake(obj);
 			return obj;
 		}
 		throw std::exception(("没找到需要创建的对象 " + type_name).c_str());

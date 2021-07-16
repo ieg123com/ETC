@@ -14,6 +14,7 @@ namespace Model
 		class TypeFactory*			type_factory;
 		class ISingletonFactory*	single_factory;
 		class GlobalGame*			game;
+		class GlobalData*			global_data;
 	};
 
 

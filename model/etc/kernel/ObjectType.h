@@ -8,7 +8,7 @@ class ObjectType
 {
 public:
 	ObjectType() {
-		m_type = typeof(ObjectType);
+		m_type = typeof(class ObjectType);
 	}
 
 	const char* GetName() const {

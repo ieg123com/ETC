@@ -8,6 +8,7 @@
 #include <memory>
 #include <unordered_set>
 #include "ObjectType.h"
+#include "GameDefinition.h"
 
 namespace Model
 {

@@ -1,6 +1,7 @@
 ﻿#include "Object.h"
 #include "ObjectPool.h"
 #include "Game.h"
+#include "GlobalData.h"
 #include <atomic>
 
 namespace Model
@@ -54,8 +55,6 @@ namespace Model
 
 	void Object::RefreshObjectID()
 	{
-		static std::atomic<ObjectID> last_id = 0;
-		last_id++;
-		m_obj_id = last_id;
+		m_obj_id = GlobalData::GetObjectID();
 	}
 }

@@ -6,6 +6,14 @@
 
 namespace Model
 {
+	class Reflection
+	{
+	public:
+
+
+		Type m_type;
+
+	};
 
 	class IReflection
 	{
@@ -14,13 +22,13 @@ namespace Model
 
 		template<typename T>
 		T* Create() {
-			
+			m_create()
 		}
 
 	private:
 		Type	m_type;
 
-		std::
+		std::function<void* ()> m_create;
 
 		friend class ReflectionSystem;
 	};
@@ -28,6 +36,19 @@ namespace Model
 
 	class IReflectionSystem
 	{
+
+	};
+
+
+
+
+	class ReflectionSystem
+	{
+	public:
+
+
+
+
 
 	};
 

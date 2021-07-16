@@ -1,12 +1,17 @@
 #pragma once
 #include <stdio.h>
 #include <string>
+#include "base/task/domain_task.h"
+#include "test.h"
 
 namespace Hotfix
 {
 	void Start()
 	{
 		printf("Hotfix.dll º”‘ÿÕÍ≥…!\n");
+
+		Model::DomainTask::Instance().RunAll();
+
 
 	}
 

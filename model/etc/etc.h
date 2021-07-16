@@ -7,7 +7,5 @@
 #include "kernel/ObjectFactory.h"
 #include "kernel/ObjectRegisterAction.h"
 
-#include "interface/IAwake.h"
-
 
 #include "Game.h"

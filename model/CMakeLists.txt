@@ -103,6 +103,18 @@ FILE(GLOB BASE_SINGLE_FILES "./base/single/*.cpp" "./base/single/*.h")
 set(BASE_TYPE_FILES "")
 FILE(GLOB BASE_TYPE_FILES "./base/type/*.cpp" "./base/type/*.h")
 
+#反射机制
+set(BASE_REFLECTION_FILES "")
+FILE(GLOB BASE_REFLECTION_FILES "./base/reflection/*.cpp" "./base/reflection/*.h")
+
+#属性基础
+set(BASE_ATTRIBUTE_FILES "")
+FILE(GLOB BASE_ATTRIBUTE_FILES "./base/attribute/*.cpp" "./base/attribute/*.h")
+
+#任务
+set(BASE_TASK_FILES "")
+FILE(GLOB BASE_TASK_FILES "./base/task/*.cpp" "./base/task/*.h")
+
 #helper
 set(BASE_HELPER_FILES "")
 FILE(GLOB BASE_HELPER_FILES "./base/helper/*.cpp" "./base/helper/*.h")
@@ -115,9 +127,13 @@ FILE(GLOB BASE_HELPER_DLL_FILES "./base/helper/dll/*.cpp" "./base/helper/dll/*.h
 set(BASE_HELPER_HOTFIX_FILES "")
 FILE(GLOB BASE_HELPER_HOTFIX_FILES "./base/helper/hotfix/*.cpp" "./base/helper/hotfix/*.h")
 
+
 source_group(base						FILES ${BASE_FILES})
 source_group(base\\log					FILES ${BASE_LOG_FILES})
 source_group(base\\type					FILES ${BASE_TYPE_FILES})
+source_group(base\\reflection			FILES ${BASE_REFLECTION_FILES})
+source_group(base\\attribute			FILES ${BASE_ATTRIBUTE_FILES})
+source_group(base\\task					FILES ${BASE_TASK_FILES})
 source_group(base\\single				FILES ${BASE_SINGLE_FILES})
 source_group(base\\helper				FILES ${BASE_HELPER_FILES})
 source_group(base\\helper\\dll			FILES ${BASE_HELPER_DLL_FILES})
@@ -127,6 +143,9 @@ LIST(APPEND ALL_OBJECT
 	${BASE_FILES}
 	${BASE_LOG_FILES}
 	${BASE_TYPE_FILES}
+	${BASE_REFLECTION_FILES}
+	${BASE_ATTRIBUTE_FILES}
+	${BASE_TASK_FILES}
 	${BASE_SINGLE_FILES}
 	${BASE_HELPER_FILES}
 	${BASE_HELPER_DLL_FILES}
