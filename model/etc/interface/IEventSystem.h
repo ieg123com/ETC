@@ -14,7 +14,7 @@ namespace Model
 	class IEvent
 	{
 	public:
-		virtual void Run() = 0;
+		virtual void Run(Arg...arg) = 0;
 
 
 	};
