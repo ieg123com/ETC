@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "Object.h"
 #include <unordered_map>
+#include <queue>
+#include <vector>
 #include "IAwakeSystem.h"
 #include "IStartSystem.h"
 #include "IUpdateSystem.h"
@@ -18,80 +20,72 @@ namespace Model
 		EventSystem();
 
 
+		
+
+
 		template<typename ...Arg>
 		void Awake(std::shared_ptr<Object> self, Arg ...arg)
 		{
-			auto found = m_awake_system.equal_range(self->GetObjectType().m_type);
-			while (found.first != found.second)
+			TypeIndex index = self->GetObjectType().GetTypeIndex();
+			if (m_awake_system.size() <= index)return;
+			auto& all_obj = m_awake_system[index];
+			for (auto& item : all_obj)
 			{
-				((IAwake<Arg...>*)found.first->second)->Run(self, arg...);
+				((IAwake<Arg...>*)item)->Run(self, arg...);
 			}
 		}
 
 		void Start(std::shared_ptr<Object> self)
 		{
-			auto found = m_start_system.equal_range(self->GetObjectType().m_type);
-			while (found.first != found.second)
+			TypeIndex index = self->GetObjectType().GetTypeIndex();
+			if (m_start_system.size() <= index)return;
+			auto& all_obj = m_start_system[index];
+			for (auto& item : all_obj)
 			{
-				found.first->second->Run(self);
+				item->Run(self);
 			}
 		}
 
 		void Update(std::shared_ptr<Object> self)
 		{
-			auto found = m_update_system.equal_range(self->GetObjectType().m_type);
-			while (found.first != found.second)
+			TypeIndex index = self->GetObjectType().GetTypeIndex();
+			if (m_update_system.size() <= index)return;
+			auto& all_obj = m_update_system[index];
+			for (auto& item : all_obj)
 			{
-				found.first->second->Run(self);
+				item->Run(self);
 			}
 		}
 		
 		void LateUpdate(std::shared_ptr<Object> self)
 		{
-			auto found = m_late_update_system.equal_range(self->GetObjectType().m_type);
-			while (found.first != found.second)
+			TypeIndex index = self->GetObjectType().GetTypeIndex();
+			if (m_late_update_system.size() <= index)return;
+			auto& all_obj = m_late_update_system[index];
+			for (auto& item : all_obj)
 			{
-				found.first->second->Run(self);
+				item->Run(self);
 			}
 		}
 
 		void Destroy(std::shared_ptr<Object> self)
 		{
-			auto found = m_destroy_system.equal_range(self->GetObjectType().m_type);
-			while (found.first != found.second)
+			TypeIndex index = self->GetObjectType().GetTypeIndex();
+			if (m_destroy_system.size() <= index)return;
+			auto& all_obj = m_destroy_system[index];
+			for (auto& item : all_obj)
 			{
-				found.first->second->Run(self);
+				item->Run(self);
 			}
 		}
 
 	private:
 
-		std::unordered_multimap<Type, IAwakeSystem*>		m_awake_system;
-		std::unordered_multimap<Type, IStartSystem*>		m_start_system;
-		std::unordered_multimap<Type, IUpdateSystem*>		m_update_system;
-		std::unordered_multimap<Type, ILateUpdateSystem*>	m_late_update_system;
-		std::unordered_multimap<Type, IDestroySystem*>		m_destroy_system;
-
-
-	private:
-		std::unordered_map<ObjectID, std::shared_ptr<Object>> m_objects;
-
-
-		std::unordered_map<ObjectID, std::shared_ptr<Object>> m_updates;
-		std::unordered_map<ObjectID, std::shared_ptr<Object>> m_late_updates;
-		std::unordered_map<ObjectID, std::shared_ptr<Object>> m_seconds_updates;
-
-		std::queue<std::shared_ptr<Object>>	m_start_enter;
-	private:
-		std::queue<ObjectID>	m_update_enter;
-		std::queue<ObjectID>	m_update_leave;
-
-		std::queue<ObjectID>	m_late_update_enter;
-		std::queue<ObjectID>	m_late_update_leave;
-
-		std::queue<ObjectID>	m_seconds_update_enter;
-		std::queue<ObjectID>	m_seconds_update_leave;
-
+		std::vector<std::list<IAwakeSystem*>>		m_awake_system;
+		std::vector<std::list<IStartSystem*>>		m_start_system;
+		std::vector<std::list<IUpdateSystem*>>		m_update_system;
+		std::vector<std::list<ILateUpdateSystem*>>	m_late_update_system;
+		std::vector<std::list<IDestroySystem*>>		m_destroy_system;
 
 	};
 }

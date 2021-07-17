@@ -12,7 +12,7 @@ namespace Hotfix
 
 		Model::DomainTask::Instance().RunAll();
 
-
+		printf("TypeID %d\n", Model::GlobalData::TypeID());
 	}
 
 	void Over()

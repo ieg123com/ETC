@@ -1,9 +1,11 @@
 #pragma once
 #include "type/type.h"
+#include "interface/ISupportTypeCreation.h"
 
 namespace Model
 {
-	class IEventSystem
+	class IEventSystem:
+		public ISupportTypeCreation
 	{
 	public:
 		virtual const Type& GetType()const = 0;
