@@ -29,16 +29,16 @@ namespace Model
 		* @retval	true : 已被销毁
 		* @retval	false : 没有被销毁
 		*/
-		bool IsDisposed()const {
+		inline bool IsDisposed()const {
 			return m_disposed;
 		}
 
-		ObjectID GetObjectID()const {
+		inline ObjectID GetObjectID()const {
 			return m_obj_id;
 		}
 
 		/** @brief	自身对象*/
-		std::shared_ptr<Object> Self() {
+		inline std::shared_ptr<Object> Self() {
 			return shared_from_this();
 		}
 		/**

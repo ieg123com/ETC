@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Object.h"
 #include <unordered_map>
+#include <queue>
 #include "IAwakeSystem.h"
 #include "IStartSystem.h"
 #include "IUpdateSystem.h"
@@ -73,13 +74,21 @@ namespace Model
 		std::unordered_multimap<Type, IDestroySystem*>		m_destroy_system;
 
 
+	public:
+
+		void AddObject(const std::shared_ptr<Object>& obj);
+		void RemoveObject(const std::shared_ptr<Object>& obj);
+		std::shared_ptr<Object> GetObject(const ObjectID id) const;
+
+
+
+
 	private:
 		std::unordered_map<ObjectID, std::shared_ptr<Object>> m_objects;
 
 
 		std::unordered_map<ObjectID, std::shared_ptr<Object>> m_updates;
 		std::unordered_map<ObjectID, std::shared_ptr<Object>> m_late_updates;
-		std::unordered_map<ObjectID, std::shared_ptr<Object>> m_seconds_updates;
 
 		std::queue<std::shared_ptr<Object>>	m_start_enter;
 	private:
@@ -88,9 +97,6 @@ namespace Model
 
 		std::queue<ObjectID>	m_late_update_enter;
 		std::queue<ObjectID>	m_late_update_leave;
-
-		std::queue<ObjectID>	m_seconds_update_enter;
-		std::queue<ObjectID>	m_seconds_update_leave;
 
 
 	};
