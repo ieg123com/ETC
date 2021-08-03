@@ -2,17 +2,25 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <functional>
+#include "GlobalData.h"
+#include "interface/ISupportTypeCreation.h"
 
+// ÀàÐÍË÷Òý
+using TypeIndex = uint32_t;
 
 class TypeInfo
 {
+	friend class Activator;
+	friend class TypeFactory;
 public:
 	const std::string name;
 	const std::string raw_name;
 	const size_t hash_code;
+	const TypeIndex index;
 
-	TypeInfo():name(""),raw_name(""),hash_code(0) {}
-	TypeInfo(const type_info* ty):raw_name(ty->raw_name()),name(ty->name()),hash_code(ty->hash_code()){}
+	TypeInfo() :name(""), raw_name(""), hash_code(0), index(Model::GlobalData::GetTypeIndex()) { }
+	TypeInfo(const type_info* ty):raw_name(ty->raw_name()),name(ty->name()),hash_code(ty->hash_code()), index(Model::GlobalData::GetTypeIndex()) {}
 
 
 	bool operator == (const TypeInfo& obj)const noexcept{
@@ -30,6 +38,9 @@ public:
 		}
 		return false;
 	}
+
+private:
+	std::function<Model::ISupportTypeCreation* ()> create_instance;
 };
 
 
@@ -86,6 +97,7 @@ namespace std
 
 namespace Model
 {
+
 	class TypeFactory
 	{
 	public:
@@ -97,16 +109,50 @@ namespace Model
 			if (found == m_all_type_info.end())
 			{
 				auto value = std::make_pair(std::string((&typeid(T))->raw_name()), new TypeInfo(&typeid(T)));
+				if (std::is_base_of<ISupportTypeCreation, T>::value)
+				{
+					value.second->create_instance = []()->ISupportTypeCreation* {return T(); }
+				}
+				else {
+					value.second->create_instance = nullptr;
+				}
 				found = m_all_type_info.insert(value).first;
 			}
 			return found->second;
 		}
 
+
+		template<typename T>
+		static T* CreateInstance(const Type& type)
+		{
+			if (type.m_info == nullptr)
+			{
+				return nullptr;
+			}
+			if (!type.m_info->create_instance)
+			{
+				return nullptr;
+			}
+			ISupportTypeCreation* new_obj = type.m_info->create_instance();
+
+			T* ret_obj = dynamic_cast<T>(new_obj);
+			if (ret_obj == nullptr)
+			{
+				delete new_obj;
+				return nullptr;
+			}
+			new_obj->BeginInit();
+			new_obj->EndInit();
+			return ret_obj;
+		}
+	private:
 		std::unordered_map<std::string, TypeInfo*>	m_all_type_info;
+
 	};
 
 
 	extern TypeFactory* g_type_factory;
+
 }
 
 

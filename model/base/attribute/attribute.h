@@ -1,6 +1,7 @@
 #pragma once
 #include <stdint.h>
 #include <memory>
+#include "interface/ISupportTypeCreation.h"
 
 namespace Model
 {
@@ -8,6 +9,7 @@ namespace Model
 
 
 	class Attribute:
+		public ISupportTypeCreation,
 		public std::enable_shared_from_this<Attribute>
 	{
 	public:

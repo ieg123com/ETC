@@ -9,11 +9,13 @@
 #include <unordered_set>
 #include "ObjectType.h"
 #include "GameDefinition.h"
+#include "interface/ISupportTypeCreation.h"
 
 namespace Model
 {
 	/** @brief 基础类 */
 	class Object :
+		public ISupportTypeCreation,
 		public std::enable_shared_from_this<Object>
 	{
 	public:
@@ -129,6 +131,7 @@ namespace Model
 
 	private:
 		friend class GameSystem;
+		friend class EventSystem;
 		friend class ObjectFactory;
 		friend class ObjectPool;
 	};

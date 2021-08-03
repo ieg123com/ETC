@@ -11,7 +11,7 @@ namespace Model
 	public:
 
 
-		Type m_type;
+		::Type m_type;
 
 	};
 
@@ -26,7 +26,7 @@ namespace Model
 		}
 
 	private:
-		Type	m_type;
+		::Type	m_type;
 
 		std::function<void* ()> m_create;
 

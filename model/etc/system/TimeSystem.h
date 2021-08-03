@@ -25,5 +25,6 @@ namespace Model
 		int64_t	m_last_time;
 
 		friend class GameSystem;
+		friend class EventSystem;
 	};
 }

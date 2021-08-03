@@ -15,6 +15,7 @@ namespace Model
 				"The create object must inherit Object!");
 			auto obj = InternalCreate<T>(from_pool);
 			Game::Event().Awake(obj);
+			Game::Event().Load(obj);
 			return obj;
 		}
 
@@ -25,6 +26,7 @@ namespace Model
 				"The create object must inherit Object!");
 			auto obj = InternalCreate<T>(from_pool);
 			Game::Event().Awake<A>(obj,a);
+			Game::Event().Load(obj);
 			return obj;
 		}
 
@@ -35,6 +37,7 @@ namespace Model
 				"The create object must inherit Object!");
 			auto obj = InternalCreate<T>(from_pool);
 			Game::Event().Awake<A,B>(obj, a,b);
+			Game::Event().Load(obj);
 			return obj;
 		}
 
@@ -45,6 +48,7 @@ namespace Model
 				"The create object must inherit Object!");
 			auto obj = InternalCreate<T>(from_pool);
 			Game::Event().Awake<A, B,C>(obj, a, b,c);
+			Game::Event().Load(obj);
 			return obj;
 		}
 
@@ -59,6 +63,7 @@ namespace Model
 			auto obj = InternalCreate<T>(from_pool);
 			obj->m_host = host;
 			Game::Event().Awake(obj);
+			Game::Event().Load(obj);
 			return obj;
 		}
 
@@ -70,6 +75,7 @@ namespace Model
 			auto obj = InternalCreate<T>(from_pool);
 			obj->m_host = host;
 			Game::Event().Awake<A>(obj,a);
+			Game::Event().Load(obj);
 			return obj;
 		}
 
@@ -81,6 +87,7 @@ namespace Model
 			auto obj = InternalCreate<T>(from_pool);
 			obj->m_host = host;
 			Game::Event().Awake<A,B>(obj, a,b);
+			Game::Event().Load(obj);
 			return obj;
 		}
 
@@ -92,6 +99,7 @@ namespace Model
 			auto obj = InternalCreate<T>(from_pool);
 			obj->m_host = host;
 			Game::Event().Awake<A, B,C>(obj, a, b,c);
+			Game::Event().Load(obj);
 			return obj;
 		}
 

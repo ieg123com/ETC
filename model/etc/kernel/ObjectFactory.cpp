@@ -9,6 +9,7 @@ namespace Model
 		if (auto obj = InternalCreate(type_name, from_pool))
 		{
 			Game::Event().Awake(obj);
+			Game::Event().Load(obj);
 			return obj;
 		}
 		return nullptr;
@@ -19,6 +20,7 @@ namespace Model
 		if (auto obj = InternalCreate(type_name, from_pool))
 		{
 			Game::Event().Awake(obj);
+			Game::Event().Load(obj);
 			return obj;
 		}
 		throw std::exception(("没找到需要创建的对象 " + type_name).c_str());
@@ -30,6 +32,7 @@ namespace Model
 		{
 			obj->m_host = host;
 			Game::Event().Awake(obj);
+			Game::Event().Load(obj);
 			return obj;
 		}
 		return nullptr;
@@ -41,6 +44,7 @@ namespace Model
 		{
 			obj->m_host = host;
 			Game::Event().Awake(obj);
+			Game::Event().Load(obj);
 			return obj;
 		}
 		throw std::exception(("没找到需要创建的对象 " + type_name).c_str());
