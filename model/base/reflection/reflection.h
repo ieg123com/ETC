@@ -4,6 +4,7 @@
 #include "reflection_attribute.h"
 #include "reflection_assembly.h"
 #include "reflection_system.h"
+#include "task/domain_task.h"
 
 
 
@@ -11,8 +12,8 @@
 #define REF_VAR_NAME(_class,_line) g_reflection_task_##_class##_line
 
 #define REF_B(_class,_attr,_line) \
-Model::AddDomainTask REF_VAR_NAME(_class,_line)([] {\
-Model::Reflection::ISystem<_class> ref_sys;\
+::Model::AddDomainTask REF_VAR_NAME(_class,_line)([] {\
+::Model::Reflection::ISystem<_class> ref_sys;\
 ref_sys.Add(new _attr);\
 	});
 

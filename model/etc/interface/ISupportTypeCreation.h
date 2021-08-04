@@ -9,8 +9,9 @@ namespace Model
 	class ISupportTypeCreation
 	{
 	public:
-		virtual void BeginInit(){}
-		virtual void EndInit(){}
+		ISupportTypeCreation(){}
+		virtual void BeginInit() { printf("begin init\n"); }
+		virtual void EndInit() { printf("end init\n"); }
 	};
 
 }

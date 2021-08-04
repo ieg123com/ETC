@@ -1,18 +1,50 @@
 #pragma once
 #include <stdio.h>
 #include <string>
-#include "base/task/domain_task.h"
 #include "test.h"
+#include "etc.h"
+#include "demo/Entity/PlayerEntity.h"
+
+using namespace Model;
 
 namespace Hotfix
 {
+	class TestAwakeSystem : public AwakeSystem<PlayerEntity>
+	{
+	public:
+		virtual void Awake(std::shared_ptr<PlayerEntity> self) override
+		{
+			LOG_INFO("TestAwakeSystem PlayerEntity Awake");
+
+
+
+		}
+	};
+
 	void Start()
 	{
 		printf("Hotfix.dll º”‘ÿÕÍ≥…!\n");
 
-		Model::DomainTask::Instance().RunAll();
+		
 
-		printf("TypeID %d\n", Model::GlobalData::TypeID());
+		printf("TypeID %d\n", Model::GlobalData::TypeIndex());
+
+
+		Type ty = typeof(TestAwakeSystem);
+
+		auto obj = TypeFactory::CreateInstance<TestAwakeSystem>(ty);
+
+		auto awake = std::dynamic_pointer_cast<AwakeSystem<PlayerEntity>>(obj);
+
+		
+
+		auto player = ObjectFactory::Create<PlayerEntity>();
+
+		player->Uuid = 100;
+
+		awake->Run(player);
+		printf("Ok\n");
+
 	}
 
 	void Over()

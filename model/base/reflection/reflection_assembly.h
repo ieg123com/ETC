@@ -42,6 +42,31 @@ namespace Model
 			}
 
 
+			const std::list<std::shared_ptr<IBaseAttribute>>& GetType(const Type& type)const {
+				auto found = m_all_attr.find(type);
+				if (found == m_all_attr.end())
+				{
+					return std::list<std::shared_ptr<IBaseAttribute>>();
+				}
+				return found->second;
+			}
+
+			template<typename T>
+			const std::list<std::shared_ptr<IBaseAttribute>>& GetType()const {
+				return GetType(typeof(T));
+			}
+
+			std::list<std::shared_ptr<IBaseAttribute>> GetAllType()const {
+				std::list<std::shared_ptr<IBaseAttribute>> all_attr;
+				for (auto& item : m_all_attr)
+				{
+					for (auto& attr : item.second)
+					{
+						all_attr.push_back(attr);
+					}
+				}
+				return std::move(all_attr);
+			}
 
 		private:
 			std::unordered_map<Type, std::list<std::shared_ptr<IBaseAttribute>>>	m_all_attr;

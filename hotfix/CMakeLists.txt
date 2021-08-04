@@ -59,6 +59,22 @@ LIST(APPEND ALL_OBJECT
 
 
 
+#========================Demo==============================
+include_directories(./hdemo)
+
+
+set(HDEMO_ENTITY_FILES "")
+FILE(GLOB HDEMO_ENTITY_FILES "./hdemo/Entity/*.cpp")
+
+
+
+source_group(hdemo\\Entity						FILES ${HDEMO_ENTITY_FILES})
+
+LIST(APPEND ALL_OBJECT
+	${HDEMO_ENTITY_FILES})
+
+
+
 
 # Target
 add_library(hotfix SHARED

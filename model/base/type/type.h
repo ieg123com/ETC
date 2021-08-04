@@ -9,10 +9,15 @@
 // ÀàÐÍË÷Òý
 using TypeIndex = uint32_t;
 
+namespace Model
+{
+	class TypeFactory;
+}
+
 class TypeInfo
 {
 	friend class Activator;
-	friend class TypeFactory;
+	friend class Model::TypeFactory;
 public:
 	const std::string name;
 	const std::string raw_name;
@@ -40,7 +45,7 @@ public:
 	}
 
 private:
-	std::function<Model::ISupportTypeCreation* ()> create_instance;
+	std::function<std::shared_ptr<Model::ISupportTypeCreation> ()> create_instance;
 };
 
 
@@ -103,7 +108,7 @@ namespace Model
 	public:
 
 		template<typename T>
-		TypeInfo* Get()
+		constexpr TypeInfo* Get()
 		{
 			auto found = m_all_type_info.find((&typeid(T))->raw_name());
 			if (found == m_all_type_info.end())
@@ -111,7 +116,12 @@ namespace Model
 				auto value = std::make_pair(std::string((&typeid(T))->raw_name()), new TypeInfo(&typeid(T)));
 				if (std::is_base_of<ISupportTypeCreation, T>::value)
 				{
-					value.second->create_instance = []()->ISupportTypeCreation* {return T(); }
+					value.second->create_instance = []()->std::shared_ptr<ISupportTypeCreation> {
+						//T* new_obj = new T();
+						std::shared_ptr<T> obj = std::make_shared<T>();
+						//std::shared_ptr<T> obj(new_obj, [](T* self)->void { delete self; });
+						return std::reinterpret_pointer_cast<ISupportTypeCreation>(obj);
+					};
 				}
 				else {
 					value.second->create_instance = nullptr;
@@ -123,7 +133,7 @@ namespace Model
 
 
 		template<typename T>
-		static T* CreateInstance(const Type& type)
+		static std::shared_ptr<T> CreateInstance(const Type& type)
 		{
 			if (type.m_info == nullptr)
 			{
@@ -133,12 +143,13 @@ namespace Model
 			{
 				return nullptr;
 			}
-			ISupportTypeCreation* new_obj = type.m_info->create_instance();
+			std::shared_ptr<ISupportTypeCreation> new_obj = type.m_info->create_instance();
 
-			T* ret_obj = dynamic_cast<T>(new_obj);
-			if (ret_obj == nullptr)
+			auto event_obj = std::dynamic_pointer_cast<IEventSystem>(new_obj);
+
+			std::shared_ptr<T> ret_obj = std::dynamic_pointer_cast<T>(new_obj);
+			if (!ret_obj)
 			{
-				delete new_obj;
 				return nullptr;
 			}
 			new_obj->BeginInit();

@@ -240,6 +240,19 @@ source_group(other						FILES ${OTHER_FILES})
 LIST(APPEND ALL_OBJECT
 	${OTHER_FILES})
 
+#========================Demo==============================
+include_directories(./demo)
+
+set(DEMO_ENTITY_FILES "")
+FILE(GLOB DEMO_ENTITY_FILES "./demo/Entity/*.h")
+
+source_group(demo\\Entity						FILES ${DEMO_ENTITY_FILES})
+
+LIST(APPEND ALL_OBJECT
+	${DEMO_ENTITY_FILES})
+
+
+
 
 # Target
 add_library(model

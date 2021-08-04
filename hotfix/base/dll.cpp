@@ -16,13 +16,15 @@ void Awake()
 void Init(const Model::stGlobalVar& global)
 {
 	Model::SetGlobalVar(global);
+	Model::DomainTask::Instance().RunAll();
+	//Game::Event().Add(DLLType::Model, Assembly::GetSharedPtr());
 
 	// º”‘ÿÕÍ≥…
-	Hotfix::Start();
+	::Hotfix::Start();
 }
 
 
 void Destroy()
 {
-	Hotfix::Over();
+	::Hotfix::Over();
 }

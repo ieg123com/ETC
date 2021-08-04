@@ -73,6 +73,7 @@ namespace Model
 		}
 
 		static std::shared_ptr<T> GetSharedPtr() {
+			if (!m_Instance)Instance();
 			return m_Instance;
 		}
 

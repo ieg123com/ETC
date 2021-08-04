@@ -24,6 +24,8 @@ namespace std
 	std::string Print(const char* format, ...);
 	std::string PrintToUtf8(const char* format, ...);
 
+	std::string format(const std::string& fmt, ...);
+
 
 	std::string gb2312_to_utf8(const std::string& text);
 	std::string utf8_to_gb2312(const std::string& text);

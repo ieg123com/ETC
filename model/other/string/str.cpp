@@ -60,6 +60,27 @@ std::string std::Print(const char* format, ...)
 }
 
 
+std::string std::format(const std::string& fmt, ...)
+{
+	static std::vector<char>	vsprintf_data;
+	if (vsprintf_data.empty())
+	{
+		vsprintf_data.resize(1024);
+	}
+	va_list ap;
+	va_start(ap, &fmt);
+	int ret;
+	while ((ret = vsnprintf(vsprintf_data.data(), vsprintf_data.size(), fmt.c_str(), ap)) > vsprintf_data.size())
+	{
+		vsprintf_data.resize(vsprintf_data.size() * 2);
+		va_start(ap, &fmt);
+	}
+	va_end(ap);
+	return std::move(std::string(vsprintf_data.data(), ret));
+}
+
+
+
 std::string std::gb2312_to_utf8(const std::string& text)
 {
 	int len = MultiByteToWideChar(CP_ACP, 0, text.c_str(), -1, NULL, 0);

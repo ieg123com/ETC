@@ -3,9 +3,11 @@
 #include "type/type.h"
 #include "helper/hotfix/HotfixHelper.h"
 #include "task/domain_task.h"
+#include "reflection/reflection.h"
 #include "GlobalData.h"
 #include "Game.h"
 
+using namespace Model::Reflection;
 
 namespace Model
 {
@@ -18,6 +20,9 @@ namespace Model
 		g_game->Init();
 
 		DomainTask::Instance().RunAll();
+
+		Game::Event().Add(DLLType::Model, Assembly::GetSharedPtr());
+
 	}
 
 	stGlobalVar GetGlobalVar()

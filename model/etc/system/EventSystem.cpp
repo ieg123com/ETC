@@ -1,5 +1,7 @@
 ﻿#include "EventSystem.h"
 #include "Game.h"
+#include "reflection/reflection.h"
+#include "interface/ObjectSystemAttribute.h"
 
 namespace Model
 {
@@ -8,7 +10,59 @@ namespace Model
 	}
 
 
+	void EventSystem::Add(DLLType dll_type, std::shared_ptr<Reflection::Assembly> assembly)
+	{
+		m_assemblys[dll_type] = assembly;
+		m_types.clear();
+		for (auto& item : m_assemblys)
+		{
+			auto all_attr = item.second->GetAllType();
+			for (auto& attr : all_attr)
+			{
+				m_types.emplace(attr->GetAttrType(), attr->GetObjectType());
+			}
+		}
 
+		m_awake_system.clear();
+		m_load_system.clear();
+		m_start_system.clear();
+		m_update_system.clear();
+		m_late_update_system.clear();
+		m_destroy_system.clear();
+
+
+		auto os_attr = m_types.equal_range(typeof(ObjectSystem));
+		while (os_attr.first != os_attr.second)
+		{
+			auto obj = TypeFactory::CreateInstance<ISupportTypeCreation>(os_attr.first->second);
+			if (auto sys = std::dynamic_pointer_cast<IAwakeSystem>(obj))
+			{
+				Add(m_awake_system, os_attr.first->first, sys);
+			}
+			else if (auto sys = std::dynamic_pointer_cast<ILoadSystem>(obj))
+			{
+				Add(m_load_system, os_attr.first->first, sys);
+			}
+			else if (auto sys = std::dynamic_pointer_cast<IStartSystem>(obj))
+			{
+				Add(m_start_system, os_attr.first->first, sys);
+			}
+			else if (auto sys = std::dynamic_pointer_cast<IUpdateSystem>(obj))
+			{
+				Add(m_update_system, os_attr.first->first, sys);
+			}
+			else if (auto sys = std::dynamic_pointer_cast<ILateUpdateSystem>(obj))
+			{
+				Add(m_late_update_system, os_attr.first->first, sys);
+			}
+			else if (auto sys = std::dynamic_pointer_cast<IDestroySystem>(obj))
+			{
+				Add(m_destroy_system, os_attr.first->first, sys);
+			}
+			++(os_attr.first);
+		}
+
+	}
 
 
 	void EventSystem::AddObject(const std::shared_ptr<Object>& obj)

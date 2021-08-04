@@ -15,7 +15,6 @@ namespace Model
 			template<typename AT>
 			void Add(AT* base_attr)const {
 				base_attr->m_obj_type = typeof(T);
-				base_attr->m_create = []()->void* {return new T(); };
 				std::shared_ptr<AT> new_attr(base_attr);
 				Assembly::Instance().AddAttribute(new_attr);
 			}

@@ -14,14 +14,25 @@
 
 namespace Model
 {
+	namespace Reflection {
+		class Assembly;
+	}
+	class Reflection::Assembly;
+
+
+	enum class DLLType : uint8_t 
+	{
+		Model,
+		Hotfix
+	};
+
 
 	class EventSystem
 	{
 	public:
 		EventSystem();
 
-
-		
+		void Add(DLLType dll_type,std::shared_ptr<Reflection::Assembly> assembly);
 
 
 		template<typename ...Arg>
@@ -32,7 +43,7 @@ namespace Model
 			auto& all_obj = m_awake_system[index];
 			for (auto& item : all_obj)
 			{
-				((IAwake<Arg...>*)item)->Run(self, arg...);
+				((IAwake<Arg...>*)item.get())->Run(self, arg...);
 			}
 		}
 
@@ -92,22 +103,35 @@ namespace Model
 		}
 
 		template<typename T>
-		bool Exist(const std::vector<std::list<T*>>& sys, const TypeIndex idx)
+		bool Exist(const std::vector<std::list<std::shared_ptr<T>>>& sys, const TypeIndex idx)
 		{
 			if (sys.size() <= idx)return false;
 			if (sys[idx].empty())return false;
 			return true;
 		}
 
+		template<typename T>
+		void Add(std::vector<std::list<std::shared_ptr<T>>>& sys, const Type& t, std::shared_ptr<T> obj) {
+			TypeIndex idx = t.m_info->index;
+			if (sys.size() <= idx)
+			{
+				sys.resize(GlobalData::TypeIndex() + 1);
+			}
+			if (sys.size() <= idx) throw std::exception("TypeIndex 在 EventSystem 中出错");
+			sys[idx].push_back(obj);
+		}
+
 	private:
 
-		std::vector<std::list<IAwakeSystem*>>		m_awake_system;
-		std::vector<std::list<ILoadSystem*>>		m_load_system;
-		std::vector<std::list<IStartSystem*>>		m_start_system;
-		std::vector<std::list<IUpdateSystem*>>		m_update_system;
-		std::vector<std::list<ILateUpdateSystem*>>	m_late_update_system;
-		std::vector<std::list<IDestroySystem*>>		m_destroy_system;
+		std::vector<std::list<std::shared_ptr<IAwakeSystem>>>		m_awake_system;
+		std::vector<std::list<std::shared_ptr<ILoadSystem>>>		m_load_system;
+		std::vector<std::list<std::shared_ptr<IStartSystem>>>		m_start_system;
+		std::vector<std::list<std::shared_ptr<IUpdateSystem>>>		m_update_system;
+		std::vector<std::list<std::shared_ptr<ILateUpdateSystem>>>	m_late_update_system;
+		std::vector<std::list<std::shared_ptr<IDestroySystem>>>		m_destroy_system;
 
+		std::unordered_map<DLLType, std::shared_ptr<Reflection::Assembly>>	m_assemblys;
+		std::unordered_multimap<Type, Type>			m_types;
 
 	public:
 

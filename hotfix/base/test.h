@@ -9,6 +9,8 @@ namespace Hotfix
 	class RefTest : public BaseAttribute<RefTest>
 	{
 	public:
+		RefTest() { m_str = ""; }
+
 		RefTest(const std::string& str) {
 			m_str = str;
 			printf("Ref %s\n", m_str.c_str());
