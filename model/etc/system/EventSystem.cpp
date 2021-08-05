@@ -30,34 +30,33 @@ namespace Model
 		m_late_update_system.clear();
 		m_destroy_system.clear();
 
-
 		auto os_attr = m_types.equal_range(typeof(ObjectSystem));
 		while (os_attr.first != os_attr.second)
 		{
 			auto obj = TypeFactory::CreateInstance<ISupportTypeCreation>(os_attr.first->second);
 			if (auto sys = std::dynamic_pointer_cast<IAwakeSystem>(obj))
 			{
-				Add(m_awake_system, os_attr.first->first, sys);
+				Add(m_awake_system, sys->GetType(), sys);
 			}
 			else if (auto sys = std::dynamic_pointer_cast<ILoadSystem>(obj))
 			{
-				Add(m_load_system, os_attr.first->first, sys);
+				Add(m_load_system, sys->GetType(), sys);
 			}
 			else if (auto sys = std::dynamic_pointer_cast<IStartSystem>(obj))
 			{
-				Add(m_start_system, os_attr.first->first, sys);
+				Add(m_start_system, sys->GetType(), sys);
 			}
 			else if (auto sys = std::dynamic_pointer_cast<IUpdateSystem>(obj))
 			{
-				Add(m_update_system, os_attr.first->first, sys);
+				Add(m_update_system, sys->GetType(), sys);
 			}
 			else if (auto sys = std::dynamic_pointer_cast<ILateUpdateSystem>(obj))
 			{
-				Add(m_late_update_system, os_attr.first->first, sys);
+				Add(m_late_update_system, sys->GetType(), sys);
 			}
 			else if (auto sys = std::dynamic_pointer_cast<IDestroySystem>(obj))
 			{
-				Add(m_destroy_system, os_attr.first->first, sys);
+				Add(m_destroy_system, sys->GetType(), sys);
 			}
 			++(os_attr.first);
 		}

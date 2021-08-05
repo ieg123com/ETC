@@ -8,7 +8,7 @@ namespace Model
 		public ISupportTypeCreation
 	{
 	public:
-		virtual const Type& GetType()const = 0;
+		virtual const Type GetType()const = 0;
 
 	};
 

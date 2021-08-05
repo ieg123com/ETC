@@ -19,10 +19,10 @@ class TypeInfo
 	friend class Activator;
 	friend class Model::TypeFactory;
 public:
-	const std::string name;
-	const std::string raw_name;
-	const size_t hash_code;
-	const TypeIndex index;
+	std::string name;
+	std::string raw_name;
+	size_t hash_code;
+	TypeIndex index;
 
 	TypeInfo() :name(""), raw_name(""), hash_code(0), index(Model::GlobalData::GetTypeIndex()) { }
 	TypeInfo(const type_info* ty):raw_name(ty->raw_name()),name(ty->name()),hash_code(ty->hash_code()), index(Model::GlobalData::GetTypeIndex()) {}
@@ -45,7 +45,8 @@ public:
 	}
 
 private:
-	std::function<std::shared_ptr<Model::ISupportTypeCreation> ()> create_instance;
+	std::function<Model::ISupportTypeCreation* ()> create_instance;
+	std::function<void (Model::ISupportTypeCreation*)> delete_instance;
 };
 
 
@@ -116,15 +117,17 @@ namespace Model
 				auto value = std::make_pair(std::string((&typeid(T))->raw_name()), new TypeInfo(&typeid(T)));
 				if (std::is_base_of<ISupportTypeCreation, T>::value)
 				{
-					value.second->create_instance = []()->std::shared_ptr<ISupportTypeCreation> {
-						//T* new_obj = new T();
-						std::shared_ptr<T> obj = std::make_shared<T>();
-						//std::shared_ptr<T> obj(new_obj, [](T* self)->void { delete self; });
-						return std::reinterpret_pointer_cast<ISupportTypeCreation>(obj);
+					value.second->create_instance = []()->ISupportTypeCreation* {
+						T* new_obj = new T();
+						return (ISupportTypeCreation*)new_obj;
+					};
+					value.second->delete_instance = [](ISupportTypeCreation* self)->void {
+						delete (T*)self;
 					};
 				}
 				else {
 					value.second->create_instance = nullptr;
+					value.second->delete_instance = nullptr;
 				}
 				found = m_all_type_info.insert(value).first;
 			}
@@ -143,9 +146,7 @@ namespace Model
 			{
 				return nullptr;
 			}
-			std::shared_ptr<ISupportTypeCreation> new_obj = type.m_info->create_instance();
-
-			auto event_obj = std::dynamic_pointer_cast<IEventSystem>(new_obj);
+			std::shared_ptr<ISupportTypeCreation> new_obj(type.m_info->create_instance(), type.m_info->delete_instance);
 
 			std::shared_ptr<T> ret_obj = std::dynamic_pointer_cast<T>(new_obj);
 			if (!ret_obj)

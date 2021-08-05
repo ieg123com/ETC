@@ -17,7 +17,7 @@ void Init(const Model::stGlobalVar& global)
 {
 	Model::SetGlobalVar(global);
 	Model::DomainTask::Instance().RunAll();
-	//Game::Event().Add(DLLType::Model, Assembly::GetSharedPtr());
+	Game::Event().Add(DLLType::Model, Assembly::GetSharedPtr());
 
 	// º”‘ÿÕÍ≥…
 	::Hotfix::Start();

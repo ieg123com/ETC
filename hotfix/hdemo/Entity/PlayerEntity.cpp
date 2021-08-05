@@ -16,7 +16,20 @@ namespace Hotfix
 
 		}
 	};
-
 	REF(PlayerEntityAwakeSystem, ObjectSystem)
+
+
+	class PlayerEntityDestroySystem : public DestroySystem<PlayerEntity>
+	{
+	public:
+		virtual void Destroy(std::shared_ptr<PlayerEntity> self) override
+		{
+			LOG_INFO("PlayerEntity Destroy");
+
+
+
+		}
+	};
+	REF(PlayerEntityDestroySystem, ObjectSystem)
 }
 

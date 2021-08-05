@@ -29,20 +29,14 @@ namespace Hotfix
 
 		printf("TypeID %d\n", Model::GlobalData::TypeIndex());
 
-
-		Type ty = typeof(TestAwakeSystem);
-
-		auto obj = TypeFactory::CreateInstance<TestAwakeSystem>(ty);
-
-		auto awake = std::dynamic_pointer_cast<AwakeSystem<PlayerEntity>>(obj);
-
 		
-
+		printf("start create player\n");
 		auto player = ObjectFactory::Create<PlayerEntity>();
 
 		player->Uuid = 100;
 
-		awake->Run(player);
+		player->Dispose();
+
 		printf("Ok\n");
 
 	}

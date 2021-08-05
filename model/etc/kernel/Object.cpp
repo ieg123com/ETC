@@ -31,7 +31,7 @@ namespace Model
 	void Object::Dispose() {
 		if (IsDisposed())return;
 		m_disposed = true;
-		Destroy();
+		Game::Event().Destroy(shared_from_this());
 
 		Game::System().RemoveSystem(shared_from_this());
 		//GEvent::Clear();

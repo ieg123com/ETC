@@ -43,7 +43,7 @@ namespace Model
 			auto& all_obj = m_awake_system[index];
 			for (auto& item : all_obj)
 			{
-				((IAwake<Arg...>*)item.get())->Run(self, arg...);
+				((IAwake<Arg...>*)(item.get()))->Run(self, arg...);
 			}
 		}
 

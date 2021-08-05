@@ -22,7 +22,7 @@ namespace Model
 			Destroy(std::static_pointer_cast<T>(self));
 		}
 
-		virtual const Type& GetType()const override { return typeof(T); }
+		virtual const Type GetType()const override { return typeof(T); }
 		virtual void Destroy(std::shared_ptr<T> self) = 0;
 	};
 }
