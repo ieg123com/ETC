@@ -12,12 +12,6 @@ namespace Model
 		m_is_from_pool = false;
 		m_disposed = false;
 
-		CanEverAwake = false;
-		CanEverStart = false;
-		CanEverUpdate = false;
-		CanEverLateUpdate = false;
-		CanEverSecondsUpdate = false;
-
 		Game::object_count()++;
 	}
 
@@ -33,8 +27,7 @@ namespace Model
 		m_disposed = true;
 		Game::Event().Destroy(shared_from_this());
 
-		Game::System().RemoveSystem(shared_from_this());
-		//GEvent::Clear();
+		Game::Event().RemoveObject(shared_from_this());
 
 		m_host.reset();
 		m_obj_id = 0;

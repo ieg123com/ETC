@@ -9,6 +9,7 @@
 #include "interface/IDestroySystem.h"
 
 #include "interface/ObjectSystemAttribute.h"
+#include "interface/EventSystemAttribute.h"
 
 #include "kernel/Object.h"
 #include "kernel/Entity.h"

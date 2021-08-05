@@ -125,7 +125,7 @@ namespace Model
 				obj->m_object_type.m_type = typeof(T);
 				obj->DebugIncreaseSelf();
 			}
-			Game::System().AddSystem(obj);
+			Game::Event().AddObject(obj);
 			return obj;
 		}
 

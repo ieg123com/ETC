@@ -8,7 +8,5 @@ namespace Model
 	class ObjectSystem : public Reflection::BaseAttribute<ObjectSystem>
 	{
 	public:
-		ObjectSystem() {
-		}
 	};
 }

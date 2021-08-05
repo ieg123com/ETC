@@ -27,10 +27,10 @@ namespace Model
 	};
 
 
-	class EventSystem
+	class MEventSystem
 	{
 	public:
-		EventSystem();
+		MEventSystem();
 
 		void Add(DLLType dll_type,std::shared_ptr<Reflection::Assembly> assembly);
 
@@ -121,8 +121,20 @@ namespace Model
 			sys[idx].push_back(obj);
 		}
 
+
+		void RegisterObjectEvent(std::shared_ptr<Object> target_obj, std::shared_ptr<Object> self, const std::string& event_id);
+
+		void RemoveObjectEvent(std::shared_ptr<Object> target_obj, std::shared_ptr<Object> self, const std::string& event_id);
+		void RemoveObjectEvent(std::shared_ptr<Object> target_obj, const std::string& event_id);
+
+
+
 	private:
 
+		std::unordered_map<DLLType, std::shared_ptr<Reflection::Assembly>>	m_assemblys;
+		std::unordered_multimap<Type, Type>			m_types;
+
+		// 对象系统事件
 		std::vector<std::list<std::shared_ptr<IAwakeSystem>>>		m_awake_system;
 		std::vector<std::list<std::shared_ptr<ILoadSystem>>>		m_load_system;
 		std::vector<std::list<std::shared_ptr<IStartSystem>>>		m_start_system;
@@ -130,8 +142,13 @@ namespace Model
 		std::vector<std::list<std::shared_ptr<ILateUpdateSystem>>>	m_late_update_system;
 		std::vector<std::list<std::shared_ptr<IDestroySystem>>>		m_destroy_system;
 
-		std::unordered_map<DLLType, std::shared_ptr<Reflection::Assembly>>	m_assemblys;
-		std::unordered_multimap<Type, Type>			m_types;
+		// 事件
+		std::unordered_multimap<std::string, std::shared_ptr<IEventSystem>>	m_event_system;
+		std::unordered_multimap<std::pair<std::string,Type>, std::shared_ptr<IObjEventSystem>>	m_objevent_system;
+
+		using CObjectEventSystem = std::unordered_multimap<ObjectID,std::pair<std::shared_ptr<Object>, std::shared_ptr<IObjEventSystem>>>;
+		// 对象事件
+		std::unordered_map<ObjectID, std::unordered_multimap<std::string,CObjectEventSystem>>	m_object_event;
 
 	public:
 

@@ -131,7 +131,7 @@ namespace Model
 
 	private:
 		friend class GameSystem;
-		friend class EventSystem;
+		friend class MEventSystem;
 		friend class ObjectFactory;
 		friend class ObjectPool;
 	};

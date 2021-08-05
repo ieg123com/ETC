@@ -19,10 +19,10 @@ class TypeInfo
 	friend class Activator;
 	friend class Model::TypeFactory;
 public:
-	std::string name;
-	std::string raw_name;
-	size_t hash_code;
-	TypeIndex index;
+	const std::string name;
+	const std::string raw_name;
+	const size_t hash_code;
+	const TypeIndex index;
 
 	TypeInfo() :name(""), raw_name(""), hash_code(0), index(Model::GlobalData::GetTypeIndex()) { }
 	TypeInfo(const type_info* ty):raw_name(ty->raw_name()),name(ty->name()),hash_code(ty->hash_code()), index(Model::GlobalData::GetTypeIndex()) {}
@@ -45,8 +45,8 @@ public:
 	}
 
 private:
-	std::function<Model::ISupportTypeCreation* ()> create_instance;
-	std::function<void (Model::ISupportTypeCreation*)> delete_instance;
+	std::function<void*()>		create_instance;
+	std::function<void(void*)>	delete_instance;
 };
 
 
@@ -117,11 +117,11 @@ namespace Model
 				auto value = std::make_pair(std::string((&typeid(T))->raw_name()), new TypeInfo(&typeid(T)));
 				if (std::is_base_of<ISupportTypeCreation, T>::value)
 				{
-					value.second->create_instance = []()->ISupportTypeCreation* {
+					value.second->create_instance = []()->void* {
 						T* new_obj = new T();
-						return (ISupportTypeCreation*)new_obj;
+						return new_obj;
 					};
-					value.second->delete_instance = [](ISupportTypeCreation* self)->void {
+					value.second->delete_instance = [](void* self)->void {
 						delete (T*)self;
 					};
 				}
@@ -146,7 +146,7 @@ namespace Model
 			{
 				return nullptr;
 			}
-			std::shared_ptr<ISupportTypeCreation> new_obj(type.m_info->create_instance(), type.m_info->delete_instance);
+			std::shared_ptr<ISupportTypeCreation> new_obj((ISupportTypeCreation*)(type.m_info->create_instance()), type.m_info->delete_instance);
 
 			std::shared_ptr<T> ret_obj = std::dynamic_pointer_cast<T>(new_obj);
 			if (!ret_obj)
