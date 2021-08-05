@@ -11,6 +11,20 @@
 #include "IDestroySystem.h"
 
 
+namespace std
+{
+	template<typename _Ty1, typename _Ty2>
+	struct hash<pair<_Ty1, _Ty2>>
+	{
+		size_t operator ()(const pair<_Ty1, _Ty2>& self) const noexcept {
+			return hash<decltype(self.first)>()(self.first) +
+				hash<decltype(self.second)>()(self.second);
+		}
+	};
+}
+
+
+
 
 namespace Model
 {
@@ -29,6 +43,7 @@ namespace Model
 
 	class MEventSystem
 	{
+		friend class ObjectDebug;
 	public:
 		MEventSystem();
 

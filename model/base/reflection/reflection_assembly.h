@@ -43,10 +43,11 @@ namespace Model
 
 
 			const std::list<std::shared_ptr<IBaseAttribute>>& GetType(const Type& type)const {
+				static std::list<std::shared_ptr<IBaseAttribute>> ret_null;
 				auto found = m_all_attr.find(type);
 				if (found == m_all_attr.end())
 				{
-					return std::list<std::shared_ptr<IBaseAttribute>>();
+					return ret_null;
 				}
 				return found->second;
 			}

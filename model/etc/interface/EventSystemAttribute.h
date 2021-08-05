@@ -8,7 +8,7 @@ namespace Model
 	class Event : public Reflection::BaseAttribute<Event>
 	{
 	public:
-		Event() = delete;
+		Event() {}
 		Event(const std::string& event_id) {
 			EventId = event_id;
 		}
@@ -19,7 +19,7 @@ namespace Model
 	class ObjEvent : public Reflection::BaseAttribute<Event>
 	{
 	public:
-		ObjEvent() = delete;
+		ObjEvent() {}
 		ObjEvent(const std::string& event_id) {
 			EventId = event_id;
 		}
