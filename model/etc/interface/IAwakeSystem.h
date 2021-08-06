@@ -17,7 +17,7 @@ namespace Model
 		public IAwakeSystem
 	{
 	public:
-		virtual void Run(std::shared_ptr<Object> self, Arg ...arg) = 0;
+		virtual void Run(const std::shared_ptr<Object>& self, Arg ...arg) = 0;
 	};
 
 	template<typename T,typename ...Arg>
@@ -26,12 +26,12 @@ namespace Model
 	{
 	public:
 
-		virtual void Run(std::shared_ptr<Object> self, Arg...arg) override {
+		virtual void Run(const std::shared_ptr<Object>& self, Arg...arg) override {
 			Awake(std::static_pointer_cast<T>(self), arg...);
 		}
 
 		virtual const Type GetType()const override { return typeof(T); }
-		virtual void Awake(std::shared_ptr<T> self, Arg...arg) = 0;
+		virtual void Awake(const std::shared_ptr<T>& self, Arg...arg) = 0;
 
 	};
 }

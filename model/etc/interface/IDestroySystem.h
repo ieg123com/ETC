@@ -9,7 +9,7 @@ namespace Model
 		public IEventSystem
 	{
 	public:
-		virtual void Run(std::shared_ptr<Object> self) = 0;
+		virtual void Run(const std::shared_ptr<Object>& self) = 0;
 	};
 
 
@@ -18,11 +18,11 @@ namespace Model
 		public IDestroySystem
 	{
 	public:
-		virtual void Run(std::shared_ptr<Object> self) override {
+		virtual void Run(const std::shared_ptr<Object>& self) override {
 			Destroy(std::static_pointer_cast<T>(self));
 		}
 
 		virtual const Type GetType()const override { return typeof(T); }
-		virtual void Destroy(std::shared_ptr<T> self) = 0;
+		virtual void Destroy(const std::shared_ptr<T>& self) = 0;
 	};
 }

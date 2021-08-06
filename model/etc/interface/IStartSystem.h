@@ -9,7 +9,7 @@ namespace Model
 		public IEventSystem
 	{
 	public:
-		virtual void Run(std::shared_ptr<Object> self) = 0;
+		virtual void Run(const std::shared_ptr<Object>& self) = 0;
 	};
 
 	template<typename T>
@@ -17,11 +17,11 @@ namespace Model
 		public IStartSystem
 	{
 	public:
-		virtual void Run(std::shared_ptr<Object> self) override {
+		virtual void Run(const std::shared_ptr<Object>& self) override {
 			Start(std::static_pointer_cast<T>(self));
 		}
 
 		virtual const Type GetType()const override { return typeof(T); }
-		virtual void Start(std::shared_ptr<T> self) = 0;
+		virtual void Start(const std::shared_ptr<T>& self) = 0;
 	};
 }

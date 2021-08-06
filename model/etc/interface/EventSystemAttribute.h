@@ -16,7 +16,7 @@ namespace Model
 		std::string EventId;
 	};
 
-	class ObjEvent : public Reflection::BaseAttribute<Event>
+	class ObjEvent : public Reflection::BaseAttribute<ObjEvent>
 	{
 	public:
 		ObjEvent() {}

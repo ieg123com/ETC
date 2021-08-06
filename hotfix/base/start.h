@@ -9,17 +9,6 @@ using namespace Model;
 
 namespace Hotfix
 {
-	class TestAwakeSystem : public AwakeSystem<PlayerEntity>
-	{
-	public:
-		virtual void Awake(std::shared_ptr<PlayerEntity> self) override
-		{
-			LOG_INFO("TestAwakeSystem PlayerEntity Awake");
-
-
-
-		}
-	};
 
 	void Start()
 	{
@@ -35,9 +24,14 @@ namespace Hotfix
 
 		player->Uuid = 100;
 
+
 		player->Dispose();
 
 		printf("Ok\n");
+
+		Game::Event().Run<const std::string&>("test","sss");
+		Game::Event().Run<const std::string&>(player, "test", "123");
+
 
 	}
 

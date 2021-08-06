@@ -6,6 +6,10 @@
 
 namespace Model
 {
+
+
+
+
 	MEventSystem::MEventSystem()
 	{
 	}
@@ -114,21 +118,117 @@ namespace Model
 
 	}
 
-	void MEventSystem::RegisterObjectEvent(std::shared_ptr<Object> target_obj, std::shared_ptr<Object> self, const std::string& event_id) {
-		auto all_event = m_objevent_system.equal_range(std::make_pair(event_id, self->GetObjectType().m_type));
-		while (all_event.first != all_event.second)
+	void MEventSystem::RegisterObjectEvent(const std::shared_ptr<Object>& target_obj, const std::shared_ptr<Object>& self, const std::string& event_id) {
+		static stObjectEventContext ctx;
+		if (!target_obj) throw std::exception("target_obj cannot be null");
+		if (!self) throw std::exception("self cannot be null");
+		if (event_id.empty()) throw std::exception("event_id cannot be empty");
+		ctx.status = EventCtxStatus::AddEvent;
+		ctx.target_obj = target_obj;
+		ctx.self = self;
+		ctx.event_id = event_id;
+		m_object_event_operation.emplace(std::move(ctx));
+	}
+
+	void MEventSystem::RemoveObjectEvent(const std::shared_ptr<Object>& target_obj, const std::shared_ptr<Object>& self, const std::string& event_id)
+	{
+		static stObjectEventContext ctx;
+		if (!target_obj) throw std::exception("target_obj cannot be null");
+		if (!self) throw std::exception("self cannot be null");
+		if (event_id.empty()) throw std::exception("event_id cannot be empty");
+		ctx.status = EventCtxStatus::DeleteSpecificEventInObject;
+		ctx.target_obj = target_obj;
+		ctx.self = self;
+		ctx.event_id = event_id;
+		m_object_event_operation.emplace(std::move(ctx));
+	}
+
+	void MEventSystem::RemoveObjectEvent(const std::shared_ptr<Object>& target_obj, const std::string& event_id)
+	{
+		static stObjectEventContext ctx;
+		if (!target_obj) throw std::exception("target_obj cannot be null");
+		if (event_id.empty()) throw std::exception("event_id cannot be empty");
+		ctx.status = EventCtxStatus::DeleteSpecificEventInObject;
+		ctx.target_obj = target_obj;
+		ctx.event_id = event_id;
+		m_object_event_operation.emplace(std::move(ctx));
+	}
+
+	void MEventSystem::RemoveObjectEvent(const std::shared_ptr<Object>& target_obj)
+	{
+		stObjectEventContext ctx;
+		if (!target_obj) throw std::exception("target_obj cannot be null");
+		ctx.status = EventCtxStatus::DeleteAllEventInObject;
+		ctx.target_obj = target_obj;
+		m_object_event_operation.emplace(std::move(ctx));
+	}
+
+	void MEventSystem::__ObjectEventOperationHandle()
+	{
+		while (!m_object_event_operation.empty())
 		{
-
-
-
+			auto ctx = std::move(m_object_event_operation.front());
+			m_object_event_operation.pop();
+			switch (ctx.status)
+			{
+			case EventCtxStatus::AddEvent:
+				__AddEvent(ctx);
+				break;
+			case EventCtxStatus::DeleteAllEventInObject:
+				__DeleteAllEventInObject(ctx);
+				break;
+			case EventCtxStatus::DeleteSpecificEventInObject:
+				__DeleteSpecificEventInObject(ctx);
+				break;
+			default:
+				break;
+			}
 		}
 	}
 
-	void MEventSystem::RemoveObjectEvent(std::shared_ptr<Object> target_obj, std::shared_ptr<Object> self, const std::string& event_id)
+	void MEventSystem::__AddEvent(const stObjectEventContext& ctx)
 	{
+		auto found_objevent_sys = m_objevent_system.find(std::make_pair(ctx.event_id,ctx.self->GetObjectType().m_type));
+		if (found_objevent_sys == m_objevent_system.end())
+		{
+			return;
+		}
 
+		m_object_event[ctx.target_obj->GetObjectID()][ctx.event_id].insert(
+			std::make_pair(
+				ctx.self->GetObjectID(),
+				std::make_pair(
+					ctx.self,
+					found_objevent_sys->second
+				)
+			)
+		);
 	}
 
+	void MEventSystem::__DeleteAllEventInObject(const stObjectEventContext& ctx)
+	{
+		m_object_event.erase(ctx.target_obj->GetObjectID());
+	}
+
+	void MEventSystem::__DeleteSpecificEventInObject(const stObjectEventContext& ctx)
+	{
+		if (ctx.self)
+		{
+			// 删除到指定对象
+			auto found_object_event = m_object_event.find(ctx.target_obj->GetObjectID());
+			if (found_object_event == m_object_event.end())return;
+			auto found_event_id = found_object_event->second.find(ctx.event_id);
+			if (found_event_id == found_object_event->second.end())return;
+			found_event_id->second.erase(ctx.self->GetObjectID());
+		}
+		else 
+		{
+			// 删除到指定事件id
+			auto found_object_event = m_object_event.find(ctx.target_obj->GetObjectID());
+			if (found_object_event == m_object_event.end())return;
+			found_object_event->second.erase(ctx.event_id);
+		}
+	}
 
 	void MEventSystem::AddObject(const std::shared_ptr<Object>& obj)
 	{

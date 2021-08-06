@@ -41,6 +41,7 @@ namespace Model
 			Run(arg...);
 		}
 
+		virtual const Type GetType()const { return typeof(Object); }
 		virtual void Run(Arg...arg) = 0;
  	};
 
@@ -50,7 +51,7 @@ namespace Model
 		public IObjEventSystem
 	{
 	public:
-		virtual void Handle(std::shared_ptr<Object> self,Arg...arg) = 0;
+		virtual void Handle(const std::shared_ptr<Object>& self,Arg...arg) = 0;
 
 	};
 
@@ -60,11 +61,12 @@ namespace Model
 		public IObjEvent<Arg...>
 	{
 	public:
-		virtual void Handle(std::shared_ptr<Object> self,Arg...arg) override {
+		virtual void Handle(const std::shared_ptr<Object>& self,Arg...arg) override {
 			Run(std::static_pointer_cast<T>(self),arg...);
 		}
 
-		virtual void Run(std::shared_ptr<T> self,Arg...arg) = 0;
+		virtual const Type GetType()const { return typeof(T); }
+		virtual void Run(const std::shared_ptr<T>& self, Arg...arg) = 0;
 	};
 
 

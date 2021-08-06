@@ -10,7 +10,7 @@ namespace Hotfix
 	class UnitEntityAwakeSystem : public AwakeSystem<UnitEntity>
 	{
 	public:
-		virtual void Awake(std::shared_ptr<UnitEntity> self) override
+		virtual void Awake(const std::shared_ptr<UnitEntity>& self) override
 		{
 			
 		}
