@@ -24,13 +24,13 @@ namespace Hotfix
 
 		player->Uuid = 100;
 
+		Game::Event().Run<const std::string&>(player, "test", "123");
 
 		player->Dispose();
 
 		printf("Ok\n");
 
-		Game::Event().Run<const std::string&>("test","sss");
-		Game::Event().Run<const std::string&>(player, "test", "123");
+		Game::Event().Run("test","sss");
 
 
 	}

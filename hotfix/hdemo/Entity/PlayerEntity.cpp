@@ -60,7 +60,7 @@ namespace Hotfix
 	public:
 		virtual void Run(const std::shared_ptr<PlayerEntity>& self,const std::string& str) override
 		{
-			LOG_INFO("Test ObjEvent [{}] {}", self->GetObjectID(), str);
+			LOG_INFO("Test ObjEvent [{}] {}", self->Uuid, str);
 		}
 	};
 	REF(TestObjEvent, ObjEvent("test"));
