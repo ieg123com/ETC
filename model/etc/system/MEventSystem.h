@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "etc_config.h"
 #include "Object.h"
 #include <unordered_map>
 #include <queue>
@@ -79,7 +80,18 @@ namespace Model
 			auto& all_obj = m_awake_system[index];
 			for (auto& item : all_obj)
 			{
+#if EVENT_CALLBACK_TYPE_CHECK
+				if (item->GetCallbackType() == &typeid(void(Arg...)))
+				{
+					((IAwake<Arg...>*)(item.get()))->Run(self, arg...);
+				}
+				else {
+					
+					throw std::exception(std::format(""));
+				}
+#else
 				((IAwake<Arg...>*)(item.get()))->Run(self, arg...);
+#endif
 			}
 		}
 

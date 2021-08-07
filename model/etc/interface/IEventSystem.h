@@ -12,7 +12,7 @@ namespace Model
 	{
 	public:
 		virtual const Type GetType()const = 0;
-		virtual const std::type_info* GetArgType()const = 0;
+		virtual const std::type_info* GetCallbackType()const = 0;
 
 	};
 
@@ -43,7 +43,7 @@ namespace Model
 		}
 
 		virtual const Type GetType()const { return typeof(Object); }
-		virtual const std::type_info* GetArgType()const { return &typeid(void(Arg...)); }
+		virtual const std::type_info* GetCallbackType()const { return &typeid(void(Arg...)); }
 		virtual void Run(Arg...arg) = 0;
  	};
 
@@ -68,7 +68,7 @@ namespace Model
 		}
 
 		virtual const Type GetType()const { return typeof(T); }
-		virtual const std::type_info* GetArgType()const { return &typeid(void(Arg...)); }
+		virtual const std::type_info* GetCallbackType()const { return &typeid(void(Arg...)); }
 		virtual void Run(const std::shared_ptr<T>& self, Arg...arg) = 0;
 	};
 
