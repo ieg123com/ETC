@@ -163,7 +163,13 @@ namespace Model
 			auto all_event_range = m_event_system.equal_range(event_id);
 			while (all_event_range.first != all_event_range.second)
 			{
-				((IEvent<Arg...>*)(all_event_range.first->second.get()))->Handle(arg...);
+				if (all_event_range.first->second->GetArgType() == &typeid(void(Arg...)))
+				{
+					((IEvent<Arg...>*)(all_event_range.first->second.get()))->Handle(arg...);
+				}
+				else {
+					printf("Run Error\n");
+				}
 				++(all_event_range.first);
 			}
 		}

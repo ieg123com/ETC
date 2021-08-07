@@ -50,7 +50,8 @@ namespace Hotfix
 	public:
 		virtual void Run(const std::string& str) override
 		{
-			LOG_INFO("Test Event {}",str);
+			LOG_INFO("==>Test Event");
+			LOG_INFO("Test Event {}", str);
 		}
 	};
 	REF(TestEvent, Event("test"));

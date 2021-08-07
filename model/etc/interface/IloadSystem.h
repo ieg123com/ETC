@@ -22,6 +22,7 @@ namespace Model
 		}
 
 		virtual const Type GetType()const override { return typeof(T); }
+		virtual const std::type_info* GetArgType()const { return &typeid(void()); }
 		virtual void Load(const std::shared_ptr<T>& self) = 0;
 	};
 }

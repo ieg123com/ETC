@@ -31,6 +31,7 @@ namespace Model
 		}
 
 		virtual const Type GetType()const override { return typeof(T); }
+		virtual const std::type_info* GetArgType()const { return &typeid(void(Arg...)); }
 		virtual void Awake(const std::shared_ptr<T>& self, Arg...arg) = 0;
 
 	};
