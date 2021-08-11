@@ -1,5 +1,5 @@
 #pragma once
-#include "type/type.h"
+#include "type/type_factory.h"
 #include "interface/ISupportTypeCreation.h"
 
 

@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <memory>
-#include "type/type.h"
+#include "type/type_factory.h"
 
 
 

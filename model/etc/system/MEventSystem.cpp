@@ -267,6 +267,9 @@ namespace Model
 		{
 			m_late_update_leave.push(obj->GetObjectID());
 		}
+
+		RemoveObjectEvent(obj);
+
 		// 重新加载热更补丁时，需要处理事件问题
 	}
 

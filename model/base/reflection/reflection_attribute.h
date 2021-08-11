@@ -1,6 +1,6 @@
 #pragma once
 #include <functional>
-#include "type/type.h"
+#include "type/type_factory.h"
 #include "attribute/attribute.h"
 
 
