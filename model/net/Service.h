@@ -20,30 +20,28 @@ namespace Model
 
 
 
-		Service() {
-			CanEverAwake = true;
-		}
 
 
-		virtual bool Listen(const uint16_t port) = 0;
+		virtual bool Listen(const uint16_t port) { return false; }
 
-		virtual std::shared_ptr<Session> Connect(const IPEndPoint& address) = 0;
+		virtual std::shared_ptr<Session> Connect(const IPEndPoint& address) { return nullptr; }
 
 
 
-		virtual void Send(const SessionID fd, const char* data, const size_t len) = 0;
+		virtual void Send(const SessionID fd, const char* data, const size_t len) {}
 
-		virtual void Close(const SessionID fd) = 0;
+		virtual void Close(const SessionID fd) {}
 
 
 	public:
 
-		NetworkType GetNetworkType() const { return m_network_type; }
+
+		void Awake();
+
+		void Destroy();
 
 	protected:
-		virtual void Awake() override;
-
-		virtual void Destroy() override;
+		NetworkType GetNetworkType() const { return m_network_type; }
 
 		// 服务类型
 		NetworkType	m_network_type;

@@ -41,7 +41,6 @@ namespace Model
 	{
 	public:
 		AddDomainTask(std::function<void()>&& task) {
-			printf("AddDomainTask\n");
 			DomainTask::Instance().Add(task);
 		}
 	};

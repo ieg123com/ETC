@@ -12,19 +12,12 @@ namespace Model
 		public Component
 	{
 	public:
-		TimerComponent();
 
 		static TimerComponent* Instance;
+	
+		void Awake();
 
-		// 	TimerComponent* GetInstance()
-		// 	{
-		// 		static TimerComponent* Instance = nullptr;
-		// 		return Instance;
-		// 	}
-	protected:
-		virtual void Awake() override;
-
-		virtual void Update() override;
+		void Update();
 
 	public:
 

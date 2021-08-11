@@ -116,6 +116,17 @@ namespace Model
 			}
 		}
 
+
+		{
+			// 自定义对象事件清除
+			m_object_event.clear();
+			while(!m_object_event_operation.empty())m_object_event_operation.pop();
+			
+			for (auto& item : m_objects)
+			{
+				Load(item.second);
+			}
+		}
 	}
 
 	void MEventSystem::RegisterObjectEvent(const std::shared_ptr<Object>& target_obj, const std::shared_ptr<Object>& self, const std::string& event_id) {

@@ -32,7 +32,7 @@ namespace Hotfix
 		
 
 		LOG_INFO("ok");
-		player->Dispose();
+		//player->Dispose();
 
 
 		

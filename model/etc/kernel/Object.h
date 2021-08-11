@@ -74,14 +74,6 @@ namespace Model
 		/** @brief	销毁对象*/
 		virtual void Dispose();
 
-
-		// 方便将对象发送到其他服务器
-		// 服务器间传送对象，所有继承Object的对象必须处理下列接口
-		// 从Json中解析对象
-		virtual bool ParseFromJson(const Json& json) { return false; };
-		// 序列化对象到Json
-		virtual bool SerializeToJson(const Json& json) const { return false; };
-
 	private:
 		// debug 用
 		void DebugIncreaseSelf();
@@ -99,35 +91,6 @@ namespace Model
 		bool		m_is_from_pool;
 
 		bool		m_disposed;
-
-	protected:
-		/** @brief	唤醒通知 默认不开启*/
-		bool CanEverAwake;
-		/** @brief	唤醒通知*/
-		virtual void Awake() {}
-
-		/** @brief	开始通知 默认不开启*/
-		bool CanEverStart;
-		/** @brief	开始通知*/
-		virtual void Start() {}
-
-		/** @brief	更新通知 默认不开启*/
-		bool CanEverUpdate;
-		/** @brief	更新通知*/
-		virtual void Update() {}
-
-		/** @brief	更新后通知 默认不开启*/
-		bool CanEverLateUpdate;
-		/** @brief	更新后通知*/
-		virtual void LateUpdate() {}
-
-		/** @brief	每秒更新通知 默认不开启*/
-		bool CanEverSecondsUpdate;
-		/** @brief	每秒更新通知*/
-		virtual void SecondsUpdate() {}
-
-		/** @brief	销毁时通知*/
-		virtual void Destroy() {}
 
 	private:
 		friend class GameSystem;

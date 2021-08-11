@@ -31,11 +31,11 @@ namespace Model
 		/** @brief 发送消息*/
 		void Send(const char* data, const size_t len);
 
-	protected:
+	public:
 
-		virtual void Awake() override;
+		void Awake();
 
-		virtual void Destroy() override;
+		void Destroy();
 
 
 	private:

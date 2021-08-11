@@ -1,10 +1,32 @@
 ﻿#include "Session.h"
 #include "Service.h"
 #include "module/message/MessageDefines.h"
+#include "etc/etc.h"
 
 
 namespace Model
 {
+
+	class SessionAwakeSystem :public AwakeSystem<Session>
+	{
+	public:
+		virtual void Awake(const std::shared_ptr<Session>& self)override
+		{
+			self->Awake();
+		}
+	};
+	REF(SessionAwakeSystem, ObjectSystem);
+
+	class SessionDestroySystem :public DestroySystem<Session>
+	{
+	public:
+		virtual void Destroy(const std::shared_ptr<Session>& self) override
+		{
+			self->Destroy();
+		}
+	};
+	REF(SessionDestroySystem, ObjectSystem);
+
 	void Session::Awake()
 	{
 		RpcId = 0;

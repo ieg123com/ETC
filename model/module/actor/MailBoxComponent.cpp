@@ -1,8 +1,33 @@
 ﻿#include "MailBoxComponent.h"
+#include "etc/etc.h"
 #include "log/log.h"
 
 namespace Model
 {
+	class MailBoxComponentAwakeSystem : public AwakeSystem<MailBoxComponent>
+	{
+	public:
+		virtual void Awake(const std::shared_ptr<MailBoxComponent>& self) override
+		{
+			self->Awake();
+		}
+	};
+	REF(MailBoxComponentAwakeSystem, ObjectSystem);
+
+
+	class MailBoxComponentDestroySystem : public DestroySystem<MailBoxComponent>
+	{
+	public:
+		virtual void Destroy(const std::shared_ptr<MailBoxComponent>& self) override
+		{
+			self->Destroy();
+		}
+	};
+	REF(MailBoxComponentDestroySystem, ObjectSystem);
+
+
+
+
 	void MailBoxComponent::Awake()
 	{
 		__StartLoop();

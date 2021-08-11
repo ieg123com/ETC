@@ -99,11 +99,11 @@ namespace Model
 
 		virtual void Close(const SessionID fd) override;
 
-	protected:
+	public:
 
-		virtual void Awake() override;
+		void Awake();
 
-		virtual void Destroy() override;
+		void Destroy();
 
 
 	private:

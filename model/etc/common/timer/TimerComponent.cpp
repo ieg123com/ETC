@@ -1,15 +1,32 @@
 ﻿#include "TimerComponent.h"
 #include "Game.h"
+#include "etc/etc.h"
 
 namespace Model
 {
+	class TimerComponentAwakeSystem :public AwakeSystem<TimerComponent>
+	{
+	public:
+		virtual void Awake(const std::shared_ptr<TimerComponent>& self)override
+		{
+			self->Awake();
+		}
+	};
+	REF(TimerComponentAwakeSystem, ObjectSystem);
+
+	class TimerComponentUpdateSystem : public UpdateSystem<TimerComponent>
+	{
+	public:
+		virtual void Update(const std::shared_ptr<TimerComponent>& self) override
+		{
+			self->Update();
+		}
+	};
+	REF(TimerComponentUpdateSystem, ObjectSystem);
+
+
 	TimerComponent* TimerComponent::Instance = nullptr;
 
-	TimerComponent::TimerComponent()
-	{
-		CanEverAwake = true;
-		CanEverUpdate = true;
-	}
 
 	void TimerComponent::Awake()
 	{

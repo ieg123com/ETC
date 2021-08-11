@@ -22,8 +22,23 @@ int main(int argc,char* argv[])
 		}
 		catch (std::exception& e)
 		{
-			printf("加载热更文件出错 %s\n", e.what());
+			printf("加载热重载文件出错 %s\n", e.what());
+			return;
 		}
+
+		while (true)
+		{
+			try {
+				Model::Game::Event().Update();
+				Model::Game::Event().LateUpdate();
+				co_sleep(100);
+			}
+			catch (std::exception& e)
+			{
+				LOG_ERROR("更新时出错 {}",e.what());
+			}
+		}
+
 	}
 
 	};

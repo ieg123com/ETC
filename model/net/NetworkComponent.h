@@ -13,10 +13,6 @@ namespace Model
 	{
 	public:
 
-		NetworkComponent() {
-			CanEverAwake = true;
-		}
-
 
 		bool Listen(const uint16_t port);
 

@@ -16,18 +16,10 @@ namespace Model
 		public Component
 	{
 	public:
-		MailBoxComponent() {
-			CanEverAwake = true;
-		}
 
+		void Awake();
 
-
-
-	protected:
-
-		virtual void Awake() override;
-
-		virtual void Destroy() override;
+		void Destroy();
 
 	private:
 

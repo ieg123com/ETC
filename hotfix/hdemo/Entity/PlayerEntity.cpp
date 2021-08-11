@@ -45,6 +45,16 @@ namespace Hotfix
 	REF(PlayerEntityDestroySystem, ObjectSystem);
 
 
+	class PlayerEntityUpdateSystem : public UpdateSystem<PlayerEntity>
+	{
+	public:
+		virtual void Update(const std::shared_ptr<PlayerEntity>& self) override
+		{
+			LOG_INFO("Update");
+		}
+	};
+	REF(PlayerEntityUpdateSystem, ObjectSystem);
+
 	class TestEvent : public EventSystem<const std::string&>
 	{
 	public:
@@ -65,5 +75,7 @@ namespace Hotfix
 		}
 	};
 	REF(TestObjEvent, ObjEvent("test"));
+
+
 }
 
