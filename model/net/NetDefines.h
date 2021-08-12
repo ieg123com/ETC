@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <stdint.h>
-#include "string/str.h"
+#include "other/string/str.h"
 
 
 
@@ -43,12 +43,24 @@ namespace Model
 			Ip = "";
 			Port = 0;
 		}
+		IPEndPoint(const uint64_t port) {
+			Ip = "";
+			Port = port;
+		}
 		IPEndPoint(const std::string& address) {
+			From(address);
+		}
+		IPEndPoint(const char* address) {
 			From(address);
 		}
 		IPEndPoint(const std::string& ip,const uint16_t port) {
 			Ip = ip;
 			Port = port;
+		}
+
+		IPEndPoint(const IPEndPoint& obj) {
+			Ip = obj.Ip;
+			Port = obj.Port;
 		}
 
 		IPEndPoint(IPEndPoint&& obj){

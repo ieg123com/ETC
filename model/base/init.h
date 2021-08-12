@@ -4,6 +4,7 @@
 #include "helper/hotfix/HotfixHelper.h"
 #include "task/domain_task.h"
 #include "reflection/reflection.h"
+#include "kernel/ObjectFactory.h"
 #include "GlobalData.h"
 #include "Game.h"
 
@@ -22,6 +23,8 @@ namespace Model
 		DomainTask::Instance().RunAll();
 
 		Game::Event().Add(DLLType::Model, Assembly::GetSharedPtr());
+
+		g_game->m_World = ObjectFactory::Create<World>();
 
 	}
 

@@ -7,6 +7,7 @@
 #include "system/TimeSystem.h"
 #include "system/MEventSystem.h"
 #include "kernel/ObjectPool.h"
+#include "entity/World.h"
 
 
 namespace Model
@@ -14,6 +15,8 @@ namespace Model
 	class GlobalGame
 	{
 	public:
+		
+		std::shared_ptr<World> m_World;
 
 		GameSystem m_System;
 
@@ -36,6 +39,7 @@ namespace Model
 	class Game
 	{
 	public:
+		static inline std::shared_ptr<World> World() { return Model::g_game->m_World; }
 		static inline GameSystem& System() { return Model::g_game->m_System; }
 		static inline TimeSystem& Time() { return Model::g_game->m_Time; }
 		static inline ObjectPool& ObjPool() { return Model::g_game->m_ObjPool; }

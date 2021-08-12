@@ -6,7 +6,7 @@
 
 namespace Model
 {
-	bool NetworkComponent::Listen(const uint16_t port)
+	bool NetworkComponent::Listen(const IPEndPoint& address)
 	{
 		m_service = Service::Create<WEpollService>(NetworkType::Server);
 
@@ -15,7 +15,7 @@ namespace Model
 		m_service->OnRead = std::bind(&NetworkComponent::OnRead, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 		m_service->OnDisconnect = std::bind(&NetworkComponent::OnDisconnect, this, std::placeholders::_1);
 
-		if (!m_service->Listen(port))
+		if (!m_service->Listen(address))
 		{
 			// 开启端口失败
 			return false;

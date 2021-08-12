@@ -7,7 +7,7 @@
 #pragma once
 #include "Object.h"
 #include "ActorDefines.h"
-#include "IPEndPoint.h"
+#include "net/NetDefines.h"
 
 
 namespace Model

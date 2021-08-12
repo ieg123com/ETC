@@ -14,12 +14,12 @@ namespace Model
 	public:
 
 
-		bool Listen(const uint16_t port);
+		bool Listen(const IPEndPoint& address);
 
 		std::shared_ptr<Session> Connect(const IPEndPoint& address);
 
 
-
+	protected:
 		virtual void OnConnectComplete(const std::shared_ptr<Session>& session);
 
 		virtual void OnAccept(const std::shared_ptr<Session>& session);
@@ -40,7 +40,6 @@ namespace Model
 
 		std::shared_ptr<Service>	m_service;
 
-	private:
 		// 全部连接
 		std::unordered_map<SessionID, std::shared_ptr<Session>>	m_sessions;
 	};

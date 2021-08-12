@@ -22,7 +22,7 @@ namespace Model
 
 
 
-		virtual bool Listen(const uint16_t port) { return false; }
+		virtual bool Listen(const IPEndPoint& address) { return false; }
 
 		virtual std::shared_ptr<Session> Connect(const IPEndPoint& address) { return nullptr; }
 

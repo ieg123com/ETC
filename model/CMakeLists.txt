@@ -33,6 +33,10 @@ FILE(GLOB ETC_INTERFACE_FILES "./etc/interface/*.cpp" "./etc/interface/*.h")
 set(ETC_SYSTEM_FILES "")
 FILE(GLOB ETC_SYSTEM_FILES "./etc/system/*.cpp" "./etc/system/*.h")
 
+#entity
+set(ETC_ENTITY_FILES "")
+FILE(GLOB ETC_ENTITY_FILES "./etc/entity/*.cpp" "./etc/entity/*.h")
+
 #计时器
 set(ETC_COMMON_TIMER_FILES "")
 FILE(GLOB ETC_COMMON_TIMER_FILES "./etc/common/timer/*.cpp" "./etc/common/timer/*.h")
@@ -61,6 +65,7 @@ FILE(GLOB ETC_COMMON_SKIP_LIST_FILES "./etc/common/aoi/skip_list/*.cpp" "./etc/c
 source_group(etc							FILES ${ETC_FILES})
 source_group(etc\\kernel					FILES ${ETC_KERNEL_FILES})
 source_group(etc\\system					FILES ${ETC_SYSTEM_FILES})
+source_group(etc\\entity					FILES ${ETC_ENTITY_FILES})
 source_group(etc\\interface					FILES ${ETC_INTERFACE_FILES})
 source_group(etc\\kernel\\event				FILES ${ETC_COMMON_EVENT_FILES})
 source_group(etc\\common\\timer				FILES ${ETC_COMMON_TIMER_FILES})
@@ -73,6 +78,7 @@ LIST(APPEND ALL_OBJECT
 	${ETC_FILES}
 	${ETC_KERNEL_FILES}
 	${ETC_SYSTEM_FILES}
+	${ETC_ENTITY_FILES}
 	${ETC_INTERFACE_FILES}
 	${ETC_COMMON_EVENT_FILES}
 	${ETC_COMMON_TIMER_FILES}
@@ -202,17 +208,29 @@ FILE(GLOB MODULE_MEMORY_FILES "./module/memory/*.cpp" "./module/memory/*.h")
 set(MODULE_MESSAGE_FILES "")
 FILE(GLOB MODULE_MESSAGE_FILES "./module/message/*.cpp" "./module/message/*.h")
 
+# component
+set(MODULE_COMPONENT_FILES "")
+FILE(GLOB MODULE_COMPONENT_FILES "./module/component/*.cpp" "./module/component/*.h")
+
+# component config
+set(MODULE_COMPONENT_CONFIG_FILES "")
+FILE(GLOB MODULE_COMPONENT_CONFIG_FILES "./module/component/config/*.cpp" "./module/component/config/*.h")
+
 source_group(module						FILES ${MODULE_FILES})
 source_group(module\\actor				FILES ${MODULE_ACTOR_FILES})
 source_group(module\\memory				FILES ${MODULE_MEMORY_FILES})
 source_group(module\\message			FILES ${MODULE_MESSAGE_FILES})
+source_group(module\\component			FILES ${MODULE_COMPONENT_FILES})
+source_group(module\\component\\config	FILES ${MODULE_COMPONENT_CONFIG_FILES})
 
 
 LIST(APPEND ALL_OBJECT
 	${MODULE_FILES}
 	${MODULE_ACTOR_FILES}
 	${MODULE_MEMORY_FILES}
-	${MODULE_MESSAGE_FILES})
+	${MODULE_MESSAGE_FILES}
+	${MODULE_COMPONENT_FILES}
+	${MODULE_COMPONENT_CONFIG_FILES})
 
 #========================协议==============================
 
@@ -239,6 +257,7 @@ source_group(other						FILES ${OTHER_FILES})
 
 LIST(APPEND ALL_OBJECT
 	${OTHER_FILES})
+
 
 #========================Demo==============================
 include_directories(./demo)

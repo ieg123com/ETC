@@ -78,10 +78,10 @@ namespace Model
 	}
 
 
-	bool WEpollService::Listen(const uint16_t port)
+	bool WEpollService::Listen(const IPEndPoint& address)
 	{
 
-		m_address_info.address.Port = port;
+		m_address_info.address = address;
 
 		if (!StartEpollServer())
 		{

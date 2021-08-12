@@ -81,17 +81,10 @@ namespace Model
 			auto& all_obj = m_awake_system[index];
 			for (auto& item : all_obj)
 			{
-#if EVENT_CALLBACK_TYPE_CHECK
-				if (item->GetCallbackType() == &typeid(void(Arg...)))
+				if (item->GetCallbackType() == typeid(void(Arg...)))
 				{
 					((IAwake<Arg...>*)(item.get()))->Run(self, arg...);
 				}
-				else {
-					throw std::exception(std::format("Awake 调用的类型不匹配").c_str());
-				}
-#else
-				((IAwake<Arg...>*)(item.get()))->Run(self, arg...);
-#endif
 			}
 		}
 
@@ -175,17 +168,10 @@ namespace Model
 			auto all_event_range = m_event_system.equal_range(event_id);
 			while (all_event_range.first != all_event_range.second)
 			{
-#if EVENT_CALLBACK_TYPE_CHECK
-				if (all_event_range.first->second->GetCallbackType() == &typeid(void(Arg...)))
+				if (all_event_range.first->second->GetCallbackType() == typeid(void(Arg...)))
 				{
 					((IEvent<Arg...>*)(all_event_range.first->second.get()))->Handle(arg...);
 				}
-				else {
-					throw std::exception(std::format("Event 调用的类型不匹配").c_str());
-				}
-#else
-				((IEvent<Arg...>*)(all_event_range.first->second.get()))->Handle(arg...);
-#endif
 				++(all_event_range.first);
 			}
 		}
@@ -201,8 +187,7 @@ namespace Model
 			if (found_event_id == found_objevent->second.end())return;
 			for (auto& item : found_event_id->second)
 			{
-#if EVENT_CALLBACK_TYPE_CHECK
-				if (item.second.second->GetCallbackType() == &typeid(void(Arg...)))
+				if (item.second.second->GetCallbackType() == typeid(void(Arg...)))
 				{
 					if (item.second.first->IsDisposed())
 					{
@@ -212,12 +197,6 @@ namespace Model
 						((IObjEvent<Arg...>*)(item.second.second.get()))->Handle(item.second.first, arg...);
 					}
 				}
-				else {
-					throw std::exception(std::format("ObjEvent 调用的类型不匹配").c_str());
-				}
-#else
-				((IObjEvent<Arg...>*)(item.second.second.get()))->Handle(item.second.first, arg...);
-#endif
 
 			}
 		}

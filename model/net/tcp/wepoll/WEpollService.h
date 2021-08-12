@@ -83,7 +83,7 @@ namespace Model
 		 * @retval		true : 监听端口成功
 		 * @retval		false : 开启端口失败
 		 */
-		virtual bool Listen(const uint16_t port) override;
+		virtual bool Listen(const IPEndPoint& address) override;
 
 		/**
 		 * @brief		连接指定服务器

@@ -46,16 +46,30 @@ LIST(APPEND ALL_OBJECT
 set(MODULE_FILES "")
 FILE(GLOB MODULE_FILES "./module/*.cpp" "./module/*.h")
 
-# wepoll
-#set(NET_WEPOLL_FILES "")
-#FILE(GLOB NET_WEPOLL_FILES "./module/tcp/wepoll/*.cpp" "./module/tcp/wepoll/*.h")
+# Message组件
+set(MODULE_MESSAGE_FILES "")
+FILE(GLOB MODULE_MESSAGE_FILES "./module/message/*.cpp" "./module/message/*.h")
+
+# Component
+set(MODULE_COMPONENT_FILES "")
+FILE(GLOB MODULE_COMPONENT_FILES "./module/component/*.cpp" "./module/component/*.h")
+
+# Component Config
+set(MODULE_COMPONENT_CONFIG_FILES "")
+FILE(GLOB MODULE_COMPONENT_CONFIG_FILES "./module/component/config/*.cpp" "./module/component/config/*.h")
 
 
 source_group(module						FILES ${MODULE_FILES})
-#source_group(net\\tcp\\wepoll			FILES ${NET_WEPOLL_FILES})
+source_group(module\\message			FILES ${MODULE_MESSAGE_FILES})
+source_group(module\\component			FILES ${MODULE_COMPONENT_FILES})
+source_group(module\\component\\config	FILES ${MODULE_COMPONENT_CONFIG_FILES})
+
 
 LIST(APPEND ALL_OBJECT
-	${MODULE_FILES})
+	${MODULE_FILES}
+	${MODULE_MESSAGE_FILES}
+	${MODULE_COMPONENT_FILES}
+	${MODULE_COMPONENT_CONFIG_FILES})
 
 
 
