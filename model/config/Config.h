@@ -3,8 +3,10 @@
 #include <memory>
 #include <unordered_map>
 #include <string>
+#include "etc/etc.h"
 #include "other/json/cJsonHelper.h"
 #include "log/ServerLog.h"
+
 
 
 using ConfigId = int64_t;
@@ -19,6 +21,11 @@ class Config:
 	virtual bool Parse(Json json) = 0;
 public:
 	ConfigId	Id;
+
+	template<typename T>
+	std::shared_ptr<T> To() {
+		return std::dynamic_pointer_cast<T>(shared_from_this());
+	}
 };
 
 class Category
@@ -67,6 +74,10 @@ public:
 		return found->second;
 	}
 
+	const std::unordered_map<ConfigId, t_ptr>& GetAllConfig() const {
+		return AllConfig;
+	}
+
 	void Remove(const ConfigId id) {
 		AllConfig.erase(id);
 	}
@@ -81,45 +92,56 @@ private:
 
 
 
-
-class ConfigComponent
+namespace Model
 {
-public:
+	class ConfigComponent :
+		public Component
+	{
+	public:
+		static ConfigComponent* Instance;
 
-	static ConfigComponent& Instance() {
-		static ConfigComponent self;
-		return self;
-	}
-
-	template<typename T>
-	bool Load(const char* path) {
-		auto category = std::make_shared<Category>();
-		if (!category->Load<T>(path))
-		{
-			return false;
+		template<typename T>
+		bool Load(const char* path) {
+			auto category = std::make_shared<Category>();
+			if (!category->Load<T>(path))
+			{
+				return false;
+			}
+			Data.erase(&typeid(T));
+			Data.insert(std::make_pair(&typeid(T), category));
+			return true;
 		}
-		Data.erase(&typeid(T));
-		Data.insert(std::make_pair(&typeid(T), category));
-		return true;
-	}
 
-	template<typename T>
-	std::shared_ptr<T> Get(const ConfigId id) {
-		auto found = Data.find(&typeid(T));
-		if (found == Data.end())
-		{
+		template<typename T>
+		std::shared_ptr<T> Get(const ConfigId id) {
+			auto found = Data.find(&typeid(T));
+			if (found == Data.end())
+			{
+				return nullptr;
+			}
+			if (auto cfg = found->second->Get(id))
+			{
+				return std::dynamic_pointer_cast<T>(cfg);
+			}
 			return nullptr;
 		}
-		if (auto cfg = found->second->Get(id))
-		{
-			return std::dynamic_pointer_cast<T>(cfg);
+
+		template<typename T>
+		const std::unordered_map<ConfigId, std::shared_ptr<Config>>& GetAllConfig()const {
+			static std::unordered_map<ConfigId, std::shared_ptr<Config>> ret_null;
+			auto found = Data.find(&typeid(T));
+			if (found == Data.end())
+			{
+				return ret_null;
+			}
+			return found->second->GetAllConfig();
 		}
-		return nullptr;
-	}
-	
-private:
 
-	std::unordered_map<const type_info*, std::shared_ptr<Category>> Data;
+	private:
+
+		std::unordered_map<const type_info*, std::shared_ptr<Category>> Data;
 
 
-};
+	};
+}
+

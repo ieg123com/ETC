@@ -21,9 +21,17 @@ namespace Hotfix
 				std::string key = arg.substr(2, pos - 2);
 				std::string value = arg.substr(pos + 1, arg.size() - pos - 1);
 				LOG_WARN("key {} value {}", key, value);
+				if (key == "AppId")
+				{
+					self->Options.AppId = std::to<int32_t>(value);
+				}
+				if (key == "AppType")
+				{
+					self->Options.AppType = ToAppType(value);
+				}
 			}
+			
 		}
-		 
 
 	};
 	REF(OptionComponentAwakeSystem, ObjectSystem);

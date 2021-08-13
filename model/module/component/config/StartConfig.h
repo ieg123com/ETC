@@ -1,5 +1,6 @@
 #pragma once
 #include "etc/etc.h"
+#include "module/other/AppType.h"
 
 
 namespace Model
@@ -10,7 +11,8 @@ namespace Model
 	{
 	public:
 		int32_t	AppId;
-		int32_t AppType;
+		EAppType AppType;
+		std::string Config;
 	};
 
 

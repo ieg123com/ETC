@@ -3,7 +3,6 @@
 
 
 // 后续接入json
-typedef long Json;
 
 typedef long long ObjectID;
 

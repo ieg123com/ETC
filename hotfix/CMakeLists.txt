@@ -57,7 +57,7 @@ FILE(GLOB MODULE_COMPONENT_FILES "./module/component/*.cpp" "./module/component/
 # Component Config
 set(MODULE_COMPONENT_CONFIG_FILES "")
 FILE(GLOB MODULE_COMPONENT_CONFIG_FILES "./module/component/config/*.cpp" "./module/component/config/*.h")
- 
+
 
 source_group(module						FILES ${MODULE_FILES})
 source_group(module\\message			FILES ${MODULE_MESSAGE_FILES})

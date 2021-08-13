@@ -3,9 +3,15 @@
 #include "helper/hotfix/HotfixHelper.h"
 #include "base/init.h"
 #include "coroutine.h"
+#include "config/Config.h"
 #include "module/message/NetInnerComponent.h"
 #include "module/message/NetOuterComponent.h"
 #include "module/component/OptionComponent.h"
+#include "module/component/StartConfigComponent.h"
+#include "module/component/config/StartConfig.h"
+#include "module/component/config/InnerConfig.h"
+#include "module/component/config/OuterConfig.h"
+
 
 
 using namespace Model;
@@ -23,18 +29,45 @@ int main(int argc,char* argv[])
 		{
 			hotfix.Load("hotfix.dll");
 			hotfix.Init(Model::GetGlobalVar());
-		}
-		catch (std::exception& e)
-		{
-			LOG_ERROR("加载热重载文件出错 {}", e.what());
-			return;
-		}
+		
+			Game::World()->AddComponent<ConfigComponent>();
+			Init();
 
-		Game::World()->AddComponent<OptionComponent, int, char*[]>(argc, argv);
+			Options option = Game::World()->AddComponent<OptionComponent, int, char* []>(argc, argv)->Options;
+			auto start_config = Game::World()->AddComponent<StartConfigComponent, int32_t>(option.AppId)->startConfig;
+			if (!Is(option.AppType, start_config->AppType))
+			{
+				throw std::exception("命令行参数 AppType 和配置中的不一致");
+			}
 
 
-		try
-		{
+			auto outer_config = start_config->GetComponent<OuterConfig>();
+			auto inner_config = start_config->GetComponent<InnerConfig>();
+
+
+			switch (start_config->AppType)
+			{
+			case EAppType::Gate:
+				break;
+			case EAppType::Login:
+				break;
+			case EAppType::List:
+				break;
+			case EAppType::Map:
+				break;
+			case EAppType::Location:
+				break;
+			case EAppType::Chat:
+				break;
+			case EAppType::Social:
+				break;
+			default:
+				throw std::exception("命令行参数 AppType 不正确");
+				break;
+			}
+
+
+		
 			Game::World()->AddComponent<NetOuterComponent, const IPEndPoint&>("127.0.0.1:2881");
 			Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>("127.0.0.1:1881");
 		}
