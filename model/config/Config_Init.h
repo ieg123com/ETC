@@ -1,15 +1,12 @@
 #pragma once
 #include "Config_StartConfig.h"
 
-namespace Model
+
+class Config_Init
 {
-	class Config_Init
-	{
-	public:
+public:
 
-		static void Init() {
-			if (!ConfigComponent::Instance->Load<Config_StartConfig>("conf/Config_StartConfig.json")) LOG_WARN("load 'conf/Config_StartConfig.json' configure file failed!");
-		}
-	};
-}
-
+	static void Init(){
+		if(!Model::ConfigComponent::Instance->Load<Config_StartConfig>("conf/Config_StartConfig.json")) LOG_WARN("load 'conf/Config_StartConfig.json' configure file failed!");
+	}
+};

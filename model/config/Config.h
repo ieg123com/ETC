@@ -6,6 +6,7 @@
 #include "etc/etc.h"
 #include "other/json/cJsonHelper.h"
 #include "log/ServerLog.h"
+#include "type/type.h"
 
 
 
@@ -107,14 +108,14 @@ namespace Model
 			{
 				return false;
 			}
-			Data.erase(&typeid(T));
-			Data.insert(std::make_pair(&typeid(T), category));
+			Data.erase(typeof(T));
+			Data.insert(std::make_pair(typeof(T), category));
 			return true;
 		}
 
 		template<typename T>
 		std::shared_ptr<T> Get(const ConfigId id) {
-			auto found = Data.find(&typeid(T));
+			auto found = Data.find(typeof(T));
 			if (found == Data.end())
 			{
 				return nullptr;
@@ -129,7 +130,7 @@ namespace Model
 		template<typename T>
 		const std::unordered_map<ConfigId, std::shared_ptr<Config>>& GetAllConfig()const {
 			static std::unordered_map<ConfigId, std::shared_ptr<Config>> ret_null;
-			auto found = Data.find(&typeid(T));
+			auto found = Data.find(typeof(T));
 			if (found == Data.end())
 			{
 				return ret_null;
@@ -139,7 +140,7 @@ namespace Model
 
 	private:
 
-		std::unordered_map<const type_info*, std::shared_ptr<Category>> Data;
+		std::unordered_map<Type, std::shared_ptr<Category>> Data;
 
 
 	};

@@ -4,6 +4,7 @@
 #include "base/init.h"
 #include "coroutine.h"
 #include "config/Config.h"
+#include "config/Config_Init.h"
 #include "module/message/NetInnerComponent.h"
 #include "module/message/NetOuterComponent.h"
 #include "module/component/OptionComponent.h"
@@ -29,12 +30,15 @@ int main(int argc,char* argv[])
 		{
 			hotfix.Load("hotfix.dll");
 			hotfix.Init(Model::GetGlobalVar());
-		
+			LOG_INFO("A");
 			Game::World()->AddComponent<ConfigComponent>();
-			Init();
+			printf("%p\n", ConfigComponent::Instance);
+			Config_Init::Init();
 
+			LOG_INFO("B");
 			Options option = Game::World()->AddComponent<OptionComponent, int, char* []>(argc, argv)->Options;
 			auto start_config = Game::World()->AddComponent<StartConfigComponent, int32_t>(option.AppId)->startConfig;
+			LOG_INFO("C");
 			if (!Is(option.AppType, start_config->AppType))
 			{
 				throw std::exception("命令行参数 AppType 和配置中的不一致");
@@ -48,18 +52,24 @@ int main(int argc,char* argv[])
 			switch (start_config->AppType)
 			{
 			case EAppType::Gate:
+				Game::World()->AddComponent<NetOuterComponent, const IPEndPoint&>(outer_config->Address);
+				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(inner_config->Address);
 				break;
 			case EAppType::Login:
 				break;
 			case EAppType::List:
 				break;
 			case EAppType::Map:
+				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(inner_config->Address);
 				break;
 			case EAppType::Location:
+				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(inner_config->Address);
 				break;
 			case EAppType::Chat:
+				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(inner_config->Address);
 				break;
 			case EAppType::Social:
+				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(inner_config->Address);
 				break;
 			default:
 				throw std::exception("命令行参数 AppType 不正确");
@@ -68,8 +78,7 @@ int main(int argc,char* argv[])
 
 
 		
-			Game::World()->AddComponent<NetOuterComponent, const IPEndPoint&>("127.0.0.1:2881");
-			Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>("127.0.0.1:1881");
+			
 		}
 		catch (std::exception& e)
 		{

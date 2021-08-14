@@ -9,6 +9,7 @@ namespace Model
 	public:
 		virtual void Load(const std::shared_ptr<ConfigComponent>& self) override
 		{
+			LOG_INFO("ConfigComponent Load");
 			ConfigComponent::Instance = self.get();
 		}
 	};
