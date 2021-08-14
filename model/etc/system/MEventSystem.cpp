@@ -25,6 +25,7 @@ namespace Model
 			for (auto& attr : all_attr)
 			{
 				m_types.emplace(attr->GetAttrType(), attr->GetObjectType());
+				LOG_WARN("object type {}", attr->GetObjectType().name());
 			}
 		}
 

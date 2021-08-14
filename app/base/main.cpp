@@ -28,6 +28,7 @@ int main(int argc,char* argv[])
 		Model::Hotfix hotfix;
 		try
 		{
+			LOG_INFO("==============================");
 			hotfix.Load("hotfix.dll");
 			hotfix.Init(Model::GetGlobalVar());
 			LOG_INFO("A");
