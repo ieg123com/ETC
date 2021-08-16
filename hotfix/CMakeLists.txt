@@ -31,7 +31,7 @@ include_directories(./config)
 #config
 set(CONFIG_FILES "")
 FILE(GLOB CONFIG_FILES "./config/*.cpp" "./config/*.h")
-
+ 
 
 source_group(config						FILES ${CONFIG_FILES})
 

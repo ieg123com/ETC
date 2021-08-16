@@ -4,6 +4,7 @@
 #include "test.h"
 #include "etc.h"
 #include "demo/Entity/PlayerEntity.h"
+#include "coroutine.h"
 
 using namespace Model;
 
@@ -51,7 +52,24 @@ namespace Hotfix
 		}
 		printf("Ok\n");
 
+		go[]{
+				while (true)
+				{
+					co_sleep(2000);
+					LOG_INFO("Hotfix sleep 1");
+				}
+		};
 
+		go[]{
+		while (true)
+		{
+			co_sleep(2000);
+			LOG_INFO("Hotfix sleep 2");
+		}
+		};
+		LOG_INFO("co_sched.Start()");
+		//co_sched.Start();
+		LOG_INFO("co_sched.Start() End");
 	}
 
 	void Over()

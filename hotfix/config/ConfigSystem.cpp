@@ -1,20 +1,17 @@
-#include "Config.h"
+#include "config/Config.h"
 
+using namespace Model;
 
-namespace Model
+namespace Hotfix
 {
-	ConfigComponent* ConfigComponent::Instance = nullptr;
-
-
 	class ConfigComponentLoadSystem : public LoadSystem<ConfigComponent>
 	{
 	public:
 		virtual void Load(const std::shared_ptr<ConfigComponent>& self) override
 		{
-			LOG_INFO("Model ConfigComponent Load");
+			LOG_INFO("Hotfix ConfigComponent Load");
 			ConfigComponent::Instance = self.get();
 		}
 	};
 	REF(ConfigComponentLoadSystem, ObjectSystem);
-
 }
