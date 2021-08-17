@@ -7,36 +7,52 @@
 namespace Model
 {
 
+	extern class TypeFactory* g_type_factory;
+
 	class TypeFactory
 	{
 	public:
 
 		template<typename T>
-		constexpr TypeInfo* Get()
+		static TypeInfo* Get()
 		{
-			auto found = m_all_type_info.find((&typeid(T))->raw_name());
-			if (found == m_all_type_info.end())
+			auto found = g_type_factory->m_all_type_info.find((&typeid(T))->raw_name());
+			if (found == g_type_factory->m_all_type_info.end())
 			{
 				auto value = std::make_pair(std::string((&typeid(T))->raw_name()), new TypeInfo(&typeid(T)));
-				if (std::is_base_of<ISupportTypeCreation, T>::value)
-				{
-					value.second->create_instance = []()->void* {
-						T* new_obj = new T();
-						return new_obj;
-					};
-					value.second->delete_instance = [](void* self)->void {
-						delete (T*)self;
-					};
-				}
-				else {
-					value.second->create_instance = nullptr;
-					value.second->delete_instance = nullptr;
-				}
-				found = m_all_type_info.insert(value).first;
+				value.second->create_instance = nullptr;
+				value.second->delete_instance = nullptr;
+				found = g_type_factory->m_all_type_info.insert(value).first;
 			}
 			return found->second;
 		}
 
+
+		template<typename T>
+		static void RegisterInstance()
+		{
+			static_assert(std::is_base_of<ISupportTypeCreation, T>::value,
+				"The registered instance must inherit 'ISupportTypeCreation'");
+			TypeInfo* tpinfo;
+			auto found = g_type_factory->m_all_type_info.find((&typeid(T))->raw_name());
+			if (found == g_type_factory->m_all_type_info.end())
+			{
+				tpinfo = TypeFactory::Get<T>();
+			}
+			else {
+				tpinfo = found->second;
+			}
+			if (!tpinfo->create_instance)
+			{
+				tpinfo->create_instance = []()->void* {
+					T* new_obj = new T();
+					return new_obj;
+				};
+				tpinfo->delete_instance = [](void* self)->void {
+					delete (T*)self;
+				};
+			}
+		}
 
 		template<typename T>
 		static std::shared_ptr<T> CreateInstance(const Type& type)
@@ -67,7 +83,7 @@ namespace Model
 	};
 
 
-	extern TypeFactory* g_type_factory;
+	
 
 }
 

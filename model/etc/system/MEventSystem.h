@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <queue>
 #include <vector>
+#include <set>
 #include "IAwakeSystem.h"
 #include "IloadSystem.h"
 #include "IStartSystem.h"
@@ -217,7 +218,7 @@ namespace Model
 	private:
 
 		std::unordered_map<DLLType, std::shared_ptr<Reflection::Assembly>>	m_assemblys;
-		std::unordered_multimap<Type, Type>			m_types;
+		std::unordered_map<Type, std::set<Type>>			m_types;
 
 		// 对象系统事件
 		std::vector<std::list<std::shared_ptr<IAwakeSystem>>>		m_awake_system;

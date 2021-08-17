@@ -75,7 +75,39 @@ public:
 		}
 		return false;
 	}
-	
+
+	bool operator < (const Type& obj)const noexcept {
+		if (m_info < obj.m_info)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool operator > (const Type& obj)const noexcept {
+		if (m_info > obj.m_info)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool operator <= (const Type& obj)const noexcept {
+		if (m_info <= obj.m_info)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool operator >= (const Type& obj)const noexcept {
+		if (m_info >= obj.m_info)
+		{
+			return true;
+		}
+		return false;
+	}
+
 	const char* name()const{
 		return m_info->name.c_str();
 	}

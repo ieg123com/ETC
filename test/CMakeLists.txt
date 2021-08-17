@@ -5,9 +5,9 @@ project(test)
 include_directories(./ ../libgo)
 link_directories(../libs/mysql)
 
-include_directories(../etc/etc ../etc/etc/common ../etc/etc/interface ../etc/etc/kernel ../etc/etc/system)
-include_directories(../etc/base)
-include_directories(../etc/config)
+include_directories(../model/etc ../model/etc/common ../model/etc/interface ../model/etc/kernel ../model/etc/system)
+include_directories(../model/base)
+include_directories(../model/config)
 
 
 #=================================基础服务加载================================
@@ -36,7 +36,7 @@ add_executable(test
 
 
 if(MSVC)
-	target_link_libraries(test libmysql libgo ws2_32 wepoll redis model hotfix)
+	target_link_libraries(test libmysql libgo ws2_32 wepoll redis model)
 	ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS -D_WINSOCK_DEPRECATED_NO_WARNINGS -D_SPDLOG_ACTIVE_LEVEL)
 	
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")

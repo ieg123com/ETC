@@ -24,8 +24,10 @@ namespace Model
 			auto all_attr = item.second->GetType<ObjectSystem>();
 			for (auto& attr : all_attr)
 			{
-				m_types.emplace(attr->GetAttrType(), attr->GetObjectType());
-				LOG_WARN("object type {}", attr->GetObjectType().name());
+				if (m_types[attr->GetAttrType()].insert(attr->GetObjectType()).second)
+				{
+					LOG_WARN("object type {}", attr->GetObjectType().name());
+				}
 			}
 		}
 
@@ -37,10 +39,10 @@ namespace Model
 		m_late_update_system.clear();
 		m_destroy_system.clear();
 
-		auto os_attr = m_types.equal_range(typeof(ObjectSystem));
-		while (os_attr.first != os_attr.second)
+		auto os_attr = m_types.find(typeof(ObjectSystem));
+		for(auto& attr : os_attr->second)
 		{
-			auto obj = TypeFactory::CreateInstance<IEventSystem>(os_attr.first->second);
+			auto obj = TypeFactory::CreateInstance<IEventSystem>(attr);
 			if (auto sys = std::dynamic_pointer_cast<IAwakeSystem>(obj))
 			{
 				Add(m_awake_system, obj->GetType(), sys);
@@ -65,7 +67,6 @@ namespace Model
 			{
 				Add(m_destroy_system, obj->GetType(), sys);
 			}
-			++(os_attr.first);
 		}
 
 

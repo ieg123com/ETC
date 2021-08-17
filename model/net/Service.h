@@ -28,10 +28,11 @@ namespace Model
 
 
 
-		virtual void Send(const SessionID fd, const char* data, const size_t len) {}
+		virtual void Send(const SessionID fd, const char* data, const size_t len) = 0;
 
-		virtual void Close(const SessionID fd) {}
+		virtual void Close(const SessionID fd) = 0;
 
+		NetworkType GetNetworkType() const { return m_network_type; }
 
 	public:
 
@@ -40,9 +41,8 @@ namespace Model
 
 		void Destroy();
 
-	protected:
-		NetworkType GetNetworkType() const { return m_network_type; }
 
+	protected:
 		// 服务类型
 		NetworkType	m_network_type;
 
