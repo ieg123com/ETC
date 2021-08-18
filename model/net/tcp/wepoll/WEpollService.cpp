@@ -20,6 +20,7 @@
 #include <string.h>
 
 #include "net/Session.h"
+#include "net/TChannel.h"
 
 
 // 异步 epoll wait
@@ -112,9 +113,11 @@ namespace Model
 		// 创建新会话
 		stSocketContext* ctx = new stSocketContext();
 		ctx->session = ObjectFactory::Create<Session>();
-		ctx->session->SessionId = m_listened_socket;
-		ctx->session->Address = address;
-		ctx->session->__service = Get<Service>();
+		auto channel = ObjectFactory::Create<TChannel, const std::shared_ptr<Service>&>(Get<Service>());
+		channel->Address = address;
+		channel->SessionId = m_listened_socket;
+		ctx->session->__channel = channel;
+
 		__AddSocketCtx(m_listened_socket, ctx);
 
 		m_epoll_status = EpollStatus::EPOLL_RUNNING;
@@ -395,9 +398,10 @@ namespace Model
 		// 创建新会话
 		stSocketContext* ctx = new stSocketContext();
 		ctx->session = ObjectFactory::Create<Session>();
-		ctx->session->SessionId = conn_sock;
-		ctx->session->Address.Ip = std::move(client_ip);
-		ctx->session->__service = Get<Service>();
+		auto channel = ObjectFactory::Create<TChannel, const std::shared_ptr<Service>&>(Get<Service>());
+		channel->Address.Ip = std::move(client_ip);
+		channel->SessionId = conn_sock;
+		ctx->session->__channel = channel;
 
 		if (!__AddSocketCtx(conn_sock, ctx))
 		{

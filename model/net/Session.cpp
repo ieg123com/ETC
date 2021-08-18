@@ -2,6 +2,7 @@
 #include "Service.h"
 #include "module/message/MessageDefines.h"
 #include "etc/etc.h"
+#include "IChannel.h"
 
 
 namespace Model
@@ -27,46 +28,34 @@ namespace Model
 	};
 	REF(SessionDestroySystem, ObjectSystem);
 
+
+	const SessionID& Session::SessionId()const
+	{
+		return (__channel) ? __channel->SessionId : 0;
+	}
+
+	const IPEndPoint& Session::Address()const
+	{
+		static IPEndPoint address_null;
+		return (__channel) ? __channel->Address : address_null;
+	}
+
 	void Session::Awake()
 	{
 		RpcId = 0;
-		SessionId = 0;
 	}
 
 	void Session::Destroy()
 	{
-		if (__service)
+		if (__channel)
 		{
-			if (__service->GetNetworkType() == NetworkType::Server)
-			{
-				// 服务类型为服务器
-				__service->Close(SessionId);
-				__service.reset();
-			}
-			else if (__service->GetNetworkType() == NetworkType::Client)
-			{
-				// 服务类型为客户端
-				__service->Dispose();
-				__service.reset();
-			}
+			__channel->Dispose();
+			__channel.reset();
 		}
-
 	}
 
 	void Session::OnRead(const char* data, const size_t len)
 	{
-
-		m_memory_split.AddData(data, len);
-		if (!m_memory_split.Unpack())
-		{
-			return;
-		}
-
-		// 消息解析完成
-		auto pack = m_memory_split.Data;
-		stMessageHead head;
-		memmove(&head, pack->data(), sizeof(head));
-
 
 
 
@@ -74,6 +63,6 @@ namespace Model
 
 	void Session::Send(const char* data, const size_t len)
 	{
-		__service->Send(SessionId, data, len);
+
 	}
 }

@@ -10,8 +10,6 @@ namespace Model
 	public:
 
 
-
-
 		std::shared_ptr<Session> Get(const IPEndPoint& address);
 
 

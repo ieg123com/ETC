@@ -50,6 +50,14 @@ class CircularBuffer
 	}
 
 public:
+	~CircularBuffer() {
+		Clear();
+		while (!m_buffer_cache.empty())
+		{
+			delete m_buffer_cache.front();
+			m_buffer_cache.pop();
+		}
+	}
 
 	size_t Length() {
 		return (m_buffer_queue.empty()) ? 0 : ((m_buffer_queue.size() - 1) * m_chunk_size + m_last_index - m_first_index);
@@ -107,7 +115,15 @@ public:
 		}
 	}
 	
-
+	void Clear() {
+		m_first_index = 0;
+		m_last_index = m_chunk_size;
+		m_last_buffer = nullptr;
+		while (!m_buffer_queue.empty())
+		{
+			RemoveFirst();
+		}
+	}
 
 
 

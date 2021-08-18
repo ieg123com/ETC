@@ -22,7 +22,8 @@ namespace Model
 
 	void NetInnerComponent::OnDisconnect(const std::shared_ptr<Session>& session)
 	{
-		
+		NetworkComponent::OnDisconnect(session);
+		__m_address_sessions.erase(session->Address());
 	}
 
 

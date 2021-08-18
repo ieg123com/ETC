@@ -6,7 +6,8 @@ namespace Model
 {
 	class Service;
 
-	class IChannel
+	class IChannel:
+		public GEntity
 	{
 	public:
 
@@ -16,11 +17,6 @@ namespace Model
 
 		/** @brief ÍøÂç·þÎñ*/
 		std::shared_ptr<Service>	__service;
-
-		IChannel(std::shared_ptr<Service> serv) {
-			__service = serv;
-		}
-
 
 		virtual void OnRead(const char* data, const size_t len) = 0;
 

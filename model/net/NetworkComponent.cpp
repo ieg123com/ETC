@@ -49,7 +49,7 @@ namespace Model
 
 	void NetworkComponent::OnConnectComplete(const std::shared_ptr<Session>& session)
 	{
-		LOG_INFO("完成连接:{} fd:{}", session->Address.ToString(), session->SessionId);
+		LOG_INFO("完成连接:{} fd:{}", session->Address().ToString(), session->SessionId());
 		if (!__AddSession(session))
 		{
 			LOG_ERROR("连接的会话fd相同");
@@ -59,7 +59,7 @@ namespace Model
 
 	void NetworkComponent::OnAccept(const std::shared_ptr<Session>& session)
 	{
-		LOG_INFO("会话连接:{} fd:{}", session->Address.ToString(), session->SessionId);
+		LOG_INFO("会话连接:{} fd:{}", session->Address().ToString(), session->SessionId());
 
 		if (!__AddSession(session))
 		{
@@ -74,15 +74,15 @@ namespace Model
 	void NetworkComponent::OnRead(const std::shared_ptr<Session>& session, const char* data, const size_t len)
 	{
 		LOG_INFO("Ip:{} fd:{}\n{}",
-			session->Address.ToString(),
-			session->SessionId,
+			session->Address().ToString(),
+			session->SessionId(),
 			data);
 		session->OnRead(data, len);
 	}
 
 	void NetworkComponent::OnDisconnect(const std::shared_ptr<Session>& session)
 	{
-		LOG_INFO("会话断开:{} fd:{}", session->Address.ToString(), session->SessionId);
+		LOG_INFO("会话断开:{} fd:{}", session->Address().ToString(), session->SessionId());
 		if (__RemoveSession(session))
 		{
 			session->Dispose();
@@ -91,13 +91,13 @@ namespace Model
 
 	bool NetworkComponent::__AddSession(const std::shared_ptr<Session>& session)
 	{
-		return m_sessions.insert(std::make_pair(session->SessionId, session)).second;
+		return m_sessions.insert(std::make_pair(session->SessionId(), session)).second;
 	}
 
 
 	bool NetworkComponent::__RemoveSession(const std::shared_ptr<Session>& session)
 	{
-		auto found = m_sessions.find(session->SessionId);
+		auto found = m_sessions.find(session->SessionId());
 		if (found == m_sessions.end())
 		{
 			return false;
