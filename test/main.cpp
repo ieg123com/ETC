@@ -71,7 +71,7 @@ void test()
 {
 	MemorySplit	split;
 
-	char str[] = "Test MemorySplit!";
+	char str[] = "0123456789[]";
 
 	uint16_t pack_size = sizeof(str);
 
@@ -94,15 +94,28 @@ void test()
 	
 	CircularBuffer buffer;
 
-	buffer.Write(str, sizeof(str));
-	buffer.Write(str, sizeof(str));
-	buffer.Write(str, sizeof(str));
+	buffer.Write(str, sizeof(str)-1);
+	buffer.Write(str, sizeof(str)-1);
+	buffer.Write(str, sizeof(str)-1);
 	std::string strin;
 
 	strin.resize(100);
-	buffer.Read((void*)strin.data(), 18);
+	buffer.Read((void*)strin.data(), 12*3);
+	buffer.Write(str, sizeof(str) );
+	buffer.Read((void*)strin.data(), 13 );
+	buffer.Write(str, sizeof(str));
+	buffer.Read((void*)strin.data(), 13);
+	buffer.Write(str, sizeof(str));
+	buffer.Read((void*)strin.data(), 13);
+	buffer.Write(str, sizeof(str));
+	buffer.Read((void*)strin.data(), 13);
+	buffer.Write(str, sizeof(str));
+	buffer.Write(str, sizeof(str));
+	buffer.Read((void*)strin.data(), 13);
+	buffer.Read((void*)strin.data(), 13);
 
-	LOG_INFO("strin [{}]", strin)
+
+	LOG_INFO("strin [{}]", strin.c_str())
 		;
 
 	while (true)
