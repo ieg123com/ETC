@@ -130,7 +130,15 @@ namespace Model
 
 	bool WEpollService::Send(const SessionID fd, const char* data, const size_t len)
 	{
-		send(fd, data, len, 0);
+		size_t count = len;
+		
+		int ret = send(fd, data, count, 0);
+		if (ret < 0)
+		{
+			LastError = WSAGetLastError();
+			return false;
+		}
+		return true;
 	}
 
 	void WEpollService::Close(const SessionID fd)
@@ -232,7 +240,7 @@ namespace Model
 	int WEpollService::OnEpollReadableEvent(stSocketContext* ctx, epoll_event& epoll_event)
 	{
 
-		int fd = ctx->session->SessionId;
+		int fd = ctx->session->SessionId();
 
 		static char read_buffer[READ_BUFFER_SIZE];
 		//memset(read_buffer, 0, READ_BUFFER_SIZE);
@@ -290,6 +298,8 @@ namespace Model
 		if (m_listened_socket == -1)
 		{
 			LOG_ERROR("socket error: {}", strerror(errno));
+			LastError = errno;
+			LastErrorMsg = strerror(errno);
 			return false;
 		}
 		int opt = 1;
@@ -314,11 +324,15 @@ namespace Model
 		if (::bind(m_listened_socket, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) == SOCKET_ERROR)
 		{
 			LOG_ERROR("bind error: {}", strerror(errno));
+			LastError = errno;
+			LastErrorMsg = strerror(errno);
 			return false;
 		}
 		if (listen(m_listened_socket, addressInfo.backlog) == SOCKET_ERROR)
 		{
 			LOG_ERROR("listen error: {}", strerror(errno));
+			LastError = errno;
+			LastErrorMsg = strerror(errno);
 			return false;
 		}
 		return true;
@@ -332,6 +346,8 @@ namespace Model
 		if (m_listened_socket == -1)
 		{
 			LOG_ERROR("socket error: {}", strerror(errno));
+			LastError = errno;
+			LastErrorMsg = strerror(errno);
 			return false;
 		}
 		int opt = 1;
@@ -356,6 +372,8 @@ namespace Model
 		if (connect(m_listened_socket, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) == SOCKET_ERROR)
 		{
 			LOG_ERROR("connect error:{} {}", WSAGetLastError(), strerror(errno));
+			LastError = errno;
+			LastErrorMsg = strerror(errno);
 			return false;
 		}
 		return true;
@@ -370,6 +388,8 @@ namespace Model
 		if ((new_fd = accept(sockfd, (struct sockaddr*)&their_addr, &sin_size)) == -1)
 		{
 			LOG_ERROR("accept error: {}", strerror(errno));
+			LastError = errno;
+			LastErrorMsg = strerror(errno);
 			return -1;
 		}
 
@@ -422,6 +442,8 @@ namespace Model
 		if (epoll_ctl(m_epollfd, EPOLL_CTL_ADD, conn_sock, &conn_sock_ev) == -1)
 		{
 			LOG_ERROR("epoll_ctl: conn_sock: {}", strerror(errno));
+			LastError = errno;
+			LastErrorMsg = strerror(errno);
 			CloseAndReleaseOneEvent(event);
 			return;
 		}
@@ -431,7 +453,7 @@ namespace Model
 	void WEpollService::HandleEpollReadableEvent(epoll_event& event)
 	{
 		auto ctx = (stSocketContext*)event.data.ptr;
-		int fd = ctx->session->SessionId;
+		int fd = ctx->session->SessionId();
 
 
 		int ret = OnEpollReadableEvent(ctx, event);
@@ -462,7 +484,7 @@ namespace Model
 	void WEpollService::HandleWriteableEvent(SessionID& epollfd, epoll_event& event)
 	{
 		auto ctx = (stSocketContext*)event.data.ptr;
-		int fd = ctx->session->SessionId;
+		int fd = ctx->session->SessionId();
 		//LOG_DEBUG("start write data");
 
 		int ret = OnEpollWriteableEvent(ctx);
@@ -523,6 +545,8 @@ namespace Model
 		if (epoll_ctl(m_epollfd, EPOLL_CTL_ADD, m_listened_socket, &ev) == -1)
 		{
 			LOG_ERROR("epoll_ctl: listen_sock: {}", strerror(errno));
+			LastError = errno;
+			LastErrorMsg = strerror(errno);
 			return false;
 		}
 
@@ -565,6 +589,8 @@ namespace Model
 #endif
 		{
 			LOG_ERROR("epoll_create: {}", strerror(errno));
+			LastError = errno;
+			LastErrorMsg = strerror(errno);
 			return false;
 		}
 
@@ -586,6 +612,8 @@ namespace Model
 					continue;
 				}
 				LOG_ERROR("epoll_wait error: {}", strerror(errno));
+				LastError = errno;
+				LastErrorMsg = strerror(errno);
 				break;
 			}
 			else if (fds_num == 0)
@@ -730,7 +758,7 @@ namespace Model
 		}
 
 		stSocketContext* ctx = (stSocketContext*)epoll_event.data.ptr;
-		SessionID fd = ctx->session->SessionId;
+		SessionID fd = ctx->session->SessionId();
 		Close(fd);
 
 	}

@@ -26,6 +26,9 @@ namespace Model
 
 		virtual void Disconnect();
 
+		void Awake(const std::shared_ptr<Service>& service);
+
+
 	};
 }
 

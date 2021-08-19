@@ -18,8 +18,10 @@ namespace Model
 		template<typename T>
 		static std::shared_ptr<Service> Create(const NetworkType type);
 
+		// 发生的错误
+		int LastError;
 
-
+		std::string LastErrorMsg;
 
 
 		virtual bool Listen(const IPEndPoint& address) { return false; }

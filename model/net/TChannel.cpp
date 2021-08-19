@@ -10,7 +10,7 @@ namespace Model
 	public:
 		virtual void Awake(const std::shared_ptr<TChannel>& self, const std::shared_ptr<Service>& service) override
 		{
-			self->__service = service;
+			self->Awake(service);
 			go[self]{
 				self->Start();
 			};
@@ -48,11 +48,14 @@ namespace Model
 		m_send_buffer.Write(&pack_size, sizeof(pack_size));
 		m_send_buffer.Write(data, len);
 
-		m_send_data.resize(m_send_buffer.Length());
+		if (m_send_data.empty())
+		{
+			m_send_data.resize(m_send_buffer.Length());
+			m_send_buffer.Read((char*)m_send_data.data(), m_send_data.size());
+		}
 
 		m_channel << std::move([this] {
-			this->__service->Send(this->SessionId, this->m_send_data.data(), this->m_send_data.size());
-			this->m_send_data.empty();
+			this->StartSend();
 		});
 	}
 
@@ -72,9 +75,14 @@ namespace Model
 			}
 			catch (...)
 			{
-				LOG_ERROR("未知错误");
+				LOG_ERROR("接受数据时发生未知错误");
 			}
 		}
+	}
+
+	void TChannel::Awake(const std::shared_ptr<Service>& service)
+	{
+		IChannel::Awake(service);
 	}
 
 	void TChannel::Destroy()
@@ -83,4 +91,15 @@ namespace Model
 		m_channel << std::move([] {});
 	}
 
+	void TChannel::StartSend()
+	{
+		if (__service->Send(this->SessionId, this->m_send_data.data(), this->m_send_data.size()))
+		{
+			m_send_data.empty();
+		}
+		else {
+			// 发送失败
+			LOG_ERROR("发生数据失败 error:{}", __service->LastError);
+		}
+	}
 }

@@ -18,11 +18,13 @@ namespace Model
 
 		virtual void Start()override;
 
+		void Awake(const std::shared_ptr<Service>& service);
+
 		void Destroy();
 
 	private:
 
-
+		void StartSend();
 
 
 	private:

@@ -22,4 +22,9 @@ namespace Model
 		}
 	}
 
+	void IChannel::Awake(const std::shared_ptr<Service>& service)
+	{
+		__service = service;
+	}
+
 }

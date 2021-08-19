@@ -1,41 +1,55 @@
 #pragma once
 #include <memory>
+#include "interface/ISupportTypeCreation.h"
 #include "google/protobuf/message.h"
+#include "type/type.h"
 
 
-class Session;
-
-template<typename T>
-class IMessage
+namespace Model
 {
-public:
+	class Session;
 
-	virtual void Run(std::shared_ptr<Session> session,T& message) = 0;
-
-};
-
-
-template<typename T>
-class RegIMessage
-{
-public:
-	RegIMessage() {
-
-	}
-};
-
-
-
-#define REGMESSAGE() 0
-
-
-
-class TestMessage :
-	public IMessage<ddd>
-{
-public:
-	virtual void Run(std::shared_ptr<Session> session, void message) override
+	class IMessage :
+		public ISupportTypeCreation
 	{
+	public:
+		virtual const Type GetRequestType() = 0;
+		virtual const Type GetResponseType() = 0;
+	};
 
-	}
-};
+
+	template<typename T>
+	class IMessageSystem :
+		public IMessage
+	{
+	public:
+		virtual void Handle(const std::shared_ptr<T>& session, ::google::protobuf::Message* message) = 0;
+		
+	};
+
+
+	template<typename T,typename Request>
+	class MessageSystem :
+		public IMessageSystem
+	{
+	public:
+		virtual void Handle(const std::shared_ptr<T>& session, ::google::protobuf::Message* message) override
+		{
+			Run(session, static<T*>(message));
+		}
+
+		virtual void Run(const std::shared_ptr<T>& session, const Request& message) = 0;
+
+		virtual const Type GetRequestType() { return typeof(Request); }
+		virtual const Type GetResponseType() { return typeof(nullptr); }
+	};
+
+}
+
+
+
+
+
+
+
+

@@ -28,6 +28,8 @@ namespace Model
 	void Service::Awake()
 	{
 		m_closed = false;
+		LastError = 0;
+		LastErrorMsg = "";
 	}
 
 	void Service::Destroy()
