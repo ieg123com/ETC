@@ -95,7 +95,7 @@ namespace Model
 		virtual std::shared_ptr<Session> Connect(const IPEndPoint& address) override;
 
 
-		virtual void Send(const SessionID fd, const char* data, const size_t len) override;
+		virtual bool Send(const SessionID fd, const char* data, const size_t len) override;
 
 		virtual void Close(const SessionID fd) override;
 

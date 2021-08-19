@@ -128,7 +128,7 @@ namespace Model
 
 
 
-	void WEpollService::Send(const SessionID fd, const char* data, const size_t len)
+	bool WEpollService::Send(const SessionID fd, const char* data, const size_t len)
 	{
 		send(fd, data, len, 0);
 	}

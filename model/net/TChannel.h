@@ -18,6 +18,8 @@ namespace Model
 
 		virtual void Start()override;
 
+		void Destroy();
+
 	private:
 
 

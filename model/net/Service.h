@@ -28,7 +28,7 @@ namespace Model
 
 
 
-		virtual void Send(const SessionID fd, const char* data, const size_t len) = 0;
+		virtual bool Send(const SessionID fd, const char* data, const size_t len) = 0;
 
 		virtual void Close(const SessionID fd) = 0;
 

@@ -11,6 +11,9 @@ namespace Model
 		virtual void Awake(const std::shared_ptr<TChannel>& self, const std::shared_ptr<Service>& service) override
 		{
 			self->__service = service;
+			go[self]{
+				self->Start();
+			};
 		}
 	};
 	REF(TChannelAwakeSystem, ObjectSystem);
@@ -20,7 +23,7 @@ namespace Model
 	public:
 		virtual void Destroy(const std::shared_ptr<TChannel>& self) override
 		{
-			self->Disconnect();
+			self->Destroy();
 		}
 	};
 	REF(TChannelDestroySystem, ObjectSystem);
@@ -45,14 +48,39 @@ namespace Model
 		m_send_buffer.Write(&pack_size, sizeof(pack_size));
 		m_send_buffer.Write(data, len);
 
-		__service->Send(SessionId, m_send_data.data(), m_send_data.size());
+		m_send_data.resize(m_send_buffer.Length());
+
+		m_channel << std::move([this] {
+			this->__service->Send(this->SessionId, this->m_send_data.data(), this->m_send_data.size());
+			this->m_send_data.empty();
+		});
 	}
 
 	void TChannel::Start()
 	{
-		while (!m_channel.empty() || )
+		std::function<void()> func;
+		while (!m_channel.empty() || !IsDisposed())
 		{
-
+			m_channel >> std::move(func);
+			try
+			{
+				func();
+			}
+			catch (std::exception& e)
+			{
+				LOG_ERROR("接受数据时发生错误:{}", e.what());
+			}
+			catch (...)
+			{
+				LOG_ERROR("未知错误");
+			}
 		}
 	}
+
+	void TChannel::Destroy()
+	{
+		Disconnect();
+		m_channel << std::move([] {});
+	}
+
 }
