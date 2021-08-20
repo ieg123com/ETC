@@ -9,22 +9,22 @@ namespace Model
 	{
 	public:
 		Event() {}
-		Event(const std::string& event_id) {
+		Event(const int32_t event_id) {
 			EventId = event_id;
 		}
 
-		std::string EventId;
+		int32_t EventId;
 	};
 
 	class ObjEvent : public Reflection::BaseAttribute<ObjEvent>
 	{
 	public:
 		ObjEvent() {}
-		ObjEvent(const std::string& event_id) {
+		ObjEvent(const int32_t event_id) {
 			EventId = event_id;
 		}
 
-		std::string EventId;
+		int32_t EventId;
 	};
 
 }

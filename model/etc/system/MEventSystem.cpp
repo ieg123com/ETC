@@ -72,7 +72,7 @@ namespace Model
 
 
 		// 自定义事件系统
-		std::vector<std::pair<std::string, Type>> all_event_attr;
+		std::vector<std::pair<int32_t, Type>> all_event_attr;
 		for (auto& item : m_assemblys)
 		{
 			auto all_attr = item.second->GetType<Event>();
@@ -96,7 +96,7 @@ namespace Model
 
 
 		// 自定义对象事件系统
-		std::vector<std::pair<std::string, Type>> all_objevent_attr;
+		std::vector<std::pair<int32_t, Type>> all_objevent_attr;
 		for (auto& item : m_assemblys)
 		{
 			auto all_attr = item.second->GetType<ObjEvent>();
@@ -129,13 +129,32 @@ namespace Model
 				Load(item.second);
 			}
 		}
+
+		{
+			std::unordered_map<Type, std::set<Type>>			message_types;
+			for (auto& item : m_assemblys)
+			{
+				auto all_attr = item.second->GetType<Message>();
+				for (auto& attr : all_attr)
+				{
+					if (m_types[attr->GetAttrType()].insert(attr->GetObjectType()).second)
+					{
+						LOG_WARN("object type {}", attr->GetObjectType().name());
+					}
+				}
+			}
+
+			// 消息事件
+			m_message_system.clear();
+
+		}
 	}
 
-	void MEventSystem::RegisterObjectEvent(const std::shared_ptr<Object>& target_obj, const std::shared_ptr<Object>& self, const std::string& event_id) {
+	void MEventSystem::RegisterObjectEvent(const std::shared_ptr<Object>& target_obj, const std::shared_ptr<Object>& self, const int32_t event_id) {
 		static stObjectEventContext ctx;
 		if (!target_obj) throw std::exception("target_obj cannot be null");
 		if (!self) throw std::exception("self cannot be null");
-		if (event_id.empty()) throw std::exception("event_id cannot be empty");
+		if (event_id == 0) throw std::exception("event_id cannot be empty");
 		ctx.status = EventCtxStatus::AddEvent;
 		ctx.target_obj = target_obj;
 		ctx.self = self;
@@ -143,12 +162,12 @@ namespace Model
 		m_object_event_operation.emplace(std::move(ctx));
 	}
 
-	void MEventSystem::RemoveObjectEvent(const std::shared_ptr<Object>& target_obj, const std::shared_ptr<Object>& self, const std::string& event_id)
+	void MEventSystem::RemoveObjectEvent(const std::shared_ptr<Object>& target_obj, const std::shared_ptr<Object>& self, const int32_t event_id)
 	{
 		static stObjectEventContext ctx;
 		if (!target_obj) throw std::exception("target_obj cannot be null");
 		if (!self) throw std::exception("self cannot be null");
-		if (event_id.empty()) throw std::exception("event_id cannot be empty");
+		if (event_id == 0) throw std::exception("event_id cannot be empty");
 		ctx.status = EventCtxStatus::DeleteSpecificEventInObject;
 		ctx.target_obj = target_obj;
 		ctx.self = self;
@@ -156,11 +175,11 @@ namespace Model
 		m_object_event_operation.emplace(std::move(ctx));
 	}
 
-	void MEventSystem::RemoveObjectEvent(const std::shared_ptr<Object>& target_obj, const std::string& event_id)
+	void MEventSystem::RemoveObjectEvent(const std::shared_ptr<Object>& target_obj, const int32_t event_id)
 	{
 		static stObjectEventContext ctx;
 		if (!target_obj) throw std::exception("target_obj cannot be null");
-		if (event_id.empty()) throw std::exception("event_id cannot be empty");
+		if (event_id == 0) throw std::exception("event_id cannot be empty");
 		ctx.status = EventCtxStatus::DeleteSpecificEventInObject;
 		ctx.target_obj = target_obj;
 		ctx.event_id = event_id;

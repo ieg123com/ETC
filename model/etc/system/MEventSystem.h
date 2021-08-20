@@ -12,6 +12,11 @@
 #include "IUpdateSystem.h"
 #include "ILateUpdateSystem.h"
 #include "IDestroySystem.h"
+#include "module/message/IMessage.h"
+#include "module/message/IActorMessage.h"
+#include "module/message/IRpcMessage.h"
+#include "module/message/IActorRpcMessage.h"
+
 
 
 namespace std
@@ -59,7 +64,7 @@ namespace Model
 		EventCtxStatus	status;
 		std::shared_ptr<Object> target_obj;
 		std::shared_ptr<Object> self;
-		std::string	event_id;
+		int32_t	event_id;
 
 	};
 
@@ -165,7 +170,7 @@ namespace Model
 
 		// 执行自定义事件
 		template<typename ...Arg>
-		void Run(const std::string& event_id, Arg...arg) {
+		void Run(const int32_t event_id, Arg...arg) {
 			auto all_event_range = m_event_system.equal_range(event_id);
 			while (all_event_range.first != all_event_range.second)
 			{
@@ -203,10 +208,10 @@ namespace Model
 		}
 
 
-		void RegisterObjectEvent(const std::shared_ptr<Object>& target_obj, const std::shared_ptr<Object>& self, const std::string& event_id);
+		void RegisterObjectEvent(const std::shared_ptr<Object>& target_obj, const std::shared_ptr<Object>& self, const int32_t event_id);
 
-		void RemoveObjectEvent(const std::shared_ptr<Object>& target_obj, const std::shared_ptr<Object>& self, const std::string& event_id);
-		void RemoveObjectEvent(const std::shared_ptr<Object>& target_obj, const std::string& event_id);
+		void RemoveObjectEvent(const std::shared_ptr<Object>& target_obj, const std::shared_ptr<Object>& self, const int32_t event_id);
+		void RemoveObjectEvent(const std::shared_ptr<Object>& target_obj, const int32_t event_id);
 		void RemoveObjectEvent(const std::shared_ptr<Object>& target_obj);
 
 
@@ -220,6 +225,9 @@ namespace Model
 		std::unordered_map<DLLType, std::shared_ptr<Reflection::Assembly>>	m_assemblys;
 		std::unordered_map<Type, std::set<Type>>			m_types;
 
+		// 消息系统事件
+		std::vector<std::list<std::shared_ptr<IMessageSystem>>>		m_message_system;
+
 		// 对象系统事件
 		std::vector<std::list<std::shared_ptr<IAwakeSystem>>>		m_awake_system;
 		std::vector<std::list<std::shared_ptr<ILoadSystem>>>		m_load_system;
@@ -229,15 +237,17 @@ namespace Model
 		std::vector<std::list<std::shared_ptr<IDestroySystem>>>		m_destroy_system;
 
 		// 自定义事件
-		std::unordered_multimap<std::string, std::shared_ptr<IEventSystem>>	m_event_system;
-		std::unordered_multimap<std::pair<std::string,Type>, std::shared_ptr<IObjEventSystem>>	m_objevent_system;
+		std::unordered_multimap<int32_t, std::shared_ptr<IEventSystem>>	m_event_system;
+		std::unordered_multimap<std::pair<int32_t,Type>, std::shared_ptr<IObjEventSystem>>	m_objevent_system;
 
 		using CObjectEventSystem = std::unordered_multimap<ObjectID,std::pair<std::shared_ptr<Object>, std::shared_ptr<IObjEventSystem>>>;
 		// 自定义对象事件
-		std::unordered_map<ObjectID, std::unordered_map<std::string,CObjectEventSystem>>	m_object_event;
+		std::unordered_map<ObjectID, std::unordered_map<int32_t,CObjectEventSystem>>	m_object_event;
 
 		// 自定义对象事件待操作
 		std::queue<stObjectEventContext>	m_object_event_operation;
+
+
 
 	public:
 

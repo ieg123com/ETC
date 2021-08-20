@@ -3,6 +3,8 @@
 #include "interface/ISupportTypeCreation.h"
 #include "google/protobuf/message.h"
 #include "type/type.h"
+#include "etc/kernel/Entity.h"
+#include "net/Session.h"
 
 
 namespace Model
@@ -18,27 +20,26 @@ namespace Model
 	};
 
 
-	template<typename T>
 	class IMessageSystem :
 		public IMessage
 	{
 	public:
-		virtual void Handle(const std::shared_ptr<T>& session, ::google::protobuf::Message* message) = 0;
+		virtual void Handle(const std::shared_ptr<Session>& session, ::google::protobuf::Message* message) = 0;
 		
 	};
 
 
-	template<typename T,typename Request>
+	template<typename Request>
 	class MessageSystem :
 		public IMessageSystem
 	{
 	public:
-		virtual void Handle(const std::shared_ptr<T>& session, ::google::protobuf::Message* message) override
+		virtual void Handle(const std::shared_ptr<Session>& session, ::google::protobuf::Message* message) override
 		{
-			Run(session, static<T*>(message));
+			Run(session, static<Request*>(message));
 		}
 
-		virtual void Run(const std::shared_ptr<T>& session, const Request& message) = 0;
+		virtual void Run(const std::shared_ptr<Session>& session, const Request& message) = 0;
 
 		virtual const Type GetRequestType() { return typeof(Request); }
 		virtual const Type GetResponseType() { return typeof(nullptr); }

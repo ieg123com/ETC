@@ -6,6 +6,15 @@ namespace Model
 	MessageDispatcherComponent* MessageDispatcherComponent::Instance = nullptr;
 
 
+	class MessageDispatcherComponentAwakeSystem :public AwakeSystem<MessageDispatcherComponent>
+	{
+	public:
+		virtual void Awake(const std::shared_ptr<MessageDispatcherComponent>& self) override
+		{
+			self->Awake();
+		}
+	};
+
 	class MessageDispatcherComponentLoadSystem :public LoadSystem<MessageDispatcherComponent>
 	{
 	public:
@@ -15,6 +24,15 @@ namespace Model
 		}
 	};
 	REF(MessageDispatcherComponentLoadSystem, ObjectSystem);
+
+
+
+	void MessageDispatcherComponent::Awake()
+	{
+		__m_message.resize(UINT16_MAX + 1);
+
+	}
+
 
 
 

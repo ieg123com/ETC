@@ -12,7 +12,7 @@ namespace Model
 		public IMessage 
 	{
 	public:
-		virtual void Handle(const std::shared_ptr<T>& unit, const ::google::protobuf::Message* message) = 0;
+		virtual void Handle(const std::shared_ptr<GEntity>& unit, const ::google::protobuf::Message* message) = 0;
 	};
 
 	template<typename T,typename Request>
@@ -20,9 +20,9 @@ namespace Model
 		public IActorMessageSystem<T>
 	{
 	public:
-		virtual void Handle(const std::shared_ptr<T>& unit, const ::google::protobuf::Message* message) override
+		virtual void Handle(const std::shared_ptr<GEntity>& unit, const ::google::protobuf::Message* message) override
 		{
-			Run(session, static<T*>(message));
+			Run(std::dynamic_pointer_cast<T>(unit), static<Request*>(message));
 		}
 
 		virtual void Run(const std::shared_ptr<T>& unit, const Request& message) = 0;
