@@ -3,11 +3,10 @@
 #include "reflection/reflection.h"
 #include "interface/ObjectSystemAttribute.h"
 #include "interface/EventSystemAttribute.h"
+#include "module/message/MessageSystemAttribute.h"
 
 namespace Model
 {
-
-
 
 
 	MEventSystem::MEventSystem()
@@ -137,15 +136,17 @@ namespace Model
 				auto all_attr = item.second->GetType<Message>();
 				for (auto& attr : all_attr)
 				{
-					if (m_types[attr->GetAttrType()].insert(attr->GetObjectType()).second)
+					if (message_types[attr->GetAttrType()].insert(attr->GetObjectType()).second)
 					{
-						LOG_WARN("object type {}", attr->GetObjectType().name());
+						LOG_WARN("message type {}", attr->GetObjectType().name());
 					}
 				}
 			}
 
 			// 消息事件
 			m_message_system.clear();
+
+
 
 		}
 	}
