@@ -10,7 +10,7 @@ namespace Model
 		public IMessage 
 	{
 	public:
-		virtual void Handle(const std::shared_ptr<GEntity>& unit, const ::google::protobuf::Message* request, const ::google::protobuf::Message* response) = 0;
+		virtual void Handle(const std::shared_ptr<GEntity>& unit, const char* data, const size_t len) = 0;
 
 	};
 
@@ -20,15 +20,21 @@ namespace Model
 		public IActorRpcMessageSystem<T>
 	{
 	public:
-		virtual void Handle(const std::shared_ptr<GEntity>& unit, const ::google::protobuf::Message* request, const ::google::protobuf::Message* response) override
+		virtual void Handle(const std::shared_ptr<GEntity>& unit, const char* data, const size_t len) override
 		{
-			Run(std::dynamic_pointer_cast<T>(unit), static_cast<Request*>(request), static_cast<Response*>(response));
+			Request request;
+			Response response;
+			if (!request.ParseFromArray(data, len))
+			{
+				throw std::exception("½âÎöÊý¾ÝÊ§°Ü£¡");
+			}
+			Run(std::dynamic_pointer_cast<T>(unit), request, response);
 		}
 
-		virtual void Run(const std::shared_ptr<T>& unit, const Request& request, const Response& response) = 0;
+		virtual void Run(const std::shared_ptr<T>& unit, Request& request, Response& response) = 0;
 
-		virtual const Type GetRequestType() { return typeof(Request); }
-		virtual const Type GetResponseType() { return typeof(Response); }
+		virtual const Type GetRequestType() const override { return typeof(Request); }
+		virtual const Type GetResponseType() const override { return typeof(Response); }
 	};
 
 }

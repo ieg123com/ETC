@@ -3,8 +3,8 @@
 #include "interface/ISupportTypeCreation.h"
 #include "google/protobuf/message.h"
 #include "type/type.h"
+#include "type/type_factory.h"
 #include "etc/kernel/Entity.h"
-#include "net/Session.h"
 
 
 namespace Model
@@ -15,8 +15,8 @@ namespace Model
 		public ISupportTypeCreation
 	{
 	public:
-		virtual const Type GetRequestType() = 0;
-		virtual const Type GetResponseType() = 0;
+		virtual const Type GetRequestType() const = 0;
+		virtual const Type GetResponseType() const = 0;
 	};
 
 
@@ -24,7 +24,7 @@ namespace Model
 		public IMessage
 	{
 	public:
-		virtual void Handle(const std::shared_ptr<Session>& session, ::google::protobuf::Message* message) = 0;
+		virtual void Handle(const std::shared_ptr<Session>& session, const char* data,const size_t len) = 0;
 		
 	};
 
@@ -34,15 +34,20 @@ namespace Model
 		public IMessageSystem
 	{
 	public:
-		virtual void Handle(const std::shared_ptr<Session>& session, ::google::protobuf::Message* message) override
+		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) override
 		{
-			Run(session, static<Request*>(message));
+			Request request;
+			if (!request.ParseFromArray(data, len))
+			{
+				throw std::exception("½âÎöÊý¾ÝÊ§°Ü£¡");
+			}
+			Run(session, request);
 		}
 
-		virtual void Run(const std::shared_ptr<Session>& session, const Request& message) = 0;
+		virtual void Run(const std::shared_ptr<Session>& session, Request& message) = 0;
 
-		virtual const Type GetRequestType() { return typeof(Request); }
-		virtual const Type GetResponseType() { return typeof(nullptr); }
+		virtual const Type GetRequestType() const override { return typeof(Request); }
+		virtual const Type GetResponseType() const override { return typeof(IMessage); }
 	};
 
 }

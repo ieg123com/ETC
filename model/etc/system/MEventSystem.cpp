@@ -144,10 +144,16 @@ namespace Model
 			}
 
 			// 消息事件
-			m_message_system.clear();
+			__message_system.clear();
 
-
-
+			auto m_attr = message_types.find(typeof(Message));
+			for (auto& attr : m_attr->second)
+			{
+				if (auto obj = TypeFactory::CreateInstance<IMessageSystem>(attr))
+				{
+					__message_system.push_back(obj);
+				}
+			}
 		}
 	}
 

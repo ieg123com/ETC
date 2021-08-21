@@ -15,4 +15,13 @@ message MessageHead	// IResponse
 
 
 
+message TestRequest
+{
+	int32 A = 1;
+	int32 B = 2;
+}
 
+message TestResponse
+{
+	int32 Sum = 1;
+}

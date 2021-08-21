@@ -1,6 +1,7 @@
 ﻿#include "NetworkComponent.h"
 #include "tcp/wepoll/WEpollService.h"
 #include "Session.h"
+#include "Service.h"
 #include "log/log.h"
 
 

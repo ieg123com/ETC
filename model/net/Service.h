@@ -2,6 +2,7 @@
 #include "etc.h"
 #include "NetDefines.h"
 #include "coroutine.h"
+#include <functional>
 
 
 

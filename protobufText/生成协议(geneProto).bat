@@ -1,1 +1,1 @@
-protoc.exe ./model_message.proto --cpp_out=../server/proto
+protoc.exe ./etc_message.proto --cpp_out=../model/proto

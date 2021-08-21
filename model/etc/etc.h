@@ -7,9 +7,14 @@
 #include "interface/IUpdateSystem.h"
 #include "interface/ILateUpdateSystem.h"
 #include "interface/IDestroySystem.h"
+#include "module/message/IActorMessage.h"
+#include "module/message/IActorRpcMessage.h"
+#include "module/message/IMessage.h"
+#include "module/message/IRpcMessage.h"
 
 #include "interface/ObjectSystemAttribute.h"
 #include "interface/EventSystemAttribute.h"
+#include "module/message/MessageSystemAttribute.h"
 
 #include "kernel/Object.h"
 #include "kernel/Entity.h"

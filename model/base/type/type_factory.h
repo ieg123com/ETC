@@ -90,4 +90,4 @@ namespace Model
 
 
 
-#define typeof(T)  Type(Model::g_type_factory->Get<T>())
+#define typeof(_T)  Type(Model::TypeFactory::Get<_T>())

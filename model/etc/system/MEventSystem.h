@@ -74,6 +74,11 @@ namespace Model
 	{
 		friend class ObjectDebug;
 	public:
+
+		// 消息系统事件
+		std::vector<std::shared_ptr<IMessageSystem>>				__message_system;
+
+
 		MEventSystem();
 
 		void Add(DLLType dll_type,std::shared_ptr<Reflection::Assembly> assembly);
@@ -184,7 +189,7 @@ namespace Model
 
 		// 执行自定义对象事件
 		template<typename ...Arg>
-		void Run(const std::shared_ptr<Object>& target_obj, const std::string& event_id, Arg...arg) {
+		void Run(const std::shared_ptr<Object>& target_obj, const int32_t event_id, Arg...arg) {
 			__ObjectEventOperationHandle();
 			
 			auto found_objevent = m_object_event.find(target_obj->GetObjectID());
@@ -225,8 +230,7 @@ namespace Model
 		std::unordered_map<DLLType, std::shared_ptr<Reflection::Assembly>>	m_assemblys;
 		std::unordered_map<Type, std::set<Type>>			m_types;
 
-		// 消息系统事件
-		std::vector<std::list<std::shared_ptr<IMessageSystem>>>		m_message_system;
+
 
 		// 对象系统事件
 		std::vector<std::list<std::shared_ptr<IAwakeSystem>>>		m_awake_system;

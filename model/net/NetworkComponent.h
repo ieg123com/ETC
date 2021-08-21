@@ -7,6 +7,8 @@
 
 namespace Model
 {
+	class Service;
+
 	// 网络组件
 	class NetworkComponent :
 		public Component
