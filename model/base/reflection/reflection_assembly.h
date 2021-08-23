@@ -24,6 +24,7 @@ namespace Model
 
 
 			void AddAttribute(std::shared_ptr<IBaseAttribute> base_attr) {
+				printf("attr type %s obj type %s\n", base_attr->GetAttrType().name(), base_attr->GetObjectType().name());
 				m_all_attr[base_attr->GetAttrType()].push_back(base_attr);
 			}
 

@@ -7,6 +7,7 @@
 #include "config/Config_Init.h"
 #include "module/message/NetInnerComponent.h"
 #include "module/message/NetOuterComponent.h"
+#include "module/message/MessageDispatcherComponent.h"
 #include "module/component/OptionComponent.h"
 #include "module/component/StartConfigComponent.h"
 #include "module/component/config/StartConfig.h"
@@ -57,6 +58,7 @@ int main(int argc,char* argv[])
 			case EAppType::Gate:
 				Game::World()->AddComponent<NetOuterComponent, const IPEndPoint&>(outer_config->Address);
 				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(inner_config->Address);
+				Game::World()->AddComponent<MessageDispatcherComponent>();
 				break;
 			case EAppType::Login:
 				break;
@@ -64,15 +66,19 @@ int main(int argc,char* argv[])
 				break;
 			case EAppType::Map:
 				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(inner_config->Address);
+				Game::World()->AddComponent<MessageDispatcherComponent>();
 				break;
 			case EAppType::Location:
 				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(inner_config->Address);
+				Game::World()->AddComponent<MessageDispatcherComponent>();
 				break;
 			case EAppType::Chat:
 				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(inner_config->Address);
+				Game::World()->AddComponent<MessageDispatcherComponent>();
 				break;
 			case EAppType::Social:
 				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(inner_config->Address);
+				Game::World()->AddComponent<MessageDispatcherComponent>();
 				break;
 			default:
 				throw std::exception("命令行参数 AppType 不正确");

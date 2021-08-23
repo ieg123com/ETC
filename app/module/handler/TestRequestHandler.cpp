@@ -8,7 +8,7 @@ namespace Hotfix
 	class TestRequestHandler : public MessageSystem<TestRequest>
 	{
 	public:
-		void Run(const std::shared_ptr<Session>& session, const TestRequest& request) override
+		virtual void Run(const std::shared_ptr<Session>& session, TestRequest& request) override
 		{
 
 

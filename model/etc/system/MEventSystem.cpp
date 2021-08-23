@@ -39,35 +39,37 @@ namespace Model
 		m_destroy_system.clear();
 
 		auto os_attr = m_types.find(typeof(ObjectSystem));
-		for(auto& attr : os_attr->second)
+		if (os_attr != m_types.end())
 		{
-			auto obj = TypeFactory::CreateInstance<IEventSystem>(attr);
-			if (auto sys = std::dynamic_pointer_cast<IAwakeSystem>(obj))
+			for (auto& attr : os_attr->second)
 			{
-				Add(m_awake_system, obj->GetType(), sys);
-			}
-			else if (auto sys = std::dynamic_pointer_cast<ILoadSystem>(obj))
-			{
-				Add(m_load_system, obj->GetType(), sys);
-			}
-			else if (auto sys = std::dynamic_pointer_cast<IStartSystem>(obj))
-			{
-				Add(m_start_system, obj->GetType(), sys);
-			}
-			else if (auto sys = std::dynamic_pointer_cast<IUpdateSystem>(obj))
-			{
-				Add(m_update_system, obj->GetType(), sys);
-			}
-			else if (auto sys = std::dynamic_pointer_cast<ILateUpdateSystem>(obj))
-			{
-				Add(m_late_update_system, obj->GetType(), sys);
-			}
-			else if (auto sys = std::dynamic_pointer_cast<IDestroySystem>(obj))
-			{
-				Add(m_destroy_system, obj->GetType(), sys);
+				auto obj = TypeFactory::CreateInstance<IEventSystem>(attr);
+				if (auto sys = std::dynamic_pointer_cast<IAwakeSystem>(obj))
+				{
+					Add(m_awake_system, obj->GetType(), sys);
+				}
+				else if (auto sys = std::dynamic_pointer_cast<ILoadSystem>(obj))
+				{
+					Add(m_load_system, obj->GetType(), sys);
+				}
+				else if (auto sys = std::dynamic_pointer_cast<IStartSystem>(obj))
+				{
+					Add(m_start_system, obj->GetType(), sys);
+				}
+				else if (auto sys = std::dynamic_pointer_cast<IUpdateSystem>(obj))
+				{
+					Add(m_update_system, obj->GetType(), sys);
+				}
+				else if (auto sys = std::dynamic_pointer_cast<ILateUpdateSystem>(obj))
+				{
+					Add(m_late_update_system, obj->GetType(), sys);
+				}
+				else if (auto sys = std::dynamic_pointer_cast<IDestroySystem>(obj))
+				{
+					Add(m_destroy_system, obj->GetType(), sys);
+				}
 			}
 		}
-
 
 
 		// 自定义事件系统
@@ -147,11 +149,14 @@ namespace Model
 			__message_system.clear();
 
 			auto m_attr = message_types.find(typeof(Message));
-			for (auto& attr : m_attr->second)
+			if (m_attr != message_types.end())
 			{
-				if (auto obj = TypeFactory::CreateInstance<IMessageSystem>(attr))
+				for (auto& attr : m_attr->second)
 				{
-					__message_system.push_back(obj);
+					if (auto obj = TypeFactory::CreateInstance<IMessageSystem>(attr))
+					{
+						__message_system.push_back(obj);
+					}
 				}
 			}
 		}
