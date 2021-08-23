@@ -1,6 +1,7 @@
 #include "etc/etc.h"
 #include "model/module/other/SystemEventType.h"
 #include "model/module/message/MessageDispatcherComponent.h"
+#include "model/proto/etc_message.pb.h"
 
 
 using namespace Model;
@@ -15,7 +16,8 @@ namespace Hotfix
 
 			LOG_INFO("Register message event");
 
-
+			dis_msg->RegisterMessage<TestRequest>(100, EAppType::Map | EAppType::Chat);
+			dis_msg->RegisterMessage<TestResponse>(100, EAppType::Map | EAppType::Chat);
 
 
 

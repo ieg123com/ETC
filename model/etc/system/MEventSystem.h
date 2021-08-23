@@ -183,6 +183,9 @@ namespace Model
 				{
 					((IEvent<Arg...>*)(all_event_range.first->second.get()))->Handle(arg...);
 				}
+				else {
+					throw std::exception("事件参数不同");
+				}
 				++(all_event_range.first);
 			}
 		}

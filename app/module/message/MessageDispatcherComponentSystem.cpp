@@ -25,7 +25,7 @@ namespace Hotfix
 		{
 			LOG_INFO("MessageDispatcherComponent Load");
 			MessageDispatcherComponent::Instance = self.get();
-			Game::Event().Run(ESystemEventType::StartRegMessage);
+			Game::Event().Run<const std::shared_ptr<MessageDispatcherComponent>&>(ESystemEventType::StartRegMessage, self);
 
 		}
 	};

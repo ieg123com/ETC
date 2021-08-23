@@ -66,7 +66,7 @@ FILE(GLOB MODULE_HANDLER_FILES "./module/handler/*.cpp" "./module/handler/*.h")
 # init
 set(MODULE_INIT_FILES "")
 FILE(GLOB MODULE_INIT_FILES "./module/init/*.cpp" "./module/init/*.h")
-
+ 
 
 source_group(module						FILES ${MODULE_FILES})
 source_group(module\\message			FILES ${MODULE_MESSAGE_FILES})

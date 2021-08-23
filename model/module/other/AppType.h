@@ -3,7 +3,7 @@
 
 namespace Model
 {
-	enum class EAppType : unsigned int
+	enum EAppType
 	{
 		None = 0,
 		Watcher = 1 << 0,
