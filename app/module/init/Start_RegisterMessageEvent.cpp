@@ -17,9 +17,9 @@ namespace Hotfix
 			LOG_INFO("Register message event");
 
 			dis_msg->RegisterMessage<TestRequest>(100, EAppType::Map | EAppType::Chat);
-			dis_msg->RegisterMessage<TestResponse>(100, EAppType::Map | EAppType::Chat);
+			dis_msg->RegisterMessage<TestResponse>(101, EAppType::Map | EAppType::Chat);
 
-
+			LOG_INFO("Register message event");
 
 		}
 	};

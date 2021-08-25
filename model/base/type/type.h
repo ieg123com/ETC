@@ -112,6 +112,10 @@ public:
 		return m_info->name.c_str();
 	}
 
+	const char* class_name()const {
+		return m_info->name.c_str()+6;
+	}
+
 	const char* row_name()const{
 		return m_info->raw_name.c_str();
 	}
