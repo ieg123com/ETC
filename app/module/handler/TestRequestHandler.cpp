@@ -1,5 +1,6 @@
 #include "etc/etc.h"
 #include "model/proto/etc_message.pb.h"
+#include "model/module/other/AppType.h"
 
 using namespace Model;
 
@@ -15,7 +16,7 @@ namespace Hotfix
 
 		}
 	};
-	REF(TestRequestHandler, Message);
+	REF(TestRequestHandler, Message(EAppType::Map));
 
 
 }

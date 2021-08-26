@@ -1,6 +1,7 @@
 #include "TChannel.h"
 #include "Service.h"
 #include "module/message/MessageDefines.h"
+#include "module/message/MessageDispatcherComponent.h"
 
 
 namespace Model
@@ -37,9 +38,12 @@ namespace Model
 		}
 
 		// 消息解析完成
-		auto pack = m_memory_split.Data;
-		stMessageHead head;
-		memmove(&head, pack.data(), sizeof(head));
+
+		auto pack = std::make_shared<std::string>(std::move(m_memory_split.Data));
+		auto session = GetHost<Session>();
+		m_channel << std::move([session, pack] {
+			MessageDispatcherComponent::Instance->Handle(session, pack->data(), pack->size());
+			});
 	}
 
 	void TChannel::Send(const char* data, const size_t len)

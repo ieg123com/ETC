@@ -116,7 +116,7 @@ namespace Model
 		auto channel = ObjectFactory::Create<TChannel, const std::shared_ptr<Service>&>(Get<Service>());
 		channel->Address = address;
 		channel->SessionId = m_listened_socket;
-		ctx->session->__channel = channel;
+		ctx->session->SetChannel(channel);
 
 		__AddSocketCtx(m_listened_socket, ctx);
 
@@ -421,7 +421,7 @@ namespace Model
 		auto channel = ObjectFactory::Create<TChannel, const std::shared_ptr<Service>&>(Get<Service>());
 		channel->Address.Ip = std::move(client_ip);
 		channel->SessionId = conn_sock;
-		ctx->session->__channel = channel;
+		ctx->session->SetChannel(channel);
 
 		if (!__AddSocketCtx(conn_sock, ctx))
 		{

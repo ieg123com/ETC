@@ -20,6 +20,8 @@ namespace Model
 
 		const IPEndPoint& Address()const;
 
+		void SetChannel(std::shared_ptr<IChannel> channel);
+
 		/** @brief 消息到达*/
 		void OnRead(const char* data, const size_t len);
 

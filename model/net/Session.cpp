@@ -40,6 +40,12 @@ namespace Model
 		return (__channel) ? __channel->Address : address_null;
 	}
 
+	void Session::SetChannel(std::shared_ptr<IChannel> channel)
+	{
+		channel->m_host = Self();
+		__channel = channel;
+	}
+
 	void Session::Awake()
 	{
 		RpcId = 0;

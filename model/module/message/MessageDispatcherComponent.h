@@ -1,10 +1,12 @@
 #pragma once
 #include "etc/etc.h"
 #include "module/other/AppType.h"
+#include "module/other/MessageType.h"
 
 namespace Model
 {
 	class IMessage;
+	class Session;
 	// 消息调度组件
 	class MessageDispatcherComponent:
 		public Component
@@ -12,16 +14,20 @@ namespace Model
 		// 消息状态
 		struct stMessageState
 		{
+			
+			int32_t		app_type;
 			// 消息类型
-			int32_t	msg_type;
+			EMessageType	msg_type;
 			// 回调
 			std::shared_ptr<IMessage> call_back;
 			stMessageState() {
-				msg_type = EAppType::None;
+				app_type = EAppType::None;
+				msg_type = EMessageType::Message;
 			}
 
 			void clear() {
-				msg_type = EAppType::None;
+				app_type = EAppType::None;
+				msg_type = EMessageType::Message;
 				call_back.reset();
 			}
 		};
@@ -38,7 +44,7 @@ namespace Model
 		void Clear();
 
 		template<typename T>
-		void RegisterMessage(const uint16_t msg_id, const int32_t msg_type){
+		void RegisterMessage(const uint16_t msg_id, const EMessageType msg_type){
 
 			//static_assert(std::is_base_of(::google::protobuf::Message, T)::value,
 			//	"The registered message must inherit '::google::protobuf::Message'");
@@ -48,7 +54,7 @@ namespace Model
 			__m_message[msg_id].msg_type = msg_type;
 		}
 
-		void Handle(const uint16_t msg_id, const char* data, const char* len);
+		void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len);
 
 
 
