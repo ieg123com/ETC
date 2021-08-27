@@ -76,7 +76,7 @@ namespace Model
 	public:
 
 		// 消息系统事件
-		std::vector<std::shared_ptr<IMessageSystem>>				__message_system;
+		std::vector<std::shared_ptr<IMessage>>				__message_system;
 
 
 		MEventSystem();

@@ -2,6 +2,7 @@
 #include "ObjectPool.h"
 #include "Game.h"
 #include "GlobalData.h"
+#include "IdGenerator.h"
 #include <atomic>
 
 namespace Model
@@ -48,6 +49,6 @@ namespace Model
 
 	void Object::RefreshObjectID()
 	{
-		m_obj_id = GlobalData::GetObjectID();
+		m_obj_id = IdGenerator::Instance->GenerateObjectID();
 	}
 }

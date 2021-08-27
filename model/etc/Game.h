@@ -8,6 +8,7 @@
 #include "system/MEventSystem.h"
 #include "kernel/ObjectPool.h"
 #include "entity/World.h"
+#include "module/component/Options.h"
 
 
 namespace Model
@@ -26,8 +27,11 @@ namespace Model
 
 		MEventSystem m_Event;
 
+		Options	m_Options;
+
 		std::atomic<uint64_t> m_object_count;
 		std::atomic<uint64_t> m_item_count;
+
 
 		bool m_Stopping;
 
@@ -44,6 +48,7 @@ namespace Model
 		static inline TimeSystem& Time() { return Model::g_game->m_Time; }
 		static inline ObjectPool& ObjPool() { return Model::g_game->m_ObjPool; }
 		static inline MEventSystem& Event() { return Model::g_game->m_Event; }
+		static inline Options& Options() { return Model::g_game->m_Options; }
 		static inline std::atomic<uint64_t>& object_count() { return Model::g_game->m_object_count; }
 		static inline std::atomic<uint64_t>& item_count() { return Model::g_game->m_item_count; }
 		static inline bool& Stopping() { return Model::g_game->m_Stopping; }

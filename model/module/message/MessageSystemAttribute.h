@@ -10,7 +10,7 @@ namespace Model
 	public:
 		Message(const int32_t app_type)
 		{
-
+			appType = app_type;
 		}
 
 		int32_t		appType;

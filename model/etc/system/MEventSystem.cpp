@@ -132,16 +132,20 @@ namespace Model
 		}
 
 		{
-			std::unordered_map<Type, std::set<Type>>			message_types;
+			std::unordered_map<Type, std::set<std::pair<Type,int32_t>>>			message_types;
 			for (auto& item : m_assemblys)
 			{
 				auto all_attr = item.second->GetType<Message>();
 				for (auto& attr : all_attr)
 				{
-					if (message_types[attr->GetAttrType()].insert(attr->GetObjectType()).second)
+					if (auto message = std::dynamic_pointer_cast<Message>(attr))
 					{
-						LOG_WARN("message type {}", attr->GetObjectType().name());
+						if (message_types[attr->GetAttrType()].emplace(attr->GetObjectType(),message->appType).second)
+						{
+							LOG_WARN("message type {}", attr->GetObjectType().name());
+						}
 					}
+					
 				}
 			}
 
@@ -153,7 +157,7 @@ namespace Model
 			{
 				for (auto& attr : m_attr->second)
 				{
-					if (auto obj = TypeFactory::CreateInstance<IMessageSystem>(attr))
+					if (auto obj = TypeFactory::CreateInstance<IMessage>(attr.first))
 					{
 						__message_system.push_back(obj);
 					}

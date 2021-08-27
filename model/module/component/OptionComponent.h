@@ -1,16 +1,11 @@
 #pragma once
 #include "etc/etc.h"
-#include "module/other/AppType.h"
+#include "Options.h"
 
 namespace Model
 {
 
-	class Options
-	{
-	public:
-		int32_t	AppId;
-		EAppType AppType;
-	};
+
 
 
 	class OptionComponent :

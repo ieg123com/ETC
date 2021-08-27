@@ -5,22 +5,21 @@
 namespace Model
 {
 
-	template<typename T>
 	class IActorRpcMessageSystem :
 		public IMessage 
 	{
 	public:
-		virtual void Handle(const std::shared_ptr<GEntity>& unit, const char* data, const size_t len) = 0;
+		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) = 0;
 
 	};
 
 
 	template<typename T,typename Request,typename Response>
 	class ActorRpcMessageSystem :
-		public IActorRpcMessageSystem<T>
+		public IActorRpcMessageSystem
 	{
 	public:
-		virtual void Handle(const std::shared_ptr<GEntity>& unit, const char* data, const size_t len) override
+		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) override
 		{
 			Request request;
 			Response response;

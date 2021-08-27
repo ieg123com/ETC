@@ -33,13 +33,15 @@ namespace Hotfix
 				auto& message_system = Game::Event().__message_system;
 				for (auto& item : message_system)
 				{
-					auto found_type_req = self->__m_message_id.find(item->GetRequestType());
-					if (found_type_req == self->__m_message_id.end())
+					// 请求消息
+					auto found_type_req = self->__m_message_type.find(item->GetRequestType());
+					if (found_type_req == self->__m_message_type.end())
 					{
 						LOG_WARN("没有注册的消息类型 {}", item->GetRequestType().class_name());
 						continue;
 					}
-					self->__m_message[found_type_req->second].call_back = item;
+					found_type_req->second.app_type = item->appType;
+					self->__m_message[found_type_req->second.msg_id].call_back = item;
 				}
 			}
 		}

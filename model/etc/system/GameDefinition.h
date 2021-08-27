@@ -8,3 +8,5 @@ typedef long long ObjectID;
 
 // 使用这个，没法查找引用
 //typedef EntityEventType EventType;
+
+

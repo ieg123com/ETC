@@ -17,6 +17,7 @@ namespace Model
 	public:
 		virtual const Type GetRequestType() const = 0;
 		virtual const Type GetResponseType() const = 0;
+		int32_t appType = 0;
 	};
 
 

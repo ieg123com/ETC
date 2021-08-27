@@ -7,20 +7,19 @@ namespace Model
 {
 	class Unit;
 
-	template<typename T>
 	class IActorMessageSystem :
 		public IMessage 
 	{
 	public:
-		virtual void Handle(const std::shared_ptr<GEntity>& unit, const char* data, const size_t len) = 0;
+		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) = 0;
 	};
 
 	template<typename T,typename Request>
 	class ActorMessageSystem :
-		public IActorMessageSystem<T>
+		public IActorMessageSystem
 	{
 	public:
-		virtual void Handle(const std::shared_ptr<GEntity>& unit, const char* data, const size_t len) override
+		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) override
 		{
 			Request request;
 			if (!request.ParseFromArray(data, len))

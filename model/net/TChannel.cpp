@@ -1,5 +1,6 @@
 #include "TChannel.h"
 #include "Service.h"
+#include "Session.h"
 #include "module/message/MessageDefines.h"
 #include "module/message/MessageDispatcherComponent.h"
 
