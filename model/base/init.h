@@ -13,20 +13,45 @@ using namespace Model::Reflection;
 
 namespace Model
 {
-	void Init()
+	void ParseArguments(int argc, char* argv[])
+	{
+		for (int i = 0; i < argc; ++i)
+		{
+			std::string arg = argv[i];
+			size_t pos = arg.find('=');
+			if (pos == std::string::npos)continue;
+			std::string key = arg.substr(2, pos - 2);
+			std::string value = arg.substr(pos + 1, arg.size() - pos - 1);
+			LOG_WARN("key {} value {}", key, value);
+			if (key == "AppId")
+			{
+				Game::Options().AppId = std::to<int32_t>(value);
+			}
+			if (key == "AppType")
+			{
+				Game::Options().AppType = ToAppType(value);
+			}
+		}
+	}
+
+	void Init(int argc, char* argv[])
 	{
 		g_type_factory = new TypeFactory();
 		g_singleton_factory = new ISingletonFactory();
-		g_global_data = new GlobalData();
-		g_game = new GlobalGame();
+		GlobalData::Instance = new GlobalData();
+		GlobalGame::Instance = new GlobalGame();
 		IdGenerator::Instance = new IdGenerator();
-		g_game->Init();
+		GlobalGame::Instance->Init();
+
+		ParseArguments(argc, argv);
+		LOG_INFO("========== ParseArguments ==========");
+
 
 		DomainTask::Instance().RunAll();
 
 		Game::Event().Add(DLLType::Model, Assembly::GetSharedPtr());
 
-		g_game->m_World = ObjectFactory::Create<World>();
+		GlobalGame::Instance->m_World = ObjectFactory::Create<World>();
 
 	}
 
@@ -35,8 +60,8 @@ namespace Model
 		stGlobalVar global;
 		global.type_factory = g_type_factory;
 		global.single_factory = g_singleton_factory;
-		global.global_data = g_global_data;
-		global.game = g_game;
+		global.global_data = GlobalData::Instance;
+		global.game = GlobalGame::Instance;
 		global.id_generator = IdGenerator::Instance;
 		return global;
 	}
@@ -45,8 +70,8 @@ namespace Model
 	{
 		g_type_factory = global.type_factory;
 		g_singleton_factory = global.single_factory;
-		g_global_data = global.global_data;
-		g_game = global.game;
+		GlobalData::Instance = global.global_data;
+		GlobalGame::Instance = global.game;
 		IdGenerator::Instance = global.id_generator;
 	}
 }

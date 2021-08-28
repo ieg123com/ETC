@@ -5,6 +5,8 @@
 #include "etc/etc.h"
 #include "net/NetworkComponent.h"
 #include "module/memory/MemorySplit.h"
+#include "model/module/message/NetInnerComponent.h"
+#include "model/module/message/NetOuterComponent.h"
 #include <stdio.h>
 //#include "CircularBuffer.h"
 
@@ -25,7 +27,7 @@ std::shared_ptr<Scene> g_scene;
 
 void network_server()
 {
-	if (g_scene->AddComponent<NetworkComponent>()->Listen(81))
+	if (g_scene->AddComponent<NetOuterComponent>()->Listen(80))
 	{
 		LOG_INFO("开启成功");
 	}
@@ -35,19 +37,15 @@ void network_server()
 }
 
 
-class ClientNetworkComponent : public NetworkComponent
-{
-
-};
 
 void network_client()
 {
 	co_sleep(1000);
-	auto client_net = g_scene->AddComponent<ClientNetworkComponent>();
-
+	auto client_net = g_scene->AddComponent<NetInnerComponent>();
+	client_net->Connect("127.0.0.1:80")->Send("Holle this Client!", 19);
 	for (int i = 0; i < 10; ++i)
 	{
-		client_net->Connect("127.0.0.1:80");
+		client_net->Connect("127.0.0.1:80")->Send("Holle this Client!", 19);
 	}
 
 	
@@ -58,6 +56,19 @@ void network_client()
 	
 }
 
+
+void network()
+{
+	if (g_scene->AddComponent<NetOuterComponent,const IPEndPoint&>("127.0.0.1:80"))
+	{
+		LOG_INFO("开启成功");
+	}
+	else {
+		LOG_ERROR("失败");
+	}
+	auto client_net = g_scene->AddComponent<NetInnerComponent>();
+	client_net->Connect("127.0.0.1:80")->Send("Holle this Client!", 19);
+}
 // std::vector<co::Channel<std::string>>	g_channel;
 // typedef co::ConditionVariableAnyT<void*> cond_t;
 // cond_t g_cond;
@@ -157,14 +168,15 @@ void channel_test()
 }
 
 
-int main()
+int main(int argc, char* argv[])
 {
-	Model::Init();
+	Model::Init(argc,argv);
 	g_scene = ObjectFactory::Create<Scene>();
-	//go network_server;
-	//go network_client;
+// 	go network_server;
+// 	go network_client;
+	go network;
 	//go echo_server;
-	go test;
+	//go test;
 	//go channel_test;
 	//go client;
 

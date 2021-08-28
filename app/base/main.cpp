@@ -18,26 +18,7 @@
 
 using namespace Model;
 
-void ParseArguments(int argc, char* argv[])
-{
-	for (int i = 0; i < argc; ++i)
-	{
-		std::string arg = argv[i];
-		size_t pos = arg.find('=');
-		if (pos == std::string::npos)continue;
-		std::string key = arg.substr(2, pos - 2);
-		std::string value = arg.substr(pos + 1, arg.size() - pos - 1);
-		LOG_WARN("key {} value {}", key, value);
-		if (key == "AppId")
-		{
-			Game::Options().AppId = std::to<int32_t>(value);
-		}
-		if (key == "AppType")
-		{
-			Game::Options().AppType = ToAppType(value);
-		}
-	}
-}
+
 
 
 
@@ -46,16 +27,15 @@ int main(int argc,char* argv[])
 
 
 	go [=]{
-		Model::Init();
+		Model::Init(argc,argv);
 	{
 		//Model::Hotfix hotfix;
 		try
 		{
-			LOG_INFO("==============================");
 			//hotfix.Load("hotfix.dll");
 			//hotfix.Init(Model::GetGlobalVar());
 
-			ParseArguments(argc, argv);
+			LOG_INFO("==============================");
 			LOG_INFO("A");
 			Game::World()->AddComponent<ConfigComponent>();
 			printf("%p\n", ConfigComponent::Instance);

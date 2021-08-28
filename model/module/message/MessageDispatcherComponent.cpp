@@ -26,7 +26,7 @@ namespace Model
 	{
 		uint16_t msg_id = 0;
 		if (len < sizeof(msg_id))
-			throw std::exception(std::format("数据解析错误，因为没法确定消息id！(session->Address() = '%s')",session->Address().ToString().c_str()).c_str());
+			throw std::exception(std::format("数据解析错误，因为没法确定消息id！(session->Address() = '%s')",session->Address.ToString().c_str()).c_str());
 
 
 		auto& appType = Game::Options().AppType;

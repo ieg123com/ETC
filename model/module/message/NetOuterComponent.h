@@ -10,6 +10,12 @@ namespace Model
 	{
 	public:
 
+		void Destroy();
 
+
+	protected:
+		virtual void OnConnectComplete(const std::shared_ptr<Session>& session) override;
+
+		virtual void OnAccept(const std::shared_ptr<Session>& session) override;
 	};
 }

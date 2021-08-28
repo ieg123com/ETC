@@ -3,7 +3,7 @@
 
 namespace Model
 {
-	GlobalData *g_global_data = nullptr;
+	GlobalData* GlobalData::Instance = nullptr;
 
 	GlobalData::GlobalData()
 	{

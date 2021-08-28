@@ -6,6 +6,7 @@
 namespace Model
 {
 	class IChannel;
+	class Service;
 
 	class Session :
 		public GEntity
@@ -14,13 +15,13 @@ namespace Model
 
 		int32_t		RpcId;
 
+		SessionID	SessionId;
+
+		IPEndPoint	Address;
+		/** @brief 网络服务*/
+		std::shared_ptr<Service>	__service;
+		// 数据处理
 		std::shared_ptr<IChannel>	__channel;
-
-		const SessionID& SessionId()const;
-
-		const IPEndPoint& Address()const;
-
-		void SetChannel(std::shared_ptr<IChannel> channel);
 
 		/** @brief 消息到达*/
 		void OnRead(const char* data, const size_t len);
@@ -30,7 +31,7 @@ namespace Model
 
 	public:
 
-		void Awake();
+		void Awake(const std::shared_ptr<Service>& service);
 
 		void Destroy();
 

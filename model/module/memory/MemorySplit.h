@@ -21,6 +21,7 @@ namespace Model
 
 		// 添加要分割的数据
 		void AddData(const char* data, const size_t len);
+		void Write(const char* data, const size_t len);
 
 		bool Unpack();
 

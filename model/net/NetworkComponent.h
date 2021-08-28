@@ -4,6 +4,7 @@
 
 
 
+class IMessageDispatcher;
 
 namespace Model
 {
@@ -14,6 +15,8 @@ namespace Model
 		public Component
 	{
 	public:
+		IMessageDispatcher* __MessageDispatcher;
+
 
 
 		bool Listen(const IPEndPoint& address);
@@ -31,6 +34,9 @@ namespace Model
 		virtual void OnDisconnect(const std::shared_ptr<Session>& session);
 
 
+
+		void Destroy();
+
 	private:
 
 		bool __AddSession(const std::shared_ptr<Session>& session);
@@ -40,7 +46,8 @@ namespace Model
 
 	protected:
 
-		std::shared_ptr<Service>	m_service;
+		std::shared_ptr<Service>	m_sservice;
+		//std::shared_ptr<>
 
 		// 全部连接
 		std::unordered_map<SessionID, std::shared_ptr<Session>>	m_sessions;

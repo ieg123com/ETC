@@ -11,6 +11,7 @@ namespace Model
 		public IChannel
 	{
 	public:
+		TChannel();
 
 		virtual void OnRead(const char* data, const size_t len)override;
 
@@ -18,7 +19,7 @@ namespace Model
 
 		virtual void Start()override;
 
-		void Awake(const std::shared_ptr<Service>& service);
+		void Awake();
 
 		void Destroy();
 
@@ -29,6 +30,7 @@ namespace Model
 
 	private:
 
+		std::shared_ptr<Session>	m_session;
 
 		co::Channel<std::function<void()>>	m_channel;
 

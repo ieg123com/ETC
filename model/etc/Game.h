@@ -16,6 +16,7 @@ namespace Model
 	class GlobalGame
 	{
 	public:
+		static GlobalGame* Instance;
 		
 		std::shared_ptr<World> m_World;
 
@@ -38,20 +39,18 @@ namespace Model
 		void Init();
 	};
 
-	extern GlobalGame* g_game;
-
 	class Game
 	{
 	public:
-		static inline std::shared_ptr<World> World() { return Model::g_game->m_World; }
-		static inline GameSystem& System() { return Model::g_game->m_System; }
-		static inline TimeSystem& Time() { return Model::g_game->m_Time; }
-		static inline ObjectPool& ObjPool() { return Model::g_game->m_ObjPool; }
-		static inline MEventSystem& Event() { return Model::g_game->m_Event; }
-		static inline Options& Options() { return Model::g_game->m_Options; }
-		static inline std::atomic<uint64_t>& object_count() { return Model::g_game->m_object_count; }
-		static inline std::atomic<uint64_t>& item_count() { return Model::g_game->m_item_count; }
-		static inline bool& Stopping() { return Model::g_game->m_Stopping; }
+		static inline std::shared_ptr<World> World() { return Model::GlobalGame::Instance->m_World; }
+		static inline GameSystem& System() { return Model::GlobalGame::Instance->m_System; }
+		static inline TimeSystem& Time() { return Model::GlobalGame::Instance->m_Time; }
+		static inline ObjectPool& ObjPool() { return Model::GlobalGame::Instance->m_ObjPool; }
+		static inline MEventSystem& Event() { return Model::GlobalGame::Instance->m_Event; }
+		static inline Options& Options() { return Model::GlobalGame::Instance->m_Options; }
+		static inline std::atomic<uint64_t>& object_count() { return Model::GlobalGame::Instance->m_object_count; }
+		static inline std::atomic<uint64_t>& item_count() { return Model::GlobalGame::Instance->m_item_count; }
+		static inline bool& Stopping() { return Model::GlobalGame::Instance->m_Stopping; }
 	};
 }
 

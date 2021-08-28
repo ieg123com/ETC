@@ -1,30 +1,18 @@
 #include "IChannel.h"
 #include "Service.h"
+#include "Session.h"
 
 namespace Model
 {
-	void IChannel::Disconnect()
+
+	void IChannel::Awake()
 	{
-		if (__service)
-		{
-			if (__service->GetNetworkType() == NetworkType::Server)
-			{
-				// 服务类型为服务器
-				__service->Close(SessionId);
-				__service.reset();
-			}
-			else if (__service->GetNetworkType() == NetworkType::Client)
-			{
-				// 服务类型为客户端
-				__service->Dispose();
-				__service.reset();
-			}
-		}
+		__session = GetHost<Session>();
+		__session->__channel = Get<IChannel>();
 	}
 
-	void IChannel::Awake(const std::shared_ptr<Service>& service)
+	void IChannel::Destroy()
 	{
-		__service = service;
+		__session.reset();
 	}
-
 }

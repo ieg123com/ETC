@@ -11,12 +11,7 @@ namespace Model
 	{
 	public:
 
-		SessionID	SessionId;
-
-		IPEndPoint	Address;
-
-		/** @brief ÍøÂç·þÎñ*/
-		std::shared_ptr<Service>	__service;
+		std::shared_ptr<Session>	__session;
 
 		virtual void OnRead(const char* data, const size_t len) = 0;
 
@@ -24,10 +19,10 @@ namespace Model
 
 		virtual void Start() = 0;
 
-		virtual void Disconnect();
 
-		void Awake(const std::shared_ptr<Service>& service);
+		void Awake();
 
+		void Destroy();
 
 	};
 }

@@ -5,6 +5,7 @@
 
 namespace Model
 {
+	GlobalGame* GlobalGame::Instance = nullptr;
 
 	void GlobalGame::Init()
 	{
@@ -13,7 +14,6 @@ namespace Model
 		m_Stopping = false;
 	}
 
-	GlobalGame* g_game = nullptr;
 }
 
 

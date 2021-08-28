@@ -1,4 +1,5 @@
 #include "NetInnerComponent.h"
+#include "net/TChannel.h"
 
 
 
@@ -20,10 +21,27 @@ namespace Model
 		return nullptr;
 	}
 
+	void NetInnerComponent::Destroy()
+	{
+		NetworkComponent::Destroy();
+	}
+
+	void NetInnerComponent::OnConnectComplete(const std::shared_ptr<Session>& session)
+	{
+		session->__channel = ObjectFactory::CreateWithHost<TChannel>(session);
+		NetworkComponent::OnConnectComplete(session);
+	}
+
+	void NetInnerComponent::OnAccept(const std::shared_ptr<Session>& session)
+	{
+		session->__channel = ObjectFactory::CreateWithHost<TChannel>(session);
+		NetworkComponent::OnAccept(session);
+	}
+
 	void NetInnerComponent::OnDisconnect(const std::shared_ptr<Session>& session)
 	{
 		NetworkComponent::OnDisconnect(session);
-		__m_address_sessions.erase(session->Address());
+		__m_address_sessions.erase(session->Address);
 	}
 
 

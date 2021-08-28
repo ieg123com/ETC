@@ -112,15 +112,20 @@ namespace Model
 
 		// 创建新会话
 		stSocketContext* ctx = new stSocketContext();
-		ctx->session = ObjectFactory::Create<Session>();
-		auto channel = ObjectFactory::Create<TChannel, const std::shared_ptr<Service>&>(Get<Service>());
-		channel->Address = address;
-		channel->SessionId = m_listened_socket;
-		ctx->session->SetChannel(channel);
+		ctx->session = ObjectFactory::Create<Session, const std::shared_ptr<Service>&>(Get<Service>());
+		ctx->session->Address = address;
+		ctx->session->SessionId = m_listened_socket;
 
 		__AddSocketCtx(m_listened_socket, ctx);
 
 		m_epoll_status = EpollStatus::EPOLL_RUNNING;
+
+
+		if (OnConnectComplete)
+		{
+			OnConnectComplete(ctx->session);
+		}
+
 		go std::bind(&WEpollService::StartClientEventLoop, this, ctx->session);
 
 		return ctx->session;
@@ -146,11 +151,8 @@ namespace Model
 		if (m_network_type == NetworkType::Server)
 		{
 			auto ctx = __GetSocketCtx(fd);
-			if (!ctx)
-			{
-				LOG_ERROR("close fd failed! fd:{}", fd);
-				return;
-			}
+			if (!ctx)return;
+
 			__RemoveSocketCtx(fd);
 
 			OnEpollCloseEvent(ctx);
@@ -240,7 +242,7 @@ namespace Model
 	int WEpollService::OnEpollReadableEvent(stSocketContext* ctx, epoll_event& epoll_event)
 	{
 
-		int fd = ctx->session->SessionId();
+		int fd = ctx->session->SessionId;
 
 		static char read_buffer[READ_BUFFER_SIZE];
 		//memset(read_buffer, 0, READ_BUFFER_SIZE);
@@ -417,11 +419,9 @@ namespace Model
 
 		// 创建新会话
 		stSocketContext* ctx = new stSocketContext();
-		ctx->session = ObjectFactory::Create<Session>();
-		auto channel = ObjectFactory::Create<TChannel, const std::shared_ptr<Service>&>(Get<Service>());
-		channel->Address.Ip = std::move(client_ip);
-		channel->SessionId = conn_sock;
-		ctx->session->SetChannel(channel);
+		ctx->session = ObjectFactory::Create<Session, const std::shared_ptr<Service>&>(Get<Service>());
+		ctx->session->Address.Ip = std::move(client_ip);
+		ctx->session->SessionId = conn_sock;
 
 		if (!__AddSocketCtx(conn_sock, ctx))
 		{
@@ -453,7 +453,7 @@ namespace Model
 	void WEpollService::HandleEpollReadableEvent(epoll_event& event)
 	{
 		auto ctx = (stSocketContext*)event.data.ptr;
-		int fd = ctx->session->SessionId();
+		int fd = ctx->session->SessionId;
 
 
 		int ret = OnEpollReadableEvent(ctx, event);
@@ -484,7 +484,7 @@ namespace Model
 	void WEpollService::HandleWriteableEvent(SessionID& epollfd, epoll_event& event)
 	{
 		auto ctx = (stSocketContext*)event.data.ptr;
-		int fd = ctx->session->SessionId();
+		int fd = ctx->session->SessionId;
 		//LOG_DEBUG("start write data");
 
 		int ret = OnEpollWriteableEvent(ctx);
@@ -651,11 +651,6 @@ namespace Model
 #endif
 
 
-		if (OnConnectComplete)
-		{
-			OnConnectComplete(session);
-		}
-
 		while (m_epoll_status == EpollStatus::EPOLL_RUNNING)
 		{
 			fd_set fd;
@@ -758,7 +753,7 @@ namespace Model
 		}
 
 		stSocketContext* ctx = (stSocketContext*)epoll_event.data.ptr;
-		SessionID fd = ctx->session->SessionId();
+		SessionID fd = ctx->session->SessionId;
 		Close(fd);
 
 	}

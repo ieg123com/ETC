@@ -2,6 +2,7 @@
 #include <memory>
 
 
+class IdGenerator;
 
 namespace Model
 {
@@ -15,7 +16,7 @@ namespace Model
 		class ISingletonFactory*	single_factory;
 		class GlobalGame*			game;
 		class GlobalData*			global_data;
-		class IdGenerator* id_generator;
+		IdGenerator*				id_generator;
 	};
 
 

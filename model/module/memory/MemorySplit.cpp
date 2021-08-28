@@ -17,6 +17,12 @@ namespace Model
 		__AddData(data, len);
 	}
 
+	void MemorySplit::Write(const char* data, const size_t len)
+	{
+		m_recv_buffer.Write(data, len);
+	}
+
+
 	bool MemorySplit::Unpack()
 	{
 		return __Unpack();
