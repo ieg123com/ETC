@@ -7,6 +7,7 @@ namespace Model
 {
 	class IChannel;
 	class Service;
+	class NetworkComponent;
 
 	class Session :
 		public GEntity
@@ -22,6 +23,8 @@ namespace Model
 		std::shared_ptr<Service>	__service;
 		// 数据处理
 		std::shared_ptr<IChannel>	__channel;
+
+		std::shared_ptr<NetworkComponent>	__networkcomponent;
 
 		/** @brief 消息到达*/
 		void OnRead(const char* data, const size_t len);

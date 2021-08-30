@@ -19,9 +19,34 @@ message TestRequest
 {
 	int32 A = 1;
 	int32 B = 2;
+	
+	int32 RpcId = 90;
 }
 
 message TestResponse
 {
 	int32 Sum = 1;
+	
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
+
+
+message ActorTestRequest
+{
+	int32 A = 1;
+	int32 B = 2;
+	
+	int32 RpcId = 90;
+	int64 ActorId = 93;
+}
+
+message ActorTestResponse
+{
+	int32 Sum = 1;
+	
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
 }

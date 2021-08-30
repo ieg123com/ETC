@@ -3,7 +3,10 @@
 #include "Session.h"
 #include "module/message/MessageDefines.h"
 #include "module/message/MessageDispatcherComponent.h"
+#include "module/message/IMessageDispatcher.h"
 #include "etc/etc_config.h"
+#include "net/NetworkComponent.h"
+
 
 
 namespace Model
@@ -48,8 +51,7 @@ namespace Model
 		auto pack = std::make_shared<std::string>(std::move(m_memory_split.Data));
 		auto session = GetHost<Session>();
 		if (!m_channel.TryPush(std::move([session, pack] {
-			LOG_INFO("ip:{}\ndata:{}", session->Address.ToString(), pack->c_str());
-			//MessageDispatcherComponent::Instance->Handle(session, pack->data(), pack->size());
+			session->__networkcomponent->__MessageDispatcher->Dispatch(session, pack->data(), pack->size());
 			})))
 		{
 			// 缓存队列容量已满,当前会话发生了堵塞

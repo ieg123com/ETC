@@ -71,6 +71,7 @@ namespace Model
 
 	void NetworkComponent::OnConnectComplete(const std::shared_ptr<Session>& session)
 	{
+		session->__networkcomponent = Get<NetworkComponent>();
 		LOG_INFO("完成连接:{} fd:{}", session->Address.ToString(), session->SessionId);
 		if (!__AddSession(session))
 		{
@@ -81,6 +82,7 @@ namespace Model
 
 	void NetworkComponent::OnAccept(const std::shared_ptr<Session>& session)
 	{
+		session->__networkcomponent = Get<NetworkComponent>();
 		LOG_INFO("会话连接:{} fd:{}", session->Address.ToString(), session->SessionId);
 		if (!__AddSession(session))
 		{
