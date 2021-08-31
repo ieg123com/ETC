@@ -108,6 +108,15 @@ public:
 		return false;
 	}
 
+	bool operator()()const noexcept {
+		return (m_info != nullptr);
+	}
+
+	Type& operator = (const Type& right) {
+		m_info = right.m_info;
+		return *this;
+	}
+
 	const char* name()const{
 		return m_info->name.c_str();
 	}

@@ -159,6 +159,7 @@ namespace Model
 				{
 					if (auto obj = TypeFactory::CreateInstance<IMessage>(attr.first))
 					{
+						obj->appType = attr.second;
 						__message_system.push_back(obj);
 					}
 				}

@@ -2,9 +2,9 @@
 #include "model/module/other/SystemEventType.h"
 #include "model/module/message/MessageDispatcherComponent.h"
 #include "model/proto/etc_message.pb.h"
+#include "model/proto/login.pb.h"
 
 
-using namespace Model;
 
 namespace Hotfix
 {
@@ -13,13 +13,19 @@ namespace Hotfix
 	public:
 		virtual void Run(const std::shared_ptr<MessageDispatcherComponent>& dis_msg) override
 		{
-
-			LOG_INFO("Register message event");
+			// TODO: ×¢²áÏûÏ¢id
+			LOG_INFO("Start register message");
 
 			dis_msg->RegisterMessage<TestRequest>(100, EMessageType::Request);
 			dis_msg->RegisterMessage<TestResponse>(101, EMessageType::Response);
 
-			LOG_INFO("Register message event");
+			dis_msg->RegisterMessage<login::Login_AccountLogin_Request_20020>(20020, EMessageType::Request);
+			dis_msg->RegisterMessage<login::Login_AccountLogin_Response_20021>(20021, EMessageType::Response);
+			dis_msg->RegisterMessage<login::Login_keyLogin_Request_20024>(20024, EMessageType::Request);
+			dis_msg->RegisterMessage<login::Login_keyLogin_Response_20025>(20025, EMessageType::Response);
+
+
+			LOG_INFO("Register message complete");
 
 		}
 	};

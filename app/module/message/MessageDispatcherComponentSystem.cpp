@@ -29,19 +29,21 @@ namespace Hotfix
 			Game::Event().Run<const std::shared_ptr<MessageDispatcherComponent>&>(ESystemEventType::StartRegMessage, self);
 			
 			{
-				// TODO:  
+				// TODO:  给指定消息id设置回调函数
 				auto& message_system = Game::Event().__message_system;
 				for (auto& item : message_system)
 				{
 					// 请求消息
-					auto found_type_req = self->__m_message_type.find(item->GetRequestType());
-					if (found_type_req == self->__m_message_type.end())
+					try
 					{
-						LOG_WARN("没有注册的消息类型 {}", item->GetRequestType().class_name());
-						continue;
+						uint16_t opcode = OpcodeTypeComponent::Instance->GetTypeOpcodeTry(item->GetRequestType());
+						self->GetMessage(opcode).app_type = item->appType;
+						self->GetMessage(opcode).call_back = item;
 					}
-					found_type_req->second.app_type = item->appType;
-					self->__m_message[found_type_req->second.msg_id].call_back = item;
+					catch (std::exception& e)
+					{
+						LOG_WARN("没有注册的消息类型 {} error:{}", item->GetRequestType().class_name(),e.what());
+					}
 				}
 			}
 		}

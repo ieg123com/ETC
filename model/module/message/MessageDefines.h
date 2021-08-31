@@ -1,5 +1,11 @@
 #pragma once
 #include <stdint.h>
+#include "google/protobuf/message.h"
+
+
+using PBMessage = ::google::protobuf::Message;
+
+
 
 
 

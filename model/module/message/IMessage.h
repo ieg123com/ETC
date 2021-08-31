@@ -5,12 +5,11 @@
 #include "type/type.h"
 #include "type/type_factory.h"
 #include "etc/kernel/Entity.h"
+#include "net/Session.h"
 
 
 namespace Model
 {
-	class Session;
-
 	class IMessage :
 		public ISupportTypeCreation
 	{

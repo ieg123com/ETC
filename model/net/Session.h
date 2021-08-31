@@ -1,6 +1,7 @@
 ﻿#pragma once
-#include "etc.h"
+#include "kernel/Entity.h"
 #include "NetDefines.h"
+#include "google/protobuf/message.h"
 #include <string>
 
 namespace Model
@@ -12,6 +13,8 @@ namespace Model
 	class Session :
 		public GEntity
 	{
+		// 要发送的数据
+		std::string	m_data_sent;
 	public:
 
 		int32_t		RpcId;
@@ -32,6 +35,11 @@ namespace Model
 		/** @brief 发送消息*/
 		void Send(const char* data, const size_t len);
 
+		template<typename T>
+		void Reply(const T& message) {
+			__Reply(typeof(T), &message);
+		}
+
 	public:
 
 		void Awake(const std::shared_ptr<Service>& service);
@@ -40,7 +48,7 @@ namespace Model
 
 
 	private:
-
-
+	
+		void __Reply(const Type& tp, const ::google::protobuf::Message* message);
 	};
 }

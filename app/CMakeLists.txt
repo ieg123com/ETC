@@ -63,6 +63,10 @@ FILE(GLOB MODULE_COMPONENT_CONFIG_FILES "./module/component/config/*.cpp" "./mod
 set(MODULE_HANDLER_FILES "")
 FILE(GLOB MODULE_HANDLER_FILES "./module/handler/*.cpp" "./module/handler/*.h")
 
+# handler login
+set(MODULE_HANDLER_LOGIN_FILES "")
+FILE(GLOB MODULE_HANDLER_LOGIN_FILES "./module/handler/login/*.cpp" "./module/handler/login/*.h")
+
 # init
 set(MODULE_INIT_FILES "")
 FILE(GLOB MODULE_INIT_FILES "./module/init/*.cpp" "./module/init/*.h")
@@ -73,6 +77,7 @@ source_group(module\\message			FILES ${MODULE_MESSAGE_FILES})
 source_group(module\\component			FILES ${MODULE_COMPONENT_FILES})
 source_group(module\\component\\config	FILES ${MODULE_COMPONENT_CONFIG_FILES})
 source_group(module\\handler			FILES ${MODULE_HANDLER_FILES})
+source_group(module\\handler\\login		FILES ${MODULE_HANDLER_LOGIN_FILES})
 source_group(module\\init				FILES ${MODULE_INIT_FILES})
 
 
@@ -82,6 +87,7 @@ LIST(APPEND ALL_OBJECT
 	${MODULE_COMPONENT_FILES}
 	${MODULE_COMPONENT_CONFIG_FILES}
 	${MODULE_HANDLER_FILES}
+	${MODULE_HANDLER_LOGIN_FILES}
 	${MODULE_INIT_FILES})
 
 

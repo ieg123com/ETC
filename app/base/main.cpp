@@ -8,6 +8,7 @@
 #include "module/message/NetInnerComponent.h"
 #include "module/message/NetOuterComponent.h"
 #include "module/message/MessageDispatcherComponent.h"
+#include "module/message/OpcodeTypeComponent.h"
 #include "module/component/OptionComponent.h"
 #include "module/component/StartConfigComponent.h"
 #include "module/component/config/StartConfig.h"
@@ -62,26 +63,35 @@ int main(int argc,char* argv[])
 			case EAppType::Gate:
 				Game::World()->AddComponent<NetOuterComponent, const IPEndPoint&>(outer_config->Address);
 				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(inner_config->Address);
+				Game::World()->AddComponent<OpcodeTypeComponent>();
 				Game::World()->AddComponent<MessageDispatcherComponent>();
 				break;
 			case EAppType::Login:
+				Game::World()->AddComponent<NetOuterComponent, const IPEndPoint&>(outer_config->Address);
+				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(inner_config->Address);
+				Game::World()->AddComponent<OpcodeTypeComponent>();
+				Game::World()->AddComponent<MessageDispatcherComponent>();
 				break;
 			case EAppType::List:
 				break;
 			case EAppType::Map:
 				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(inner_config->Address);
+				Game::World()->AddComponent<OpcodeTypeComponent>();
 				Game::World()->AddComponent<MessageDispatcherComponent>();
 				break;
 			case EAppType::Location:
 				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(inner_config->Address);
+				Game::World()->AddComponent<OpcodeTypeComponent>();
 				Game::World()->AddComponent<MessageDispatcherComponent>();
 				break;
 			case EAppType::Chat:
 				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(inner_config->Address);
+				Game::World()->AddComponent<OpcodeTypeComponent>();
 				Game::World()->AddComponent<MessageDispatcherComponent>();
 				break;
 			case EAppType::Social:
 				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(inner_config->Address);
+				Game::World()->AddComponent<OpcodeTypeComponent>();
 				Game::World()->AddComponent<MessageDispatcherComponent>();
 				break;
 			default:
@@ -90,6 +100,7 @@ int main(int argc,char* argv[])
 			}
 
 			LOG_INFO("E");
+
 
 			while (true)
 			{

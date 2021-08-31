@@ -15,6 +15,8 @@ namespace Model
 		Chat = 1 << 6,
 		Social = 1 << 7,
 
+		Robot = 1<< 20,
+
 		AllServer = Watcher | Gate | Login | List | Map | Location | Chat | Social,
 	};
 

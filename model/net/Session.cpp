@@ -1,6 +1,7 @@
 ﻿#include "Session.h"
 #include "Service.h"
 #include "module/message/MessageDefines.h"
+#include "module/message/OpcodeTypeComponent.h"
 #include "etc/etc.h"
 #include "IChannel.h"
 
@@ -75,5 +76,23 @@ namespace Model
 		{
 			__channel->Send(data, len);
 		}
+	}
+
+	void Session::__Reply(const Type& tp, const ::google::protobuf::Message* message)
+	{
+		uint16_t opcode = 0;
+		try {
+			opcode = OpcodeTypeComponent::Instance->GetTypeOpcodeTry(tp);
+		}
+		catch (std::exception& e)
+		{
+			LOG_ERROR("回复消息失败:{} {}", tp.class_name(), e.what());
+			return;
+		}
+		int bytes_size = message->ByteSize();
+		m_data_sent.resize(bytes_size + sizeof(opcode));
+		memcpy(&m_data_sent[0], &opcode, sizeof(opcode));
+		message->SerializePartialToArray(&m_data_sent[2], bytes_size);
+		Send(m_data_sent.data(), m_data_sent.size());
 	}
 }

@@ -8,7 +8,8 @@ namespace Model
 	enum ESystemEventType
 	{
 		BEGIN	= EEventType::SYSTEM,
-		StartRegMessage, // 开始注册事件
+		StartRegMessage,		// 开始注册事件
+		StartBindRpcMessage,	// 开始绑定Rpc消息
 
 	};
 
