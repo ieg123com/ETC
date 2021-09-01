@@ -4,6 +4,7 @@
 #include "module/message/OpcodeTypeComponent.h"
 #include "etc/etc.h"
 #include "IChannel.h"
+#include "other/string/bytes.h"
 
 
 namespace Model

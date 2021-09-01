@@ -29,7 +29,7 @@ void OuterMessageDispatcher::Dispatch(const std::shared_ptr<Session>& session, c
 	switch (message_state.msg_type)
 	{
 	case EMessageType::Message:
-		if (auto message = dynamic_cast<IMessageSystem*>(message_state.call_back.get()))
+		if (auto message = dynamic_cast<IMessageHandler*>(message_state.call_back.get()))
 		{
 			message->Handle(session, data + sizeof(msg_id), len - sizeof(msg_id));
 		}
@@ -38,7 +38,7 @@ void OuterMessageDispatcher::Dispatch(const std::shared_ptr<Session>& session, c
 		}
 		break;
 	case EMessageType::Request:
-		if (auto message = dynamic_cast<IRpcMessageSystem*>(message_state.call_back.get()))
+		if (auto message = dynamic_cast<IMRpcHandler*>(message_state.call_back.get()))
 		{
 			message->Handle(session, data + sizeof(msg_id), len - sizeof(msg_id));
 		}

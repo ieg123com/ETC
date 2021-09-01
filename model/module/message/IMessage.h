@@ -20,7 +20,7 @@ namespace Model
 	};
 
 
-	class IMessageSystem :
+	class IMessageHandler :
 		public IMessage
 	{
 	public:
@@ -30,8 +30,8 @@ namespace Model
 
 
 	template<typename Request>
-	class MessageSystem :
-		public IMessageSystem
+	class MessageHandler :
+		public IMessageHandler
 	{
 	public:
 		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) override

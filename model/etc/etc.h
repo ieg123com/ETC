@@ -9,6 +9,8 @@
 #include "interface/IDestroySystem.h"
 #include "module/message/IActorMessage.h"
 #include "module/message/IActorRpcMessage.h"
+#include "module/message/IActorLocationMessage.h"
+#include "module/message/IActorLocationRpcMessage.h"
 #include "module/message/IMessage.h"
 #include "module/message/IRpcMessage.h"
 

@@ -6,6 +6,7 @@
 #include "module/message/IMessageDispatcher.h"
 #include "etc/etc_config.h"
 #include "net/NetworkComponent.h"
+#include "other/string/bytes.h"
 
 
 
@@ -136,9 +137,12 @@ namespace Model
 	{
 		if (auto service = m_session->__service)
 		{
-			if (service->Send(m_session->SessionId, this->m_send_data.data(), this->m_send_data.size()))
+			if (service->Send(m_session->SessionId, m_send_data.data(), m_send_data.size()))
 			{
-				m_send_data.empty();
+				uint16_t len, opcode = 0;
+				memcpy(&len, &m_send_data[0], sizeof(len));
+				memcpy(&opcode, &m_send_data[2], sizeof(opcode));
+				m_send_data.clear();
 			}
 			else {
 				// ∑¢ÀÕ ß∞‹

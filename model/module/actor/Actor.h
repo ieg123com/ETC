@@ -8,6 +8,7 @@
 #include "Object.h"
 #include "ActorDefines.h"
 #include "net/NetDefines.h"
+#include "net/IPEndPoint.h"
 
 
 namespace Model

@@ -16,13 +16,13 @@ namespace Hotfix
 			// TODO: ×¢²áÏûÏ¢id
 			LOG_INFO("Start register message");
 
-			dis_msg->RegisterMessage<TestRequest>(100, EMessageType::Request);
-			dis_msg->RegisterMessage<TestResponse>(101, EMessageType::Response);
+			dis_msg->RegisterMessage<TestRequest>(100);
+			dis_msg->RegisterMessage<TestResponse>(101);
 
-			dis_msg->RegisterMessage<login::Login_AccountLogin_Request_20020>(20020, EMessageType::Request);
-			dis_msg->RegisterMessage<login::Login_AccountLogin_Response_20021>(20021, EMessageType::Response);
-			dis_msg->RegisterMessage<login::Login_keyLogin_Request_20024>(20024, EMessageType::Request);
-			dis_msg->RegisterMessage<login::Login_keyLogin_Response_20025>(20025, EMessageType::Response);
+			dis_msg->RegisterMessage<login::Login_AccountLogin_Request_20020>(20020);
+			dis_msg->RegisterMessage<login::Login_AccountLogin_Response_20021>(20021);
+			dis_msg->RegisterMessage<login::Login_keyLogin_Request_20024>(20024);
+			dis_msg->RegisterMessage<login::Login_keyLogin_Response_20025>(20025);
 
 
 			LOG_INFO("Register message complete");

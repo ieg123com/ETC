@@ -3,7 +3,7 @@
 
 namespace Model
 {
-	class IRpcMessageSystem:
+	class IMRpcHandler:
 		public IMessage
 	{
 	public:
@@ -13,8 +13,8 @@ namespace Model
 
 
 	template<typename Request,typename Response>
-	class RpcMessageSystem :
-		public IRpcMessageSystem
+	class MRpcHandler :
+		public IMRpcHandler
 	{
 	public:
 		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) override

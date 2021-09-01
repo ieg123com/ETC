@@ -7,7 +7,7 @@ namespace Model
 {
 	class Unit;
 
-	class IActorMessageSystem :
+	class IMActorHandler :
 		public IMessage 
 	{
 	public:
@@ -15,8 +15,8 @@ namespace Model
 	};
 
 	template<typename T,typename Request>
-	class ActorMessageSystem :
-		public IActorMessageSystem
+	class MActorHandler :
+		public IMActorHandler
 	{
 	public:
 		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) override

@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "kernel/Entity.h"
 #include "NetDefines.h"
+#include "IPEndPoint.h"
 #include "google/protobuf/message.h"
 #include <string>
 

@@ -5,8 +5,8 @@
 namespace Model
 {
 
-	class IMActorRpcHandler :
-		public IMessage 
+	class IMActorLocationRpcHandler :
+		public IMessage
 	{
 	public:
 		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) = 0;
@@ -14,9 +14,9 @@ namespace Model
 	};
 
 
-	template<typename T,typename Request,typename Response>
-	class MActorRpcHandler :
-		public IMActorRpcHandler
+	template<typename T, typename Request, typename Response>
+	class MActorLocationRpcHandler :
+		public IMActorLocationRpcHandler
 	{
 	public:
 		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) override

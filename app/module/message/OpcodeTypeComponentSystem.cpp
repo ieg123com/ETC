@@ -26,7 +26,7 @@ public:
 			auto& message_system = Game::Event().__message_system;
 			for (auto& item : message_system)
 			{
-				if (auto msg_instance = std::dynamic_pointer_cast<IRpcMessageSystem>(item))
+				if (auto msg_instance = std::dynamic_pointer_cast<IMRpcHandler>(item))
 				{
 					self->BindRpcMessage(msg_instance->GetRequestType(), msg_instance->GetResponseType());
 				}

@@ -36,13 +36,46 @@ namespace Hotfix
 					// 请求消息
 					try
 					{
-						uint16_t opcode = OpcodeTypeComponent::Instance->GetTypeOpcodeTry(item->GetRequestType());
-						self->GetMessage(opcode).app_type = item->appType;
-						self->GetMessage(opcode).call_back = item;
+						uint16_t opcode_req = OpcodeTypeComponent::Instance->GetTypeOpcodeTry(item->GetRequestType());
+						self->GetMessage(opcode_req).app_type = item->appType;
+						self->GetMessage(opcode_req).call_back = item;
+
+						if (auto message_handler = std::dynamic_pointer_cast<IMessageHandler>(item))
+						{
+							self->GetMessage(opcode_req).msg_type = EMessageType::Message;
+						}
+						else if (auto mrpc_handler = std::dynamic_pointer_cast<IMRpcHandler>(item))
+						{
+							uint16_t opcode_rpo = OpcodeTypeComponent::Instance->GetTypeOpcodeTry(item->GetResponseType());
+							self->GetMessage(opcode_req).msg_type = EMessageType::Request;
+							self->GetMessage(opcode_rpo).msg_type = EMessageType::Response;
+						}
+						else if (auto mactor_handler = std::dynamic_pointer_cast<IMActorHandler>(item))
+						{
+							uint16_t opcode_rpo = OpcodeTypeComponent::Instance->GetTypeOpcodeTry(item->GetResponseType());
+							self->GetMessage(opcode_req).msg_type = EMessageType::ActorMessage;
+						}
+						else if (auto mactor_rpc_handler = std::dynamic_pointer_cast<IMActorRpcHandler>(item))
+						{
+							uint16_t opcode_rpo = OpcodeTypeComponent::Instance->GetTypeOpcodeTry(item->GetResponseType());
+							self->GetMessage(opcode_req).msg_type = EMessageType::ActorRequest;
+							self->GetMessage(opcode_rpo).msg_type = EMessageType::ActorResponse;
+						}
+						else if (auto mactor_location_handler = std::dynamic_pointer_cast<IMActorLocationHandler>(item))
+						{
+							uint16_t opcode_rpo = OpcodeTypeComponent::Instance->GetTypeOpcodeTry(item->GetResponseType());
+							self->GetMessage(opcode_req).msg_type = EMessageType::ActorMessage;
+						}
+						else if (auto mactor_location_rpc_handler = std::dynamic_pointer_cast<IMActorLocationRpcHandler>(item))
+						{
+							uint16_t opcode_rpo = OpcodeTypeComponent::Instance->GetTypeOpcodeTry(item->GetResponseType());
+							self->GetMessage(opcode_req).msg_type = EMessageType::ActorLocationRequest;
+							self->GetMessage(opcode_rpo).msg_type = EMessageType::ActorLocationResponse;
+						}
 					}
 					catch (std::exception& e)
 					{
-						LOG_WARN("没有注册的消息类型 {} error:{}", item->GetRequestType().class_name(),e.what());
+						LOG_WARN("没有注册的消息类型 {} {} error:{}", item->GetRequestType().class_name(),item->GetResponseType().class_name(),e.what());
 					}
 				}
 			}

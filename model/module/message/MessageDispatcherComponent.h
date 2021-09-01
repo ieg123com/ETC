@@ -48,9 +48,8 @@ namespace Model
 		void Clear();
 
 		template<typename T>
-		void RegisterMessage(const uint16_t msg_id, const EMessageType msg_type){
+		void RegisterMessage(const uint16_t msg_id){
 			OpcodeTypeComponent::Instance->RegisterMessage<T>(msg_id);
-			m_messages[msg_id].msg_type = msg_type;
 		}
 
 		inline stMessageState& GetMessage(const uint16_t msg_id) {

@@ -15,6 +15,7 @@ namespace Hotfix
 			// TODO: 绑定Rpc消息
 			LOG_INFO("Start bind rpc message");
 
+			// 以在Handler里使用的消息，不需要在这里绑定
 			msg_bind->BindRpcMessage<TestRequest, TestResponse>();
 			msg_bind->BindRpcMessage<login::Login_AccountLogin_Request_20020, login::Login_AccountLogin_Response_20021>();
 			msg_bind->BindRpcMessage<login::Login_keyLogin_Request_20024, login::Login_keyLogin_Response_20025>();

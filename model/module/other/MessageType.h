@@ -9,5 +9,8 @@ enum class EMessageType : unsigned char
 	Response,
 	ActorMessage,
 	ActorRequest,
-	ActorResponse
+	ActorResponse,
+	ActorLocationMessage,
+	ActorLocationRequest,
+	ActorLocationResponse,
 };
