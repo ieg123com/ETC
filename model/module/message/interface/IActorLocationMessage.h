@@ -11,6 +11,7 @@ namespace Model
 	public:
 		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) = 0;
 
+		virtual FMRequestParse GetRequestParse()const = 0;
 	};
 
 
@@ -32,7 +33,12 @@ namespace Model
 		virtual void Run(const std::shared_ptr<T>& unit, Request& request) = 0;
 
 		virtual const Type GetRequestType() const override { return typeof(Request); }
-		virtual const Type GetResponseType() const override { return typeof(nullptr); }
+		virtual const Type GetResponseType() const override { return typeof(IMessage); }
+
+		virtual FMRequestParse GetRequestParse()const override {
+			return MRequestParse<Request>()();
+		}
+
 	};
 
 }

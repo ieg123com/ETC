@@ -1,19 +1,20 @@
 #include "OuterMessageDispatcher.h"
 #include "MessageDispatcherComponent.h"
+#include "OuterMessageDispatcherHandler.h"
 #include "net/Session.h"
 
 
 
 void OuterMessageDispatcher::Dispatch(const std::shared_ptr<Session>& session, const char* data, const size_t len)
 {
-	uint16_t msg_id = 0;
-	if (len < sizeof(msg_id))
-		throw std::exception(std::format("数据解析错误，因为没法确定消息id！(session->Address() = '%s')", session->Address.ToString().c_str()).c_str());
+	uint16_t opcode = 0;
+	if (len < sizeof(opcode))
+		throw std::exception(std::format("OuterMessageDispatcher 数据解析错误，因为没法确定消息id！(session->Address() = '%s')", session->Address.ToString().c_str()).c_str());
 
-	memcpy(&msg_id, data, sizeof(msg_id));
-	LOG_WARN("msg id:{}", msg_id);
+	memcpy(&opcode, data, sizeof(opcode));
+	LOG_WARN("msg id:{}", opcode);
 	auto& appType = Game::Options().AppType;
-	auto& message_state = MessageDispatcherComponent::Instance->GetMessage(msg_id);
+	auto& message_state = MessageDispatcherComponent::Instance->GetMessage(opcode);
 	if (!Is((EAppType)message_state.app_type, appType))
 	{
 		// 类型不符
@@ -29,25 +30,18 @@ void OuterMessageDispatcher::Dispatch(const std::shared_ptr<Session>& session, c
 	switch (message_state.msg_type)
 	{
 	case EMessageType::Message:
-		if (auto message = dynamic_cast<IMessageHandler*>(message_state.call_back.get()))
-		{
-			message->Handle(session, data + sizeof(msg_id), len - sizeof(msg_id));
-		}
-		else {
-			throw std::exception(std::format("注册的消息和类型 IMessageSystem 不符, msg_id = %d", msg_id).c_str());
-		}
+		OuterMessageDispatcherHandler::HandleIMessage(session,opcode, data + sizeof(opcode), len - sizeof(opcode));
 		break;
 	case EMessageType::Request:
-		if (auto message = dynamic_cast<IMRpcHandler*>(message_state.call_back.get()))
-		{
-			message->Handle(session, data + sizeof(msg_id), len - sizeof(msg_id));
-		}
-		else {
-			throw std::exception(std::format("注册的消息和类型 IRpcMessageSystem 不符, msg_id = %d", msg_id).c_str());
-		}
+		OuterMessageDispatcherHandler::HandleIMRequest(session,opcode, data + sizeof(opcode), len - sizeof(opcode));
 		break;
-	case EMessageType::Response:
-
+	case EMessageType::ActorLocationMessage:
+		OuterMessageDispatcherHandler::HandleIMActorLocation(session,opcode, data + sizeof(opcode), len - sizeof(opcode));
+		break;
+	case EMessageType::ActorLocationRequest:
+		OuterMessageDispatcherHandler::HandleIMActorLocationRequest(session,opcode, data + sizeof(opcode), len - sizeof(opcode));
+		break;
+	default:
 		break;
 	}
 

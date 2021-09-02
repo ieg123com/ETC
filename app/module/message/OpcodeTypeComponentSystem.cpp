@@ -29,6 +29,35 @@ public:
 				if (auto msg_instance = std::dynamic_pointer_cast<IMRpcHandler>(item))
 				{
 					self->BindRpcMessage(msg_instance->GetRequestType(), msg_instance->GetResponseType());
+					self->RegisterRequestParse(msg_instance->GetRequestType(), msg_instance->GetRequestParse());
+					self->RegisterResponseParse(msg_instance->GetResponseType(), msg_instance->GetResponseParse());
+					self->RegisterResetResponse(msg_instance->GetResponseType(), msg_instance->GetResetResponse());
+				}
+				if (auto msg_instance = std::dynamic_pointer_cast<IMActorRpcHandler>(item))
+				{
+					self->BindRpcMessage(msg_instance->GetRequestType(), msg_instance->GetResponseType());
+					self->RegisterRequestParse(msg_instance->GetRequestType(), msg_instance->GetRequestParse());
+					self->RegisterResponseParse(msg_instance->GetResponseType(), msg_instance->GetResponseParse());
+					self->RegisterResetResponse(msg_instance->GetResponseType(), msg_instance->GetResetResponse());
+				}
+				if (auto msg_instance = std::dynamic_pointer_cast<IMActorLocationRpcHandler>(item))
+				{
+					self->BindRpcMessage(msg_instance->GetRequestType(), msg_instance->GetResponseType());
+					self->RegisterRequestParse(msg_instance->GetRequestType(), msg_instance->GetRequestParse());
+					self->RegisterResponseParse(msg_instance->GetResponseType(), msg_instance->GetResponseParse());
+					self->RegisterResetResponse(msg_instance->GetResponseType(), msg_instance->GetResetResponse());
+				}
+				if (auto msg_instance = std::dynamic_pointer_cast<IMessageHandler>(item))
+				{
+					self->RegisterRequestParse(msg_instance->GetRequestType(), msg_instance->GetRequestParse());
+				}
+				if (auto msg_instance = std::dynamic_pointer_cast<IMActorHandler>(item))
+				{
+					self->RegisterRequestParse(msg_instance->GetRequestType(), msg_instance->GetRequestParse());
+				}
+				if (auto msg_instance = std::dynamic_pointer_cast<IMActorLocationHandler>(item))
+				{
+					self->RegisterRequestParse(msg_instance->GetRequestType(), msg_instance->GetRequestParse());
 				}
 			}
 		}

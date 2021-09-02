@@ -46,29 +46,29 @@ namespace Hotfix
 						}
 						else if (auto mrpc_handler = std::dynamic_pointer_cast<IMRpcHandler>(item))
 						{
-							uint16_t opcode_rpo = OpcodeTypeComponent::Instance->GetTypeOpcodeTry(item->GetResponseType());
+							uint16_t opcode_rpo = OpcodeTypeComponent::Instance->GetTypeOpcodeTry(mrpc_handler->GetResponseType());
 							self->GetMessage(opcode_req).msg_type = EMessageType::Request;
 							self->GetMessage(opcode_rpo).msg_type = EMessageType::Response;
 						}
 						else if (auto mactor_handler = std::dynamic_pointer_cast<IMActorHandler>(item))
 						{
-							uint16_t opcode_rpo = OpcodeTypeComponent::Instance->GetTypeOpcodeTry(item->GetResponseType());
+							uint16_t opcode_rpo = OpcodeTypeComponent::Instance->GetTypeOpcodeTry(mactor_handler->GetRequestType());
 							self->GetMessage(opcode_req).msg_type = EMessageType::ActorMessage;
 						}
 						else if (auto mactor_rpc_handler = std::dynamic_pointer_cast<IMActorRpcHandler>(item))
 						{
-							uint16_t opcode_rpo = OpcodeTypeComponent::Instance->GetTypeOpcodeTry(item->GetResponseType());
+							uint16_t opcode_rpo = OpcodeTypeComponent::Instance->GetTypeOpcodeTry(mactor_rpc_handler->GetResponseType());
 							self->GetMessage(opcode_req).msg_type = EMessageType::ActorRequest;
 							self->GetMessage(opcode_rpo).msg_type = EMessageType::ActorResponse;
 						}
 						else if (auto mactor_location_handler = std::dynamic_pointer_cast<IMActorLocationHandler>(item))
 						{
-							uint16_t opcode_rpo = OpcodeTypeComponent::Instance->GetTypeOpcodeTry(item->GetResponseType());
+							uint16_t opcode_rpo = OpcodeTypeComponent::Instance->GetTypeOpcodeTry(mactor_location_handler->GetRequestType());
 							self->GetMessage(opcode_req).msg_type = EMessageType::ActorMessage;
 						}
 						else if (auto mactor_location_rpc_handler = std::dynamic_pointer_cast<IMActorLocationRpcHandler>(item))
 						{
-							uint16_t opcode_rpo = OpcodeTypeComponent::Instance->GetTypeOpcodeTry(item->GetResponseType());
+							uint16_t opcode_rpo = OpcodeTypeComponent::Instance->GetTypeOpcodeTry(mactor_location_rpc_handler->GetResponseType());
 							self->GetMessage(opcode_req).msg_type = EMessageType::ActorLocationRequest;
 							self->GetMessage(opcode_rpo).msg_type = EMessageType::ActorLocationResponse;
 						}

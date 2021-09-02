@@ -108,7 +108,7 @@ public:
 		return false;
 	}
 
-	bool operator()()const noexcept {
+	operator bool()const noexcept {
 		return (m_info != nullptr);
 	}
 
