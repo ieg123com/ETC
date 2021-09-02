@@ -9,6 +9,8 @@ namespace Model
 	public:
 
 		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) = 0;
+
+		virtual FMResponseParse GetResponseParse()const;
 	};
 
 

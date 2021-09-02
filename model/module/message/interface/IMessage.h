@@ -7,6 +7,10 @@
 #include "etc/kernel/Entity.h"
 #include "net/Session.h"
 
+// 消息回复调用函数
+using FMReply = std::function<void()>;
+// Actor回复消息解析
+using FMResponseParse = std::function<PBMessage*(int32_t&,const char*,const uint16_t)>
 
 namespace Model
 {
@@ -16,6 +20,7 @@ namespace Model
 	public:
 		virtual const Type GetRequestType() const = 0;
 		virtual const Type GetResponseType() const = 0;
+
 		int32_t appType = 0;
 	};
 

@@ -19,6 +19,7 @@ namespace Hotfix
 			self->AppType = ToAppType(config->AppType);
 			self->Config = config->Config;
 			cJSON* json = cJSON_Parse(self->Config.c_str());
+			if (json == nullptr)return;
 			cJSON* new_json = json->child;
 
 			do {

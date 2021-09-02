@@ -3,7 +3,7 @@
 #include "reflection/reflection.h"
 #include "interface/ObjectSystemAttribute.h"
 #include "interface/EventSystemAttribute.h"
-#include "module/message/MessageSystemAttribute.h"
+#include "module/message/interface/MessageSystemAttribute.h"
 
 namespace Model
 {

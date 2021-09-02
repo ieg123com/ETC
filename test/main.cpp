@@ -142,11 +142,15 @@ void channel_test()
 {
 	{
 		//co_chan<std::string> g_channel;
-		co::Channel<std::string>	g_channel(1);
+		co::Channel<std::string>	channel;
 		//A a;
 		//LOG_INFO("1");
-		LOG_INFO("ok {}", g_channel.TryPush("123"));
-		LOG_INFO("ok {}", g_channel.TryPush("123"));
+
+		std::string ctx;
+		LOG_WARN("TimedPop {}", channel.TimedPop(ctx, std::chrono::milliseconds(1000)));
+		
+		//LOG_INFO("ok {}", g_channel.TryPush("123"));
+		//LOG_INFO("ok {}", g_channel.TryPush("123"));
 
 		//LOG_INFO("2");
 		//std::string str;
@@ -167,6 +171,15 @@ void channel_test()
 
 }
 
+void tick()
+{
+	while (true)
+	{
+		LOG_INFO("tick...");
+		co_sleep(200);
+	}
+}
+
 
 int main(int argc, char* argv[])
 {
@@ -174,11 +187,12 @@ int main(int argc, char* argv[])
 	g_scene = ObjectFactory::Create<Scene>();
 // 	go network_server;
 // 	go network_client;
-	go network;
+//	go network;
 	//go echo_server;
 	//go test;
-	//go channel_test;
+	go channel_test;
 	//go client;
+	go tick;
 
 	co_sched.Start();
 

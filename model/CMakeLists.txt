@@ -208,6 +208,10 @@ FILE(GLOB MODULE_MEMORY_FILES "./module/memory/*.cpp" "./module/memory/*.h")
 set(MODULE_MESSAGE_FILES "")
 FILE(GLOB MODULE_MESSAGE_FILES "./module/message/*.cpp" "./module/message/*.h")
 
+# message interface
+set(MODULE_MESSAGE_INTERFACE_FILES "")
+FILE(GLOB MODULE_MESSAGE_INTERFACE_FILES "./module/message/interface/*.cpp" "./module/message/interface/*.h")
+
 # other
 set(MODULE_OTHER_FILES "")
 FILE(GLOB MODULE_OTHER_FILES "./module/other/*.cpp" "./module/other/*.h")
@@ -224,6 +228,7 @@ source_group(module						FILES ${MODULE_FILES})
 source_group(module\\actor				FILES ${MODULE_ACTOR_FILES})
 source_group(module\\memory				FILES ${MODULE_MEMORY_FILES})
 source_group(module\\message			FILES ${MODULE_MESSAGE_FILES})
+source_group(module\\message\\interface	FILES ${MODULE_MESSAGE_INTERFACE_FILES})
 source_group(module\\other				FILES ${MODULE_OTHER_FILES})
 source_group(module\\component			FILES ${MODULE_COMPONENT_FILES})
 source_group(module\\component\\config	FILES ${MODULE_COMPONENT_CONFIG_FILES})
@@ -234,6 +239,7 @@ LIST(APPEND ALL_OBJECT
 	${MODULE_ACTOR_FILES}
 	${MODULE_MEMORY_FILES}
 	${MODULE_MESSAGE_FILES}
+	${MODULE_MESSAGE_INTERFACE_FILES}
 	${MODULE_OTHER_FILES}
 	${MODULE_COMPONENT_FILES}
 	${MODULE_COMPONENT_CONFIG_FILES})

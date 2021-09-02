@@ -12,11 +12,12 @@
 #include "IUpdateSystem.h"
 #include "ILateUpdateSystem.h"
 #include "IDestroySystem.h"
-#include "module/message/IMessage.h"
-#include "module/message/IActorMessage.h"
-#include "module/message/IRpcMessage.h"
-#include "module/message/IActorRpcMessage.h"
-
+#include "module/message/interface/IMessage.h"
+#include "module/message/interface/IActorMessage.h"
+#include "module/message/interface/IActorLocationMessage.h"
+#include "module/message/interface/IRpcMessage.h"
+#include "module/message/interface/IActorRpcMessage.h"
+#include "module/message/interface/IActorLocationRpcMessage.h"
 
 
 namespace std
