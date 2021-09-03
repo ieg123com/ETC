@@ -48,12 +48,12 @@ namespace Model
 		void Clear();
 
 		template<typename T>
-		void RegisterMessage(const uint16_t msg_id){
-			OpcodeTypeComponent::Instance->RegisterMessage<T>(msg_id);
+		void RegisterMessage(const uint16_t opcode){
+			OpcodeTypeComponent::Instance->RegisterMessage<T>(opcode);
 		}
 
-		inline stMessageState& GetMessage(const uint16_t msg_id) {
-			return m_messages[msg_id];
+		inline stMessageState& GetMessage(const uint16_t opcode) {
+			return m_messages[opcode];
 		}
 	};
 }

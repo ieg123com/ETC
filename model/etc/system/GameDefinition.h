@@ -2,6 +2,16 @@
 #include "log/log.h"
 
 
+
+#ifdef ETC_EXPORTS
+#define ETC_EXPORT __declspec(dllexport)
+#else
+#define ETC_EXPORT __declspec(dllimport)
+#endif
+
+
+
+
 // 后续接入json
 
 typedef long long ObjectID;

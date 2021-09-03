@@ -1,19 +1,19 @@
 #pragma once
-#include "IMessage.h"
+#include "IActorMessage.h"
 
 
 namespace Model
 {
 
 	class IMActorLocationRpcHandler :
-		public IMessage
+		public IMActorRpcHandler
 	{
 	public:
-		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) = 0;
+		//virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) = 0;
 
-		virtual FMRequestParse GetRequestParse()const = 0;
-		virtual FMResponseParse GetResponseParse()const = 0;
-		virtual FMResetResponse GetResetResponse()const = 0;
+		//virtual FMRequestParse GetRequestParse()const = 0;
+		//virtual FMResponseParse GetResponseParse()const = 0;
+		//virtual FMResetResponse GetResetResponse()const = 0;
 	};
 
 

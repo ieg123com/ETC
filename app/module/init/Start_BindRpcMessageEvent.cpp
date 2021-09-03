@@ -1,7 +1,7 @@
 #include "etc/etc.h"
 #include "model/module/other/SystemEventType.h"
 #include "model/module/message/OpcodeTypeComponent.h"
-#include "model/proto/etc_message.pb.h"
+#include "model/proto/etc_msg.pb.h"
 #include "model/proto/login.pb.h"
 
 namespace Hotfix

@@ -281,9 +281,7 @@ source_group(demo\\Entity						FILES ${DEMO_ENTITY_FILES})
 
 LIST(APPEND ALL_OBJECT
 	${DEMO_ENTITY_FILES})
-
-
-
+ 
 
 # Target
 add_library(model
@@ -296,7 +294,8 @@ if(MSVC)
 	
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT /EHa")
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd /EHa")
-else()
+	add_definitions(-DETC_EXPORTS)
+else() 
 	target_link_libraries(model mysqlclient libgo)
 endif()
 

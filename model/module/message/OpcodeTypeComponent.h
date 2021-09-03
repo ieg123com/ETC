@@ -35,10 +35,10 @@ public:
 	void RegisterMessage(const uint16_t msg_id) {
 		if (!m_type_opcodes.emplace(typeof(T), msg_id).second)
 		{
-			throw std::exception(std::format("消息类型已经注册过了,不能重复注册！type = %s", typeof(T).class_name()).c_str());
+			throw std::exception(std::format("消息类型已经注册过了,不能重复注册！type = %s", typeof(T).full_name()).c_str());
 		}
 		m_opcode_types[msg_id] = typeof(T);
-		m_opcode_instances[msg_id] = []()->PBMessage*{ return new T(); };
+		m_opcode_instances[msg_id] = []()->std::shared_ptr<PBMessage>{ return std::make_shared<T>(); };
 	}
 
 	void RegisterRequestParse(const Type& tp, FMRequestParse& parse_req) {
@@ -46,7 +46,7 @@ public:
 	}
 
 	void RegisterResponseParse(const Type& tp, FMResponseParse& parse_rpo) {
-		m_type_request_parse.emplace(tp, parse_rpo);
+		m_type_response_parse.emplace(tp, parse_rpo);
 	}
 
 	void RegisterResetResponse(const Type& tp, FMResetResponse& reset_rpo) {
@@ -56,7 +56,7 @@ public:
 	void BindRpcMessage(const Type& request, const Type& response) {
 		if (!m_type_request_response.emplace(request, response).second)
 		{
-			throw std::exception(std::format("已绑定了相同类型的消息。request = %s,response = %s",request.class_name(),response.class_name()).c_str());
+			throw std::exception(std::format("已绑定了相同类型的消息。request = %s,response = %s",request.full_name(),response.full_name()).c_str());
 		}
 	}
 
@@ -68,12 +68,12 @@ public:
 			m_type_request_response.emplace(typeof(Request), typeof(Response));
 			RegisterRequestParse(typeof(Request), MRequestParse<Request>()());
 			RegisterResponseParse(typeof(Response), MResponseParse<Response>()());
-			RegisterResponseParse(typeof(Response), MResetResponse<Response>()());
+			RegisterResetResponse(typeof(Response), MResetResponse<Response>()());
 			return;
 		}
 		if (found->second != typeof(Response))
 		{
-			throw std::exception(std::format("已绑定了相同类型的消息。request = %s,response = %s", typeof(Request).class_name(), typeof(Response).class_name()).c_str());
+			throw std::exception(std::format("已绑定了相同类型的消息。request = %s,response = %s", typeof(Request).full_name(), typeof(Response).full_name()).c_str());
 		}
 	}
 
@@ -88,13 +88,16 @@ public:
 	std::shared_ptr<PBMessage> CreateInstanceTry(const Type& tp)const {
 		return CreateInstanceTry(GetTypeOpcodeTry(tp));
 	}
+
+	std::shared_ptr<PBMessage> CreateResponseInstanceTry(const uint16_t opcode);
+
 	
 	// 获取消息id
 	uint16_t GetTypeOpcodeTry(const Type& tp)const {
 		auto found = m_type_opcodes.find(tp);
 		if (found == m_type_opcodes.end())
 		{
-			throw std::exception(std::format("没有找到类型的消息id，type = %s",tp.class_name()).c_str());
+			throw std::exception(std::format("没有找到类型的消息id，type = %s",tp.full_name()).c_str());
 		}
 		return found->second;
 	}
@@ -110,9 +113,9 @@ public:
 
 
 
-	std::shared_ptr<PBMessage> MRequestParse(const uint16_t opcode, stIMRequest& strequest, const char* data, const uint16_t len);
+	std::shared_ptr<PBMessage> RequestMessageParse(const uint16_t opcode, stIMRequest& strequest, const char* data, const uint16_t len);
 
-	std::shared_ptr<PBMessage> MResponseParse(const uint16_t opcode, stIMResponse& stresponse, const char* data, const uint16_t len);
+	std::shared_ptr<PBMessage> ResponseMessageParse(const uint16_t opcode, stIMResponse& stresponse, const char* data, const uint16_t len);
 
-	bool MResetResponse(const uint16_t opcode,PBMessage* response, const stIMResponse& stresponse);
+	bool ResetMessageResponse(const uint16_t opcode, PBMessage* response, const stIMResponse& stresponse);
 };

@@ -79,21 +79,43 @@ namespace Model
 		}
 	}
 
-	void Session::__Reply(const Type& tp, const ::google::protobuf::Message* message)
+	void Session::Reply(const PBMessage* message)
 	{
 		uint16_t opcode = 0;
 		try {
-			opcode = OpcodeTypeComponent::Instance->GetTypeOpcodeTry(tp);
+			opcode = OpcodeTypeComponent::Instance->GetTypeOpcodeTry(message->GetType());
 		}
 		catch (std::exception& e)
 		{
-			LOG_ERROR("回复消息失败:{} {}", tp.class_name(), e.what());
+			LOG_ERROR("回复消息失败:{} {}", message->GetTypeName(), e.what());
 			return;
 		}
+		__SendOuterMessage(opcode, message);
+	}
+
+	void Session::ActorReply(const uint16_t opcode, const int64_t actor_id, const PBMessage* message)
+	{
+		__SendInnterMessage(opcode, actor_id, message);
+	}
+
+	void Session::__SendOuterMessage(const uint16_t opcode, const PBMessage* message)
+	{
 		int bytes_size = message->ByteSize();
 		m_data_sent.resize(bytes_size + sizeof(opcode));
 		memcpy(&m_data_sent[0], &opcode, sizeof(opcode));
-		message->SerializePartialToArray(&m_data_sent[2], bytes_size);
+		message->SerializePartialToArray(&m_data_sent[sizeof(opcode)], bytes_size);
 		Send(m_data_sent.data(), m_data_sent.size());
 	}
+
+	void Session::__SendInnterMessage(const uint16_t opcode, const int64_t actor_id, const PBMessage* message)
+	{
+		int bytes_size = message->ByteSize();
+		m_data_sent.resize(bytes_size + sizeof(opcode)+sizeof(actor_id));
+		memcpy(&m_data_sent[0], &opcode, sizeof(opcode));
+		memcpy(&m_data_sent[sizeof(opcode)], &actor_id, sizeof(actor_id));
+		message->SerializePartialToArray(&m_data_sent[sizeof(opcode) + sizeof(actor_id)], bytes_size);
+		Send(m_data_sent.data(), m_data_sent.size());
+	}
+
+
 }

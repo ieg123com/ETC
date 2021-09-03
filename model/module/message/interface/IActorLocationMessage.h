@@ -1,17 +1,18 @@
 #pragma once
-#include "IMessage.h"
+#include "IActorMessage.h"
+#include "model/proto/etc_msg.pb.h"
 
 
 namespace Model
 {
 
 	class IMActorLocationHandler :	
-		public IMessage
+		public IMActorHandler
 	{
 	public:
-		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) = 0;
+		//virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) = 0;
 
-		virtual FMRequestParse GetRequestParse()const = 0;
+		//virtual FMRequestParse GetRequestParse()const = 0;
 	};
 
 
@@ -33,7 +34,7 @@ namespace Model
 		virtual void Run(const std::shared_ptr<T>& unit, Request& request) = 0;
 
 		virtual const Type GetRequestType() const override { return typeof(Request); }
-		virtual const Type GetResponseType() const override { return typeof(IMessage); }
+		virtual const Type GetResponseType() const override { return typeof(ActorResponse); }
 
 		virtual FMRequestParse GetRequestParse()const override {
 			return MRequestParse<Request>()();

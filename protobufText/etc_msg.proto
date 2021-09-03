@@ -14,6 +14,23 @@ message MessageHead	// IResponse
 }
 
 
+// Actor默认请求
+message ActorRequest
+{
+	int32 RpcId = 90;
+}
+
+// Actor默认回复消息
+message ActorResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;	
+}
+
+
+
+
 
 message TestRequest
 {
@@ -50,3 +67,7 @@ message ActorTestResponse
 	int32 Error = 91;
 	string Message = 92;
 }
+
+
+
+

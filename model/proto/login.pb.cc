@@ -654,7 +654,6 @@ void Login_RegisterEmail_Request_20010::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* Login_RegisterEmail_Request_20010::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:login.Login_RegisterEmail_Request_20010)
   // optional string Name = 1;
   if (this->name().size() > 0) {
@@ -1288,7 +1287,6 @@ void Login_RegisterEmail_Response_20011::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* Login_RegisterEmail_Response_20011::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:login.Login_RegisterEmail_Response_20011)
   // optional int64 AccountId = 2;
   if (this->accountid() != 0) {
@@ -1790,7 +1788,6 @@ void Login_AccountLogin_Request_20020::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* Login_AccountLogin_Request_20020::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:login.Login_AccountLogin_Request_20020)
   // optional string Account = 1;
   if (this->account().size() > 0) {
@@ -2548,7 +2545,6 @@ void Login_AccountLogin_Response_20021::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* Login_AccountLogin_Response_20021::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:login.Login_AccountLogin_Response_20021)
   // optional int64 AccountId = 2;
   if (this->accountid() != 0) {
@@ -3377,7 +3373,6 @@ void Login_WechatLogin_Request_20022::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* Login_WechatLogin_Request_20022::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:login.Login_WechatLogin_Request_20022)
   // optional string WxCode = 1;
   if (this->wxcode().size() > 0) {
@@ -4068,7 +4063,6 @@ void Login_WechatLogin_Response_20023::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* Login_WechatLogin_Response_20023::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:login.Login_WechatLogin_Response_20023)
   // optional int64 AccountId = 2;
   if (this->accountid() != 0) {
@@ -4920,7 +4914,6 @@ void Login_keyLogin_Request_20024::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* Login_keyLogin_Request_20024::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:login.Login_keyLogin_Request_20024)
   // optional int64 AccountId = 1;
   if (this->accountid() != 0) {
@@ -5450,7 +5443,6 @@ void Login_keyLogin_Response_20025::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* Login_keyLogin_Response_20025::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:login.Login_keyLogin_Response_20025)
   // optional int32 SessionID = 2;
   if (this->sessionid() != 0) {
@@ -5789,7 +5781,6 @@ void Login_HeartBeat_Request_30::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* Login_HeartBeat_Request_30::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:login.Login_HeartBeat_Request_30)
   // @@protoc_insertion_point(serialize_to_array_end:login.Login_HeartBeat_Request_30)
   return target;

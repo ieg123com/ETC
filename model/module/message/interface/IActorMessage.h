@@ -1,5 +1,7 @@
 #pragma once
 #include "IMessage.h"
+#include "model/proto/etc_msg.pb.h"
+
 
 
 
@@ -34,7 +36,7 @@ namespace Model
 		virtual void Run(const std::shared_ptr<T>& unit, Request& message) = 0;
 
 		virtual const Type GetRequestType() const override { return typeof(Request); }
-		virtual const Type GetResponseType() const override { return typeof(IMessage); }
+		virtual const Type GetResponseType() const override { return typeof(ActorResponse); }
 		virtual FMRequestParse GetRequestParse()const override {
 			return MRequestParse<Request>()();
 		}

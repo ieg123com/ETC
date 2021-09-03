@@ -7,6 +7,8 @@ namespace Model
 	class Session;
 }
 
+using namespace Model;
+
 class OuterMessageDispatcherHandler
 {
 public:

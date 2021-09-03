@@ -52,11 +52,11 @@ namespace Model
 	{
 		FMResetResponse operator()()const noexcept {
 			return [](PBMessage* response, const stIMResponse& stresponse)->bool {
-				auto mresponse = dynamic_cast<T>(response);
+				auto mresponse = dynamic_cast<T*>(response);
 				if (!mresponse)return false;
-				mresponse->set_rpcid(stresponse.RpcId);
-				mresponse->set_error(stresponse.Error);
-				mresponse->set_message(stresponse.Message);
+				if(!stresponse.RpcId.empty())mresponse->set_rpcid(stresponse.RpcId);
+				if(!stresponse.Error.empty())mresponse->set_error(stresponse.Error);
+				if(!stresponse.Message.empty())mresponse->set_message(stresponse.Message);
 				return true;
 			};
 		}

@@ -3,7 +3,6 @@
 #include <string>
 #include <unordered_map>
 #include <functional>
-#include "GlobalData.h"
 
 
 // ÀàÐÍË÷Òý
@@ -24,8 +23,8 @@ public:
 	const size_t hash_code;
 	const TypeIndex index;
 
-	TypeInfo() :name(""), raw_name(""), hash_code(0), index(Model::GlobalData::GetTypeIndex()) { }
-	TypeInfo(const type_info* ty):raw_name(ty->raw_name()),name(ty->name()),hash_code(ty->hash_code()), index(Model::GlobalData::GetTypeIndex()) {}
+	TypeInfo(const TypeIndex idx) :name(""), raw_name(""), hash_code(0), index(idx) { }
+	TypeInfo(const type_info* ty,const TypeIndex idx):raw_name(ty->raw_name()),name(ty->name()),hash_code(ty->hash_code()), index(idx) {}
 
 
 	bool operator == (const TypeInfo& obj)const noexcept{
@@ -121,7 +120,7 @@ public:
 		return m_info->name.c_str();
 	}
 
-	const char* class_name()const {
+	const char* full_name()const {
 		return m_info->name.c_str()+6;
 	}
 

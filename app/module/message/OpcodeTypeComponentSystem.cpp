@@ -53,10 +53,12 @@ public:
 				}
 				if (auto msg_instance = std::dynamic_pointer_cast<IMActorHandler>(item))
 				{
+					self->BindRpcMessage(msg_instance->GetRequestType(), msg_instance->GetResponseType());
 					self->RegisterRequestParse(msg_instance->GetRequestType(), msg_instance->GetRequestParse());
 				}
 				if (auto msg_instance = std::dynamic_pointer_cast<IMActorLocationHandler>(item))
 				{
+					self->BindRpcMessage(msg_instance->GetRequestType(), msg_instance->GetResponseType());
 					self->RegisterRequestParse(msg_instance->GetRequestType(), msg_instance->GetRequestParse());
 				}
 			}

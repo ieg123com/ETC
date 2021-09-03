@@ -42,7 +42,7 @@ namespace Model
 					}
 					response.set_rpcid(request.rpcid());
 					
-					session->Reply(response);
+					session->Reply(&response);
 				};
 
 				try {
@@ -51,7 +51,7 @@ namespace Model
 				catch (std::exception& e)
 				{
 					LOG_ERROR("处理消息失败:{} {}",
-						typeof(Request).class_name(),
+						typeof(Request).full_name(),
 						e.what());
 					response.set_error(1);
 					response.set_message(e.what());
@@ -60,7 +60,7 @@ namespace Model
 				catch (...)
 				{
 					LOG_ERROR("处理消息失败:{} 未知错误",
-						typeof(Request).class_name());
+						typeof(Request).full_name());
 					response.set_error(1);
 					response.set_message("未知错误");
 					reply();
@@ -69,13 +69,13 @@ namespace Model
 			catch (std::exception& e)
 			{
 				LOG_ERROR("解析消息失败:{} {}",
-					typeof(Request).class_name(),
+					typeof(Request).full_name(),
 					e.what());
 			}
 			catch (...)
 			{
 				LOG_ERROR("解析消息失败:{} 未知错误",
-					typeof(Request).class_name());
+					typeof(Request).full_name());
 			}
 		}
 

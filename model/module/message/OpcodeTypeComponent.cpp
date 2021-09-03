@@ -41,6 +41,11 @@ void OpcodeTypeComponent::Destroy()
 	m_opcode_request_response.clear();
 }
 
+std::shared_ptr<PBMessage> OpcodeTypeComponent::CreateResponseInstanceTry(const uint16_t opcode)
+{
+	return CreateInstanceTry(GetResponseOpcodeTry(opcode));
+}
+
 Type OpcodeTypeComponent::GetOpcodeTypeTry(const int16_t opcode)
 {
 	if (m_opcode_types[opcode])
@@ -55,7 +60,7 @@ Type OpcodeTypeComponent::GetResponseTypeTry(const Type& tp)
 	auto found = m_type_request_response.find(tp);
 	if (found == m_type_request_response.end())
 	{
-		std::exception(std::format("没有通过类型找到回复类型,type = %s", tp.class_name()).c_str());
+		std::exception(std::format("没有通过类型找到回复类型,type = %s", tp.full_name()).c_str());
 	}
 	return found->second;
 }
@@ -72,7 +77,7 @@ uint16_t OpcodeTypeComponent::GetResponseOpcodeTry(const int16_t opcode)
 	return response_opcode;
 }
 
-std::shared_ptr<PBMessage> OpcodeTypeComponent::MRequestParse(const uint16_t opcode, stIMRequest& strequest, const char* data, const uint16_t len)
+std::shared_ptr<PBMessage> OpcodeTypeComponent::RequestMessageParse(const uint16_t opcode, stIMRequest& strequest, const char* data, const uint16_t len)
 {
 	if (m_opcode_request_parse[opcode])
 	{
@@ -88,7 +93,7 @@ std::shared_ptr<PBMessage> OpcodeTypeComponent::MRequestParse(const uint16_t opc
 	return nullptr;
 }
 
-std::shared_ptr<PBMessage> OpcodeTypeComponent::MResponseParse(const uint16_t opcode, stIMResponse& stresponse, const char* data, const uint16_t len)
+std::shared_ptr<PBMessage> OpcodeTypeComponent::ResponseMessageParse(const uint16_t opcode, stIMResponse& stresponse, const char* data, const uint16_t len)
 {
 	if (m_opcode_response_parse[opcode])
 	{
@@ -104,7 +109,7 @@ std::shared_ptr<PBMessage> OpcodeTypeComponent::MResponseParse(const uint16_t op
 	return nullptr;
 }
 
-bool OpcodeTypeComponent::MResetResponse(const uint16_t opcode,PBMessage* response, const stIMResponse& stresponse)
+bool OpcodeTypeComponent::ResetMessageResponse(const uint16_t opcode,PBMessage* response, const stIMResponse& stresponse)
 {
 	if (m_opcode_reset_response[opcode])
 	{

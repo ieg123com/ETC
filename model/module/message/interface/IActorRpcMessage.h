@@ -1,5 +1,6 @@
 #pragma once
 #include "IMessage.h"
+#include "kernel/Entity.h"
 
 
 namespace Model
@@ -9,7 +10,7 @@ namespace Model
 		public IMessage 
 	{
 	public:
-		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) = 0;
+		virtual void Handle(const std::shared_ptr<GEntity>& unit, const char* data, const size_t len) = 0;
 		
 		virtual const Type GetRequestType() const = 0;
 		virtual const Type GetResponseType() const = 0;
@@ -24,7 +25,7 @@ namespace Model
 		public IMActorRpcHandler
 	{
 	public:
-		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) override
+		virtual void Handle(const std::shared_ptr<GEntity>& unit, const char* data, const size_t len) override
 		{
 			Request request;
 			Response response;

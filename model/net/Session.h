@@ -2,7 +2,7 @@
 #include "kernel/Entity.h"
 #include "NetDefines.h"
 #include "IPEndPoint.h"
-#include "google/protobuf/message.h"
+#include "module/message/MessageDefines.h"
 #include <string>
 
 namespace Model
@@ -36,10 +36,13 @@ namespace Model
 		/** @brief 发送消息*/
 		void Send(const char* data, const size_t len);
 
-		template<typename T>
-		void Reply(const T& message) {
-			__Reply(typeof(T), &message);
-		}
+
+		void Reply(const PBMessage* message);
+
+		void ActorReply(const uint16_t opcode, const int64_t actor_id, const PBMessage* message);
+
+
+
 
 	public:
 
@@ -49,7 +52,9 @@ namespace Model
 
 
 	private:
-	
-		void __Reply(const Type& tp, const ::google::protobuf::Message* message);
+		void __SendOuterMessage(const uint16_t opcode, const PBMessage* message);
+
+		void __SendInnterMessage(const uint16_t opcode, const int64_t actor_id, const PBMessage* message);
+
 	};
 }

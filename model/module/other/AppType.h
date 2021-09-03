@@ -17,7 +17,7 @@ namespace Model
 
 		Robot = 1<< 20,
 
-		AllServer = Watcher | Gate | Login | List | Map | Location | Chat | Social,
+		AllServer = Watcher | Gate | Login | List | Map | Location | Chat | Social | Robot,
 	};
 
 	EAppType ToAppType(const std::string& str);

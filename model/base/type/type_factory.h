@@ -1,6 +1,7 @@
 #pragma once
 #include "type.h"
 #include "interface/ISupportTypeCreation.h"
+#include "GlobalData.h"
 
 
 
@@ -19,7 +20,7 @@ namespace Model
 			auto found = g_type_factory->m_all_type_info.find((&typeid(T))->raw_name());
 			if (found == g_type_factory->m_all_type_info.end())
 			{
-				auto value = std::make_pair(std::string((&typeid(T))->raw_name()), new TypeInfo(&typeid(T)));
+				auto value = std::make_pair(std::string((&typeid(T))->raw_name()), new TypeInfo(&typeid(T),GlobalData::Instance->GetTypeIndex()));
 				value.second->create_instance = nullptr;
 				value.second->delete_instance = nullptr;
 				found = g_type_factory->m_all_type_info.insert(value).first;

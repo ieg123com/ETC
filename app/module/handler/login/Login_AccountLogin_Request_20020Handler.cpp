@@ -10,8 +10,9 @@ namespace Hotfix
 	public:
 		virtual void Run(const std::shared_ptr<Session>& session, login::Login_AccountLogin_Request_20020& request, login::Login_AccountLogin_Response_20021& response, std::function<void()>& reply)override
 		{
-			LOG_WARN("Login_AccountLogin_Request_20020Handler {}",request.DebugString());
-			
+			LOG_WARN("Login_AccountLogin_Request_20020Handler TypeName:{}",request.GetTypeName());
+			request.GetTypeName();
+
 			reply();
 		}
 	};

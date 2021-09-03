@@ -67,9 +67,17 @@ FILE(GLOB MODULE_HANDLER_FILES "./module/handler/*.cpp" "./module/handler/*.h")
 set(MODULE_HANDLER_LOGIN_FILES "")
 FILE(GLOB MODULE_HANDLER_LOGIN_FILES "./module/handler/login/*.cpp" "./module/handler/login/*.h")
 
+# handler etc_msg
+set(MODULE_HANDLER_ETC_MSG_FILES "")
+FILE(GLOB MODULE_HANDLER_ETC_MSG_FILES "./module/handler/etc_msg/*.cpp" "./module/handler/etc_msg/*.h")
+
 # init
 set(MODULE_INIT_FILES "")
 FILE(GLOB MODULE_INIT_FILES "./module/init/*.cpp" "./module/init/*.h")
+
+# actor
+set(MODULE_ACTOR_FILES "")
+FILE(GLOB MODULE_ACTOR_FILES "./module/actor/*.cpp" "./module/actor/*.h")
  
 
 source_group(module						FILES ${MODULE_FILES})
@@ -78,7 +86,9 @@ source_group(module\\component			FILES ${MODULE_COMPONENT_FILES})
 source_group(module\\component\\config	FILES ${MODULE_COMPONENT_CONFIG_FILES})
 source_group(module\\handler			FILES ${MODULE_HANDLER_FILES})
 source_group(module\\handler\\login		FILES ${MODULE_HANDLER_LOGIN_FILES})
+source_group(module\\handler\\etc_msg	FILES ${MODULE_HANDLER_ETC_MSG_FILES})
 source_group(module\\init				FILES ${MODULE_INIT_FILES})
+source_group(module\\actor				FILES ${MODULE_ACTOR_FILES})
 
 
 LIST(APPEND ALL_OBJECT
@@ -88,7 +98,9 @@ LIST(APPEND ALL_OBJECT
 	${MODULE_COMPONENT_CONFIG_FILES}
 	${MODULE_HANDLER_FILES}
 	${MODULE_HANDLER_LOGIN_FILES}
-	${MODULE_INIT_FILES})
+	${MODULE_HANDLER_ETC_MSG_FILES}
+	${MODULE_INIT_FILES}
+	${MODULE_ACTOR_FILES})
 
 
 

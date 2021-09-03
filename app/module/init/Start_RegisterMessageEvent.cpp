@@ -1,7 +1,7 @@
 #include "etc/etc.h"
 #include "model/module/other/SystemEventType.h"
 #include "model/module/message/MessageDispatcherComponent.h"
-#include "model/proto/etc_message.pb.h"
+#include "model/proto/etc_msg.pb.h"
 #include "model/proto/login.pb.h"
 
 
@@ -15,6 +15,11 @@ namespace Hotfix
 		{
 			// TODO: 注册消息id
 			LOG_INFO("Start register message");
+			
+#pragma region 内部消息
+			dis_msg->RegisterMessage<ActorRequest>(65534);
+			dis_msg->RegisterMessage<ActorResponse>(65535);
+#pragma endregion
 
 			dis_msg->RegisterMessage<TestRequest>(100);
 			dis_msg->RegisterMessage<TestResponse>(101);

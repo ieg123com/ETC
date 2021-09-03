@@ -75,7 +75,7 @@ namespace Hotfix
 					}
 					catch (std::exception& e)
 					{
-						LOG_WARN("没有注册的消息类型 {} {} error:{}", item->GetRequestType().class_name(),item->GetResponseType().class_name(),e.what());
+						LOG_WARN("没有注册的消息类型 {} {} error:{}", item->GetRequestType().full_name(),item->GetResponseType().full_name(),e.what());
 					}
 				}
 			}

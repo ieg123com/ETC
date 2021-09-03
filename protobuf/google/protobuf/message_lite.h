@@ -40,6 +40,7 @@
 #define GOOGLE_PROTOBUF_MESSAGE_LITE_H__
 
 #include <google/protobuf/stubs/common.h>
+#include <model/base/type/type.h>
 
 
 namespace google {
@@ -88,6 +89,8 @@ class LIBPROTOBUF_EXPORT MessageLite {
   // Get the name of this message type, e.g. "foo.bar.BazProto".
   virtual string GetTypeName() const = 0;
 
+  // Get the type of message object
+  virtual Type GetType()const { return Type(); }
   // Construct a new instance of the same type.  Ownership is passed to the
   // caller.
   virtual MessageLite* New() const = 0;

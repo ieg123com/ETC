@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <functional>
 #include <memory>
+#include "other/container/Use.h"
 #include "google/protobuf/message.h"
 
 
@@ -15,16 +16,16 @@ class stIMRequest:
 	public stIMessage
 {
 public:
-	int32_t RpcId;
+	Use<int32_t> RpcId;
 };
 
 class stIMResponse:
 	public stIMessage
 {
 public:
-	int32_t RpcId;
-	int32_t Error;
-	std::string Message;
+	Use<int32_t> RpcId;
+	Use<int32_t> Error;
+	Use<std::string> Message;
 };
 
 class stIMActorRequest :
