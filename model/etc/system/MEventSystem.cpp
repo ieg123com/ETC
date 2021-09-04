@@ -132,7 +132,7 @@ namespace Model
 		}
 
 		{
-			std::unordered_map<Type, std::set<std::pair<Type,int32_t>>>			message_types;
+			std::unordered_map<Type, std::set<std::pair<Type,int32_t>>>			message_handle_types;
 			for (auto& item : m_assemblys)
 			{
 				auto all_attr = item.second->GetType<Message>();
@@ -140,30 +140,30 @@ namespace Model
 				{
 					if (auto message = std::dynamic_pointer_cast<Message>(attr))
 					{
-						if (message_types[attr->GetAttrType()].emplace(attr->GetObjectType(),message->appType).second)
+						if (message_handle_types[attr->GetAttrType()].emplace(attr->GetObjectType(),message->appType).second)
 						{
 							LOG_WARN("message type {}", attr->GetObjectType().name());
 						}
 					}
-					
 				}
 			}
 
 			// 消息事件
-			__message_system.clear();
+			__message_handle_system.clear();
 
-			auto m_attr = message_types.find(typeof(Message));
-			if (m_attr != message_types.end())
+			auto m_attr = message_handle_types.find(typeof(Message));
+			if (m_attr != message_handle_types.end())
 			{
 				for (auto& attr : m_attr->second)
 				{
-					if (auto obj = TypeFactory::CreateInstance<IMessage>(attr.first))
+					if (auto obj = TypeFactory::CreateInstance<IMessageSystem>(attr.first))
 					{
 						obj->appType = attr.second;
-						__message_system.push_back(obj);
+						__message_handle_system.push_back(obj);
 					}
 				}
 			}
+
 		}
 	}
 
@@ -210,6 +210,21 @@ namespace Model
 		ctx.status = EventCtxStatus::DeleteAllEventInObject;
 		ctx.target_obj = target_obj;
 		m_object_event_operation.emplace(std::move(ctx));
+	}
+
+
+	std::unordered_map<Type, std::shared_ptr<Reflection::IBaseAttribute>> MEventSystem::GetAssemblysType(const Type& tp)const
+	{
+		std::unordered_map<Type, std::shared_ptr<Reflection::IBaseAttribute>> objtype_baseattribute;
+		for (auto& item : m_assemblys)
+		{
+			auto all_attr = item.second->GetType(tp);
+			for (auto& attr : all_attr)
+			{
+				objtype_baseattribute.emplace(attr->GetObjectType(), attr);
+			}
+		}
+		return objtype_baseattribute;
 	}
 
 	void MEventSystem::__ObjectEventOperationHandle()

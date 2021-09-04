@@ -15,19 +15,7 @@ namespace Hotfix
 		{
 			// TODO: 注册消息id
 			LOG_INFO("Start register message");
-			
-#pragma region 内部消息
-			dis_msg->RegisterMessage<ActorRequest>(65534);
-			dis_msg->RegisterMessage<ActorResponse>(65535);
-#pragma endregion
 
-			dis_msg->RegisterMessage<TestRequest>(100);
-			dis_msg->RegisterMessage<TestResponse>(101);
-
-			dis_msg->RegisterMessage<login::Login_AccountLogin_Request_20020>(20020);
-			dis_msg->RegisterMessage<login::Login_AccountLogin_Response_20021>(20021);
-			dis_msg->RegisterMessage<login::Login_keyLogin_Request_20024>(20024);
-			dis_msg->RegisterMessage<login::Login_keyLogin_Response_20025>(20025);
 
 
 			LOG_INFO("Register message complete");

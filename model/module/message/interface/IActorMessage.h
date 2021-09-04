@@ -1,6 +1,6 @@
 #pragma once
 #include "IMessage.h"
-#include "model/proto/etc_msg.pb.h"
+#include "model/proto/EtcMsg.pb.h"
 
 
 
@@ -15,7 +15,6 @@ namespace Model
 	public:
 		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) = 0;
 
-		virtual FMRequestParse GetRequestParse()const = 0;
 	};
 
 	template<typename T,typename Request>
@@ -37,9 +36,6 @@ namespace Model
 
 		virtual const Type GetRequestType() const override { return typeof(Request); }
 		virtual const Type GetResponseType() const override { return typeof(ActorResponse); }
-		virtual FMRequestParse GetRequestParse()const override {
-			return MRequestParse<Request>()();
-		}
 	};
 
 

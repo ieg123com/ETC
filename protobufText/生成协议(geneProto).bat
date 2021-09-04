@@ -1,2 +1,4 @@
-protoc.exe ./etc_msg.proto --cpp_out=../model/proto
-protoc.exe ./login.proto --cpp_out=../model/proto
+protoc.exe ./EtcMsg.proto --cpp_out=../model/proto
+protoc.exe ./Login.proto --cpp_out=../model/proto
+
+pause

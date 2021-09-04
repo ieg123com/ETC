@@ -3,9 +3,15 @@ syntax = "proto3";
 // Model 消息,框架内部消息
 package Model;
 
+message Struct_Position
+{
+	int32 x =1;
+	int32 y=2;
+}
+
 
 // 消息头
-message MessageHead	// IResponse
+message MessageHead	// IMessage
 {
 	int32 RpcId = 90;
 	int32 Error = 91;
@@ -15,13 +21,14 @@ message MessageHead	// IResponse
 
 
 // Actor默认请求
-message ActorRequest
+// ResponseType ActorResponse
+message ActorRequest	// IActorRequest
 {
 	int32 RpcId = 90;
 }
 
 // Actor默认回复消息
-message ActorResponse
+message ActorResponse	// IActorResponse
 {
 	int32 RpcId = 90;
 	int32 Error = 91;
@@ -31,8 +38,8 @@ message ActorResponse
 
 
 
-
-message TestRequest
+// ResponseType TestResponse
+message TestRequest	// IActorLocationRequest
 {
 	int32 A = 1;
 	int32 B = 2;
@@ -40,7 +47,7 @@ message TestRequest
 	int32 RpcId = 90;
 }
 
-message TestResponse
+message TestResponse	// IActorLocationResponse
 {
 	int32 Sum = 1;
 	
@@ -49,8 +56,8 @@ message TestResponse
 	string Message = 92;
 }
 
-
-message ActorTestRequest
+// ResponseType ActorTestResponse
+message ActorTestRequest	// IActorRequest
 {
 	int32 A = 1;
 	int32 B = 2;
@@ -59,7 +66,7 @@ message ActorTestRequest
 	int64 ActorId = 93;
 }
 
-message ActorTestResponse
+message ActorTestResponse	// IActorResponse
 {
 	int32 Sum = 1;
 	
@@ -68,6 +75,10 @@ message ActorTestResponse
 	string Message = 92;
 }
 
+message ActorMessageTest
+{
+	
+}
 
 
 

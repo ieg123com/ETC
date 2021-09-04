@@ -11,6 +11,7 @@ using TypeIndex = uint32_t;
 namespace Model
 {
 	class TypeFactory;
+	class ISupportTypeCreation;
 }
 
 class TypeInfo
@@ -44,8 +45,7 @@ public:
 	}
 
 private:
-	std::function<void*()>		create_instance;
-	std::function<void(void*)>	delete_instance;
+	std::function<std::shared_ptr<Model::ISupportTypeCreation>()>		create_instance;
 };
 
 

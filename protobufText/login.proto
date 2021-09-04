@@ -7,7 +7,8 @@ package login;
 
 
 //-------------邮箱注册账号---------------	(20010)
-message Login_RegisterEmail_Request_20010
+// ResponseType Login_RegisterEmail_Response_20011
+message Login_RegisterEmail_Request_20010	// IRequest
 {
 	//昵称 对应 ui账号
 	//仅支持 英文、数字、_-
@@ -16,11 +17,9 @@ message Login_RegisterEmail_Request_20010
 	string	Password	= 3;
 	
 	int32	RpcId		= 90;
-	string	Message 	= 91;
-	int32	Error 		= 92;
 }
 
-message Login_RegisterEmail_Response_20011
+message Login_RegisterEmail_Response_20011	// IResponse
 {
 	int64	AccountId	= 2;
 	
@@ -30,17 +29,16 @@ message Login_RegisterEmail_Response_20011
 }
 
 //----------------(昵称/邮箱)+密码登录----------------(20020)
-message Login_AccountLogin_Request_20020
+// ResponseType Login_AccountLogin_Response_20021
+message Login_AccountLogin_Request_20020	// IRequest
 {
 	string	Account		= 1;
 	string	Password	= 2;
 	
 	int32	RpcId		= 90;
-	string	Message 	= 91;
-	int32	Error 		= 92;
 }
 
-message Login_AccountLogin_Response_20021
+message Login_AccountLogin_Response_20021	// IResponse
 {
 	int64	AccountId	= 2;
 	string	Key			= 3;
@@ -60,16 +58,15 @@ message Login_AccountLogin_Response_20021
 }
 
 //----------------微信登录----------------(20022)
-message Login_WechatLogin_Request_20022
+// ResponseType Login_WechatLogin_Response_20023
+message Login_WechatLogin_Request_20022	// IRequest
 {
 	string	WxCode		= 1;
 	
 	int32	RpcId		= 90;
-	string	Message 	= 91;
-	int32	Error 		= 92;
 }
 
-message Login_WechatLogin_Response_20023
+message Login_WechatLogin_Response_20023	// IResponse
 {
 	int64	AccountId	= 2;
 	string	Key			= 3;
@@ -89,17 +86,16 @@ message Login_WechatLogin_Response_20023
 }
 
 //----------------账号+key密钥验证---------------	(20024)
-message Login_keyLogin_Request_20024
+// ResponseType Login_keyLogin_Response_20025
+message Login_keyLogin_Request_20024	// IRequest
 {
 	int64	AccountId	= 1;
 	string	Key			= 2;
 	
 	int32	RpcId		= 90;
-	string	Message 	= 91;
-	int32	Error 		= 92;
 }
 
-message Login_keyLogin_Response_20025
+message Login_keyLogin_Response_20025	// IResponse
 {
 	int32	SessionID	= 2;
 	// 测试参数
@@ -114,6 +110,6 @@ message Login_keyLogin_Response_20025
 
 
 //----------------客户端心跳保活消息---------------	(25)
-message Login_HeartBeat_Request_30
+message Login_HeartBeat_Request_30	// IMessage
 {
 }

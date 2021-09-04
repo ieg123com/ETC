@@ -14,9 +14,6 @@ namespace Model
 		
 		virtual const Type GetRequestType() const = 0;
 		virtual const Type GetResponseType() const = 0;
-		virtual FMRequestParse GetRequestParse()const = 0;
-		virtual FMResponseParse GetResponseParse()const = 0;
-		virtual FMResetResponse GetResetResponse()const = 0;
 	};
 
 
@@ -40,15 +37,6 @@ namespace Model
 
 		virtual const Type GetRequestType() const override { return typeof(Request); }
 		virtual const Type GetResponseType() const override { return typeof(Response); }
-		virtual FMRequestParse GetRequestParse()const override {
-			return MRequestParse<Request>()();
-		}
-		virtual FMResponseParse GetResponseParse()const override {
-			return MResponseParse<Response>()();
-		}
-		virtual FMResetResponse GetResetResponse()const override {
-			return MResetResponse<Response>()();
-		}
 	};
 
 }

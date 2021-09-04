@@ -250,12 +250,17 @@ LIST(APPEND ALL_OBJECT
 set(PROTO_FILES "")
 FILE(GLOB PROTO_FILES "./proto/*.cc" "./proto/*.h")
 
+set(PROTO_OPCODE_FILES "")
+FILE(GLOB PROTO_OPCODE_FILES "./proto/opcode/*.cc" "./proto/opcode/*.h")
+
 
 source_group(proto						FILES ${PROTO_FILES})
+source_group(proto\\opcode				FILES ${PROTO_OPCODE_FILES})
 
 
 LIST(APPEND ALL_OBJECT
-	${PROTO_FILES})
+	${PROTO_FILES}
+	${PROTO_OPCODE_FILES})
 
 #========================其他==============================
 include_directories(./other)

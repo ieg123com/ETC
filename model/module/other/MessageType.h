@@ -4,13 +4,16 @@
 // 消息类型
 enum class EMessageType : unsigned char
 {
-	Message,
-	Request,
-	Response,
-	ActorMessage,
-	ActorRequest,
-	ActorResponse,
-	ActorLocationMessage,
-	ActorLocationRequest,
-	ActorLocationResponse,
+	None,
+	IMessage,
+	IRequest,
+	IResponse,
+	IActorMessage,
+	IActorRequest,
+	IActorResponse,
+	IActorLocationMessage,
+	IActorLocationRequest,
+	IActorLocationResponse,
 };
+
+

@@ -7,20 +7,17 @@
 class OpcodeTypeComponent:
 	public Component
 {
-	std::vector<std::function<std::shared_ptr<PBMessage>(void)>> m_opcode_instances;
 
-	std::unordered_map<Type, FMRequestParse>	m_type_request_parse;
-	std::unordered_map<Type, FMResponseParse>	m_type_response_parse;
-	std::unordered_map<Type, FMResetResponse>	m_type_reset_response;
-	std::vector<FMRequestParse>		m_opcode_request_parse;
-	std::vector<FMResponseParse>	m_opcode_response_parse;
-	std::vector<FMResetResponse>	m_opcode_reset_response;
-
-	
 	std::vector<Type>	m_opcode_types;
 	std::unordered_map<Type, uint16_t>	m_type_opcodes;
 	std::unordered_map<Type, Type>	m_type_request_response;
 	std::vector<uint16_t>			m_opcode_request_response;
+
+	// 用来记录外网消息的，== 1 为外网消息
+	std::vector<uint8_t>	m_outer_opcode;
+
+	std::vector<EMessageType>	m_opcode_msg_types;
+
 public:
 	static OpcodeTypeComponent* Instance;
 
@@ -31,91 +28,112 @@ public:
 
 	void Destroy();
 
-	template<typename T>
-	void RegisterMessage(const uint16_t msg_id) {
-		if (!m_type_opcodes.emplace(typeof(T), msg_id).second)
-		{
-			throw std::exception(std::format("消息类型已经注册过了,不能重复注册！type = %s", typeof(T).full_name()).c_str());
-		}
-		m_opcode_types[msg_id] = typeof(T);
-		m_opcode_instances[msg_id] = []()->std::shared_ptr<PBMessage>{ return std::make_shared<T>(); };
-	}
+	// 注册消息，为消息协议设置协议码
+	void __RegisterMessage(const Type& tp, const uint16_t opcode,const EMessageType msg_type);
 
-	void RegisterRequestParse(const Type& tp, FMRequestParse& parse_req) {
-		m_type_request_parse.emplace(tp, parse_req);
-	}
+	// 绑定rpc消息
+	void __BindRpcMessage(const Type& request, const Type& response);
 
-	void RegisterResponseParse(const Type& tp, FMResponseParse& parse_rpo) {
-		m_type_response_parse.emplace(tp, parse_rpo);
-	}
+	// 将一条消息注册为外网消息
+	void __RegisterOuterMessage(const uint16_t opcode);
 
-	void RegisterResetResponse(const Type& tp, FMResetResponse& reset_rpo) {
-		m_type_reset_response.emplace(tp, reset_rpo);
-	}
+	// 是外网消息
+	bool IsOuterMessage(const uint16_t opcode)const;
+	bool IsOuterMessage(const Type& tp)const;
 
-	void BindRpcMessage(const Type& request, const Type& response) {
-		if (!m_type_request_response.emplace(request, response).second)
-		{
-			throw std::exception(std::format("已绑定了相同类型的消息。request = %s,response = %s",request.full_name(),response.full_name()).c_str());
-		}
-	}
+	// 用协议码创建消息实例
+	std::shared_ptr<IMessage> CreateInstanceTry(const uint16_t opcode)const;
 
-	template<typename Request,typename Response>
-	void BindRpcMessage() {
-		auto found = m_type_request_response.find(typeof(Request));
-		if (found == m_type_request_response.end())
-		{
-			m_type_request_response.emplace(typeof(Request), typeof(Response));
-			RegisterRequestParse(typeof(Request), MRequestParse<Request>()());
-			RegisterResponseParse(typeof(Response), MResponseParse<Response>()());
-			RegisterResetResponse(typeof(Response), MResetResponse<Response>()());
-			return;
-		}
-		if (found->second != typeof(Response))
-		{
-			throw std::exception(std::format("已绑定了相同类型的消息。request = %s,response = %s", typeof(Request).full_name(), typeof(Response).full_name()).c_str());
-		}
-	}
-
-	std::shared_ptr<PBMessage> CreateInstanceTry(const uint16_t msg_id)const {
-		if (m_opcode_instances[msg_id])
-		{
-			return m_opcode_instances[msg_id]();
-		}
-		throw std::exception(std::format("没有注册这个id的消息，msg_id = %u", msg_id).c_str());
-	}
-
-	std::shared_ptr<PBMessage> CreateInstanceTry(const Type& tp)const {
-		return CreateInstanceTry(GetTypeOpcodeTry(tp));
-	}
-
-	std::shared_ptr<PBMessage> CreateResponseInstanceTry(const uint16_t opcode);
+	// 用请求消息的协议码，创建一条回复的消息实例
+	std::shared_ptr<IMessage> CreateResponseInstanceTry(const uint16_t opcode);
 
 	
 	// 获取消息id
-	uint16_t GetTypeOpcodeTry(const Type& tp)const {
-		auto found = m_type_opcodes.find(tp);
-		if (found == m_type_opcodes.end())
-		{
-			throw std::exception(std::format("没有找到类型的消息id，type = %s",tp.full_name()).c_str());
-		}
-		return found->second;
-	}
+	uint16_t GetTypeOpcodeTry(const Type& tp)const;
 
 	// 获取消息类型
-	Type GetOpcodeTypeTry(const int16_t opcode);
+	Type GetOpcodeTypeTry(const int16_t opcode)const;
 
 	// 获取回复消息类型
-	Type GetResponseTypeTry(const Type& tp);
+	Type GetResponseTypeTry(const Type& tp)const;
 
 	// 获取回复消息id
 	uint16_t GetResponseOpcodeTry(const int16_t opcode);
 
-
-
-	std::shared_ptr<PBMessage> RequestMessageParse(const uint16_t opcode, stIMRequest& strequest, const char* data, const uint16_t len);
-
-	std::shared_ptr<PBMessage> ResponseMessageParse(const uint16_t opcode, stIMResponse& stresponse, const char* data, const uint16_t len);
-
-	bool ResetMessageResponse(const uint16_t opcode, PBMessage* response, const stIMResponse& stresponse);
+	EMessageType GetMessageType(const int16_t opcode);
 };
+
+
+
+
+
+
+
+
+
+
+
+inline bool OpcodeTypeComponent::IsOuterMessage(const uint16_t opcode)const
+{
+	return (m_outer_opcode[opcode] == 1);
+}
+
+inline bool OpcodeTypeComponent::IsOuterMessage(const Type& tp)const
+{
+	uint16_t opcode = 0;
+	try
+	{
+		opcode = GetOpcodeTypeTry(tp);
+	}
+	catch (...)
+	{
+		return false;
+	};
+	return IsOuterMessage(opcode);
+}
+
+inline uint16_t OpcodeTypeComponent::GetTypeOpcodeTry(const Type& tp)const
+{
+	auto found = m_type_opcodes.find(tp);
+	if (found == m_type_opcodes.end())
+	{
+		throw std::exception(std::format("没有找到类型的消息id，type = %s", tp.full_name()).c_str());
+	}
+	return found->second;
+}
+
+inline Type OpcodeTypeComponent::GetOpcodeTypeTry(const int16_t opcode)const
+{
+	if (m_opcode_types[opcode])
+	{
+		return m_opcode_types[opcode];
+	}
+	throw std::exception(std::format("没有知道这消息id的类型,opcode = %u", opcode).c_str());
+}
+
+inline Type OpcodeTypeComponent::GetResponseTypeTry(const Type& tp)const
+{
+	auto found = m_type_request_response.find(tp);
+	if (found == m_type_request_response.end())
+	{
+		std::exception(std::format("没有通过类型找到回复类型,type = %s", tp.full_name()).c_str());
+	}
+	return found->second;
+}
+
+inline uint16_t OpcodeTypeComponent::GetResponseOpcodeTry(const int16_t opcode)
+{
+	if (m_opcode_request_response[opcode] != 0)
+	{
+		return m_opcode_request_response[opcode];
+	}
+	Type response_type = GetResponseTypeTry(GetOpcodeTypeTry(opcode));
+	uint16_t response_opcode = GetTypeOpcodeTry(response_type);
+	m_opcode_request_response[opcode] = response_opcode;
+	return response_opcode;
+}
+
+inline EMessageType OpcodeTypeComponent::GetMessageType(const int16_t opcode)
+{
+	return m_opcode_msg_types[opcode];
+}

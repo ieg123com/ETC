@@ -39,8 +39,8 @@ namespace Model
 {
 	namespace Reflection {
 		class Assembly;
+		class IBaseAttribute;
 	}
-	class Reflection::Assembly;
 
 
 	enum class DLLType : uint8_t 
@@ -77,7 +77,8 @@ namespace Model
 	public:
 
 		// 消息系统事件
-		std::vector<std::shared_ptr<IMessage>>				__message_system;
+		std::vector<std::shared_ptr<IMessageSystem>>		__message_handle_system;
+		std::vector<std::shared_ptr<IMessage>>				__proto_message_system;
 
 
 		MEventSystem();
@@ -224,14 +225,24 @@ namespace Model
 		void RemoveObjectEvent(const std::shared_ptr<Object>& target_obj);
 
 
+		const std::unordered_map<DLLType, std::shared_ptr<Reflection::Assembly>>& GetAssemblys()const { return m_assemblys; };
+
+		template<typename T>
+		std::unordered_map<Type, std::shared_ptr<Reflection::IBaseAttribute>> GetAssemblysType() {
+			return std::move(GetAssemblysType(typeof(T)));
+		}
+
+		std::unordered_map<Type, std::shared_ptr<Reflection::IBaseAttribute>> GetAssemblysType(const Type& tp)const;
+
 	private:
 		void __ObjectEventOperationHandle();
 		void __AddEvent(const stObjectEventContext& ctx);
 		void __DeleteAllEventInObject(const stObjectEventContext& ctx);
 		void __DeleteSpecificEventInObject(const stObjectEventContext& ctx);
 	private:
-
+		// 记录每个模组内部用到的反射对象
 		std::unordered_map<DLLType, std::shared_ptr<Reflection::Assembly>>	m_assemblys;
+		// 所有反射的类型
 		std::unordered_map<Type, std::set<Type>>			m_types;
 
 

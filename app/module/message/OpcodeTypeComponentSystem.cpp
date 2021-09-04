@@ -22,45 +22,14 @@ public:
 		self->Load();
 
 		{
-			// TODO:  绑定已注册的类型
-			auto& message_system = Game::Event().__message_system;
+			// TODO:  注册消息
+			auto& message_system = Game::Event().GetAssemblysType<ProtoMessage>();
 			for (auto& item : message_system)
 			{
-				if (auto msg_instance = std::dynamic_pointer_cast<IMRpcHandler>(item))
-				{
-					self->BindRpcMessage(msg_instance->GetRequestType(), msg_instance->GetResponseType());
-					self->RegisterRequestParse(msg_instance->GetRequestType(), msg_instance->GetRequestParse());
-					self->RegisterResponseParse(msg_instance->GetResponseType(), msg_instance->GetResponseParse());
-					self->RegisterResetResponse(msg_instance->GetResponseType(), msg_instance->GetResetResponse());
-				}
-				if (auto msg_instance = std::dynamic_pointer_cast<IMActorRpcHandler>(item))
-				{
-					self->BindRpcMessage(msg_instance->GetRequestType(), msg_instance->GetResponseType());
-					self->RegisterRequestParse(msg_instance->GetRequestType(), msg_instance->GetRequestParse());
-					self->RegisterResponseParse(msg_instance->GetResponseType(), msg_instance->GetResponseParse());
-					self->RegisterResetResponse(msg_instance->GetResponseType(), msg_instance->GetResetResponse());
-				}
-				if (auto msg_instance = std::dynamic_pointer_cast<IMActorLocationRpcHandler>(item))
-				{
-					self->BindRpcMessage(msg_instance->GetRequestType(), msg_instance->GetResponseType());
-					self->RegisterRequestParse(msg_instance->GetRequestType(), msg_instance->GetRequestParse());
-					self->RegisterResponseParse(msg_instance->GetResponseType(), msg_instance->GetResponseParse());
-					self->RegisterResetResponse(msg_instance->GetResponseType(), msg_instance->GetResetResponse());
-				}
-				if (auto msg_instance = std::dynamic_pointer_cast<IMessageHandler>(item))
-				{
-					self->RegisterRequestParse(msg_instance->GetRequestType(), msg_instance->GetRequestParse());
-				}
-				if (auto msg_instance = std::dynamic_pointer_cast<IMActorHandler>(item))
-				{
-					self->BindRpcMessage(msg_instance->GetRequestType(), msg_instance->GetResponseType());
-					self->RegisterRequestParse(msg_instance->GetRequestType(), msg_instance->GetRequestParse());
-				}
-				if (auto msg_instance = std::dynamic_pointer_cast<IMActorLocationHandler>(item))
-				{
-					self->BindRpcMessage(msg_instance->GetRequestType(), msg_instance->GetResponseType());
-					self->RegisterRequestParse(msg_instance->GetRequestType(), msg_instance->GetRequestParse());
-				}
+				auto attr_type = item.second->GetObjectType();
+				auto message = TypeFactory::CreateInstance<IMessage>(attr_type);
+
+				self->__RegisterMessage(message->GetType(), message->GetOpcode(),message->GetMessageType());
 			}
 		}
 

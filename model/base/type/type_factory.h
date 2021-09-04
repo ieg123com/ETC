@@ -45,12 +45,8 @@ namespace Model
 			}
 			if (!tpinfo->create_instance)
 			{
-				tpinfo->create_instance = []()->void* {
-					T* new_obj = new T();
-					return new_obj;
-				};
-				tpinfo->delete_instance = [](void* self)->void {
-					delete (T*)self;
+				tpinfo->create_instance = []()->std::shared_ptr<ISupportTypeCreation> {
+					return std::make_shared<T>();
 				};
 			}
 		}
@@ -66,7 +62,7 @@ namespace Model
 			{
 				return nullptr;
 			}
-			std::shared_ptr<ISupportTypeCreation> new_obj((ISupportTypeCreation*)(type.m_info->create_instance()), type.m_info->delete_instance);
+			std::shared_ptr<ISupportTypeCreation> new_obj = type.m_info->create_instance();
 
 			std::shared_ptr<T> ret_obj = std::dynamic_pointer_cast<T>(new_obj);
 			if (!ret_obj)

@@ -30,7 +30,7 @@ namespace Hotfix
 			
 			{
 				// TODO:  给指定消息id设置回调函数
-				auto& message_system = Game::Event().__message_system;
+				auto& message_system = Game::Event().GetAssemblysType<ProtoMessage>();
 				for (auto& item : message_system)
 				{
 					// 请求消息
