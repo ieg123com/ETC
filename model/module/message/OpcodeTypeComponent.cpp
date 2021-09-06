@@ -15,16 +15,17 @@ void OpcodeTypeComponent::Load()
 	m_type_opcodes.clear();
 	m_type_request_response.clear();
 	m_opcode_request_response.resize(UINT16_MAX + 1);
+	m_opcode_msg_types.resize(UINT16_MAX + 1);
 	memset(m_opcode_request_response.data(), 0, sizeof(*m_opcode_request_response.data()) * m_opcode_request_response.size());
 }
 
 void OpcodeTypeComponent::Destroy()
 {
-
 	m_opcode_types.clear();
 	m_type_opcodes.clear();
 	m_type_request_response.clear();
 	m_opcode_request_response.clear();
+	m_opcode_msg_types.size();
 }
 
 void OpcodeTypeComponent::__RegisterMessage(const Type& tp, const uint16_t opcode, const EMessageType msg_type)

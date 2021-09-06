@@ -12,7 +12,7 @@
 
 namespace Model
 {
-	class TChannelAwakeSystem : AwakeSystem<TChannel>
+	class TChannelAwakeSystem : public AwakeSystem<TChannel>
 	{
 	public:
 		virtual void Awake(const std::shared_ptr<TChannel>& self) override
@@ -25,7 +25,7 @@ namespace Model
 	};
 	REF(TChannelAwakeSystem, ObjectSystem);
 
-	class TChannelDestroySystem : DestroySystem<TChannel>
+	class TChannelDestroySystem : public DestroySystem<TChannel>
 	{
 	public:
 		virtual void Destroy(const std::shared_ptr<TChannel>& self) override
@@ -84,11 +84,6 @@ namespace Model
 		m_send_buffer.Write(&pack_size, sizeof(pack_size));
 		m_send_buffer.Write(data, len);
 
-		if (m_send_data.empty())
-		{
-			m_send_data.resize(m_send_buffer.Length());
-			m_send_buffer.Read((char*)m_send_data.data(), m_send_data.size());
-		}
 		if (!m_channel.TryPush(std::move([this] {
 			this->StartSend();
 			})))
@@ -137,17 +132,32 @@ namespace Model
 	{
 		if (auto service = m_session->__service)
 		{
-			if (service->Send(m_session->SessionId, m_send_data.data(), m_send_data.size()))
+			while (true)
 			{
-				uint16_t len, opcode = 0;
-				memcpy(&len, &m_send_data[0], sizeof(len));
-				memcpy(&opcode, &m_send_data[2], sizeof(opcode));
-				m_send_data.clear();
+				if (m_send_buffer.Length() == 0)
+				{
+					// 没有要发的数据了
+					break;
+				}
+				if (m_send_data.empty())
+				{
+					m_send_data.resize(m_send_buffer.Length());
+					m_send_buffer.Read((char*)m_send_data.data(), m_send_data.size());
+				}
+				if (service->Send(m_session->SessionId, m_send_data.data(), m_send_data.size()))
+				{
+					uint16_t len, opcode = 0;
+					memcpy(&len, &m_send_data[0], sizeof(len));
+					memcpy(&opcode, &m_send_data[2], sizeof(opcode));
+					m_send_data.clear();
+				}
+				else {
+					// 发送失败
+					LOG_ERROR("发送数据失败 error:{}", service->LastError);
+					break;
+				}
 			}
-			else {
-				// 发送失败
-				LOG_ERROR("发送数据失败 error:{}", service->LastError);
-			}
+			
 		}
 		
 	}

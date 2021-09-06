@@ -18,11 +18,16 @@ public:
 	void RegisterMessage(const uint16_t opcode, const std::shared_ptr<IMSystemHandler>& handler);
 
 
+	void Handle();
 
-	
+
+
 
 
 private:
+
+	// ActorMessage 消息调用
+	std::shared_ptr<IActorResponse> __Call(const int64_t actor_id, const int32_t rpc_id, const std::shared_ptr<IMessage>& message);
 
 
 

@@ -25,7 +25,7 @@ namespace Model
 			{
 				if (m_types[attr->GetAttrType()].insert(attr->GetObjectType()).second)
 				{
-					LOG_WARN("object type {}", attr->GetObjectType().name());
+					LOG_WARN("object type {}:{}", attr->GetObjectType().name(),attr->GetObjectType().m_info->index);
 				}
 			}
 		}
@@ -44,6 +44,11 @@ namespace Model
 			for (auto& attr : os_attr->second)
 			{
 				auto obj = TypeFactory::CreateInstance<IEventSystem>(attr);
+				if (obj)
+					LOG_INFO("Awake sytem {}:{}", attr.full_name(), attr.m_info->index);
+				else
+					LOG_ERROR("Awake sytem {}:{}", attr.full_name(), attr.m_info->index);
+
 				if (auto sys = std::dynamic_pointer_cast<IAwakeSystem>(obj))
 				{
 					Add(m_awake_system, obj->GetType(), sys);

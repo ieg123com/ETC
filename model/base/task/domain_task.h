@@ -3,6 +3,7 @@
 #include <memory>
 #include "task.h"
 #include "single/ISingleton.h"
+#include "etc/system/GameDefinition.h"
 
 
 

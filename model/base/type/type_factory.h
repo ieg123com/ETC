@@ -45,7 +45,7 @@ namespace Model
 			if (!tpinfo->create_instance)
 			{
 				tpinfo->create_instance = []()->std::shared_ptr<ISupportTypeCreation> {
-					return std::dynamic_pointer_cast<ISupportTypeCreation>(std::make_shared<T>());
+					return std::make_shared<T>();
 				};
 			}
 		}
@@ -55,7 +55,7 @@ namespace Model
 		{
 			if (type.m_info == nullptr)
 			{
-				return nullptr;
+				throw std::exception("不能用空 Type 创建 Instance");
 			}
 			if (!type.m_info->create_instance)
 			{

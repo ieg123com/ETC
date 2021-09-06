@@ -29,12 +29,6 @@ public:
 				auto message = TypeFactory::CreateInstance<IMessage>(item.second->GetObjectType());
 
 				self->__RegisterMessage(message->GetType(), message->GetOpcode(),message->GetMessageType());
-				switch (message->GetMessageType())
-				{
-				case EMessageType::IActorLocationMessage:
-					self->__RegisterOuterMessage(message->GetOpcode());
-					break;
-				}
 
 				if (message->GetMessageType() == EMessageType::IActorMessage ||
 					message->GetMessageType() == EMessageType::IActorLocationMessage)
