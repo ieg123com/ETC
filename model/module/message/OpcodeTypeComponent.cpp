@@ -15,9 +15,7 @@ void OpcodeTypeComponent::Load()
 	m_type_opcodes.clear();
 	m_type_request_response.clear();
 	m_opcode_request_response.resize(UINT16_MAX + 1);
-	m_outer_opcode.resize(UINT16_MAX + 1);
 	memset(m_opcode_request_response.data(), 0, sizeof(*m_opcode_request_response.data()) * m_opcode_request_response.size());
-	memset(m_outer_opcode.data(), 0, sizeof(*m_outer_opcode.data()) * m_outer_opcode.size());
 }
 
 void OpcodeTypeComponent::Destroy()
@@ -27,7 +25,6 @@ void OpcodeTypeComponent::Destroy()
 	m_type_opcodes.clear();
 	m_type_request_response.clear();
 	m_opcode_request_response.clear();
-	m_outer_opcode.clear();
 }
 
 void OpcodeTypeComponent::__RegisterMessage(const Type& tp, const uint16_t opcode, const EMessageType msg_type)
@@ -48,10 +45,6 @@ void OpcodeTypeComponent::__BindRpcMessage(const Type& request, const Type& resp
 	}
 }
 
-void OpcodeTypeComponent::__RegisterOuterMessage(const uint16_t opcode)
-{
-	m_outer_opcode[opcode] = 1;
-}
 
 
 

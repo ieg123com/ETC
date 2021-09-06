@@ -20,6 +20,8 @@
 #include "module/message/interface/IActorLocationRpcMessage.h"
 
 
+#undef GetObject
+
 namespace std
 {
 	template<typename _Ty1, typename _Ty2>
@@ -75,10 +77,6 @@ namespace Model
 	{
 		friend class ObjectDebug;
 	public:
-
-		// 消息系统事件
-		std::vector<std::shared_ptr<IMessageSystem>>		__message_handle_system;
-		std::vector<std::shared_ptr<IMessage>>				__proto_message_system;
 
 
 		MEventSystem();
@@ -227,6 +225,7 @@ namespace Model
 
 		const std::unordered_map<DLLType, std::shared_ptr<Reflection::Assembly>>& GetAssemblys()const { return m_assemblys; };
 
+		// 获取这个特性的全部实例
 		template<typename T>
 		std::unordered_map<Type, std::shared_ptr<Reflection::IBaseAttribute>> GetAssemblysType() {
 			return std::move(GetAssemblysType(typeof(T)));

@@ -75,7 +75,7 @@ message ActorTestResponse	// IActorResponse
 	string Message = 92;
 }
 
-message ActorMessageTest
+message ActorMessageTest// IMessage
 {
 	
 }

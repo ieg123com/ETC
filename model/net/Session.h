@@ -36,10 +36,12 @@ namespace Model
 		/** @brief 发送消息*/
 		void Send(const char* data, const size_t len);
 
+		void Send(const int64_t actor_id, const IMessage* message);
 
-		void Reply(const PBMessage* message);
+		void Send(const IMessage* message);
 
-		void ActorReply(const uint16_t opcode, const int64_t actor_id, const PBMessage* message);
+		void Reply(const IMessage* message);
+
 
 
 
@@ -50,11 +52,6 @@ namespace Model
 
 		void Destroy();
 
-
-	private:
-		void __SendOuterMessage(const uint16_t opcode, const PBMessage* message);
-
-		void __SendInnterMessage(const uint16_t opcode, const int64_t actor_id, const PBMessage* message);
 
 	};
 }

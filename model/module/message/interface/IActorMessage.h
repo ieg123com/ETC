@@ -10,7 +10,7 @@ namespace Model
 	class Unit;
 
 	class IMActorHandler :
-		public IMessage 
+		public IMSystemHandler
 	{
 	public:
 		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) = 0;
@@ -22,6 +22,9 @@ namespace Model
 		public IMActorHandler
 	{
 	public:
+		static_assert(std::is_base_of<IActorMessage, Request>::value,
+			"The Request type in MActorHandler needs needs to be inherited from 'IActorMessage'");
+
 		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) override
 		{
 			Request request;

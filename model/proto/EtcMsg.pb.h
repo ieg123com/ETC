@@ -76,7 +76,6 @@ class Struct_Position : public ::google::protobuf::Message /* @@protoc_insertion
   Struct_Position* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  virtual Type GetType()const override {return typeof(Struct_Position);}
   void CopyFrom(const Struct_Position& from);
   void MergeFrom(const Struct_Position& from);
   void Clear();
@@ -166,8 +165,9 @@ class MessageHead : public IMessage /* @@protoc_insertion_point(class_definition
   MessageHead* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  virtual Type GetType()const override {return typeof(MessageHead);}
   virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::MessageHead;}
+  virtual Type GetType()const override {return typeof(MessageHead);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IMessage;}
   void CopyFrom(const MessageHead& from);
   void MergeFrom(const MessageHead& from);
   void Clear();
@@ -276,11 +276,11 @@ class ActorRequest : public IActorRequest /* @@protoc_insertion_point(class_defi
   ActorRequest* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  virtual Type GetType()const override {return typeof(ActorRequest);}
   virtual int32_t GetRpcId()const override {return rpcid();}
   virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
-  virtual EMessageType GetMessageType()const override {return EMessageType::IActorRequest;}
   virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::ActorRequest;}
+  virtual Type GetType()const override {return typeof(ActorRequest);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IActorRequest;}
   void CopyFrom(const ActorRequest& from);
   void MergeFrom(const ActorRequest& from);
   void Clear();
@@ -363,15 +363,15 @@ class ActorResponse : public IActorResponse /* @@protoc_insertion_point(class_de
   ActorResponse* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  virtual Type GetType()const override {return typeof(ActorResponse);}
   virtual int32_t GetError()const override {return error();}
   virtual void SetError(const int32_t val)override { set_error(val);}
   virtual const ::std::string& GetMessage()const override {return message();}
   virtual void SetMessage(const ::std::string& val)override { set_message(val);}
   virtual int32_t GetRpcId()const override {return rpcid();}
   virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
-  virtual EMessageType GetMessageType()const override {return EMessageType::IActorResponse;}
   virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::ActorResponse;}
+  virtual Type GetType()const override {return typeof(ActorResponse);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IActorResponse;}
   void CopyFrom(const ActorResponse& from);
   void MergeFrom(const ActorResponse& from);
   void Clear();
@@ -473,11 +473,11 @@ class TestRequest : public IActorLocationRequest /* @@protoc_insertion_point(cla
   TestRequest* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  virtual Type GetType()const override {return typeof(TestRequest);}
   virtual int32_t GetRpcId()const override {return rpcid();}
   virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
-  virtual EMessageType GetMessageType()const override {return EMessageType::IActorLocationRequest;}
   virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::TestRequest;}
+  virtual Type GetType()const override {return typeof(TestRequest);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IActorLocationRequest;}
   void CopyFrom(const TestRequest& from);
   void MergeFrom(const TestRequest& from);
   void Clear();
@@ -574,15 +574,15 @@ class TestResponse : public IActorLocationResponse /* @@protoc_insertion_point(c
   TestResponse* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  virtual Type GetType()const override {return typeof(TestResponse);}
   virtual int32_t GetError()const override {return error();}
   virtual void SetError(const int32_t val)override { set_error(val);}
   virtual const ::std::string& GetMessage()const override {return message();}
   virtual void SetMessage(const ::std::string& val)override { set_message(val);}
   virtual int32_t GetRpcId()const override {return rpcid();}
   virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
-  virtual EMessageType GetMessageType()const override {return EMessageType::IActorLocationResponse;}
   virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::TestResponse;}
+  virtual Type GetType()const override {return typeof(TestResponse);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IActorLocationResponse;}
   void CopyFrom(const TestResponse& from);
   void MergeFrom(const TestResponse& from);
   void Clear();
@@ -691,11 +691,11 @@ class ActorTestRequest : public IActorRequest /* @@protoc_insertion_point(class_
   ActorTestRequest* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  virtual Type GetType()const override {return typeof(ActorTestRequest);}
   virtual int32_t GetRpcId()const override {return rpcid();}
   virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
-  virtual EMessageType GetMessageType()const override {return EMessageType::IActorRequest;}
   virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::ActorTestRequest;}
+  virtual Type GetType()const override {return typeof(ActorTestRequest);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IActorRequest;}
   void CopyFrom(const ActorTestRequest& from);
   void MergeFrom(const ActorTestRequest& from);
   void Clear();
@@ -799,15 +799,15 @@ class ActorTestResponse : public IActorResponse /* @@protoc_insertion_point(clas
   ActorTestResponse* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  virtual Type GetType()const override {return typeof(ActorTestResponse);}
   virtual int32_t GetError()const override {return error();}
   virtual void SetError(const int32_t val)override { set_error(val);}
   virtual const ::std::string& GetMessage()const override {return message();}
   virtual void SetMessage(const ::std::string& val)override { set_message(val);}
   virtual int32_t GetRpcId()const override {return rpcid();}
   virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
-  virtual EMessageType GetMessageType()const override {return EMessageType::IActorResponse;}
   virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::ActorTestResponse;}
+  virtual Type GetType()const override {return typeof(ActorTestResponse);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IActorResponse;}
   void CopyFrom(const ActorTestResponse& from);
   void MergeFrom(const ActorTestResponse& from);
   void Clear();
@@ -892,7 +892,7 @@ class ActorTestResponse : public IActorResponse /* @@protoc_insertion_point(clas
 };
 // -------------------------------------------------------------------
 
-class ActorMessageTest : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:Model.ActorMessageTest) */ {
+class ActorMessageTest : public IMessage /* @@protoc_insertion_point(class_definition:Model.ActorMessageTest) */ {
  public:
   ActorMessageTest();
   virtual ~ActorMessageTest();
@@ -916,7 +916,9 @@ class ActorMessageTest : public ::google::protobuf::Message /* @@protoc_insertio
   ActorMessageTest* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
+  virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::ActorMessageTest;}
   virtual Type GetType()const override {return typeof(ActorMessageTest);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IMessage;}
   void CopyFrom(const ActorMessageTest& from);
   void MergeFrom(const ActorMessageTest& from);
   void Clear();

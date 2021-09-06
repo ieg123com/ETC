@@ -80,6 +80,13 @@ struct ObjectIdStruct
 		value = v;
 	}
 
+	// 给固定的对象使用
+	ObjectIdStruct(const int32_t pid, const uint32_t v) {
+		time = 0;
+		process = pid;
+		value = v;
+	}
+
 	int64_t ToLong() {
 		int64_t result = value;
 		result |= (int64_t)process << 18;

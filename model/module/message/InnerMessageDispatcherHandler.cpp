@@ -2,9 +2,9 @@
 #include "MessageDispatcherComponent.h"
 #include "OpcodeTypeComponent.h"
 #include "module/actor/MailBoxComponent.h"
-#include "proto/etc_msg.pb.h"
+#include "proto/EtcMsg.pb.h"
 
-void InnerMessageDispatcherHandler::HandleIActorMessage(const uint16_t opcode, const int32_t actor_id, const PBMessage* request, FMPReply reply)
+void InnerMessageDispatcherHandler::HandleIActorMessage(const int32_t actor_id, const std::shared_ptr<IActorMessage>& message, FMPReply& reply)
 {
 	std::shared_ptr<GEntity> entity;
 	if (auto obj = Game::Event().GetObject(actor_id))
@@ -14,18 +14,18 @@ void InnerMessageDispatcherHandler::HandleIActorMessage(const uint16_t opcode, c
 	if (entity == nullptr)
 	{
 		// 没有找到acotr
-		FailResponse(opcode, ETC_ERR::NotFoundActor, reply);
+		FailResponse(message->GetOpcode(), ETC_ERR::NotFoundActor, reply);
 		return;
 	}
 	auto mailbox_componet = entity->GetComponent<MailBoxComponent>();
 	if (mailbox_componet == nullptr)
 	{
 		// Actor中没有MailBoxComponent
-		FailResponse(opcode, ETC_ERR::ActorNoMailBoxComponent, reply);
+		FailResponse(message->GetOpcode(), ETC_ERR::ActorNoMailBoxComponent, reply);
 		return;
 	}
 
-	auto message_req = OpcodeTypeComponent::Instance->CreateInstanceTry(opcode);
+	auto message_req = OpcodeTypeComponent::Instance->CreateInstanceTry(message->GetOpcode());
 
 	switch (mailbox_componet->MailBoxType)
 	{
@@ -44,7 +44,7 @@ void InnerMessageDispatcherHandler::HandleIActorMessage(const uint16_t opcode, c
 
 }
 
-void InnerMessageDispatcherHandler::HandleIActorRequest(const uint16_t opcode, const int32_t actor_id, const PBMessage* request, FMPReply reply)
+void InnerMessageDispatcherHandler::HandleIActorRequest(const int32_t actor_id, const std::shared_ptr<IActorRequest>& request, FMPReply& reply)
 {
 
 }
@@ -54,15 +54,15 @@ void InnerMessageDispatcherHandler::HandleIActorResponse(const uint16_t opcode, 
 
 }
 
-void InnerMessageDispatcherHandler::FailResponse(const uint16_t opcode, const ETC_ERR error, FMPReply reply)
+void InnerMessageDispatcherHandler::FailResponse(const uint16_t opcode, const ETC_ERR error, FMPReply& reply)
 {
-	uint16_t opcode_rpo = OpcodeTypeComponent::Instance->GetResponseOpcodeTry(opcode);
-	auto message_rpo = OpcodeTypeComponent::Instance->CreateInstanceTry(opcode_rpo);
-	stIMResponse st_rpo;
-	st_rpo.Error = (int32_t)error;
-	if (!OpcodeTypeComponent::Instance->ResetMessageResponse(opcode_rpo, message_rpo.get(), st_rpo))
+	auto message = OpcodeTypeComponent::Instance->CreateResponseInstanceTry(opcode);
+	if (auto response = dynamic_cast<IResponse*>(message.get()))
 	{
-		throw std::exception(std::format("消息回复类型格式不正确,opcode = %d", opcode_rpo).c_str());
+		response->SetError((int32_t)error);
+		reply(response);
 	}
-	reply(message_rpo.get());
+	else {
+		throw std::exception(std::format("回复Actor消息时发生错误，回复消息不是IResponse，opcode = %u", opcode).c_str());
+	}
 }

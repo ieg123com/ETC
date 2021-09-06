@@ -13,8 +13,6 @@ class OpcodeTypeComponent:
 	std::unordered_map<Type, Type>	m_type_request_response;
 	std::vector<uint16_t>			m_opcode_request_response;
 
-	// 用来记录外网消息的，== 1 为外网消息
-	std::vector<uint8_t>	m_outer_opcode;
 
 	std::vector<EMessageType>	m_opcode_msg_types;
 
@@ -34,12 +32,6 @@ public:
 	// 绑定rpc消息
 	void __BindRpcMessage(const Type& request, const Type& response);
 
-	// 将一条消息注册为外网消息
-	void __RegisterOuterMessage(const uint16_t opcode);
-
-	// 是外网消息
-	bool IsOuterMessage(const uint16_t opcode)const;
-	bool IsOuterMessage(const Type& tp)const;
 
 	// 用协议码创建消息实例
 	std::shared_ptr<IMessage> CreateInstanceTry(const uint16_t opcode)const;
@@ -72,25 +64,6 @@ public:
 
 
 
-
-inline bool OpcodeTypeComponent::IsOuterMessage(const uint16_t opcode)const
-{
-	return (m_outer_opcode[opcode] == 1);
-}
-
-inline bool OpcodeTypeComponent::IsOuterMessage(const Type& tp)const
-{
-	uint16_t opcode = 0;
-	try
-	{
-		opcode = GetOpcodeTypeTry(tp);
-	}
-	catch (...)
-	{
-		return false;
-	};
-	return IsOuterMessage(opcode);
-}
 
 inline uint16_t OpcodeTypeComponent::GetTypeOpcodeTry(const Type& tp)const
 {

@@ -1,59 +1,38 @@
 #pragma once
 #include "etc/etc.h"
-#include "module/other/AppType.h"
-#include "module/other/MessageType.h"
-#include "OpcodeTypeComponent.h"
 
 namespace Model
 {
-	class IMessage;
 	class Session;
 
-	// 消息调度组件
+	// 外网消息调度记录组件
+	// 用来记录消息调用的接口实例，接口所用的appType
 	class MessageDispatcherComponent:
 		public Component
 	{
-		// 消息状态
-		struct stMessageState
-		{
-			
-			int32_t		app_type;
-			// 消息类型
-			EMessageType	msg_type;
-			// 回调
-			std::shared_ptr<IMessage> call_back;
-			stMessageState() {
-				app_type = EAppType::None;
-				msg_type = EMessageType::Message;
-			}
-
-			void clear() {
-				app_type = EAppType::None;
-				msg_type = EMessageType::Message;
-				call_back.reset();
-			}
-		};
 
 		// 消息类型
-		std::vector<stMessageState>	m_messages;
+		std::vector<std::shared_ptr<IMessageHandler>>	m_message_handler;
+		std::vector<std::shared_ptr<IMRpcHandler>>		m_mrpc_handler;
 
 	public:
-
 		static MessageDispatcherComponent* Instance;
-
-
 
 		void Awake();
 
 		void Clear();
 
-		template<typename T>
-		void RegisterMessage(const uint16_t opcode){
-			OpcodeTypeComponent::Instance->RegisterMessage<T>(opcode);
-		}
+		void RegisterMessage(const uint16_t opcode, const std::shared_ptr<IMSystemHandler> handler);
 
-		inline stMessageState& GetMessage(const uint16_t opcode) {
-			return m_messages[opcode];
-		}
+		void MessageHandle(const std::shared_ptr<Session>& session, const uint16_t opcode, const std::shared_ptr<IMessage>& message);
+		void MRpcHandle(const std::shared_ptr<Session>& session, const uint16_t opcode, const std::shared_ptr<IRequest>& request);
+
+
+
+
+
 	};
+
+
+
 }

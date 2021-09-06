@@ -7,7 +7,7 @@ namespace Model
 {
 
 	class IMActorRpcHandler :
-		public IMessage 
+		public IMSystemHandler
 	{
 	public:
 		virtual void Handle(const std::shared_ptr<GEntity>& unit, const char* data, const size_t len) = 0;
@@ -22,6 +22,10 @@ namespace Model
 		public IMActorRpcHandler
 	{
 	public:
+		static_assert(std::is_base_of<IActorRequest, Request>::value,
+			"The Request type in MActorRpcHandler needs needs to be inherited from 'IActorRequest'");
+		static_assert(std::is_base_of<IActorResponse, Response>::value,
+			"The Response type in MActorRpcHandler needs needs to be inherited from 'IActorResponse'");
 		virtual void Handle(const std::shared_ptr<GEntity>& unit, const char* data, const size_t len) override
 		{
 			Request request;

@@ -18,6 +18,11 @@ namespace Model
 		public IMActorLocationRpcHandler
 	{
 	public:
+		static_assert(std::is_base_of<IActorLocationRequest, Request>::value,
+			"The Request type in MActorLocationRpcHandler needs needs to be inherited from 'IActorLocationRequest'");
+		static_assert(std::is_base_of<IActorLocationResponse, Response>::value,
+			"The Response type in MActorLocationRocHandler needs needs to be inherited from 'IActorLocationRepsonse'");
+
 		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) override
 		{
 			Request request;

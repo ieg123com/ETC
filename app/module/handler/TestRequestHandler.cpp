@@ -1,5 +1,5 @@
 #include "etc/etc.h"
-#include "model/proto/etc_msg.pb.h"
+#include "model/proto/EtcMsg.pb.h"
 #include "model/module/other/AppType.h"
 
 

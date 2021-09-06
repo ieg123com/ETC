@@ -13,7 +13,7 @@
 namespace Model
 {
 
-	class IMessageSystem :
+	class IMSystemHandler :
 		public ISupportTypeCreation
 	{
 	public:
@@ -25,10 +25,10 @@ namespace Model
 
 
 	class IMessageHandler :
-		public IMessageSystem
+		public IMSystemHandler
 	{
 	public:
-		virtual void Handle(const std::shared_ptr<Session>& session, const char* data,const size_t len) = 0;
+		virtual void Handle(const std::shared_ptr<Session>& session, IMessage* message) = 0;
 
 	};
 
@@ -38,14 +38,11 @@ namespace Model
 		public IMessageHandler
 	{
 	public:
-		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) override
+		static_assert(std::is_base_of<IMessage, Request>::value,
+			"The Request type in MessageHandler needs needs to be inherited from 'IMessage'");
+		virtual void Handle(const std::shared_ptr<Session>& session, IMessage* message) override
 		{
-			Request request;
-			if (!request.ParseFromArray(data, len))
-			{
-				throw std::exception("½âÎöÊý¾ÝÊ§°Ü£¡");
-			}
-			Run(session, request);
+			Run(session, *(Request*)message);
 		}
 
 		virtual void Run(const std::shared_ptr<Session>& session, Request& message) = 0;

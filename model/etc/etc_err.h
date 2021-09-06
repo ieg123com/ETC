@@ -11,6 +11,9 @@ enum class ETC_ERR : int32_t
 
 	ActorNoMailBoxComponent = 160000,
 
+
+	HandleRpcMessageException	= 170000,
+
 };
 
 

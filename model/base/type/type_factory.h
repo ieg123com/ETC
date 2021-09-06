@@ -22,7 +22,6 @@ namespace Model
 			{
 				auto value = std::make_pair(std::string((&typeid(T))->raw_name()), new TypeInfo(&typeid(T),GlobalData::Instance->GetTypeIndex()));
 				value.second->create_instance = nullptr;
-				value.second->delete_instance = nullptr;
 				found = g_type_factory->m_all_type_info.insert(value).first;
 			}
 			return found->second;
@@ -46,7 +45,7 @@ namespace Model
 			if (!tpinfo->create_instance)
 			{
 				tpinfo->create_instance = []()->std::shared_ptr<ISupportTypeCreation> {
-					return std::make_shared<T>();
+					return std::dynamic_pointer_cast<ISupportTypeCreation>(std::make_shared<T>());
 				};
 			}
 		}
@@ -69,7 +68,6 @@ namespace Model
 			{
 				return nullptr;
 			}
-			//new_obj->m_self_type = Type(Model::g_type_factory->Get<T>());
 			new_obj->BeginInit();
 			new_obj->EndInit();
 			return ret_obj;

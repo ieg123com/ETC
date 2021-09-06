@@ -79,27 +79,21 @@ namespace Model
 		}
 	}
 
-	void Session::Reply(const PBMessage* message)
+
+	void Session::Send(const int64_t actor_id, const IMessage* message)
 	{
-		uint16_t opcode = 0;
-		try {
-			opcode = OpcodeTypeComponent::Instance->GetTypeOpcodeTry(message->GetType());
-		}
-		catch (std::exception& e)
-		{
-			LOG_ERROR("回复消息失败:{} {}", message->GetTypeName(), e.what());
-			return;
-		}
-		__SendOuterMessage(opcode, message);
+		uint16_t opcode = message->GetOpcode();
+		int bytes_size = message->ByteSize();
+		m_data_sent.resize(bytes_size + sizeof(opcode) + sizeof(actor_id));
+		memcpy(&m_data_sent[0], &opcode, sizeof(opcode));
+		memcpy(&m_data_sent[sizeof(opcode)], &actor_id, sizeof(actor_id));
+		message->SerializePartialToArray(&m_data_sent[sizeof(opcode) + sizeof(actor_id)], bytes_size);
+		Send(m_data_sent.data(), m_data_sent.size());
 	}
 
-	void Session::ActorReply(const uint16_t opcode, const int64_t actor_id, const PBMessage* message)
+	void Session::Send(const IMessage* message)
 	{
-		__SendInnterMessage(opcode, actor_id, message);
-	}
-
-	void Session::__SendOuterMessage(const uint16_t opcode, const PBMessage* message)
-	{
+		uint16_t opcode = message->GetOpcode();
 		int bytes_size = message->ByteSize();
 		m_data_sent.resize(bytes_size + sizeof(opcode));
 		memcpy(&m_data_sent[0], &opcode, sizeof(opcode));
@@ -107,15 +101,25 @@ namespace Model
 		Send(m_data_sent.data(), m_data_sent.size());
 	}
 
-	void Session::__SendInnterMessage(const uint16_t opcode, const int64_t actor_id, const PBMessage* message)
+	void Session::Reply(const IMessage* message)
 	{
-		int bytes_size = message->ByteSize();
-		m_data_sent.resize(bytes_size + sizeof(opcode)+sizeof(actor_id));
-		memcpy(&m_data_sent[0], &opcode, sizeof(opcode));
-		memcpy(&m_data_sent[sizeof(opcode)], &actor_id, sizeof(actor_id));
-		message->SerializePartialToArray(&m_data_sent[sizeof(opcode) + sizeof(actor_id)], bytes_size);
-		Send(m_data_sent.data(), m_data_sent.size());
+		switch (message->GetMessageType())
+		{
+		case EMessageType::IResponse:
+			Send(message);
+			break;
+		case EMessageType::IActorResponse:
+		case EMessageType::IActorLocationResponse:
+			Send(0, message);
+			break;
+		default:
+			LOG_ERROR("有一条要回复的消息出错，原因是因为发生的消息类型不对 Type = {},MessageType = {}",
+				message->GetType().full_name(), ToString(message->GetMessageType()));
+			break;
+		}
 	}
+
+
 
 
 }

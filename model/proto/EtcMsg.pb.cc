@@ -27,6 +27,7 @@ REF(TestRequest,ProtoMessage);
 REF(TestResponse,ProtoMessage);
 REF(ActorTestRequest,ProtoMessage);
 REF(ActorTestResponse,ProtoMessage);
+REF(ActorMessageTest,ProtoMessage);
 // Reflection self the response message type.
 REF(ActorRequest,ProtoResponseMessage(typeof(ActorResponse)));
 REF(TestRequest,ProtoResponseMessage(typeof(TestResponse)));
@@ -3456,7 +3457,7 @@ void ActorTestResponse::clear_message() {
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 ActorMessageTest::ActorMessageTest()
-  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  : IMessage(), _internal_metadata_(NULL) {
   SharedCtor();
   // @@protoc_insertion_point(constructor:Model.ActorMessageTest)
 }
@@ -3466,7 +3467,7 @@ void ActorMessageTest::InitAsDefaultInstance() {
 }
 
 ActorMessageTest::ActorMessageTest(const ActorMessageTest& from)
-  : ::google::protobuf::Message(),
+  : IMessage(),
     _internal_metadata_(NULL) {
   SharedCtor();
   MergeFrom(from);

@@ -131,40 +131,6 @@ namespace Model
 			}
 		}
 
-		{
-			std::unordered_map<Type, std::set<std::pair<Type,int32_t>>>			message_handle_types;
-			for (auto& item : m_assemblys)
-			{
-				auto all_attr = item.second->GetType<Message>();
-				for (auto& attr : all_attr)
-				{
-					if (auto message = std::dynamic_pointer_cast<Message>(attr))
-					{
-						if (message_handle_types[attr->GetAttrType()].emplace(attr->GetObjectType(),message->appType).second)
-						{
-							LOG_WARN("message type {}", attr->GetObjectType().name());
-						}
-					}
-				}
-			}
-
-			// 消息事件
-			__message_handle_system.clear();
-
-			auto m_attr = message_handle_types.find(typeof(Message));
-			if (m_attr != message_handle_types.end())
-			{
-				for (auto& attr : m_attr->second)
-				{
-					if (auto obj = TypeFactory::CreateInstance<IMessageSystem>(attr.first))
-					{
-						obj->appType = attr.second;
-						__message_handle_system.push_back(obj);
-					}
-				}
-			}
-
-		}
 	}
 
 	void MEventSystem::RegisterObjectEvent(const std::shared_ptr<Object>& target_obj, const std::shared_ptr<Object>& self, const int32_t event_id) {

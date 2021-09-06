@@ -1,6 +1,6 @@
 #include "OuterMessageDispatcher.h"
 #include "MessageDispatcherComponent.h"
-#include "OuterMessageDispatcherHandler.h"
+#include "OpcodeTypeComponent.h"
 #include "net/Session.h"
 
 
@@ -13,34 +13,46 @@ void OuterMessageDispatcher::Dispatch(const std::shared_ptr<Session>& session, c
 
 	memcpy(&opcode, data, sizeof(opcode));
 	LOG_WARN("msg id:{}", opcode);
-	auto& appType = Game::Options().AppType;
-	auto& message_state = MessageDispatcherComponent::Instance->GetMessage(opcode);
-	if (!Is((EAppType)message_state.app_type, appType))
-	{
-		// 类型不符
-		// TODO 检查是不是Gate
-		if (Is(appType, EAppType::Gate))
-		{
-			// 是网关
 
-		}
+	EMessageType msg_type = OpcodeTypeComponent::Instance->GetMessageType(opcode);
+	if (msg_type == EMessageType::None)
+	{
+		LOG_WARN("收到一条未知消息类型,opcode = {}", opcode);
 		return;
 	}
 
-	switch (message_state.msg_type)
+	auto proto_msg = OpcodeTypeComponent::Instance->CreateInstanceTry(opcode);
+
+
+	switch (msg_type)
 	{
-	case EMessageType::Message:
-		OuterMessageDispatcherHandler::HandleIMessage(session,opcode, data + sizeof(opcode), len - sizeof(opcode));
-		break;
-	case EMessageType::Request:
-		OuterMessageDispatcherHandler::HandleIMRequest(session,opcode, data + sizeof(opcode), len - sizeof(opcode));
-		break;
-	case EMessageType::ActorLocationMessage:
-		OuterMessageDispatcherHandler::HandleIMActorLocation(session,opcode, data + sizeof(opcode), len - sizeof(opcode));
-		break;
-	case EMessageType::ActorLocationRequest:
-		OuterMessageDispatcherHandler::HandleIMActorLocationRequest(session,opcode, data + sizeof(opcode), len - sizeof(opcode));
-		break;
+	case EMessageType::IMessage:
+	{
+		MessageDispatcherComponent::Instance->MessageHandle(session, opcode, proto_msg);
+	}
+	break;
+	case EMessageType::IRequest:
+	{
+		auto msg_req = std::dynamic_pointer_cast<IRequest>(proto_msg);
+		if (!msg_req->ParseFromArray(data, len))
+		{
+			// 解析失败,无法获取RpcId。因此不对此进行回复
+			return;
+		}
+		MessageDispatcherComponent::Instance->MRpcHandle(session, opcode, msg_req);
+	}
+	break;
+	case EMessageType::IActorLocationMessage:
+	{
+
+	}
+	break;
+	case EMessageType::IActorLocationRequest:
+	{
+		// ActorLocation 消息，将收到的消息转发给需要的服务中
+
+	}
+	break;
 	default:
 		break;
 	}

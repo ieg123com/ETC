@@ -76,11 +76,11 @@ class Login_RegisterEmail_Request_20010 : public IRequest /* @@protoc_insertion_
   Login_RegisterEmail_Request_20010* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  virtual Type GetType()const override {return typeof(Login_RegisterEmail_Request_20010);}
   virtual int32_t GetRpcId()const override {return rpcid();}
   virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
-  virtual EMessageType GetMessageType()const override {return EMessageType::IRequest;}
   virtual uint16_t GetOpcode()const override {return LoginOpcode::Login_RegisterEmail_Request_20010;}
+  virtual Type GetType()const override {return typeof(Login_RegisterEmail_Request_20010);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IRequest;}
   void CopyFrom(const Login_RegisterEmail_Request_20010& from);
   void MergeFrom(const Login_RegisterEmail_Request_20010& from);
   void Clear();
@@ -199,15 +199,15 @@ class Login_RegisterEmail_Response_20011 : public IResponse /* @@protoc_insertio
   Login_RegisterEmail_Response_20011* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  virtual Type GetType()const override {return typeof(Login_RegisterEmail_Response_20011);}
   virtual int32_t GetError()const override {return error();}
   virtual void SetError(const int32_t val)override { set_error(val);}
   virtual const ::std::string& GetMessage()const override {return message();}
   virtual void SetMessage(const ::std::string& val)override { set_message(val);}
   virtual int32_t GetRpcId()const override {return rpcid();}
   virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
-  virtual EMessageType GetMessageType()const override {return EMessageType::IResponse;}
   virtual uint16_t GetOpcode()const override {return LoginOpcode::Login_RegisterEmail_Response_20011;}
+  virtual Type GetType()const override {return typeof(Login_RegisterEmail_Response_20011);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IResponse;}
   void CopyFrom(const Login_RegisterEmail_Response_20011& from);
   void MergeFrom(const Login_RegisterEmail_Response_20011& from);
   void Clear();
@@ -316,11 +316,11 @@ class Login_AccountLogin_Request_20020 : public IRequest /* @@protoc_insertion_p
   Login_AccountLogin_Request_20020* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  virtual Type GetType()const override {return typeof(Login_AccountLogin_Request_20020);}
   virtual int32_t GetRpcId()const override {return rpcid();}
   virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
-  virtual EMessageType GetMessageType()const override {return EMessageType::IRequest;}
   virtual uint16_t GetOpcode()const override {return LoginOpcode::Login_AccountLogin_Request_20020;}
+  virtual Type GetType()const override {return typeof(Login_AccountLogin_Request_20020);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IRequest;}
   void CopyFrom(const Login_AccountLogin_Request_20020& from);
   void MergeFrom(const Login_AccountLogin_Request_20020& from);
   void Clear();
@@ -427,15 +427,15 @@ class Login_AccountLogin_Response_20021 : public IResponse /* @@protoc_insertion
   Login_AccountLogin_Response_20021* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  virtual Type GetType()const override {return typeof(Login_AccountLogin_Response_20021);}
   virtual int32_t GetError()const override {return error();}
   virtual void SetError(const int32_t val)override { set_error(val);}
   virtual const ::std::string& GetMessage()const override {return message();}
   virtual void SetMessage(const ::std::string& val)override { set_message(val);}
   virtual int32_t GetRpcId()const override {return rpcid();}
   virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
-  virtual EMessageType GetMessageType()const override {return EMessageType::IResponse;}
   virtual uint16_t GetOpcode()const override {return LoginOpcode::Login_AccountLogin_Response_20021;}
+  virtual Type GetType()const override {return typeof(Login_AccountLogin_Response_20021);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IResponse;}
   void CopyFrom(const Login_AccountLogin_Response_20021& from);
   void MergeFrom(const Login_AccountLogin_Response_20021& from);
   void Clear();
@@ -613,11 +613,11 @@ class Login_WechatLogin_Request_20022 : public IRequest /* @@protoc_insertion_po
   Login_WechatLogin_Request_20022* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  virtual Type GetType()const override {return typeof(Login_WechatLogin_Request_20022);}
   virtual int32_t GetRpcId()const override {return rpcid();}
   virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
-  virtual EMessageType GetMessageType()const override {return EMessageType::IRequest;}
   virtual uint16_t GetOpcode()const override {return LoginOpcode::Login_WechatLogin_Request_20022;}
+  virtual Type GetType()const override {return typeof(Login_WechatLogin_Request_20022);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IRequest;}
   void CopyFrom(const Login_WechatLogin_Request_20022& from);
   void MergeFrom(const Login_WechatLogin_Request_20022& from);
   void Clear();
@@ -712,15 +712,15 @@ class Login_WechatLogin_Response_20023 : public IResponse /* @@protoc_insertion_
   Login_WechatLogin_Response_20023* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  virtual Type GetType()const override {return typeof(Login_WechatLogin_Response_20023);}
   virtual int32_t GetError()const override {return error();}
   virtual void SetError(const int32_t val)override { set_error(val);}
   virtual const ::std::string& GetMessage()const override {return message();}
   virtual void SetMessage(const ::std::string& val)override { set_message(val);}
   virtual int32_t GetRpcId()const override {return rpcid();}
   virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
-  virtual EMessageType GetMessageType()const override {return EMessageType::IResponse;}
   virtual uint16_t GetOpcode()const override {return LoginOpcode::Login_WechatLogin_Response_20023;}
+  virtual Type GetType()const override {return typeof(Login_WechatLogin_Response_20023);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IResponse;}
   void CopyFrom(const Login_WechatLogin_Response_20023& from);
   void MergeFrom(const Login_WechatLogin_Response_20023& from);
   void Clear();
@@ -898,11 +898,11 @@ class Login_keyLogin_Request_20024 : public IRequest /* @@protoc_insertion_point
   Login_keyLogin_Request_20024* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  virtual Type GetType()const override {return typeof(Login_keyLogin_Request_20024);}
   virtual int32_t GetRpcId()const override {return rpcid();}
   virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
-  virtual EMessageType GetMessageType()const override {return EMessageType::IRequest;}
   virtual uint16_t GetOpcode()const override {return LoginOpcode::Login_keyLogin_Request_20024;}
+  virtual Type GetType()const override {return typeof(Login_keyLogin_Request_20024);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IRequest;}
   void CopyFrom(const Login_keyLogin_Request_20024& from);
   void MergeFrom(const Login_keyLogin_Request_20024& from);
   void Clear();
@@ -1004,15 +1004,15 @@ class Login_keyLogin_Response_20025 : public IResponse /* @@protoc_insertion_poi
   Login_keyLogin_Response_20025* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  virtual Type GetType()const override {return typeof(Login_keyLogin_Response_20025);}
   virtual int32_t GetError()const override {return error();}
   virtual void SetError(const int32_t val)override { set_error(val);}
   virtual const ::std::string& GetMessage()const override {return message();}
   virtual void SetMessage(const ::std::string& val)override { set_message(val);}
   virtual int32_t GetRpcId()const override {return rpcid();}
   virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
-  virtual EMessageType GetMessageType()const override {return EMessageType::IResponse;}
   virtual uint16_t GetOpcode()const override {return LoginOpcode::Login_keyLogin_Response_20025;}
+  virtual Type GetType()const override {return typeof(Login_keyLogin_Response_20025);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IResponse;}
   void CopyFrom(const Login_keyLogin_Response_20025& from);
   void MergeFrom(const Login_keyLogin_Response_20025& from);
   void Clear();
@@ -1121,8 +1121,9 @@ class Login_HeartBeat_Request_30 : public IMessage /* @@protoc_insertion_point(c
   Login_HeartBeat_Request_30* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  virtual Type GetType()const override {return typeof(Login_HeartBeat_Request_30);}
   virtual uint16_t GetOpcode()const override {return LoginOpcode::Login_HeartBeat_Request_30;}
+  virtual Type GetType()const override {return typeof(Login_HeartBeat_Request_30);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IMessage;}
   void CopyFrom(const Login_HeartBeat_Request_30& from);
   void MergeFrom(const Login_HeartBeat_Request_30& from);
   void Clear();

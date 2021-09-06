@@ -122,8 +122,10 @@ namespace Model
 	// 		else
 			{
 				obj = std::make_shared<T>();
+				obj->BeginInit();
 				obj->m_object_type.m_type = typeof(T);
 				obj->DebugIncreaseSelf();
+				obj->EndInit();
 			}
 			Game::Event().AddObject(obj);
 			return obj;

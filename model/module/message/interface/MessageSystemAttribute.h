@@ -29,9 +29,9 @@ namespace Model
 	public:
 		ProtoResponseMessage(const Type& tp)
 		{
-			MessageType = tp;
+			ResponseMessageType = tp;
 		}
 
-		Type MessageType;
+		Type ResponseMessageType;
 	};
 }

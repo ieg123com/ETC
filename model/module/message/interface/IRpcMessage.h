@@ -1,14 +1,15 @@
 #pragma once
 #include "IMessage.h"
+#include "etc/etc_err.h"
 
 namespace Model
 {
 	class IMRpcHandler:
-		public IMessageSystem
+		public IMSystemHandler
 	{
 	public:
 
-		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) = 0;
+		virtual void Handle(const std::shared_ptr<Session>& session, IRequest* request) = 0;
 	};
 
 
@@ -17,16 +18,16 @@ namespace Model
 		public IMRpcHandler
 	{
 	public:
-		virtual void Handle(const std::shared_ptr<Session>& session, const char* data, const size_t len) override
+		static_assert(std::is_base_of<IRequest, Request>::value,
+			"The Request type in MRpcHandler needs needs to be inherited from 'IRequest'");
+		static_assert(std::is_base_of<IResponse, Response>::value,
+			"The Response type in MRpcHandler needs needs to be inherited from 'IResponse'");
+
+		virtual void Handle(const std::shared_ptr<Session>& session, IRequest* request) override
 		{
 			try
 			{
-				Request request;
 				Response response;
-				if (!request.ParseFromArray(data, len))
-				{
-					throw std::exception("解析数据失败！");
-				}
 
 				ObjectID object_id = session->GetObjectID();
 
@@ -36,20 +37,20 @@ namespace Model
 					{
 						return;
 					}
-					response.set_rpcid(request.rpcid());
+					response.set_rpcid(request->GetRpcId());
 					
 					session->Reply(&response);
 				};
 
 				try {
-					Run(session, request, response,reply);
+					Run(session, *(Request*)request, response,reply);
 				}
 				catch (std::exception& e)
 				{
 					LOG_ERROR("处理消息失败:{} {}",
 						typeof(Request).full_name(),
 						e.what());
-					response.set_error(1);
+					response.set_error((int32_t)ETC_ERR::HandleRpcMessageException);
 					response.set_message(e.what());
 					reply();
 				}
@@ -57,7 +58,7 @@ namespace Model
 				{
 					LOG_ERROR("处理消息失败:{} 未知错误",
 						typeof(Request).full_name());
-					response.set_error(1);
+					response.set_error((int32_t)ETC_ERR::HandleRpcMessageException);
 					response.set_message("未知错误");
 					reply();
 				}
