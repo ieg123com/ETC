@@ -79,6 +79,9 @@ FILE(GLOB MODULE_INIT_FILES "./module/init/*.cpp" "./module/init/*.h")
 set(MODULE_ACTOR_FILES "")
 FILE(GLOB MODULE_ACTOR_FILES "./module/actor/*.cpp" "./module/actor/*.h")
  
+# actor handler
+set(MODULE_ACTOR_HANDLER_FILES "")
+FILE(GLOB MODULE_ACTOR_HANDLER_FILES "./module/actor/handler/*.cpp" "./module/actor/handler/*.h")
 
 source_group(module						FILES ${MODULE_FILES})
 source_group(module\\message			FILES ${MODULE_MESSAGE_FILES})
@@ -89,6 +92,7 @@ source_group(module\\handler\\login		FILES ${MODULE_HANDLER_LOGIN_FILES})
 source_group(module\\handler\\etc_msg	FILES ${MODULE_HANDLER_ETC_MSG_FILES})
 source_group(module\\init				FILES ${MODULE_INIT_FILES})
 source_group(module\\actor				FILES ${MODULE_ACTOR_FILES})
+source_group(module\\actor\\handler		FILES ${MODULE_ACTOR_HANDLER_FILES})
 
 
 LIST(APPEND ALL_OBJECT
@@ -100,7 +104,8 @@ LIST(APPEND ALL_OBJECT
 	${MODULE_HANDLER_LOGIN_FILES}
 	${MODULE_HANDLER_ETC_MSG_FILES}
 	${MODULE_INIT_FILES}
-	${MODULE_ACTOR_FILES})
+	${MODULE_ACTOR_FILES}
+	${MODULE_ACTOR_HANDLER_FILES})
 
 
 

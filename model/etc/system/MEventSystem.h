@@ -195,7 +195,7 @@ namespace Model
 		void Run(const std::shared_ptr<Object>& target_obj, const int32_t event_id, Arg...arg) {
 			__ObjectEventOperationHandle();
 			
-			auto found_objevent = m_object_event.find(target_obj->GetObjectID());
+			auto found_objevent = m_object_event.find(target_obj->InstanceId());
 			if (found_objevent == m_object_event.end())return;
 			auto found_event_id = found_objevent->second.find(event_id);
 			if (found_event_id == found_objevent->second.end())return;
@@ -258,9 +258,9 @@ namespace Model
 		std::unordered_multimap<int32_t, std::shared_ptr<IEventSystem>>	m_event_system;
 		std::unordered_multimap<std::pair<int32_t,Type>, std::shared_ptr<IObjEventSystem>>	m_objevent_system;
 
-		using CObjectEventSystem = std::unordered_multimap<ObjectID,std::pair<std::shared_ptr<Object>, std::shared_ptr<IObjEventSystem>>>;
+		using CObjectEventSystem = std::unordered_multimap<InstanceID,std::pair<std::shared_ptr<Object>, std::shared_ptr<IObjEventSystem>>>;
 		// 自定义对象事件
-		std::unordered_map<ObjectID, std::unordered_map<int32_t,CObjectEventSystem>>	m_object_event;
+		std::unordered_map<InstanceID, std::unordered_map<int32_t,CObjectEventSystem>>	m_object_event;
 
 		// 自定义对象事件待操作
 		std::queue<stObjectEventContext>	m_object_event_operation;
@@ -271,7 +271,7 @@ namespace Model
 
 		void AddObject(const std::shared_ptr<Object>& obj);
 		void RemoveObject(const std::shared_ptr<Object>& obj);
-		std::shared_ptr<Object> GetObject(const ObjectID id) const;
+		std::shared_ptr<Object> GetObject(const InstanceID id) const;
 
 
 		void Start();
@@ -281,19 +281,19 @@ namespace Model
 		void LateUpdate();
 
 	private:
-		std::unordered_map<ObjectID, std::shared_ptr<Object>> m_objects;
+		std::unordered_map<InstanceID, std::shared_ptr<Object>> m_objects;
 
 
-		std::unordered_map<ObjectID, std::shared_ptr<Object>> m_updates;
-		std::unordered_map<ObjectID, std::shared_ptr<Object>> m_late_updates;
+		std::unordered_map<InstanceID, std::shared_ptr<Object>> m_updates;
+		std::unordered_map<InstanceID, std::shared_ptr<Object>> m_late_updates;
 
 		std::queue<std::shared_ptr<Object>>	m_start_enter;
 	private:
-		std::queue<ObjectID>	m_update_enter;
-		std::queue<ObjectID>	m_update_leave;
+		std::queue<InstanceID>	m_update_enter;
+		std::queue<InstanceID>	m_update_leave;
 
-		std::queue<ObjectID>	m_late_update_enter;
-		std::queue<ObjectID>	m_late_update_leave;
+		std::queue<InstanceID>	m_late_update_enter;
+		std::queue<InstanceID>	m_late_update_leave;
 
 	};
 }

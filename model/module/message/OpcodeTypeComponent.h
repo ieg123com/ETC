@@ -39,6 +39,27 @@ public:
 	// 用请求消息的协议码，创建一条回复的消息实例
 	std::shared_ptr<IMessage> CreateResponseInstanceTry(const uint16_t opcode);
 
+
+	template<typename T>
+	static std::shared_ptr<T> CreateInstanceTry(const uint16_t opcode) {
+		auto message = OpcodeTypeComponent::Instance->CreateInstanceTry(opcode);
+		if (auto response = std::dynamic_pointer_cast<T>(message))
+		{
+			return response;
+		}
+		throw std::exception(std::format("无法转换类型 %s => %s,opcode = %d", message->GetType().full_name(), typeof(T).full_name(), opcode));
+	}
+
+	template<typename T>
+	static std::shared_ptr<T> CreateResponseInstanceTry(const uint16_t opcode) {
+		auto message = OpcodeTypeComponent::Instance->CreateResponseInstanceTry(opcode);
+		if (auto response = std::dynamic_pointer_cast<T>(message))
+		{
+			return response;
+		}
+		throw std::exception(std::format("无法转换类型 %s => %s,opcode = %d", message->GetType().full_name(), typeof(T).full_name(), opcode));
+	}
+
 	
 	// 获取消息id
 	uint16_t GetTypeOpcodeTry(const Type& tp)const;

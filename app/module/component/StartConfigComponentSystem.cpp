@@ -1,7 +1,6 @@
 #include "module/component/StartConfigComponent.h"
 #include "config/Config_StartConfig.h"
 #include "module/component/config/StartConfig.h"
-#include "module/component/config/InnerConfig.h"
 
 using namespace Model;
 
@@ -20,13 +19,10 @@ namespace Hotfix
 			{
 				if (auto config = item.second->To<Config_StartConfig>())
 				{
-					auto start_config = ObjectFactory::Create<StartConfig, const std::shared_ptr<Config_StartConfig>&>(config);
+					auto start_config = std::make_shared<StartConfig>();
+					start_config->Init(config);
 					self->__ConfigDict.insert(std::make_pair(start_config->AppId, start_config));
 					
-					if (auto inner_config = start_config->GetComponent<InnerConfig>())
-					{
-						self->__InnerAddressDict.insert(std::make_pair(start_config->AppId, inner_config->Address));
-					}
 
 					if (Is(start_config->AppType, EAppType::Gate))
 					{

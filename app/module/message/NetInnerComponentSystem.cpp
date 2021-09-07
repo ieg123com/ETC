@@ -20,6 +20,15 @@ namespace Hotfix
 	};
 	REF(NetInnerComponentAwakeSystem, ObjectSystem);
 
+	class NetInnerComponentLoadSystem : public LoadSystem<NetInnerComponent>
+	{
+	public:
+		virtual void Load(const std::shared_ptr<NetInnerComponent>& self)override
+		{
+			NetInnerComponent::Instance = self.get();
+		}
+	};
+	REF(NetInnerComponentLoadSystem, ObjectSystem);
 
 	class NetInnerComonentDestroySystem : public DestroySystem<NetInnerComponent>
 	{

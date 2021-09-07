@@ -12,8 +12,7 @@
 #include "module/component/OptionComponent.h"
 #include "module/component/StartConfigComponent.h"
 #include "module/component/config/StartConfig.h"
-#include "module/component/config/InnerConfig.h"
-#include "module/component/config/OuterConfig.h"
+
 
 
 
@@ -53,44 +52,41 @@ int main(int argc,char* argv[])
 			}
 
 
-			auto outer_config = start_config->GetComponent<OuterConfig>();
-			auto inner_config = start_config->GetComponent<InnerConfig>();
-
 			LOG_INFO("D");
 
 			switch (start_config->AppType)
 			{
 			case EAppType::Gate:
-				Game::World()->AddComponent<NetOuterComponent, const IPEndPoint&>(outer_config->Address);
-				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(inner_config->Address);
+				Game::World()->AddComponent<NetOuterComponent, const IPEndPoint&>(start_config->OuterAddress);
+				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(start_config->InnerAddress);
 				Game::World()->AddComponent<OpcodeTypeComponent>();
 				Game::World()->AddComponent<MessageDispatcherComponent>();
 				break;
 			case EAppType::Login:
-				Game::World()->AddComponent<NetOuterComponent, const IPEndPoint&>(outer_config->Address);
-				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(inner_config->Address);
+				Game::World()->AddComponent<NetOuterComponent, const IPEndPoint&>(start_config->OuterAddress);
+				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(start_config->InnerAddress);
 				Game::World()->AddComponent<OpcodeTypeComponent>();
 				Game::World()->AddComponent<MessageDispatcherComponent>();
 				break;
 			case EAppType::List:
 				break;
 			case EAppType::Map:
-				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(inner_config->Address);
+				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(start_config->InnerAddress);
 				Game::World()->AddComponent<OpcodeTypeComponent>();
 				Game::World()->AddComponent<MessageDispatcherComponent>();
 				break;
 			case EAppType::Location:
-				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(inner_config->Address);
+				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(start_config->InnerAddress);
 				Game::World()->AddComponent<OpcodeTypeComponent>();
 				Game::World()->AddComponent<MessageDispatcherComponent>();
 				break;
 			case EAppType::Chat:
-				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(inner_config->Address);
+				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(start_config->InnerAddress);
 				Game::World()->AddComponent<OpcodeTypeComponent>();
 				Game::World()->AddComponent<MessageDispatcherComponent>();
 				break;
 			case EAppType::Social:
-				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(inner_config->Address);
+				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(start_config->InnerAddress);
 				Game::World()->AddComponent<OpcodeTypeComponent>();
 				Game::World()->AddComponent<MessageDispatcherComponent>();
 				break;

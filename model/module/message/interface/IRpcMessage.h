@@ -29,11 +29,11 @@ namespace Model
 			{
 				Response response;
 
-				ObjectID object_id = session->GetObjectID();
+				InstanceID instance_id = session->InstanceId();
 
 				std::function<void()> reply = [&] {
-					// 等回调回来,session可以已经断开了,所以需要判断session ObjectId是否一样
-					if (session->GetObjectID() != object_id)
+					// 等回调回来,session可以已经断开了,所以需要判断session InstanceID是否一样
+					if (session->InstanceId() != instance_id)
 					{
 						return;
 					}

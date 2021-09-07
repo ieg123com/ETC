@@ -5,6 +5,7 @@
 
 namespace Model
 {
+	NetOuterComponent* NetOuterComponent::Instance = nullptr;
 
 
 	void NetOuterComponent::Destroy()

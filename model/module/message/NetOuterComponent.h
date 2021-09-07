@@ -9,6 +9,7 @@ namespace Model
 		public NetworkComponent
 	{
 	public:
+		static NetOuterComponent* Instance;
 
 		void Destroy();
 

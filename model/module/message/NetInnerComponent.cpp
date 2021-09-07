@@ -5,6 +5,7 @@
 
 namespace Model
 {
+	NetInnerComponent* NetInnerComponent::Instance = nullptr;
 
 	std::shared_ptr<Session> NetInnerComponent::Get(const IPEndPoint& address)
 	{

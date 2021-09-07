@@ -40,9 +40,9 @@ void InnerMessageDispatcher::Dispatch(const std::shared_ptr<Session>& session, c
 	case EMessageType::IActorLocationMessage:
 	{
 		auto message = std::dynamic_pointer_cast<IActorMessage>(proto_message);
-		ObjectID obj_id = session->GetObjectID();
+		InstanceID instance_id = session->InstanceId();
 		FMPReply reply = [=](IResponse* response)->void {
-			if (session->GetObjectID() != obj_id)return;// 在处理消息的这段时间，会话已经被断开了
+			if (session->InstanceId() != instance_id)return;// 在处理消息的这段时间，会话已经被断开了
 			response->SetRpcId(message->GetRpcId());
 			session->Reply(response);
 		};
@@ -53,9 +53,9 @@ void InnerMessageDispatcher::Dispatch(const std::shared_ptr<Session>& session, c
 	case EMessageType::IActorLocationRequest:
 	{
 		auto request = std::dynamic_pointer_cast<IActorRequest>(proto_message);
-		ObjectID obj_id = session->GetObjectID();
+		InstanceID instance_id = session->InstanceId();
 		FMPReply reply = [=](IResponse* response)->void {
-			if (session->GetObjectID() != obj_id)return;// 在处理消息的这段时间，会话已经被断开了
+			if (session->InstanceId() != instance_id)return;// 在处理消息的这段时间，会话已经被断开了
 			response->SetRpcId(request->GetRpcId());
 			session->Reply(response);
 		};

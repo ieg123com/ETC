@@ -1,6 +1,7 @@
 #include "ActorMessageDispatcherComponent.h"
 
 
+
 ActorMessageDispatcherComponent* ActorMessageDispatcherComponent::Instance = nullptr;
 
 
@@ -27,9 +28,4 @@ void ActorMessageDispatcherComponent::RegisterMessage(const uint16_t opcode, con
 	{
 		m_mactor_rpc_handler[opcode] = instance;
 	}
-}
-
-std::shared_ptr<IActorResponse> ActorMessageDispatcherComponent::__Call(const int64_t actor_id, const int32_t rpc_id, const std::shared_ptr<IMessage>& message)
-{
-
 }

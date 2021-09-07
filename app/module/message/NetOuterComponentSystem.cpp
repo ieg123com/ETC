@@ -23,6 +23,16 @@ namespace Hotfix
 	};
 	REF(NetOuterComponentAwakeSystem, ObjectSystem);
 
+	class NetOuterComponentLoadSystem : public LoadSystem<NetOuterComponent>
+	{
+	public:
+		virtual void Load(const std::shared_ptr<NetOuterComponent>& self)override
+		{
+			NetOuterComponent::Instance = self.get();
+		}
+	};
+	REF(NetOuterComponentLoadSystem, ObjectSystem);
+
 	class NetOuterComponentDestroySystem : public DestroySystem<NetOuterComponent>
 	{
 	public:

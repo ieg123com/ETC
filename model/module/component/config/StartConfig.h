@@ -1,19 +1,24 @@
 #pragma once
-#include "etc/etc.h"
+#include <memory>
 #include "module/other/AppType.h"
+#include "net/IPEndPoint.h"
 
+class Config_StartConfig;
 
-namespace Model
+using namespace Model;
+
+// 基础配置
+class StartConfig
 {
-	// 基础配置
-	class StartConfig :
-		public GEntity
-	{
-	public:
-		int32_t	AppId;
-		EAppType AppType;
-		std::string Config;
-	};
+public:
+	// 进程id
+	int32_t	AppId;
+	// 进程类型
+	EAppType AppType;
+	// 外网地址
+	IPEndPoint OuterAddress;
+	// 内网地址
+	IPEndPoint InnerAddress;
 
-
-}
+	void Init(const std::shared_ptr<Config_StartConfig>& config);
+};

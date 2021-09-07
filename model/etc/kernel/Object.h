@@ -35,8 +35,8 @@ namespace Model
 			return m_disposed;
 		}
 
-		inline ObjectID GetObjectID()const {
-			return m_obj_id;
+		inline InstanceID InstanceId()const {
+			return m_instance_id;
 		}
 
 		/** @brief	自身对象*/
@@ -84,7 +84,7 @@ namespace Model
 	private:
 
 
-		ObjectID	m_obj_id;
+		InstanceID	m_instance_id;
 		// 对象类型
 		ObjectType	m_object_type;
 

@@ -229,9 +229,9 @@ namespace Model
 			return;
 		}
 
-		m_object_event[ctx.target_obj->GetObjectID()][ctx.event_id].insert(
+		m_object_event[ctx.target_obj->InstanceId()][ctx.event_id].insert(
 			std::make_pair(
-				ctx.self->GetObjectID(),
+				ctx.self->InstanceId(),
 				std::make_pair(
 					ctx.self,
 					found_objevent_sys->second
@@ -242,7 +242,7 @@ namespace Model
 
 	void MEventSystem::__DeleteAllEventInObject(const stObjectEventContext& ctx)
 	{
-		m_object_event.erase(ctx.target_obj->GetObjectID());
+		m_object_event.erase(ctx.target_obj->InstanceId());
 	}
 
 	void MEventSystem::__DeleteSpecificEventInObject(const stObjectEventContext& ctx)
@@ -250,16 +250,16 @@ namespace Model
 		if (ctx.self)
 		{
 			// 删除到指定对象
-			auto found_object_event = m_object_event.find(ctx.target_obj->GetObjectID());
+			auto found_object_event = m_object_event.find(ctx.target_obj->InstanceId());
 			if (found_object_event == m_object_event.end())return;
 			auto found_event_id = found_object_event->second.find(ctx.event_id);
 			if (found_event_id == found_object_event->second.end())return;
-			found_event_id->second.erase(ctx.self->GetObjectID());
+			found_event_id->second.erase(ctx.self->InstanceId());
 		}
 		else 
 		{
 			// 删除到指定事件id
-			auto found_object_event = m_object_event.find(ctx.target_obj->GetObjectID());
+			auto found_object_event = m_object_event.find(ctx.target_obj->InstanceId());
 			if (found_object_event == m_object_event.end())return;
 			found_object_event->second.erase(ctx.event_id);
 		}
@@ -267,7 +267,7 @@ namespace Model
 
 	void MEventSystem::AddObject(const std::shared_ptr<Object>& obj)
 	{
-		if (!m_objects.insert(std::make_pair(obj->GetObjectID(), obj)).second)
+		if (!m_objects.insert(std::make_pair(obj->InstanceId(), obj)).second)
 		{
 			throw std::exception("重复将同一个对象添加到系统中!");
 		}
@@ -278,17 +278,17 @@ namespace Model
 		}
 		if (Exist(m_update_system,index))
 		{
-			m_update_enter.push(obj->GetObjectID());
+			m_update_enter.push(obj->InstanceId());
 		}
 		if (Exist(m_late_update_system,index))
 		{
-			m_late_update_enter.push(obj->GetObjectID());
+			m_late_update_enter.push(obj->InstanceId());
 		}
 	}
 
 	void MEventSystem::RemoveObject(const std::shared_ptr<Object>& obj)
 	{
-		auto found = m_objects.find(obj->GetObjectID());
+		auto found = m_objects.find(obj->InstanceId());
 		if (found == m_objects.end())
 		{
 			return;
@@ -296,11 +296,11 @@ namespace Model
 		TypeIndex index = obj->GetObjectType().GetTypeIndex();
 		if (Exist(m_update_system, index))
 		{
-			m_update_leave.push(obj->GetObjectID());
+			m_update_leave.push(obj->InstanceId());
 		}
 		if (Exist(m_late_update_system, index))
 		{
-			m_late_update_leave.push(obj->GetObjectID());
+			m_late_update_leave.push(obj->InstanceId());
 		}
 
 		RemoveObjectEvent(obj);
@@ -308,7 +308,7 @@ namespace Model
 		// 重新加载热更补丁时，需要处理事件问题
 	}
 
-	std::shared_ptr<Object> MEventSystem::GetObject(const ObjectID id) const
+	std::shared_ptr<Object> MEventSystem::GetObject(const InstanceID id) const
 	{
 		auto found = m_objects.find(id);
 		if (found == m_objects.end())
@@ -346,7 +346,7 @@ namespace Model
 
 		while (!m_update_enter.empty())
 		{
-			ObjectID id = m_update_enter.front();
+			InstanceID id = m_update_enter.front();
 			m_update_enter.pop();
 			auto find_obj = m_objects.find(id);
 			if (find_obj == m_objects.end())
@@ -359,7 +359,7 @@ namespace Model
 
 		while (!m_update_leave.empty())
 		{
-			ObjectID id = m_update_leave.front();
+			InstanceID id = m_update_leave.front();
 			m_update_leave.pop();
 			m_updates.erase(id);
 		}
@@ -386,7 +386,7 @@ namespace Model
 	{
 		while (!m_late_update_enter.empty())
 		{
-			ObjectID id = m_late_update_enter.front();
+			InstanceID id = m_late_update_enter.front();
 			m_late_update_enter.pop();
 			auto find_obj = m_objects.find(id);
 			if (find_obj == m_objects.end())
@@ -399,7 +399,7 @@ namespace Model
 
 		while (!m_late_update_leave.empty())
 		{
-			ObjectID id = m_late_update_leave.front();
+			InstanceID id = m_late_update_leave.front();
 			m_late_update_leave.pop();
 			m_late_updates.erase(id);
 		}

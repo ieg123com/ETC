@@ -14,7 +14,7 @@
 
 // 后续接入json
 
-typedef long long ObjectID;
+typedef long long InstanceID;
 
 // 使用这个，没法查找引用
 //typedef EntityEventType EventType;

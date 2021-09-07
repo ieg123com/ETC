@@ -51,21 +51,21 @@ struct IdStruct
 
 
 
-struct ObjectIdStruct
+struct InstanceIdStruct
 {
 	static const uint32_t MaxValue = (uint32_t)(0x3ffff);
 
 	uint32_t	time;		// 时间		28bit	8年
-	int32_t		process;	// 进程id	18bit
+	int32_t		process;	// 进程id	18bit	262k
 	uint32_t	value;		// 递增值	18bit
 
-	ObjectIdStruct() {
+	InstanceIdStruct() {
 		time = 0;
 		process = 0;
 		value = 0;
 	}
 
-	ObjectIdStruct(const int64_t id) {
+	InstanceIdStruct(const int64_t id) {
 		int64_t result = id;
 		value = (uint32_t)(result & IdStruct::Mask18bit);
 		result >>= 18;
@@ -74,14 +74,14 @@ struct ObjectIdStruct
 		time = (uint32_t)result;
 	}
 
-	ObjectIdStruct(const uint32_t t, const int32_t pid, const uint32_t v){
+	InstanceIdStruct(const uint32_t t, const int32_t pid, const uint32_t v){
 		time = t;
 		process = pid;
 		value = v;
 	}
 
 	// 给固定的对象使用
-	ObjectIdStruct(const int32_t pid, const uint32_t v) {
+	InstanceIdStruct(const int32_t pid, const uint32_t v) {
 		time = 0;
 		process = pid;
 		value = v;
@@ -107,7 +107,7 @@ class IdGenerator
 	time_t	m_epoch_prject_start;
 	time_t	m_epoch_this_year;
 
-	ObjectIdStruct	m_object_id_struct;
+	InstanceIdStruct	m_instance_id_struct;
 	IdStruct		m_id_struct;
 
 public:
@@ -132,7 +132,7 @@ public:
 		return now_time - m_epoch_this_year;
 	}
 	
-	int64_t GenerateObjectID();
+	int64_t GenerateInstanceId();
 
 	int64_t GenerateID();
 

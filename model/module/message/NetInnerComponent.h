@@ -1,5 +1,22 @@
 #pragma once
+#include "kernel/IdGenerator.h"
 #include "net/NetworkComponent.h"
+
+
+struct ProcessActorId
+{
+	int32_t	Process;
+	int64_t ActorId;
+	ProcessActorId(const int64_t actor_id)
+	{
+		InstanceIdStruct instance_id_struct(actor_id);
+		ActorId = actor_id;
+		Process = instance_id_struct.process;
+	}
+};
+
+
+
 
 namespace Model
 {
@@ -8,6 +25,7 @@ namespace Model
 		public NetworkComponent
 	{
 	public:
+		static NetInnerComponent* Instance;
 
 		std::unordered_map<IPEndPoint, std::shared_ptr<Session>> __m_address_sessions;
 

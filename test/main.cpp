@@ -142,12 +142,20 @@ void channel_test()
 {
 	{
 		//co_chan<std::string> g_channel;
-		co::Channel<std::string>	channel;
+		co::Channel<std::string>	channel(1);
 		//A a;
 		//LOG_INFO("1");
-
+		LOG_INFO("ok 0");
+		channel << "123";
+		LOG_INFO("ok 1");
+		channel << "456";
+		LOG_INFO("ok 2");
+		channel << "789";
+		LOG_INFO("ok 3");
+		channel << "012";
+		LOG_INFO("ok 4");
 		std::string ctx;
-		LOG_WARN("TimedPop {}", channel.TimedPop(ctx, std::chrono::milliseconds(1000)));
+		//LOG_WARN("TimedPop {}", channel.TimedPop(ctx, std::chrono::milliseconds(1000)));
 		
 		//LOG_INFO("ok {}", g_channel.TryPush("123"));
 		//LOG_INFO("ok {}", g_channel.TryPush("123"));

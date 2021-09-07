@@ -16,7 +16,7 @@ namespace Model
 		static GlobalData* Instance;
 
 
-		static int64_t GetObjectID() {
+		static int64_t InstanceId() {
 			return (++(GlobalData::Instance->m_object_id));
 		}
 

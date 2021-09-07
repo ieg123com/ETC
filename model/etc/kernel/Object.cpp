@@ -31,7 +31,7 @@ namespace Model
 		Game::Event().RemoveObject(shared_from_this());
 
 		m_host.reset();
-		m_obj_id = 0;
+		m_instance_id = 0;
 
 
 		if (m_is_from_pool == true)
@@ -49,6 +49,6 @@ namespace Model
 
 	void Object::RefreshObjectID()
 	{
-		m_obj_id = IdGenerator::Instance->GenerateObjectID();
+		m_instance_id = IdGenerator::Instance->GenerateInstanceId();
 	}
 }
