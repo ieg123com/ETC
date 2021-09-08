@@ -7,21 +7,25 @@
 #include "module/message/MessageDefines.h"
 #include "base/single/ISingleton.h"
 
-
-
+// 用来记录一条Actor请求的对象
 class ActorMessageSender
 {
 	friend class ActorMessageSenderPool;
-	ActorMessageSender():m_proto_response(1){}
+	ActorMessageSender():ProtoResponse(1){}
 public:
-	int64_t m_actor_id;
-	time_t	m_create_time;
+	int64_t ActorId;
+	time_t	CreateTime;
 	
-	std::shared_ptr<IMessage> m_proto_request;
+	std::shared_ptr<IMessage> ProtoRequest;
 	
-	co::Channel<std::shared_ptr<IActorResponse>>	m_proto_response;
+	co::Channel<std::shared_ptr<IActorResponse>>	ProtoResponse;
+	// HasException = true，这个请求发生了异常，需要在调用时抛出
+	bool HasException;
 
+	std::exception Exception;
 
+	// 设置异常
+	void SetException(std::exception& e);
 
 };
 
@@ -49,9 +53,10 @@ public:
 			instance = m_pool.front();
 			m_pool.pop();
 		}
-		instance->m_actor_id = actor_id;
-		instance->m_proto_request = message;
-		instance->m_create_time = Game::Time().NowServerMilliseconds();
+		instance->ActorId = actor_id;
+		instance->ProtoRequest = message;
+		instance->HasException = false;
+		instance->CreateTime = Game::Time().NowServerMilliseconds();
 		return std::shared_ptr<ActorMessageSender>(instance, ActorMessageSenderPool::__Recycle);
 	}
 

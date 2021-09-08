@@ -5,7 +5,7 @@
 // 框架内部错误消息
 enum class ETC_ERR : int32_t
 {
-	// 内部处理错误错误消息 100000+
+	// 异常抛出消息 100000+
 
 	NotFoundActor = 150000,
 
@@ -17,4 +17,13 @@ enum class ETC_ERR : int32_t
 
 };
 
+
+bool IsRpcNeedThrowException(const ETC_ERR error)
+{
+	if ((int32_t)error > 200000)
+	{
+		return false;
+	}
+	return true;
+}
 

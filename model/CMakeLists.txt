@@ -224,6 +224,7 @@ FILE(GLOB MODULE_COMPONENT_FILES "./module/component/*.cpp" "./module/component/
 set(MODULE_COMPONENT_CONFIG_FILES "")
 FILE(GLOB MODULE_COMPONENT_CONFIG_FILES "./module/component/config/*.cpp" "./module/component/config/*.h")
 
+
 source_group(module						FILES ${MODULE_FILES})
 source_group(module\\actor				FILES ${MODULE_ACTOR_FILES})
 source_group(module\\memory				FILES ${MODULE_MEMORY_FILES})
