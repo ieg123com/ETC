@@ -4,12 +4,12 @@
 
 namespace Hotfix
 {
-	class ActorRequestHandler : public MActorRpcHandler<GEntity, ActorRequest, ActorResponse>
+	class ActorRequestHandler : public AMActorRpcHandler<GEntity, ActorRequest, ActorResponse>
 	{
 	public:
-		virtual void Run(const std::shared_ptr<GEntity>& unit, ActorRequest& request, ActorResponse& response) override
+		virtual void Run(const std::shared_ptr<GEntity>& unit, ActorRequest& request, ActorResponse& response, FMReply& reply) override
 		{
-
+			reply();
 		}
 	};
 	REF(ActorRequestHandler, Message(EAppType::AllServer));

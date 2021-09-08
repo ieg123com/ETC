@@ -13,11 +13,11 @@ class InnerMessageDispatcherHandler
 {
 public:
 
-	static void HandleIActorMessage(const int32_t actor_id, const std::shared_ptr<IActorMessage>& message, FMPReply& reply);
+	static void HandleIActorMessage(const int64_t actor_id, const std::shared_ptr<IActorMessage>& message, FMPReply& reply);
 
-	static void HandleIActorRequest(const int32_t actor_id, const std::shared_ptr<IActorRequest>& request, FMPReply& reply);
+	static void HandleIActorRequest(const int64_t actor_id, const std::shared_ptr<IActorRequest>& request, FMPReply& reply);
 	
-	static void HandleIActorResponse(const uint16_t opcode, const int32_t actor_id, const char* data, const size_t len);
+	static void HandleIActorResponse(const int64_t actor_id, const std::shared_ptr<IActorResponse>& response);
 
 	static void FailResponse(const uint16_t opcode, const ETC_ERR error, FMPReply& reply);
 

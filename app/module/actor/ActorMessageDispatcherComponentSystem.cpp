@@ -34,10 +34,12 @@ namespace Hotfix
 					// 消息处理对象类型。（获取被这个特性实例包装的对象类型）
 					Type handler_type = attr->GetObjectType();
 					// 消息处理对象实例
-					auto handler = TypeFactory::CreateInstance<IMSystemHandler>(handler_type);
-					auto message = TypeFactory::CreateInstance<IMessage>(handler->GetRequestType());
-					// 为这组件注册消息到达后的触发实例
-					self->RegisterMessage(message->GetOpcode(), handler);
+					if (auto handler = TypeFactory::CreateInstance<IMActorHandler>(handler_type))
+					{
+						auto message = TypeFactory::CreateInstance<IMessage>(handler->GetRequestType());
+						// 为这组件注册消息到达后的触发实例
+						self->RegisterMessage(message->GetOpcode(), handler);
+					}
 				}
 			}
 		}

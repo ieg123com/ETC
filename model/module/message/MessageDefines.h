@@ -51,7 +51,7 @@ class IActorRequest : public IRequest {};
 
 class IActorResponse : public IResponse {};
 
-class IActorLocationMessage :public IActorMessage{};
+class IActorLocationMessage :public IActorRequest {};
 
 class IActorLocationRequest :public IActorRequest{};
 

@@ -7,6 +7,7 @@
 #include "module/memory/MemorySplit.h"
 #include "model/module/message/NetInnerComponent.h"
 #include "model/module/message/NetOuterComponent.h"
+#include "coroutine/co_async.h"
 #include <stdio.h>
 //#include "CircularBuffer.h"
 
@@ -181,6 +182,9 @@ void channel_test()
 
 void tick()
 {
+	auto num = async::spawn([]()->int {return 1; });
+	int ddd = num.get();
+	LOG_INFO("ddd {}", ddd);
 	while (true)
 	{
 		LOG_INFO("tick...");
@@ -198,9 +202,10 @@ int main(int argc, char* argv[])
 //	go network;
 	//go echo_server;
 	//go test;
-	go channel_test;
+	//go channel_test;
 	//go client;
 	go tick;
+
 
 	co_sched.Start();
 

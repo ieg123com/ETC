@@ -9,7 +9,6 @@ void InnerMessageDispatcher::Dispatch(const std::shared_ptr<Session>& session, c
 	// 内外消息头结构
 	// opcode		2 bytes
 	// actor_id		8 bytes
-
 	uint16_t opcode = 0;
 	int64_t actor_id = 0;
 	const char* pos = data;
@@ -19,12 +18,10 @@ void InnerMessageDispatcher::Dispatch(const std::shared_ptr<Session>& session, c
 
 	memcpy(&opcode, pos, sizeof(opcode));
 	pos += sizeof(opcode);
-	size += sizeof(opcode);
+	size -= sizeof(opcode);
 	memcpy(&actor_id, pos, sizeof(actor_id));
 	pos += sizeof(actor_id);
-	size += sizeof(actor_id);
-
-	LOG_INFO("opcode = {} actor_id = {} rpc_id = {}", opcode, actor_id);
+	size -= sizeof(actor_id);
 
 	EMessageType msg_type = OpcodeTypeComponent::Instance->GetMessageType(opcode);
 	if (msg_type == EMessageType::None)
@@ -33,11 +30,18 @@ void InnerMessageDispatcher::Dispatch(const std::shared_ptr<Session>& session, c
 	}
 
 	auto proto_message = OpcodeTypeComponent::Instance->CreateInstanceTry(opcode);
+	if (!proto_message->ParseFromArray(pos, size))
+	{
+
+		throw std::exception(
+			std::format(
+				"解析消息失败! message type = %s",
+				proto_message->GetType().full_name()).c_str());
+	}
 
 	switch (msg_type)
 	{
 	case EMessageType::IActorMessage:
-	case EMessageType::IActorLocationMessage:
 	{
 		auto message = std::dynamic_pointer_cast<IActorMessage>(proto_message);
 		InstanceID instance_id = session->InstanceId();
@@ -50,6 +54,7 @@ void InnerMessageDispatcher::Dispatch(const std::shared_ptr<Session>& session, c
 	}
 		break;
 	case EMessageType::IActorRequest:
+	case EMessageType::IActorLocationMessage:
 	case EMessageType::IActorLocationRequest:
 	{
 		auto request = std::dynamic_pointer_cast<IActorRequest>(proto_message);
@@ -64,7 +69,9 @@ void InnerMessageDispatcher::Dispatch(const std::shared_ptr<Session>& session, c
 		break;
 	case EMessageType::IActorResponse:
 	case EMessageType::IActorLocationResponse:
-		InnerMessageDispatcherHandler::HandleIActorResponse(opcode, actor_id, pos, size);
+
+		auto response = std::dynamic_pointer_cast<IActorResponse>(proto_message);
+		InnerMessageDispatcherHandler::HandleIActorResponse(actor_id, response);
 		break;
 		
 	}

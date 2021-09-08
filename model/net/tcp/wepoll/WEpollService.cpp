@@ -21,6 +21,7 @@
 
 #include "net/Session.h"
 #include "net/TChannel.h"
+#include "coroutine/co_async.h"
 
 
 // 异步 epoll wait
@@ -31,16 +32,29 @@ int co_epoll_wait(int socket,
 	int timeout)
 {
 #if _WIN32
-	timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
+	//timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
+	timeval tv;
+	tv.tv_sec = 0;
+	tv.tv_usec = 10;
 
 	fd_set readfds, exceptfds;
 	FD_ZERO(&readfds);
 	FD_SET(socket, &readfds);
 	FD_ZERO(&exceptfds);
 	FD_SET(socket, &exceptfds);
-	int n = select(0, &readfds, nullptr, &exceptfds, &tv);
+	//time_t start_time = Game::Time().NowServerMilliseconds();
 
-	return epoll_wait(ephnd, events, maxevents, 0);
+	//int n = select(0, &readfds, nullptr, &exceptfds, &tv);
+	//time_t end_time = Game::Time().NowServerMilliseconds();
+
+	//printf("select diff time %lld n %d\n", end_time - start_time, n);
+	//time_t start_time = Game::Time().NowServerMilliseconds();
+	//int n = co::await([=]()-> int {return epoll_wait(ephnd, events, maxevents, 1000); });
+	//time_t end_time = Game::Time().NowServerMilliseconds();
+	int n = 0;
+	//printf("select diff time %lld n %d\n", end_time - start_time, n);
+	return n;
+	//co_yield;
 #else
 	return epoll_wait(ephnd, events, maxevents, timeout);
 #endif
@@ -600,11 +614,11 @@ namespace Model
 
 	void WEpollService::StartEpollEventLoop()
 	{
+		LOG_INFO("StartEpollEventLoop");
 		epoll_event* events = new epoll_event[m_address_info.maxEvents];
 		while (m_epoll_status == EpollStatus::EPOLL_RUNNING)
 		{
-			int fds_num = co_epoll_wait(m_listened_socket, m_epollfd, events, m_address_info.maxEvents, 100);
-
+			int fds_num = co_epoll_wait(m_listened_socket, m_epollfd, events, m_address_info.maxEvents, 1);
 			if (fds_num == -1)
 			{
 				if (errno == EINTR)
@@ -618,6 +632,7 @@ namespace Model
 			}
 			else if (fds_num == 0)
 			{
+				
 				continue;
 			}
 
@@ -626,7 +641,6 @@ namespace Model
 				
 				this->HandleEpollEvent(events[i]);
 			}
-
 		}
 		LOG_INFO("epoll wait loop stop ...");
 		if (events != NULL)

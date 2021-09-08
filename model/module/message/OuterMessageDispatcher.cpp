@@ -36,27 +36,20 @@ void OuterMessageDispatcher::Dispatch(const std::shared_ptr<Session>& session, c
 	switch (msg_type)
 	{
 	case EMessageType::IMessage:
-	{
-		MessageDispatcherComponent::Instance->MessageHandle(session, opcode, proto_msg);
-	}
-	break;
 	case EMessageType::IRequest:
 	{
-		auto msg_req = std::dynamic_pointer_cast<IRequest>(proto_msg);
-		MessageDispatcherComponent::Instance->MRpcHandle(session, opcode, msg_req);
+		MessageDispatcherComponent::Instance->Handle(session, opcode, proto_msg.get());
+		break;
 	}
-	break;
 	case EMessageType::IActorLocationMessage:
 	{
-
+		break;
 	}
-	break;
 	case EMessageType::IActorLocationRequest:
 	{
 		// ActorLocation 消息，将收到的消息转发给需要的服务中
-
+		break;
 	}
-	break;
 	default:
 		break;
 	}

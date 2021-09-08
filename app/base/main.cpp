@@ -12,6 +12,9 @@
 #include "module/component/OptionComponent.h"
 #include "module/component/StartConfigComponent.h"
 #include "module/component/config/StartConfig.h"
+#include "module/actor/ActorMessageDispatcherComponent.h"
+#include "module/actor/ActorMessageSenderComponent.h"
+#include "etc/common/timer/TimerComponent.h"
 
 
 
@@ -54,6 +57,8 @@ int main(int argc,char* argv[])
 
 			LOG_INFO("D");
 
+			Game::World()->AddComponent<TimerComponent>();
+
 			switch (start_config->AppType)
 			{
 			case EAppType::Gate:
@@ -67,6 +72,8 @@ int main(int argc,char* argv[])
 				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(start_config->InnerAddress);
 				Game::World()->AddComponent<OpcodeTypeComponent>();
 				Game::World()->AddComponent<MessageDispatcherComponent>();
+				Game::World()->AddComponent<ActorMessageDispatcherComponent>();
+				Game::World()->AddComponent<ActorMessageSenderComponent>();
 				break;
 			case EAppType::List:
 				break;
@@ -96,14 +103,12 @@ int main(int argc,char* argv[])
 			}
 
 			LOG_INFO("E");
-
-
 			while (true)
 			{
 				try {
 					Model::Game::Event().Update();
 					Model::Game::Event().LateUpdate();
-					co_sleep(100);
+					co_sleep(50);
 				}
 				catch (std::exception& e)
 				{

@@ -56,26 +56,21 @@ public:
 				Type handler_type = item.second->GetObjectType();
 				Type type_req, type_rpo;
 				auto handler = TypeFactory::CreateInstance<IMSystemHandler>(handler_type);
-				if (auto instance = std::dynamic_pointer_cast<IMRpcHandler>(handler))
-				{
-					type_req = instance->GetRequestType();
-					type_rpo = instance->GetResponseType();
-					self->__BindRpcMessage(type_req, type_rpo);
-				}
-				else if (auto instance = std::dynamic_pointer_cast<IMActorHandler>(handler))
-				{
-					// IMActorLocationHandler 同样会触发，因为继承的 IMActorHandler
-					type_req = instance->GetRequestType();
-					type_rpo = instance->GetResponseType();
-					self->__BindRpcMessage(type_req, type_rpo);
-				}
-				else if (auto instance = std::dynamic_pointer_cast<IMActorRpcHandler>(handler))
-				{
-					// IMActorLocaitonRpcHandler 同样会触发，因为继承的 IMActorRpcHandler
-					type_req = instance->GetRequestType();
-					type_rpo = instance->GetResponseType();
-					self->__BindRpcMessage(type_req, type_rpo);
-				}
+				type_req = handler->GetRequestType();
+				type_rpo = handler->GetResponseType();
+				self->__BindRpcMessage(type_req, type_rpo);
+// 				if (auto instance = std::dynamic_pointer_cast<IMHandler>(handler))
+// 				{
+// 					// 普通外网通信 回复类型绑定
+// 					
+// 				}
+// 				else if (auto instance = std::dynamic_pointer_cast<IMActorHandler>(handler))
+// 				{
+// 					// Actor 回复类型绑定
+// 					type_req = instance->GetRequestType();
+// 					type_rpo = instance->GetResponseType();
+// 					self->__BindRpcMessage(type_req, type_rpo);
+// 				}
 			}
 
 		}

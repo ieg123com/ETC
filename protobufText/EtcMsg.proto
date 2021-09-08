@@ -63,7 +63,6 @@ message ActorTestRequest	// IActorRequest
 	int32 B = 2;
 	
 	int32 RpcId = 90;
-	int64 ActorId = 93;
 }
 
 message ActorTestResponse	// IActorResponse

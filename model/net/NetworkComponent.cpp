@@ -88,17 +88,10 @@ namespace Model
 		{
 			LOG_ERROR("连接的会话fd相同");
 		}
-		else {
-			session->Send("Welcome ETC", 12);
-		}
-
 	}
 
 	void NetworkComponent::OnRead(const std::shared_ptr<Session>& session, const char* data, const size_t len)
 	{
-		LOG_INFO("数据达到 Ip:{} fd:{}\n",
-			session->Address.ToString(),
-			session->SessionId);
 		session->OnRead(data, len);
 	}
 

@@ -12,8 +12,7 @@ namespace Model
 	{
 
 		// 消息类型
-		std::vector<std::shared_ptr<IMessageHandler>>	m_message_handler;
-		std::vector<std::shared_ptr<IMRpcHandler>>		m_mrpc_handler;
+		std::vector<std::shared_ptr<IMHandler>>	m_message_handler;
 
 	public:
 		static MessageDispatcherComponent* Instance;
@@ -22,10 +21,9 @@ namespace Model
 
 		void Clear();
 
-		void RegisterMessage(const uint16_t opcode, const std::shared_ptr<IMSystemHandler> handler);
+		void RegisterMessage(const uint16_t opcode, const std::shared_ptr<IMHandler>& handler);
 
-		void MessageHandle(const std::shared_ptr<Session>& session, const uint16_t opcode, const std::shared_ptr<IMessage>& message);
-		void MRpcHandle(const std::shared_ptr<Session>& session, const uint16_t opcode, const std::shared_ptr<IRequest>& request);
+		void Handle(const std::shared_ptr<Session>& session, const uint16_t opcode, IMessage* message);
 
 
 

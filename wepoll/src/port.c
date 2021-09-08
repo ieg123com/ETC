@@ -172,7 +172,6 @@ static int port__poll(port_state_t* port_state,
   port_state->active_poll_count++;
 
   LeaveCriticalSection(&port_state->lock);
-
   BOOL r = GetQueuedCompletionStatusEx(port_state->iocp,
                                        iocp_events,
                                        maxevents,
@@ -186,7 +185,6 @@ static int port__poll(port_state_t* port_state,
 
   if (!r)
     return_map_error(-1);
-  printf("port__poll END\n");
   return port__feed_events(
       port_state, epoll_events, iocp_events, completion_count);
 }

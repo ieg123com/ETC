@@ -18,7 +18,7 @@ enum class ETC_ERR : int32_t
 };
 
 
-bool IsRpcNeedThrowException(const ETC_ERR error)
+inline bool IsRpcNeedThrowException(const ETC_ERR error)
 {
 	if ((int32_t)error > 200000)
 	{

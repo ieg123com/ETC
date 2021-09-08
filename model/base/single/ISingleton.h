@@ -9,82 +9,80 @@
 #include <memory>
 #include <mutex>
 #include "ISingletonHandle.h"
+using namespace Model;
 
-namespace Model
+/**
+	* @brief	所有域中都为单例模式
+	*/
+template<typename T>
+class ISingleton
 {
-	/**
-	 * @brief	所有域中都为单例模式
-	 */
-	template<typename T>
-	class ISingleton
-	{
-	public:
+public:
 
-		static T& Instance() {
-			static std::mutex lock;
+	static T& Instance() {
+		static std::mutex lock;
+		if (!m_Instance)
+		{
+			lock.lock();
 			if (!m_Instance)
 			{
-				lock.lock();
-				if (!m_Instance)
-				{
-					m_Instance = ISingletonFactory::Get<T>();
-				}
-				lock.unlock();
+				m_Instance = ISingletonFactory::Get<T>();
 			}
-			return *m_Instance;
+			lock.unlock();
 		}
+		return *m_Instance;
+	}
 
-		static std::shared_ptr<T> GetSharedPtr() {
-			return m_Instance;
-		}
+	static std::shared_ptr<T> GetSharedPtr() {
+		return m_Instance;
+	}
 
-	protected:
-		ISingleton() {}
-		~ISingleton() {}
+protected:
+	ISingleton() {}
+	~ISingleton() {}
 
-	private:
-		static std::shared_ptr<T>	m_Instance;
-	};
+private:
+	static std::shared_ptr<T>	m_Instance;
+};
 
-	template <typename T>
-	std::shared_ptr<T> ISingleton<T>::m_Instance;
+template <typename T>
+std::shared_ptr<T> ISingleton<T>::m_Instance;
 
 
-	/**
-	 * @brief	只在当前域中为单例
-	 */
-	template<typename T>
-	class IDomainSingleton
-	{
-	public:
+/**
+	* @brief	只在当前域中为单例
+	*/
+template<typename T>
+class IDomainSingleton
+{
+public:
 
-		static T& Instance() {
-			static std::mutex lock;
+	static T& Instance() {
+		static std::mutex lock;
+		if (!m_Instance)
+		{
+			lock.lock();
 			if (!m_Instance)
 			{
-				lock.lock();
-				if (!m_Instance)
-				{
-					m_Instance = std::make_shared<T>();
-				}
-				lock.unlock();
+				m_Instance = std::make_shared<T>();
 			}
-			return *m_Instance;
+			lock.unlock();
 		}
+		return *m_Instance;
+	}
 
-		static std::shared_ptr<T> GetSharedPtr() {
-			if (!m_Instance)Instance();
-			return m_Instance;
-		}
+	static std::shared_ptr<T> GetSharedPtr() {
+		if (!m_Instance)Instance();
+		return m_Instance;
+	}
 
-	protected:
-		IDomainSingleton() {}
-		~IDomainSingleton() {}
+protected:
+	IDomainSingleton() {}
+	~IDomainSingleton() {}
 
-	private:
-		static std::shared_ptr<T>	m_Instance;
-	};
+private:
+	static std::shared_ptr<T>	m_Instance;
+};
 
-	template <typename T>
-	std::shared_ptr<T> IDomainSingleton<T>::m_Instance;
-}
+template <typename T>
+std::shared_ptr<T> IDomainSingleton<T>::m_Instance;

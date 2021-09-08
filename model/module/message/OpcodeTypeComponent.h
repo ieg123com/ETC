@@ -1,6 +1,5 @@
 #pragma once
 #include "etc/etc.h"
-#include "interface/IMessage.h"
 
 
 
@@ -47,7 +46,11 @@ public:
 		{
 			return response;
 		}
-		throw std::exception(std::format("无法转换类型 %s => %s,opcode = %d", message->GetType().full_name(), typeof(T).full_name(), opcode));
+		throw std::exception(
+			std::format("无法转换类型 %s => %s,opcode = %d", 
+				message->GetType().full_name(),
+				typeof(T).full_name(),
+				opcode).c_str());
 	}
 
 	template<typename T>
@@ -57,7 +60,11 @@ public:
 		{
 			return response;
 		}
-		throw std::exception(std::format("无法转换类型 %s => %s,opcode = %d", message->GetType().full_name(), typeof(T).full_name(), opcode));
+		throw std::exception(
+			std::format(
+				"无法转换类型 %s => %s,opcode = %d", 
+				message->GetType().full_name(), 
+				typeof(T).full_name(), opcode).c_str());
 	}
 
 	

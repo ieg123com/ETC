@@ -8,7 +8,6 @@ class ActorMessageDispatcherComponent :
 {
 
 	std::vector<std::shared_ptr<IMActorHandler>>	m_mactor_handler;
-	std::vector<std::shared_ptr<IMActorRpcHandler>>	m_mactor_rpc_handler;
 
 
 public:
@@ -19,10 +18,10 @@ public:
 
 	void Clear();
 
-	void RegisterMessage(const uint16_t opcode, const std::shared_ptr<IMSystemHandler>& handler);
+	void RegisterMessage(const uint16_t opcode, const std::shared_ptr<IMActorHandler>& handler);
 
 
-	void Handle();
+	void Handle(const std::shared_ptr<GEntity>& entity,const uint16_t opcode, IMessage* message, FMPReply& reply);
 
 
 

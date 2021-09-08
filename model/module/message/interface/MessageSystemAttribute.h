@@ -16,6 +16,8 @@ namespace Model
 		int32_t		appType;
 	};
 
+	// protobuf 协议生成代码使用
+	// 用于标记告诉 MessageDispatcher 这是一条pb协议
 	class ProtoMessage : public Reflection::BaseAttribute<ProtoMessage>
 	{
 	public:
@@ -24,6 +26,8 @@ namespace Model
 		}
 	};
 
+	// protobuf 协议生成代码使用
+	// 用来告诉其他组件，这条请求协议的回复类型
 	class ProtoResponseMessage : public Reflection::BaseAttribute<ProtoMessage>
 	{
 	public:

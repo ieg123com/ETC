@@ -3,18 +3,32 @@
 #include "module/message/OpcodeTypeComponent.h"
 #include "module/component/StartConfigComponent.h"
 #include "module/component/config/StartConfig.h"
+#include "timer/TimerComponent.h"
 #include "ActorMessageSender.h"
 #include "ActorHandler.h"
 
 ActorMessageSenderComponent* ActorMessageSenderComponent::Instance = nullptr;
 
 
+void ActorMessageSenderComponent::Awake()
+{
+	auto self = Get<ActorMessageSenderComponent>();
+	m_rpc_id = 0;
+	m_timeout_check_timer = TimerComponent::Instance->RegisterRepeatedTimer(1000, [=] {self->Check(); });
+}
+
+void ActorMessageSenderComponent::Destory()
+{
+	TimerComponent::Instance->RemoveTimer(m_timeout_check_timer);
+}
+
+
 void ActorMessageSenderComponent::Check()
 {
-	time_t out_time = Game::Time().NowServerMilliseconds() + OUTTIME_TIME;
+	time_t out_time = Game::Time().NowServerMilliseconds() - OUTTIME_TIME;
 	for (auto& item : m_request_callback)
 	{
-		if (item.second->CreateTime > out_time)
+		if (item.second->CreateTime < out_time)
 		{
 			m_timeout_actor_message.push_back(item.first);
 		}
@@ -28,24 +42,20 @@ void ActorMessageSenderComponent::Check()
 		try
 		{
 			auto response = ActorHandler::CreateResponseTry<IActorResponse>(actor_message->ProtoRequest, ETC_ERR::ActorTimeout);
+			m_request_callback.erase(item);
 			__Run(actor_message, response);
 		}
 		catch (std::exception& e)
 		{
-
+			LOG_ERROR("Actor error: 超时后执行回调，发生错误!({})",e.what());
 		}
 		catch (...)
 		{
-
+			LOG_ERROR("Actor error: 超时后执行回调，发生错误!(未知错误)");
 		}
-
-
-
-
-
 	}
 
-
+	m_timeout_actor_message.clear();
 
 }
 
@@ -55,6 +65,17 @@ void ActorMessageSenderComponent::Send(const int64_t actor_id, const std::shared
 	__Send(actor_id, message);
 }
 
+void ActorMessageSenderComponent::RunMessage(const int64_t actor_id, const std::shared_ptr<IActorResponse>& response)
+{
+	auto found = m_request_callback.find(response->GetRpcId());
+	if (found == m_request_callback.end())
+	{
+		return;
+	}
+	auto request_callback = found->second;
+	m_request_callback.erase(response->GetRpcId());
+	__Run(request_callback, response);
+}
 
 
 std::shared_ptr<IActorResponse> ActorMessageSenderComponent::__Call(const int64_t actor_id, const int32_t rpc_id, const std::shared_ptr<IMessage>& message)
@@ -81,7 +102,7 @@ std::shared_ptr<IActorResponse> ActorMessageSenderComponent::__Call(const int64_
 
 	time_t end_time = Game::Time().NowServerMilliseconds();
 
-	if (end_time - begin_time > 200)
+	//if (end_time - begin_time > 200)
 	{
 		LOG_WARN("Actor消息回复时间太久了，end_time - begin_time = {} > 200，message type:{}", end_time - begin_time,message->GetTypeName());
 	}

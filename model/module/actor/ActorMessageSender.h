@@ -11,8 +11,9 @@
 class ActorMessageSender
 {
 	friend class ActorMessageSenderPool;
-	ActorMessageSender():ProtoResponse(1){}
+	ActorMessageSender() :ProtoResponse(1) {}
 public:
+
 	int64_t ActorId;
 	time_t	CreateTime;
 	
@@ -33,15 +34,15 @@ public:
 class ActorMessageSenderPool:
 	public ISingleton<ActorMessageSenderPool>
 {
+
 	std::queue<ActorMessageSender*>	m_pool;
 	// 为 true 关闭时，将不会回收实例
 	bool m_closed;
 
+public:
 	ActorMessageSenderPool() {
 		m_closed = false;
 	}
-public:
-	
 
 	std::shared_ptr<ActorMessageSender> Fetch(int64_t actor_id,const std::shared_ptr<IMessage>& message){
 		ActorMessageSender* instance;

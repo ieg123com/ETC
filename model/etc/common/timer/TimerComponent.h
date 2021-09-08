@@ -43,33 +43,31 @@ public:
 
 	void Update();
 
+	void Destroy();
+
 public:
 
 	// 注册一次执行的计时器
-	int64_t RegisterOnceTimer(const time_t till_time, TimerAction::CallBack& call_back) {
-		
-	}
+	int64_t RegisterOnceTimer(const time_t time,TimerAction::CallBack&& call_back);
 
 	// 注册重复执行的计时器
-	int64_t RegisterRepeatedTimer(const time_t till_time, TimerAction::CallBack& call_back) {
-
-	}
+	int64_t RegisterRepeatedTimer(const time_t time,TimerAction::CallBack&& call_back);
 
 
-	void AddTimer(const time_t till_time, const std::shared_ptr<TimerAction>& timer) {
-		m_timers.emplace(timer->InstanceId(), timer);
-		m_timerid.emplace(till_time, timer->InstanceId());
-	}
+	void AddTimer(const time_t till_time, const std::shared_ptr<TimerAction>& timer);
 
-	void RemoveTimer(const InstanceID id) {
-		
-	}
+	void AddTimer(const time_t till_time, const InstanceID id);
+
+	void RemoveTimer(const InstanceID id);
+
+private:
+
+	void __Run(const time_t trigger_time,const std::shared_ptr<TimerAction>& timer);
 
 private:
 	// key: InstanceId,value: Timer
 	// 全部计时器任务
 	std::unordered_map<InstanceID,std::shared_ptr<TimerAction>>	m_timers;
-	// frist: run time,second: Timer
 
 	// key: time ,value: Timer
 	// 记录计时器任务的超时时间
@@ -77,5 +75,7 @@ private:
 
 	std::queue<time_t>			m_timeout_time;
 	std::queue<InstanceID>		m_timeout_timerid;
+	// 最小的触发时间
+	time_t		m_min_time;
 
 };

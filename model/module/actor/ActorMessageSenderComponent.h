@@ -9,7 +9,7 @@ class ActorMessageSenderComponent :
 	public Component
 {
 	// actor 消息超市时间
-	const time_t OUTTIME_TIME = 40 * 1000;
+	const time_t OUTTIME_TIME = 10 * 1000;
 	// rpc id 增值
 	int32_t m_rpc_id;
 	// 记录所有已经发送的actor请求消息，等待回复
@@ -17,8 +17,16 @@ class ActorMessageSenderComponent :
 
 	// 超时的 ActorMessageSender RpcId
 	std::vector<int32_t>	m_timeout_actor_message;
+
+	int64_t	m_timeout_check_timer;
 public:
 	static ActorMessageSenderComponent* Instance;
+
+	void Awake();
+	void Destory();
+
+
+public:
 
 	void Check();
 
@@ -35,6 +43,7 @@ public:
 		return std::static_pointer_cast<T>(__Call(actor_id, rpc_id, request));
 	}
 
+	void RunMessage(const int64_t actor_id, const std::shared_ptr<IActorResponse>& response);
 
 private:
 
