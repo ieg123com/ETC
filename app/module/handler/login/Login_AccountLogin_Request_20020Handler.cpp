@@ -22,7 +22,7 @@ namespace Hotfix
 			auto req = std::make_shared<ActorTestRequest>();
 			req->set_a(1);
 			req->set_b(2);
-			for (int i = 0; i < 10; ++i)
+			for (int i = 0; i < 1; ++i)
 			{
 				LOG_INFO("·¢ËÍ Actor ÏûÏ¢");
 				auto rpo = ActorMessageSenderComponent::Instance->Call<ActorTestResponse>(player->InstanceId(), req);

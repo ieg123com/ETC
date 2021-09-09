@@ -19,6 +19,7 @@
 // THE SOFTWARE.
 
 #include "internal.h"
+#include "scheduler_fwd.h"
 
 // for pthread thread_local emulation
 #if defined(EMULATE_PTHREAD_THREAD_LOCAL)

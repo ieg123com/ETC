@@ -133,21 +133,21 @@ class event_task;
 } // namespace async
 
 // Include sub-headers
-#include "async++/traits.h"
-#include "async++/aligned_alloc.h"
-#include "async++/ref_count.h"
-#include "async++/scheduler_fwd.h"
-#include "async++/continuation_vector.h"
-#include "async++/task_base.h"
-#include "async++/scheduler.h"
-#include "async++/task.h"
-#include "async++/when_all_any.h"
-#include "async++/cancel.h"
-#include "async++/range.h"
-#include "async++/partitioner.h"
-#include "async++/parallel_invoke.h"
-#include "async++/parallel_for.h"
-#include "async++/parallel_reduce.h"
+#include "traits.h"
+#include "aligned_alloc.h"
+#include "ref_count.h"
+#include "scheduler_fwd.h"
+#include "continuation_vector.h"
+#include "task_base.h"
+#include "scheduler.h"
+#include "task.h"
+#include "when_all_any.h"
+#include "cancel.h"
+#include "range.h"
+#include "partitioner.h"
+#include "parallel_invoke.h"
+#include "parallel_for.h"
+#include "parallel_reduce.h"
 
 #ifndef LIBASYNC_STATIC
 #if defined(__GNUC__) && !defined(_WIN32)

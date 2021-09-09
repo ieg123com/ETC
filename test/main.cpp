@@ -7,6 +7,7 @@
 #include "module/memory/MemorySplit.h"
 #include "model/module/message/NetInnerComponent.h"
 #include "model/module/message/NetOuterComponent.h"
+#define LIBASYNC_NUM_THREADS 20
 #include "coroutine/co_async.h"
 #include <stdio.h>
 //#include "CircularBuffer.h"
@@ -81,35 +82,52 @@ int ret_num()
 
 void test()
 {
+	LOG_INFO("test");
+	time_t start_time = Game::Time().NowServerMilliseconds();
+	auto num = co::await([]()->int {
+		//std::this_thread::sleep_for(std::chrono::milliseconds(10 * 1000));
+		return 1;
+		});
+	num = co::await([]()->int {
+		//std::this_thread::sleep_for(std::chrono::milliseconds(10 * 1000));
+		return 3;
+		});
+	num = co::await([]()->int {
+		//std::this_thread::sleep_for(std::chrono::milliseconds(10 * 1000));
+		return 3;
+		});
+	LOG_INFO("num {}", num);
+	time_t end_time = Game::Time().NowServerMilliseconds();
+	LOG_INFO("test 2  cost:{}",end_time-start_time);
 	MemorySplit	split;
 
 	char str[] = "0123456789[]";
 
 	uint16_t pack_size = sizeof(str);
 
-	for (int row = 0; row < 10; ++row)
-	{
-		for (int i = 0; i < 10; ++i)
-		{
-			//split.AddData((char*)&pack_size, sizeof(pack_size));
-			split.AddData(str, sizeof(str));
-			split.AddData(str, sizeof(str));
-		}
-		LOG_INFO("开始解析");
-		while (split.Unpack())
-		{
-			LOG_INFO(" [{}] size:{} data:{}",row, split.Data.size(),split.Data.c_str());
-		}
-	}
+// 	for (int row = 0; row < 10; ++row)
+// 	{
+// 		for (int i = 0; i < 10; ++i)
+// 		{
+// 			//split.AddData((char*)&pack_size, sizeof(pack_size));
+// 			split.AddData(str, sizeof(str));
+// 			split.AddData(str, sizeof(str));
+// 		}
+// 		LOG_INFO("开始解析");
+// 		while (split.Unpack())
+// 		{
+// 			LOG_INFO(" [{}] size:{} data:{}",row, split.Data.size(),split.Data.c_str());
+// 		}
+// 	}
 
 
 	
 
-	while (true)
-	{
-		LOG_INFO("wait...");
-		co_sleep(2000);
-	}
+// 	while (true)
+// 	{
+// 		LOG_INFO("wait...");
+// 		co_sleep(2000);
+// 	}
 
 
 
@@ -182,9 +200,7 @@ void channel_test()
 
 void tick()
 {
-	auto num = async::spawn([]()->int {return 1; });
-	int ddd = num.get();
-	LOG_INFO("ddd {}", ddd);
+
 	while (true)
 	{
 		LOG_INFO("tick...");
@@ -201,7 +217,7 @@ int main(int argc, char* argv[])
 // 	go network_client;
 //	go network;
 	//go echo_server;
-	//go test;
+	go test;
 	//go channel_test;
 	//go client;
 	go tick;

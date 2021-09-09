@@ -17,7 +17,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
+#pragma once
 #ifndef ASYNCXX_H_
 # error "Do not include this header directly, include <async++.h> instead."
 #endif
@@ -89,7 +89,8 @@ inline detail::thread_scheduler_impl& thread_scheduler()
 // Built-in thread pool scheduler with a size that is configurable from the
 // LIBASYNC_NUM_THREADS environment variable. If that variable does not exist
 // then the number of CPUs in the system is used instead.
-LIBASYNC_EXPORT threadpool_scheduler& default_threadpool_scheduler();
+//LIBASYNC_EXPORT threadpool_scheduler& default_threadpool_scheduler();
+threadpool_scheduler& default_threadpool_scheduler();
 
 // Default scheduler that is used when one isn't specified. This defaults to
 // default_threadpool_scheduler(), but can be overriden by defining
@@ -126,26 +127,26 @@ public:
 // Scheduler that runs tasks in a work-stealing thread pool of the given size.
 // Note that destroying the thread pool before all tasks have completed may
 // result in some tasks not being executed.
-class threadpool_scheduler {
+class LIBASYNC_EXPORT threadpool_scheduler {
 	std::unique_ptr<detail::threadpool_data> impl;
 
 public:
-	LIBASYNC_EXPORT threadpool_scheduler(threadpool_scheduler&& other);
+	threadpool_scheduler(threadpool_scheduler&& other);
 
 	// Create a thread pool with the given number of threads
-	LIBASYNC_EXPORT threadpool_scheduler(std::size_t num_threads);
+	threadpool_scheduler(std::size_t num_threads);
 
 	// Create a thread pool with the given number of threads. Call `prerun`
     // function before execution loop and `postrun` after.
-	LIBASYNC_EXPORT threadpool_scheduler(std::size_t num_threads,
+	threadpool_scheduler(std::size_t num_threads,
                                          std::function<void()>&& prerun_,
                                          std::function<void()>&& postrun_);
 
 	// Destroy the thread pool, tasks that haven't been started are dropped
-	LIBASYNC_EXPORT ~threadpool_scheduler();
+	~threadpool_scheduler();
 
 	// Schedule a task to be run in the thread pool
-	LIBASYNC_EXPORT void schedule(task_run_handle t);
+	void schedule(task_run_handle t);
 };
 
 namespace detail {

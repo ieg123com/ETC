@@ -5,7 +5,7 @@
 
 namespace Hotfix
 {
-	class ActorRequestHandler : public AMActorRpcHandler<PlayerEntity, ActorTestRequest, ActorTestResponse>
+	class ActorTestRequestHandler : public AMActorRpcHandler<PlayerEntity, ActorTestRequest, ActorTestResponse>
 	{
 	public:
 		virtual void Run(const std::shared_ptr<PlayerEntity>& unit, ActorTestRequest& request, ActorTestResponse& response, FMReply& reply) override
@@ -20,5 +20,5 @@ namespace Hotfix
 			reply();
 		}
 	};
-	REF(ActorRequestHandler, Message(EAppType::AllServer));
+	REF(ActorTestRequestHandler, Message(EAppType::AllServer));
 }

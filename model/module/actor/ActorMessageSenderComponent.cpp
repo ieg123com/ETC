@@ -102,7 +102,7 @@ std::shared_ptr<IActorResponse> ActorMessageSenderComponent::__Call(const int64_
 
 	time_t end_time = Game::Time().NowServerMilliseconds();
 
-	//if (end_time - begin_time > 200)
+	if (end_time - begin_time > 200)
 	{
 		LOG_WARN("Actor消息回复时间太久了，end_time - begin_time = {} > 200，message type:{}", end_time - begin_time,message->GetTypeName());
 	}
@@ -140,7 +140,7 @@ void ActorMessageSenderComponent::__Run(const std::shared_ptr<ActorMessageSender
 					actor_message->ProtoRequest->GetType().full_name(),
 					response->GetType().full_name()).c_str()));
 	}
-	if (actor_message->HasException && IsRpcNeedThrowException((ETC_ERR)response->GetError()))
+	else if (actor_message->HasException && IsRpcNeedThrowException((ETC_ERR)response->GetError()))
 	{
 		actor_message->SetException(std::exception(
 			std::format(

@@ -18,10 +18,7 @@ void ActorMessageDispatcherComponent::Clear()
 void ActorMessageDispatcherComponent::RegisterMessage(const uint16_t opcode, const std::shared_ptr<IMActorHandler>& handler)
 {
 	// IMActorLocationHandler IMActorLocationRpcHandler 不需要特殊处理，把这个两个当成 Actor 消息正常处理就可以了
-	if (auto instance = std::dynamic_pointer_cast<IMActorHandler>(handler))
-	{
-		m_mactor_handler[opcode] = instance;
-	}
+	m_mactor_handler[opcode] = handler;
 
 }
 

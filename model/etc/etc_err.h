@@ -14,6 +14,9 @@ enum class ETC_ERR : int32_t
 
 
 	HandleRpcMessageException	= 170000,
+	HandleActorMessageException = 170001,
+	HandleActorRpcMessageException = 170002,
+
 
 };
 

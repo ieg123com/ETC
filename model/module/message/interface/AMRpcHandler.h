@@ -19,6 +19,13 @@ public:
 		try
 		{
 			IRequest* request = dynamic_cast<IRequest*>(message);
+			if (request == nullptr)
+			{
+				throw std::exception(std::format("转换消息类型失败: %s => %s",
+					message->GetType().full_name(),
+					typeof(IRequest).full_name()
+				).c_str());
+			}
 			Response response;
 
 			InstanceID instance_id = session->InstanceId();
@@ -35,35 +42,35 @@ public:
 			};
 
 			try {
-				Run(session, *(Request*)request, response,reply);
+				Run(session, *request, response,reply);
 			}
 			catch (std::exception& e)
 			{
-				LOG_ERROR("处理消息失败:{} {}",
+				LOG_ERROR("AMRpcHandler error: 处理消息失败:{} {}",
 					typeof(Request).full_name(),
 					e.what());
 				response.set_error((int32_t)ETC_ERR::HandleRpcMessageException);
-				response.set_message(e.what());
+				response.set_message(std::gb2312_to_utf8(e.what()));
 				reply();
 			}
 			catch (...)
 			{
-				LOG_ERROR("处理消息失败:{} 未知错误",
+				LOG_ERROR("AMRpcHandler error: 处理消息失败:{} 未知错误",
 					typeof(Request).full_name());
 				response.set_error((int32_t)ETC_ERR::HandleRpcMessageException);
-				response.set_message("未知错误");
+				response.set_message(std::gb2312_to_utf8("未知错误"));
 				reply();
 			}
 		}
 		catch (std::exception& e)
 		{
-			LOG_ERROR("解析消息失败:{} {}",
+			LOG_ERROR("AMRpcHandler error: 解析消息失败:{} {}",
 				typeof(Request).full_name(),
 				e.what());
 		}
 		catch (...)
 		{
-			LOG_ERROR("解析消息失败:{} 未知错误",
+			LOG_ERROR("AMRpcHandler error: 解析消息失败:{} 未知错误",
 				typeof(Request).full_name());
 		}
 	}

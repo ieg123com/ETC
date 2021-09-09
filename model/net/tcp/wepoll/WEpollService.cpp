@@ -33,15 +33,15 @@ int co_epoll_wait(int socket,
 {
 #if _WIN32
 	//timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
-	timeval tv;
-	tv.tv_sec = 0;
-	tv.tv_usec = 10;
-
-	fd_set readfds, exceptfds;
-	FD_ZERO(&readfds);
-	FD_SET(socket, &readfds);
-	FD_ZERO(&exceptfds);
-	FD_SET(socket, &exceptfds);
+// 	timeval tv;
+// 	tv.tv_sec = 0;
+// 	tv.tv_usec = 10;
+// 
+// 	fd_set readfds, exceptfds;
+// 	FD_ZERO(&readfds);
+// 	FD_SET(socket, &readfds);
+// 	FD_ZERO(&exceptfds);
+// 	FD_SET(socket, &exceptfds);
 	//time_t start_time = Game::Time().NowServerMilliseconds();
 
 	//int n = select(0, &readfds, nullptr, &exceptfds, &tv);
@@ -51,9 +51,10 @@ int co_epoll_wait(int socket,
 	//time_t start_time = Game::Time().NowServerMilliseconds();
 	//int n = co::await([=]()-> int {return epoll_wait(ephnd, events, maxevents, 1000); });
 	//time_t end_time = Game::Time().NowServerMilliseconds();
-	int n = 0;
+	//int n = 0;
+	return co::await([&]()-> int {return epoll_wait(ephnd, events, maxevents, timeout); });
 	//printf("select diff time %lld n %d\n", end_time - start_time, n);
-	return n;
+	//return n;
 	//co_yield;
 #else
 	return epoll_wait(ephnd, events, maxevents, timeout);
@@ -618,7 +619,18 @@ namespace Model
 		epoll_event* events = new epoll_event[m_address_info.maxEvents];
 		while (m_epoll_status == EpollStatus::EPOLL_RUNNING)
 		{
-			int fds_num = co_epoll_wait(m_listened_socket, m_epollfd, events, m_address_info.maxEvents, 1);
+#ifdef _WIN32
+			// Win下 libgo 协程库不支持 iocp,用延迟的方法，尽可能的缩短触发时间。
+			// 完善后，计划在 Linux 下部署。
+			int fds_num = epoll_wait(m_epollfd, events, m_address_info.maxEvents, 0);
+			if (fds_num == 0)
+			{
+				std::this_thread::sleep_for(std::chrono::microseconds(10));
+				fds_num = epoll_wait(m_epollfd, events, m_address_info.maxEvents, 0);
+			}
+#else
+			int fds_num = epoll_wait(m_epollfd, events, m_address_info.maxEvents, 1000);
+#endif
 			if (fds_num == -1)
 			{
 				if (errno == EINTR)
@@ -676,7 +688,7 @@ namespace Model
 			{
 				continue;
 			}
-
+			
 			int read_size = recv(sock, read_buffer, READ_BUFFER_SIZE, 0);
 			if (read_size == 0)
 			{

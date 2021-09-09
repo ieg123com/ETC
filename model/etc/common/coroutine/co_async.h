@@ -13,7 +13,8 @@ namespace co
 		while (!atask.ready())
 		{
 			if (co::GetCurrentCoroID() != 0)
-				co_yield;
+				//co_yield;
+				std::this_thread::sleep_for(std::chrono::microseconds(1));
 		}
 		return atask.get();
 	}
