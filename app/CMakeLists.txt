@@ -107,6 +107,20 @@ LIST(APPEND ALL_OBJECT
 	${MODULE_ACTOR_FILES}
 	${MODULE_ACTOR_HANDLER_FILES})
 
+#========================Demo加载==============================
+
+# demo message handler
+set(DEMO_MESSAGE_HANDLER_FILES "")
+FILE(GLOB DEMO_MESSAGE_HANDLER_FILES "./demo/message/handler/*.cpp")
+
+
+source_group(demo\\message\\handler				FILES ${DEMO_MESSAGE_HANDLER_FILES})
+
+
+LIST(APPEND ALL_OBJECT
+	${DEMO_MESSAGE_HANDLER_FILES})
+
+
 
 
 # Target

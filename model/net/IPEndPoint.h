@@ -10,13 +10,13 @@ public:
 	std::string	Ip;
 	uint16_t	Port;
 
-	IPEndPoint() {
+	IPEndPoint() noexcept {
 		Ip = "";
 		Port = 0;
 	}
-	IPEndPoint(const uint64_t port) {
+	IPEndPoint(const uint16_t port) noexcept {
 		Ip = "";
-		Port = port;
+		Port = (uint16_t)port;
 	}
 	IPEndPoint(const std::string& address) {
 		From(address);
@@ -24,17 +24,17 @@ public:
 	IPEndPoint(const char* address) {
 		From(address);
 	}
-	IPEndPoint(const std::string& ip, const uint16_t port) {
+	IPEndPoint(const std::string& ip, const uint16_t port) noexcept {
 		Ip = ip;
-		Port = port;
+		Port = (uint16_t)port;
 	}
 
-	IPEndPoint(const IPEndPoint& obj) {
+	IPEndPoint(const IPEndPoint& obj) noexcept {
 		Ip = obj.Ip;
 		Port = obj.Port;
 	}
 
-	IPEndPoint(IPEndPoint&& obj) {
+	IPEndPoint(IPEndPoint&& obj) noexcept {
 		Ip = std::move(obj.Ip);
 		Port = obj.Port;
 	}
@@ -47,13 +47,13 @@ public:
 		return (Ip != obj.Ip || Port != obj.Port);
 	}
 
-	IPEndPoint& operator = (IPEndPoint&& obj) {
+	IPEndPoint& operator = (IPEndPoint&& obj) noexcept {
 		Ip = std::move(obj.Ip);
 		Port = std::move(obj.Port);
 		return*this;
 	}
 
-	IPEndPoint& operator = (const IPEndPoint& obj) {
+	IPEndPoint& operator = (const IPEndPoint& obj) noexcept {
 		Ip = obj.Ip;
 		Port = obj.Port;
 		return*this;

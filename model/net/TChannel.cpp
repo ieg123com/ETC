@@ -51,15 +51,12 @@ namespace Model
 		// 消息解析完成
 		auto pack = std::make_shared<std::string>(std::move(m_memory_split.Data));
 		auto session = GetHost<Session>();
-		time_t begin_time = Game::Time().NowServerMilliseconds();
-		if (!m_channel.TryPush(std::move([begin_time,session, pack] {
+		if (!m_channel.TryPush(std::move([session, pack] {
 			session->__networkcomponent->__MessageDispatcher->Dispatch(session, pack->data(), pack->size());
-			time_t end_time = Game::Time().NowServerMilliseconds();
-			LOG_WARN("分发数据耗时:{}", end_time - begin_time);
 			})))
 		{
 			// 缓存队列容量已满,当前会话发生了堵塞
-			LOG_WARN("缓存队列容量已满,当前会话发生了堵塞。(ip = {},fd = {})",
+			LOG_WARN("读取数据时发现，缓存队列容量已满，当前会话发生了堵塞。(ip = {},fd = {})",
 				session->Address.ToString(), session->SessionId);
 			// 断开这个出现问题的会话
 			session->Dispose();
@@ -92,7 +89,11 @@ namespace Model
 			this->StartSend();
 			})))
 		{
-
+			auto session = GetHost<Session>();
+			LOG_WARN("发送数据时发现，缓存队列容量已满，当前会话发生了堵塞。(ip = {},fd = {})",
+				session->Address.ToString(), session->SessionId);
+			// 断开这个出现问题的会话
+			session->Dispose();
 		}
 
 	}

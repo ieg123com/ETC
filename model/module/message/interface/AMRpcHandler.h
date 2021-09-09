@@ -18,19 +18,19 @@ public:
 	{
 		try
 		{
-			IRequest* request = dynamic_cast<IRequest*>(message);
+			Request* request = dynamic_cast<Request*>(message);
 			if (request == nullptr)
 			{
 				throw std::exception(std::format("转换消息类型失败: %s => %s",
 					message->GetType().full_name(),
-					typeof(IRequest).full_name()
+					typeof(Request).full_name()
 				).c_str());
 			}
 			Response response;
 
 			InstanceID instance_id = session->InstanceId();
 
-			std::function<void()> reply = [&] {
+			FMReply reply = [&] {
 				// 等回调回来,session可以已经断开了,所以需要判断session InstanceID是否一样
 				if (session->InstanceId() != instance_id)
 				{

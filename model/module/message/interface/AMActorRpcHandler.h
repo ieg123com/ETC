@@ -48,7 +48,7 @@ public:
 				LOG_ERROR("AMActorRpcHandler error: 处理消息出错:{} {}",
 					typeof(Request).full_name(),
 					e.what());
-				response.SetError(ETC_ERR::HandleActorRpcMessageException);
+				response.SetError((int32_t)ETC_ERR::HandleActorRpcMessageException);
 				response.SetMessage(std::gb2312_to_utf8(e.what()));
 				areply();
 			}
@@ -56,7 +56,7 @@ public:
 			{
 				LOG_ERROR("AMActorRpcHandler error: 处理消息出错:{} 未知错误",
 					typeof(Request).full_name());
-				response.SetError(ETC_ERR::HandleActorRpcMessageException);
+				response.SetError((int32_t)ETC_ERR::HandleActorRpcMessageException);
 				response.SetMessage(std::gb2312_to_utf8("未知错误"));
 				areply();
 			}

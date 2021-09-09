@@ -1,6 +1,5 @@
 #pragma once
 #include "IMActorHandler.h"
-#include "module/message/OpcodeTypeComponent.h"
 #include "model/proto/EtcMsg.pb.h"
 
 
@@ -27,7 +26,7 @@ public:
 					typeof(Request).full_name()
 				).c_str());
 			}
-			std::shared_ptr<IActorResponse> response = OpcodeTypeComponent::Instance->CreateResponseInstanceTry(message->GetOpcode());
+			ActorResponse response;
 
 			auto unit = std::dynamic_pointer_cast<T>(entity);
 			if (unit == nullptr)
@@ -41,7 +40,7 @@ public:
 
 			// 因为这不是一条rpc消息，对方不需要知道有没有执行成功。
 			// 提前回复消息，告诉对方消息收到了，地址木的问题。
-			reply(response.get());
+			reply(&response);
 
 			try
 			{

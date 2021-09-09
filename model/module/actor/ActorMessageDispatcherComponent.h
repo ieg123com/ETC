@@ -2,7 +2,8 @@
 #include "etc/etc.h"
 
 
-
+// Actor 消息分发组件
+// 分发 AMActorHandler AMActorRpcHandler AMActorLocationHandler AMActorLocationRpcHandler 消息
 class ActorMessageDispatcherComponent :
 	public Component
 {

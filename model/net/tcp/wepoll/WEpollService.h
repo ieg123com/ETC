@@ -74,6 +74,14 @@ namespace Model
 	class WEpollService :
 		public Service
 	{
+
+		static int WEpollService::co_epoll_wait(
+			WEpollService* self,
+			int socket,
+			HANDLE ephnd,
+			struct epoll_event* events,
+			int maxevents,
+			int timeout);
 	public:
 		WEpollService();
 
@@ -153,8 +161,8 @@ namespace Model
 
 		EpollStatus		m_epoll_status;
 		stAddressInfo	m_address_info;
-		SessionID		m_listened_socket;
-
+		SessionID		m_tcp_socket;
+		fd_set			m_fd;
 #ifndef _WIN32
 		int m_epollfd;
 #else

@@ -39,23 +39,17 @@ int main(int argc,char* argv[])
 			//hotfix.Init(Model::GetGlobalVar());
 
 			LOG_INFO("==============================");
-			LOG_INFO("A");
 			Game::World()->AddComponent<ConfigComponent>();
-			printf("%p\n", ConfigComponent::Instance);
 			Config_Init::Init();
 
-			LOG_INFO("B");
 			
-			//Options option = Game::World()->AddComponent<OptionComponent, int, char* []>(argc, argv)->Options;
 			auto start_config = Game::World()->AddComponent<StartConfigComponent, int32_t>(Game::Options().AppId)->startConfig;
-			LOG_INFO("C");
 			if (!Is(Game::Options().AppType, start_config->AppType))
 			{
 				throw std::exception("命令行参数 AppType 和配置中的不一致");
 			}
 
 
-			LOG_INFO("D");
 
 			Game::World()->AddComponent<TimerComponent>();
 
@@ -74,6 +68,7 @@ int main(int argc,char* argv[])
 				Game::World()->AddComponent<MessageDispatcherComponent>();
 				Game::World()->AddComponent<ActorMessageDispatcherComponent>();
 				Game::World()->AddComponent<ActorMessageSenderComponent>();
+
 				break;
 			case EAppType::List:
 				break;
@@ -102,7 +97,7 @@ int main(int argc,char* argv[])
 				break;
 			}
 
-			LOG_INFO("E");
+			LOG_INFO("》》》》》》启动成功");
 			while (true)
 			{
 				try {
@@ -113,6 +108,10 @@ int main(int argc,char* argv[])
 				catch (std::exception& e)
 				{
 					LOG_ERROR("更新时出错 {}", e.what());
+				}
+				catch (...)
+				{
+					LOG_ERROR("更新时发生未知错误");
 				}
 			}
 			

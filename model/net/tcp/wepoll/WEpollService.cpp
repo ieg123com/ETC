@@ -25,37 +25,56 @@
 
 
 // 异步 epoll wait
-int co_epoll_wait(int socket,
+int WEpollService::co_epoll_wait(
+	WEpollService* self,
+	int socket,
 	HANDLE ephnd,
 	struct epoll_event* events,
 	int maxevents,
 	int timeout)
 {
+
+
+// #ifdef _WIN32
+// 	// Win下 libgo 协程库不支持 iocp,用延迟的方法，尽可能的缩短触发时间。
+// 	// 完善后，计划在 Linux 下部署。
+// 	int fds_num = epoll_wait(m_epollfd, events, m_address_info.maxEvents, 0);
+// 	if (fds_num == 0)
+// 	{
+// 		std::this_thread::sleep_for(std::chrono::microseconds(10));
+// 		fds_num = epoll_wait(m_epollfd, events, m_address_info.maxEvents, 0);
+// 	}
+// #else
+// 	int fds_num = epoll_wait(m_epollfd, events, m_address_info.maxEvents, 1000);
+// #endif
+
+
 #if _WIN32
-	//timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
+	timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
 // 	timeval tv;
 // 	tv.tv_sec = 0;
 // 	tv.tv_usec = 10;
 // 
-// 	fd_set readfds, exceptfds;
+	fd_set readfds;
+	memcpy(&readfds, &self->m_fd, sizeof(self->m_fd));
 // 	FD_ZERO(&readfds);
 // 	FD_SET(socket, &readfds);
 // 	FD_ZERO(&exceptfds);
 // 	FD_SET(socket, &exceptfds);
-	//time_t start_time = Game::Time().NowServerMilliseconds();
+	time_t start_time = Game::Time().NowServerMilliseconds();
+	int n = select(0, &readfds, nullptr, nullptr, &tv);
+	time_t end_time = Game::Time().NowServerMilliseconds();
 
-	//int n = select(0, &readfds, nullptr, &exceptfds, &tv);
-	//time_t end_time = Game::Time().NowServerMilliseconds();
-
-	//printf("select diff time %lld n %d\n", end_time - start_time, n);
+	printf("select diff time %lld n %d\n", end_time - start_time, n);
 	//time_t start_time = Game::Time().NowServerMilliseconds();
 	//int n = co::await([=]()-> int {return epoll_wait(ephnd, events, maxevents, 1000); });
 	//time_t end_time = Game::Time().NowServerMilliseconds();
 	//int n = 0;
-	return co::await([&]()-> int {return epoll_wait(ephnd, events, maxevents, timeout); });
+	//return co::await([&]()-> int {return epoll_wait(ephnd, events, maxevents, timeout); });
 	//printf("select diff time %lld n %d\n", end_time - start_time, n);
 	//return n;
 	//co_yield;
+	return epoll_wait(ephnd, events, maxevents, 0);
 #else
 	return epoll_wait(ephnd, events, maxevents, timeout);
 #endif
@@ -112,7 +131,7 @@ namespace Model
 
 	std::shared_ptr<Session> WEpollService::Connect(const IPEndPoint& address)
 	{
-		if (m_listened_socket != -1)
+		if (m_tcp_socket != -1)
 		{
 			LOG_ERROR("当前组件已经在运作了");
 			return false;
@@ -129,9 +148,9 @@ namespace Model
 		stSocketContext* ctx = new stSocketContext();
 		ctx->session = ObjectFactory::Create<Session, const std::shared_ptr<Service>&>(Get<Service>());
 		ctx->session->Address = address;
-		ctx->session->SessionId = m_listened_socket;
+		ctx->session->SessionId = m_tcp_socket;
 
-		__AddSocketCtx(m_listened_socket, ctx);
+		__AddSocketCtx(m_tcp_socket, ctx);
 
 		m_epoll_status = EpollStatus::EPOLL_RUNNING;
 
@@ -195,7 +214,7 @@ namespace Model
 		m_epollfd = -1;
 #endif // _WIN32
 
-		m_listened_socket = SOCKET_ERROR;
+		m_tcp_socket = SOCKET_ERROR;
 	}
 
 	void WEpollService::Destroy()
@@ -233,14 +252,14 @@ namespace Model
 			{
 
 #ifdef _WIN32
-				int ret = closesocket(m_listened_socket);
+				int ret = closesocket(m_tcp_socket);
 #else
 				int ret = close(m_listened_socket);
 #endif
 			}
 			WaitClose();
 			m_epollfd = INVALID_HANDLE_VALUE;
-			m_listened_socket = SOCKET_ERROR;
+			m_tcp_socket = SOCKET_ERROR;
 		}
 		Service::Destroy();
 	}
@@ -311,8 +330,8 @@ namespace Model
 	bool WEpollService::BindOnAddress(const stAddressInfo& addressInfo)
 	{
 		/* listen on sock_fd, new connection on new_fd */
-		m_listened_socket = socket(AF_INET, SOCK_STREAM, 0);
-		if (m_listened_socket == -1)
+		m_tcp_socket = socket(AF_INET, SOCK_STREAM, 0);
+		if (m_tcp_socket == -1)
 		{
 			LOG_ERROR("socket error: {}", strerror(errno));
 			LastError = errno;
@@ -323,7 +342,7 @@ namespace Model
 #ifndef _WIN32
 		setsockopt(m_listened_socket, SOL_SOCKET, 0, &opt, sizeof(opt));
 #else
-		setsockopt(m_listened_socket, SOL_SOCKET, 0, (const char*)&opt, sizeof(opt));
+		setsockopt(m_tcp_socket, SOL_SOCKET, 0, (const char*)&opt, sizeof(opt));
 #endif
 		struct sockaddr_in my_addr; /* my address information */
 		memset(&my_addr, 0, sizeof(my_addr));
@@ -338,20 +357,22 @@ namespace Model
 			my_addr.sin_addr.s_addr = inet_addr(addressInfo.address.Ip.c_str());
 		}
 		// 监听地址
-		if (::bind(m_listened_socket, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) == SOCKET_ERROR)
+		if (::bind(m_tcp_socket, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) == SOCKET_ERROR)
 		{
 			LOG_ERROR("bind error: {}", strerror(errno));
 			LastError = errno;
 			LastErrorMsg = strerror(errno);
 			return false;
 		}
-		if (listen(m_listened_socket, addressInfo.backlog) == SOCKET_ERROR)
+		if (listen(m_tcp_socket, addressInfo.backlog) == SOCKET_ERROR)
 		{
 			LOG_ERROR("listen error: {}", strerror(errno));
 			LastError = errno;
 			LastErrorMsg = strerror(errno);
 			return false;
 		}
+		FD_ZERO(&m_fd);
+		FD_SET(m_tcp_socket, &m_fd);
 		return true;
 	}
 
@@ -359,8 +380,8 @@ namespace Model
 	bool WEpollService::ConnectAddress(const stAddressInfo& addressInfo)
 	{
 		/* listen on sock_fd, new connection on new_fd */
-		m_listened_socket = socket(AF_INET, SOCK_STREAM, 0);
-		if (m_listened_socket == -1)
+		m_tcp_socket = socket(AF_INET, SOCK_STREAM, 0);
+		if (m_tcp_socket == -1)
 		{
 			LOG_ERROR("socket error: {}", strerror(errno));
 			LastError = errno;
@@ -371,7 +392,7 @@ namespace Model
 #ifndef _WIN32
 		setsockopt(m_listened_socket, SOL_SOCKET, 0, &opt, sizeof(opt));
 #else
-		setsockopt(m_listened_socket, SOL_SOCKET, 0, (const char*)&opt, sizeof(opt));
+		setsockopt(m_tcp_socket, SOL_SOCKET, 0, (const char*)&opt, sizeof(opt));
 #endif
 		struct sockaddr_in my_addr; /* my address information */
 		memset(&my_addr, 0, sizeof(my_addr));
@@ -386,7 +407,7 @@ namespace Model
 			my_addr.sin_addr.s_addr = inet_addr(addressInfo.address.Ip.c_str());
 		}
 		// 连接地址
-		if (connect(m_listened_socket, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) == SOCKET_ERROR)
+		if (connect(m_tcp_socket, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) == SOCKET_ERROR)
 		{
 			LOG_ERROR("connect error:{} {}", WSAGetLastError(), strerror(errno));
 			LastError = errno;
@@ -430,6 +451,8 @@ namespace Model
 			LOG_ERROR("set conn sock nonblocking failed!");
 			return;
 		}
+		// 增加fd
+		FD_SET(conn_sock, &m_fd);
 
 
 		// 创建新会话
@@ -556,8 +579,8 @@ namespace Model
 #else
 		ev.events = EPOLLIN | EPOLLET; // ET
 #endif
-		ev.data.fd = m_listened_socket;
-		if (epoll_ctl(m_epollfd, EPOLL_CTL_ADD, m_listened_socket, &ev) == -1)
+		ev.data.fd = m_tcp_socket;
+		if (epoll_ctl(m_epollfd, EPOLL_CTL_ADD, m_tcp_socket, &ev) == -1)
 		{
 			LOG_ERROR("epoll_ctl: listen_sock: {}", strerror(errno));
 			LastError = errno;
@@ -570,7 +593,7 @@ namespace Model
 
 	void WEpollService::HandleEpollEvent(epoll_event& e)
 	{
-		if (e.data.fd == m_listened_socket)		// 仅仅建立连接的时候进行判断，因为只有此时fd才和server 的监听fd 相等
+		if (e.data.fd == m_tcp_socket)		// 仅仅建立连接的时候进行判断，因为只有此时fd才和server 的监听fd 相等
 		{
 			// accept connection
 			this->HandleAcceptEvent((int&)m_epollfd, e);
@@ -619,18 +642,7 @@ namespace Model
 		epoll_event* events = new epoll_event[m_address_info.maxEvents];
 		while (m_epoll_status == EpollStatus::EPOLL_RUNNING)
 		{
-#ifdef _WIN32
-			// Win下 libgo 协程库不支持 iocp,用延迟的方法，尽可能的缩短触发时间。
-			// 完善后，计划在 Linux 下部署。
-			int fds_num = epoll_wait(m_epollfd, events, m_address_info.maxEvents, 0);
-			if (fds_num == 0)
-			{
-				std::this_thread::sleep_for(std::chrono::microseconds(10));
-				fds_num = epoll_wait(m_epollfd, events, m_address_info.maxEvents, 0);
-			}
-#else
-			int fds_num = epoll_wait(m_epollfd, events, m_address_info.maxEvents, 1000);
-#endif
+			int fds_num = co_epoll_wait(this,m_tcp_socket, m_epollfd, events, m_address_info.maxEvents, 1000);
 			if (fds_num == -1)
 			{
 				if (errno == EINTR)
@@ -672,7 +684,7 @@ namespace Model
 		timeout.tv_usec = 100 % 1000 * 1000;
 
 #if _WIN32
-		int sock = m_listened_socket;
+		int sock = m_tcp_socket;
 #else
 		int sock = m_listened_socket + 1;
 #endif
@@ -724,18 +736,18 @@ namespace Model
 
 		}
 
-		if (auto ctx = __GetSocketCtx(m_listened_socket))
+		if (auto ctx = __GetSocketCtx(m_tcp_socket))
 		{
 			if (OnDisconnect)
 			{
 				OnDisconnect(ctx->session);
 			}
 #ifdef _WIN32
-			int ret = closesocket(m_listened_socket);
+			int ret = closesocket(m_tcp_socket);
 #else
 			int ret = close(m_listened_socket);
 #endif
-			__RemoveSocketCtx(m_listened_socket);
+			__RemoveSocketCtx(m_tcp_socket);
 			delete ctx;
 		}
 
@@ -744,7 +756,7 @@ namespace Model
 
 	bool WEpollService::StartEpollServer()
 	{
-		if (m_listened_socket != -1)
+		if (m_tcp_socket != -1)
 		{
 			LOG_ERROR("当前组件已经在运作了");
 			return false;
@@ -778,6 +790,8 @@ namespace Model
 		{
 			return;
 		}
+
+		FD_CLR(epoll_event.data.fd, &m_fd);
 
 		stSocketContext* ctx = (stSocketContext*)epoll_event.data.ptr;
 		SessionID fd = ctx->session->SessionId;

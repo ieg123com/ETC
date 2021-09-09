@@ -124,12 +124,12 @@ public:
 
 	uint32_t TimeSincePrjectStart() const {
 		time_t now_time = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-		return now_time - m_epoch_prject_start;
+		return (uint32_t)(now_time - m_epoch_prject_start);
 	}
 
 	uint32_t TimeSinceThisYear() const {
 		time_t now_time = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-		return now_time - m_epoch_this_year;
+		return (uint32_t)(now_time - m_epoch_this_year);
 	}
 	
 	int64_t GenerateInstanceId();
