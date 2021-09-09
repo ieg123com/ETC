@@ -2,6 +2,12 @@
  * @file	WEpollService.h
  * @author	ieg123
  * @create	2021-06-25 5:48 PM
+ * @brief	这个网络库，当前只支持 64 个客户连接。
+ *     libgo库没对iocp进行支持，win下libgo没有完全进行优化，仅限于开发。
+ * 要将这套代码部署到linux下，需要一段时间。目前计划继续在 win 下运行，
+ * 将来不忙时将尝试部署到linux。
+ *     项目上线前，会将此网络库在其他线程下运行，使用Channel进行交互。这样
+ * 可以防止阻塞主线程，也不会损失太多效率。
  */
 #pragma once
 #include "net/Service.h"
