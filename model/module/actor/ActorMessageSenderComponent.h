@@ -1,8 +1,11 @@
 #pragma once
 #include "etc/etc.h"
+#include "module/message/MessageDefines.h"
+#include <map>
 
 
 class ActorMessageSender;
+
 
 // Actor消息发送组件，用于发生Actor消息。与其他服务进程进行通讯
 class ActorMessageSenderComponent :

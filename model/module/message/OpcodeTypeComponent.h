@@ -1,6 +1,7 @@
 #pragma once
 #include "etc/etc.h"
-
+#include "MessageType.h"
+#include "MessageDefines.h"
 
 
 class OpcodeTypeComponent:

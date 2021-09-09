@@ -6,7 +6,7 @@
 
 #include <algorithm>
 
-#include "etc/etc.h"
+#include "module/message/interface/MessageSystemAttribute.h"
 #include <google/protobuf/stubs/common.h>
 #include <google/protobuf/stubs/port.h>
 #include <google/protobuf/stubs/once.h>
@@ -175,11 +175,10 @@ void protobuf_AssignDesc_EtcMsg_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TestResponse, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TestResponse, _is_default_instance_));
   ActorTestRequest_descriptor_ = file->message_type(6);
-  static const int ActorTestRequest_offsets_[4] = {
+  static const int ActorTestRequest_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ActorTestRequest, a_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ActorTestRequest, b_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ActorTestRequest, rpcid_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ActorTestRequest, actorid_),
   };
   ActorTestRequest_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
@@ -297,11 +296,11 @@ void protobuf_AddDesc_EtcMsg_2eproto() {
     "TestRequest\022\t\n\001A\030\001 \001(\005\022\t\n\001B\030\002 \001(\005\022\r\n\005Rpc"
     "Id\030Z \001(\005\"J\n\014TestResponse\022\013\n\003Sum\030\001 \001(\005\022\r\n"
     "\005RpcId\030Z \001(\005\022\r\n\005Error\030[ \001(\005\022\017\n\007Message\030\\"
-    " \001(\t\"H\n\020ActorTestRequest\022\t\n\001A\030\001 \001(\005\022\t\n\001B"
-    "\030\002 \001(\005\022\r\n\005RpcId\030Z \001(\005\022\017\n\007ActorId\030] \001(\003\"O"
-    "\n\021ActorTestResponse\022\013\n\003Sum\030\001 \001(\005\022\r\n\005RpcI"
-    "d\030Z \001(\005\022\r\n\005Error\030[ \001(\005\022\017\n\007Message\030\\ \001(\t\""
-    "\022\n\020ActorMessageTestb\006proto3", 547);
+    " \001(\t\"7\n\020ActorTestRequest\022\t\n\001A\030\001 \001(\005\022\t\n\001B"
+    "\030\002 \001(\005\022\r\n\005RpcId\030Z \001(\005\"O\n\021ActorTestRespon"
+    "se\022\013\n\003Sum\030\001 \001(\005\022\r\n\005RpcId\030Z \001(\005\022\r\n\005Error\030"
+    "[ \001(\005\022\017\n\007Message\030\\ \001(\t\"\022\n\020ActorMessageTe"
+    "stb\006proto3", 530);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "EtcMsg.proto", &protobuf_RegisterTypes);
   Struct_Position::default_instance_ = new Struct_Position();
@@ -2581,7 +2580,6 @@ void TestResponse::clear_message() {
 const int ActorTestRequest::kAFieldNumber;
 const int ActorTestRequest::kBFieldNumber;
 const int ActorTestRequest::kRpcIdFieldNumber;
-const int ActorTestRequest::kActorIdFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 ActorTestRequest::ActorTestRequest()
@@ -2608,7 +2606,6 @@ void ActorTestRequest::SharedCtor() {
   a_ = 0;
   b_ = 0;
   rpcid_ = 0;
-  actorid_ = GOOGLE_LONGLONG(0);
 }
 
 ActorTestRequest::~ActorTestRequest() {
@@ -2721,21 +2718,6 @@ bool ActorTestRequest::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(744)) goto parse_ActorId;
-        break;
-      }
-
-      // optional int64 ActorId = 93;
-      case 93: {
-        if (tag == 744) {
-         parse_ActorId:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
-                 input, &actorid_)));
-
-        } else {
-          goto handle_unusual;
-        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -2779,11 +2761,6 @@ void ActorTestRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(90, this->rpcid(), output);
   }
 
-  // optional int64 ActorId = 93;
-  if (this->actorid() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt64(93, this->actorid(), output);
-  }
-
   // @@protoc_insertion_point(serialize_end:Model.ActorTestRequest)
 }
 
@@ -2803,11 +2780,6 @@ void ActorTestRequest::SerializeWithCachedSizes(
   // optional int32 RpcId = 90;
   if (this->rpcid() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(90, this->rpcid(), target);
-  }
-
-  // optional int64 ActorId = 93;
-  if (this->actorid() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt64ToArray(93, this->actorid(), target);
   }
 
   // @@protoc_insertion_point(serialize_to_array_end:Model.ActorTestRequest)
@@ -2837,13 +2809,6 @@ int ActorTestRequest::ByteSize() const {
     total_size += 2 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->rpcid());
-  }
-
-  // optional int64 ActorId = 93;
-  if (this->actorid() != 0) {
-    total_size += 2 +
-      ::google::protobuf::internal::WireFormatLite::Int64Size(
-        this->actorid());
   }
 
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
@@ -2883,9 +2848,6 @@ void ActorTestRequest::MergeFrom(const ActorTestRequest& from) {
   if (from.rpcid() != 0) {
     set_rpcid(from.rpcid());
   }
-  if (from.actorid() != 0) {
-    set_actorid(from.actorid());
-  }
 }
 
 void ActorTestRequest::CopyFrom(const ::google::protobuf::Message& from) {
@@ -2915,7 +2877,6 @@ void ActorTestRequest::InternalSwap(ActorTestRequest* other) {
   std::swap(a_, other->a_);
   std::swap(b_, other->b_);
   std::swap(rpcid_, other->rpcid_);
-  std::swap(actorid_, other->actorid_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -2971,20 +2932,6 @@ void ActorTestRequest::clear_rpcid() {
   
   rpcid_ = value;
   // @@protoc_insertion_point(field_set:Model.ActorTestRequest.RpcId)
-}
-
-// optional int64 ActorId = 93;
-void ActorTestRequest::clear_actorid() {
-  actorid_ = GOOGLE_LONGLONG(0);
-}
- ::google::protobuf::int64 ActorTestRequest::actorid() const {
-  // @@protoc_insertion_point(field_get:Model.ActorTestRequest.ActorId)
-  return actorid_;
-}
- void ActorTestRequest::set_actorid(::google::protobuf::int64 value) {
-  
-  actorid_ = value;
-  // @@protoc_insertion_point(field_set:Model.ActorTestRequest.ActorId)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

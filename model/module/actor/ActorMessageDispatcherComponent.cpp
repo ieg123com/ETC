@@ -1,4 +1,5 @@
 #include "ActorMessageDispatcherComponent.h"
+#include "module/message/interface/IMActorHandler.h"
 
 
 

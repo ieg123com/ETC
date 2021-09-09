@@ -1,6 +1,6 @@
 #include "model/module/message/OpcodeTypeComponent.h"
 #include "model/module/other/SystemEventType.h"
-
+#include "model/module/message.h"
 
 class OpcodeTypeComponentAwakeSystem :public AwakeSystem<OpcodeTypeComponent>
 {

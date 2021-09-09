@@ -1,4 +1,4 @@
-#include "etc/etc.h"
+#include "model/module/message.h"
 #include "model/proto/EtcMsg.pb.h"
 
 

@@ -61,11 +61,11 @@ int WEpollService::co_epoll_wait(
 // 	FD_SET(socket, &readfds);
 // 	FD_ZERO(&exceptfds);
 // 	FD_SET(socket, &exceptfds);
-	time_t start_time = Game::Time().NowServerMilliseconds();
+	//time_t start_time = Game::Time().NowServerMilliseconds();
 	int n = select(0, &readfds, nullptr, nullptr, &tv);
-	time_t end_time = Game::Time().NowServerMilliseconds();
+	//time_t end_time = Game::Time().NowServerMilliseconds();
 
-	printf("select diff time %lld n %d\n", end_time - start_time, n);
+	//printf("select diff time %lld n %d\n", end_time - start_time, n);
 	//time_t start_time = Game::Time().NowServerMilliseconds();
 	//int n = co::await([=]()-> int {return epoll_wait(ephnd, events, maxevents, 1000); });
 	//time_t end_time = Game::Time().NowServerMilliseconds();

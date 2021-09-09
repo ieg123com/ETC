@@ -1,9 +1,13 @@
 #pragma once
 #include "etc/etc.h"
 
+class IMHandler;
+class IMessage;
+
 namespace Model
 {
 	class Session;
+
 
 	// 外网消息调度记录组件
 	// 用来记录消息调用的接口实例，接口所用的appType

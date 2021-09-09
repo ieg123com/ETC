@@ -17,6 +17,8 @@
 #include "etc/common/timer/TimerComponent.h"
 
 
+#include "demo/handler/Test.h"
+
 
 
 using namespace Model;
@@ -96,6 +98,8 @@ int main(int argc,char* argv[])
 				throw std::exception("命令行参数 AppType 不正确");
 				break;
 			}
+
+			TimerComponent::Instance->RegisterOnceTimer(1000, ::Hotfix::StartTest);
 
 			LOG_INFO("》》》》》》启动成功");
 			while (true)

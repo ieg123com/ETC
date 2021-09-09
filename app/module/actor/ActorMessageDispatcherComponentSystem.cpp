@@ -1,4 +1,5 @@
 #include "model/module/actor/ActorMessageDispatcherComponent.h"
+#include "model/module/message.h"
 
 
 namespace Hotfix

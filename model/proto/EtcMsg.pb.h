@@ -750,12 +750,6 @@ class ActorTestRequest : public IActorRequest /* @@protoc_insertion_point(class_
   ::google::protobuf::int32 rpcid() const;
   void set_rpcid(::google::protobuf::int32 value);
 
-  // optional int64 ActorId = 93;
-  void clear_actorid();
-  static const int kActorIdFieldNumber = 93;
-  ::google::protobuf::int64 actorid() const;
-  void set_actorid(::google::protobuf::int64 value);
-
   // @@protoc_insertion_point(class_scope:Model.ActorTestRequest)
  private:
 
@@ -763,7 +757,6 @@ class ActorTestRequest : public IActorRequest /* @@protoc_insertion_point(class_
   bool _is_default_instance_;
   ::google::protobuf::int32 a_;
   ::google::protobuf::int32 b_;
-  ::google::protobuf::int64 actorid_;
   ::google::protobuf::int32 rpcid_;
   mutable int _cached_size_;
   friend void  protobuf_AddDesc_EtcMsg_2eproto();
@@ -1368,20 +1361,6 @@ inline void ActorTestRequest::set_rpcid(::google::protobuf::int32 value) {
   
   rpcid_ = value;
   // @@protoc_insertion_point(field_set:Model.ActorTestRequest.RpcId)
-}
-
-// optional int64 ActorId = 93;
-inline void ActorTestRequest::clear_actorid() {
-  actorid_ = GOOGLE_LONGLONG(0);
-}
-inline ::google::protobuf::int64 ActorTestRequest::actorid() const {
-  // @@protoc_insertion_point(field_get:Model.ActorTestRequest.ActorId)
-  return actorid_;
-}
-inline void ActorTestRequest::set_actorid(::google::protobuf::int64 value) {
-  
-  actorid_ = value;
-  // @@protoc_insertion_point(field_set:Model.ActorTestRequest.ActorId)
 }
 
 // -------------------------------------------------------------------

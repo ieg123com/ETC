@@ -1,6 +1,8 @@
 #pragma once
 #include "etc/etc.h"
+#include "module/message/MessageDefines.h"
 
+class IMActorHandler;
 
 // Actor 消息分发组件
 // 分发 AMActorHandler AMActorRpcHandler AMActorLocationHandler AMActorLocationRpcHandler 消息

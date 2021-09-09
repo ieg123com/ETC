@@ -6,7 +6,7 @@
 
 #include <algorithm>
 
-#include "etc/etc.h"
+#include "module/message/interface/MessageSystemAttribute.h"
 #include <google/protobuf/stubs/common.h>
 #include <google/protobuf/stubs/port.h>
 #include <google/protobuf/stubs/once.h>

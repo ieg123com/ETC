@@ -1,6 +1,6 @@
 #include "model/module/message/MessageDispatcherComponent.h"
 #include "model/module/other/SystemEventType.h"
-#include "model/base/type/type_factory.h"
+#include "model/module/message.h"
 
 
 using namespace Model;

@@ -2,6 +2,8 @@
 #include "module/component/StartConfigComponent.h"
 #include "module/component/config/StartConfig.h"
 #include "net/Session.h"
+#include "interface/IMHandler.h"
+
 
 
 namespace Model

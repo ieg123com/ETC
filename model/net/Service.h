@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "etc.h"
 #include "NetDefines.h"
+#include "IPEndPoint.h"
 #include "coroutine.h"
 #include <functional>
 

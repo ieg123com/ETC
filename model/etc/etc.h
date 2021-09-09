@@ -7,16 +7,10 @@
 #include "interface/IUpdateSystem.h"
 #include "interface/ILateUpdateSystem.h"
 #include "interface/IDestroySystem.h"
-#include "module/message/interface/AMActorHandler.h"
-#include "module/message/interface/AMActorRpcHandler.h"
-#include "module/message/interface/AMActorLocationHandler.h"
-#include "module/message/interface/AMActorLocationRpcHandler.h"
-#include "module/message/interface/AMHandler.h"
-#include "module/message/interface/AMRpcHandler.h"
+
 
 #include "interface/ObjectSystemAttribute.h"
 #include "interface/EventSystemAttribute.h"
-#include "module/message/interface/MessageSystemAttribute.h"
 
 #include "kernel/Object.h"
 #include "kernel/Entity.h"

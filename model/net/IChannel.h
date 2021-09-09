@@ -5,6 +5,7 @@
 namespace Model
 {
 	class Service;
+	class Session;
 
 	class IChannel:
 		public GEntity

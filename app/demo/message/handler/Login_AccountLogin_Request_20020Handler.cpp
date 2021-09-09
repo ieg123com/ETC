@@ -1,8 +1,7 @@
-#include "etc/etc.h"
+#include "model/module/message.h"
 #include "model/module/other/AppType.h"
 #include "model/proto/login.pb.h"
 #include "model/proto/EtcMsg.pb.h"
-#include "model/module/actor/ActorMessageSenderComponent.h"
 #include "demo/Entity/PlayerEntity.h"
 #include "model/module/actor/MailBoxComponent.h"
 

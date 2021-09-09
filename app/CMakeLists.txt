@@ -113,12 +113,17 @@ LIST(APPEND ALL_OBJECT
 set(DEMO_MESSAGE_HANDLER_FILES "")
 FILE(GLOB DEMO_MESSAGE_HANDLER_FILES "./demo/message/handler/*.cpp")
 
+# demo handler
+set(DEMO_HANDLER_FILES "")
+FILE(GLOB DEMO_HANDLER_FILES "./demo/handler/*.cpp" "./demo/handler/*.h")
 
 source_group(demo\\message\\handler				FILES ${DEMO_MESSAGE_HANDLER_FILES})
+source_group(demo\\handler						FILES ${DEMO_HANDLER_FILES})
 
 
 LIST(APPEND ALL_OBJECT
-	${DEMO_MESSAGE_HANDLER_FILES})
+	${DEMO_MESSAGE_HANDLER_FILES}
+	${DEMO_HANDLER_FILES})
 
 
 
