@@ -51,7 +51,9 @@ namespace Model
 
 		Game::Event().Add(DLLType::Model, Assembly::GetSharedPtr());
 
-		GlobalGame::Instance->m_World = ObjectFactory::Create<World>();
+		InstanceIdStruct instance_id_struct;
+		instance_id_struct.process = Game::Options().AppId;
+		GlobalGame::Instance->m_World = ObjectFactory::CreateWithInstanceId<World>(instance_id_struct.ToLong());
 
 	}
 

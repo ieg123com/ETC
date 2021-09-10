@@ -26,12 +26,9 @@ void InnerMessageDispatcherHandler::HandleIActorMessage(const int64_t actor_id, 
 		return;
 	}
 
-	//auto message_req = OpcodeTypeComponent::Instance->CreateInstanceTry(message->GetOpcode());
-
 	switch (mailbox_componet->MailBoxType)
 	{
 	case MailBoxType::MessageDispatcher:
-
 
 		break;
 	case MailBoxType::GateSession:

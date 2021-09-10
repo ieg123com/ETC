@@ -23,7 +23,6 @@ namespace Model
 				{
 					obj = std::dynamic_pointer_cast<T>(found->second.front());
 					found->second.pop();
-					obj->RefreshObjectID();
 					obj->m_disposed = false;
 				}
 			}

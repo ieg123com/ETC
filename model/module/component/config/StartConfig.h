@@ -11,6 +11,7 @@ using namespace Model;
 class StartConfig
 {
 public:
+	int64_t InstanceId;
 	// 进程id
 	int32_t	AppId;
 	// 进程类型

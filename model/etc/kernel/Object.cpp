@@ -9,7 +9,6 @@ namespace Model
 {
 	Object::Object()
 	{
-		RefreshObjectID();
 		m_is_from_pool = false;
 		m_disposed = false;
 
@@ -47,7 +46,7 @@ namespace Model
 		Game::System().m_ObjectDebug.IncreaseObject(m_object_type.GetName());
 	}
 
-	void Object::RefreshObjectID()
+	void Object::__RefreshObjectID()
 	{
 		m_instance_id = IdGenerator::Instance->GenerateInstanceId();
 	}

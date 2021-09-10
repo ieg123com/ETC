@@ -6,14 +6,18 @@ namespace Model
 {
 	namespace EtcMsgOpcode
 	{
-		static uint16_t ActorRequest = 65534;
-		static uint16_t ActorResponse = 65535;
+		static const uint16_t ActorRequest = 65534;
+		static const uint16_t ActorResponse = 65535;
 
-		static uint16_t MessageHead = 10;
-		static uint16_t TestRequest = 19;
-		static uint16_t TestResponse = 20;
-		static uint16_t ActorTestRequest = 21;
-		static uint16_t ActorTestResponse = 22;
-		static uint16_t ActorMessageTest = 23;
+		static const uint16_t A2L_ObjectAddRequest = 100;
+		static const uint16_t L2A_ObjectAddResponse = 101;
+		static const uint16_t A2L_ObjectLockRequest = 102;
+		static const uint16_t L2A_ObjectLockResponse = 103;
+		static const uint16_t A2L_ObjectUnLockRequest = 104;
+		static const uint16_t L2A_ObjectUnLockResponse = 105;
+		static const uint16_t A2L_ObjectRemoveRequest = 106;
+		static const uint16_t L2A_ObjectRemoveResponse = 107;
+		static const uint16_t A2L_ObjectGetRequest = 108;
+		static const uint16_t L2A_ObjectGetResponse = 109;
 	}
 }

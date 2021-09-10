@@ -13,7 +13,7 @@ public:
 		// Win测试获取对象名正常
 		// 如Linux无法获取正确的对象名，请区分创建
  		ObjectRef::Instance().RegisterObject(((typeof(T)).name() + 6), [](const bool from_pool)->std::shared_ptr<Object> {
- 			auto obj = ObjectFactory::InternalCreate<T>(from_pool);
+ 			auto obj = ObjectFactory::InternalCreate<T>(0,from_pool);
  			return obj;
  			});
 	}

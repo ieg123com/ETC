@@ -79,7 +79,7 @@ namespace Model
 		void DebugIncreaseSelf();
 
 		// 刷新对象id
-		void RefreshObjectID();
+		void __RefreshObjectID();
 
 	private:
 

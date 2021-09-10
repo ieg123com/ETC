@@ -40,217 +40,20 @@ void protobuf_AddDesc_EtcMsg_2eproto();
 void protobuf_AssignDesc_EtcMsg_2eproto();
 void protobuf_ShutdownFile_EtcMsg_2eproto();
 
-class ActorMessageTest;
+class A2L_ObjectAddRequest;
+class A2L_ObjectGetRequest;
+class A2L_ObjectLockRequest;
+class A2L_ObjectRemoveRequest;
+class A2L_ObjectUnLockRequest;
 class ActorRequest;
 class ActorResponse;
-class ActorTestRequest;
-class ActorTestResponse;
-class MessageHead;
-class Struct_Position;
-class TestRequest;
-class TestResponse;
+class L2A_ObjectAddResponse;
+class L2A_ObjectGetResponse;
+class L2A_ObjectLockResponse;
+class L2A_ObjectRemoveResponse;
+class L2A_ObjectUnLockResponse;
 
 // ===================================================================
-
-class Struct_Position : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:Model.Struct_Position) */ {
- public:
-  Struct_Position();
-  virtual ~Struct_Position();
-
-  Struct_Position(const Struct_Position& from);
-
-  inline Struct_Position& operator=(const Struct_Position& from) {
-    CopyFrom(from);
-    return *this;
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const Struct_Position& default_instance();
-
-  void Swap(Struct_Position* other);
-
-  // implements Message ----------------------------------------------
-
-  inline Struct_Position* New() const { return New(NULL); }
-
-  Struct_Position* New(::google::protobuf::Arena* arena) const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const Struct_Position& from);
-  void MergeFrom(const Struct_Position& from);
-  void Clear();
-  bool IsInitialized() const;
-
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
-      bool deterministic, ::google::protobuf::uint8* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const {
-    return InternalSerializeWithCachedSizesToArray(false, output);
-  }
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(Struct_Position* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return _internal_metadata_.arena();
-  }
-  inline void* MaybeArenaPtr() const {
-    return _internal_metadata_.raw_arena_ptr();
-  }
-  public:
-
-  ::google::protobuf::Metadata GetMetadata() const;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // optional int32 x = 1;
-  void clear_x();
-  static const int kXFieldNumber = 1;
-  ::google::protobuf::int32 x() const;
-  void set_x(::google::protobuf::int32 value);
-
-  // optional int32 y = 2;
-  void clear_y();
-  static const int kYFieldNumber = 2;
-  ::google::protobuf::int32 y() const;
-  void set_y(::google::protobuf::int32 value);
-
-  // @@protoc_insertion_point(class_scope:Model.Struct_Position)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  bool _is_default_instance_;
-  ::google::protobuf::int32 x_;
-  ::google::protobuf::int32 y_;
-  mutable int _cached_size_;
-  friend void  protobuf_AddDesc_EtcMsg_2eproto();
-  friend void protobuf_AssignDesc_EtcMsg_2eproto();
-  friend void protobuf_ShutdownFile_EtcMsg_2eproto();
-
-  void InitAsDefaultInstance();
-  static Struct_Position* default_instance_;
-};
-// -------------------------------------------------------------------
-
-class MessageHead : public IMessage /* @@protoc_insertion_point(class_definition:Model.MessageHead) */ {
- public:
-  MessageHead();
-  virtual ~MessageHead();
-
-  MessageHead(const MessageHead& from);
-
-  inline MessageHead& operator=(const MessageHead& from) {
-    CopyFrom(from);
-    return *this;
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const MessageHead& default_instance();
-
-  void Swap(MessageHead* other);
-
-  // implements Message ----------------------------------------------
-
-  inline MessageHead* New() const { return New(NULL); }
-
-  MessageHead* New(::google::protobuf::Arena* arena) const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::MessageHead;}
-  virtual Type GetType()const override {return typeof(MessageHead);}
-  virtual EMessageType GetMessageType()const override {return EMessageType::IMessage;}
-  void CopyFrom(const MessageHead& from);
-  void MergeFrom(const MessageHead& from);
-  void Clear();
-  bool IsInitialized() const;
-
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
-      bool deterministic, ::google::protobuf::uint8* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const {
-    return InternalSerializeWithCachedSizesToArray(false, output);
-  }
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(MessageHead* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return _internal_metadata_.arena();
-  }
-  inline void* MaybeArenaPtr() const {
-    return _internal_metadata_.raw_arena_ptr();
-  }
-  public:
-
-  ::google::protobuf::Metadata GetMetadata() const;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // optional int32 RpcId = 90;
-  void clear_rpcid();
-  static const int kRpcIdFieldNumber = 90;
-  ::google::protobuf::int32 rpcid() const;
-  void set_rpcid(::google::protobuf::int32 value);
-
-  // optional int32 Error = 91;
-  void clear_error();
-  static const int kErrorFieldNumber = 91;
-  ::google::protobuf::int32 error() const;
-  void set_error(::google::protobuf::int32 value);
-
-  // optional string Message = 92;
-  void clear_message();
-  static const int kMessageFieldNumber = 92;
-  const ::std::string& message() const;
-  void set_message(const ::std::string& value);
-  void set_message(const char* value);
-  void set_message(const char* value, size_t size);
-  ::std::string* mutable_message();
-  ::std::string* release_message();
-  void set_allocated_message(::std::string* message);
-
-  // optional int64 ActorId = 93;
-  void clear_actorid();
-  static const int kActorIdFieldNumber = 93;
-  ::google::protobuf::int64 actorid() const;
-  void set_actorid(::google::protobuf::int64 value);
-
-  // @@protoc_insertion_point(class_scope:Model.MessageHead)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  bool _is_default_instance_;
-  ::google::protobuf::int32 rpcid_;
-  ::google::protobuf::int32 error_;
-  ::google::protobuf::internal::ArenaStringPtr message_;
-  ::google::protobuf::int64 actorid_;
-  mutable int _cached_size_;
-  friend void  protobuf_AddDesc_EtcMsg_2eproto();
-  friend void protobuf_AssignDesc_EtcMsg_2eproto();
-  friend void protobuf_ShutdownFile_EtcMsg_2eproto();
-
-  void InitAsDefaultInstance();
-  static MessageHead* default_instance_;
-};
-// -------------------------------------------------------------------
 
 class ActorRequest : public IActorRequest /* @@protoc_insertion_point(class_definition:Model.ActorRequest) */ {
  public:
@@ -449,255 +252,37 @@ class ActorResponse : public IActorResponse /* @@protoc_insertion_point(class_de
 };
 // -------------------------------------------------------------------
 
-class TestRequest : public IActorLocationRequest /* @@protoc_insertion_point(class_definition:Model.TestRequest) */ {
+class A2L_ObjectAddRequest : public IActorRequest /* @@protoc_insertion_point(class_definition:Model.A2L_ObjectAddRequest) */ {
  public:
-  TestRequest();
-  virtual ~TestRequest();
+  A2L_ObjectAddRequest();
+  virtual ~A2L_ObjectAddRequest();
 
-  TestRequest(const TestRequest& from);
+  A2L_ObjectAddRequest(const A2L_ObjectAddRequest& from);
 
-  inline TestRequest& operator=(const TestRequest& from) {
+  inline A2L_ObjectAddRequest& operator=(const A2L_ObjectAddRequest& from) {
     CopyFrom(from);
     return *this;
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const TestRequest& default_instance();
+  static const A2L_ObjectAddRequest& default_instance();
 
-  void Swap(TestRequest* other);
+  void Swap(A2L_ObjectAddRequest* other);
 
   // implements Message ----------------------------------------------
 
-  inline TestRequest* New() const { return New(NULL); }
+  inline A2L_ObjectAddRequest* New() const { return New(NULL); }
 
-  TestRequest* New(::google::protobuf::Arena* arena) const;
+  A2L_ObjectAddRequest* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
   virtual int32_t GetRpcId()const override {return rpcid();}
   virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
-  virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::TestRequest;}
-  virtual Type GetType()const override {return typeof(TestRequest);}
-  virtual EMessageType GetMessageType()const override {return EMessageType::IActorLocationRequest;}
-  void CopyFrom(const TestRequest& from);
-  void MergeFrom(const TestRequest& from);
-  void Clear();
-  bool IsInitialized() const;
-
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
-      bool deterministic, ::google::protobuf::uint8* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const {
-    return InternalSerializeWithCachedSizesToArray(false, output);
-  }
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(TestRequest* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return _internal_metadata_.arena();
-  }
-  inline void* MaybeArenaPtr() const {
-    return _internal_metadata_.raw_arena_ptr();
-  }
-  public:
-
-  ::google::protobuf::Metadata GetMetadata() const;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // optional int32 A = 1;
-  void clear_a();
-  static const int kAFieldNumber = 1;
-  ::google::protobuf::int32 a() const;
-  void set_a(::google::protobuf::int32 value);
-
-  // optional int32 B = 2;
-  void clear_b();
-  static const int kBFieldNumber = 2;
-  ::google::protobuf::int32 b() const;
-  void set_b(::google::protobuf::int32 value);
-
-  // optional int32 RpcId = 90;
-  void clear_rpcid();
-  static const int kRpcIdFieldNumber = 90;
-  ::google::protobuf::int32 rpcid() const;
-  void set_rpcid(::google::protobuf::int32 value);
-
-  // @@protoc_insertion_point(class_scope:Model.TestRequest)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  bool _is_default_instance_;
-  ::google::protobuf::int32 a_;
-  ::google::protobuf::int32 b_;
-  ::google::protobuf::int32 rpcid_;
-  mutable int _cached_size_;
-  friend void  protobuf_AddDesc_EtcMsg_2eproto();
-  friend void protobuf_AssignDesc_EtcMsg_2eproto();
-  friend void protobuf_ShutdownFile_EtcMsg_2eproto();
-
-  void InitAsDefaultInstance();
-  static TestRequest* default_instance_;
-};
-// -------------------------------------------------------------------
-
-class TestResponse : public IActorLocationResponse /* @@protoc_insertion_point(class_definition:Model.TestResponse) */ {
- public:
-  TestResponse();
-  virtual ~TestResponse();
-
-  TestResponse(const TestResponse& from);
-
-  inline TestResponse& operator=(const TestResponse& from) {
-    CopyFrom(from);
-    return *this;
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const TestResponse& default_instance();
-
-  void Swap(TestResponse* other);
-
-  // implements Message ----------------------------------------------
-
-  inline TestResponse* New() const { return New(NULL); }
-
-  TestResponse* New(::google::protobuf::Arena* arena) const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  virtual int32_t GetError()const override {return error();}
-  virtual void SetError(const int32_t val)override { set_error(val);}
-  virtual const ::std::string& GetMessage()const override {return message();}
-  virtual void SetMessage(const ::std::string& val)override { set_message(val);}
-  virtual int32_t GetRpcId()const override {return rpcid();}
-  virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
-  virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::TestResponse;}
-  virtual Type GetType()const override {return typeof(TestResponse);}
-  virtual EMessageType GetMessageType()const override {return EMessageType::IActorLocationResponse;}
-  void CopyFrom(const TestResponse& from);
-  void MergeFrom(const TestResponse& from);
-  void Clear();
-  bool IsInitialized() const;
-
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
-      bool deterministic, ::google::protobuf::uint8* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const {
-    return InternalSerializeWithCachedSizesToArray(false, output);
-  }
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(TestResponse* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return _internal_metadata_.arena();
-  }
-  inline void* MaybeArenaPtr() const {
-    return _internal_metadata_.raw_arena_ptr();
-  }
-  public:
-
-  ::google::protobuf::Metadata GetMetadata() const;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // optional int32 Sum = 1;
-  void clear_sum();
-  static const int kSumFieldNumber = 1;
-  ::google::protobuf::int32 sum() const;
-  void set_sum(::google::protobuf::int32 value);
-
-  // optional int32 RpcId = 90;
-  void clear_rpcid();
-  static const int kRpcIdFieldNumber = 90;
-  ::google::protobuf::int32 rpcid() const;
-  void set_rpcid(::google::protobuf::int32 value);
-
-  // optional int32 Error = 91;
-  void clear_error();
-  static const int kErrorFieldNumber = 91;
-  ::google::protobuf::int32 error() const;
-  void set_error(::google::protobuf::int32 value);
-
-  // optional string Message = 92;
-  void clear_message();
-  static const int kMessageFieldNumber = 92;
-  const ::std::string& message() const;
-  void set_message(const ::std::string& value);
-  void set_message(const char* value);
-  void set_message(const char* value, size_t size);
-  ::std::string* mutable_message();
-  ::std::string* release_message();
-  void set_allocated_message(::std::string* message);
-
-  // @@protoc_insertion_point(class_scope:Model.TestResponse)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  bool _is_default_instance_;
-  ::google::protobuf::int32 sum_;
-  ::google::protobuf::int32 rpcid_;
-  ::google::protobuf::internal::ArenaStringPtr message_;
-  ::google::protobuf::int32 error_;
-  mutable int _cached_size_;
-  friend void  protobuf_AddDesc_EtcMsg_2eproto();
-  friend void protobuf_AssignDesc_EtcMsg_2eproto();
-  friend void protobuf_ShutdownFile_EtcMsg_2eproto();
-
-  void InitAsDefaultInstance();
-  static TestResponse* default_instance_;
-};
-// -------------------------------------------------------------------
-
-class ActorTestRequest : public IActorRequest /* @@protoc_insertion_point(class_definition:Model.ActorTestRequest) */ {
- public:
-  ActorTestRequest();
-  virtual ~ActorTestRequest();
-
-  ActorTestRequest(const ActorTestRequest& from);
-
-  inline ActorTestRequest& operator=(const ActorTestRequest& from) {
-    CopyFrom(from);
-    return *this;
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const ActorTestRequest& default_instance();
-
-  void Swap(ActorTestRequest* other);
-
-  // implements Message ----------------------------------------------
-
-  inline ActorTestRequest* New() const { return New(NULL); }
-
-  ActorTestRequest* New(::google::protobuf::Arena* arena) const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  virtual int32_t GetRpcId()const override {return rpcid();}
-  virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
-  virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::ActorTestRequest;}
-  virtual Type GetType()const override {return typeof(ActorTestRequest);}
+  virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::A2L_ObjectAddRequest;}
+  virtual Type GetType()const override {return typeof(A2L_ObjectAddRequest);}
   virtual EMessageType GetMessageType()const override {return EMessageType::IActorRequest;}
-  void CopyFrom(const ActorTestRequest& from);
-  void MergeFrom(const ActorTestRequest& from);
+  void CopyFrom(const A2L_ObjectAddRequest& from);
+  void MergeFrom(const A2L_ObjectAddRequest& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -716,7 +301,7 @@ class ActorTestRequest : public IActorRequest /* @@protoc_insertion_point(class_
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(ActorTestRequest* other);
+  void InternalSwap(A2L_ObjectAddRequest* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _internal_metadata_.arena();
@@ -732,31 +317,31 @@ class ActorTestRequest : public IActorRequest /* @@protoc_insertion_point(class_
 
   // accessors -------------------------------------------------------
 
-  // optional int32 A = 1;
-  void clear_a();
-  static const int kAFieldNumber = 1;
-  ::google::protobuf::int32 a() const;
-  void set_a(::google::protobuf::int32 value);
-
-  // optional int32 B = 2;
-  void clear_b();
-  static const int kBFieldNumber = 2;
-  ::google::protobuf::int32 b() const;
-  void set_b(::google::protobuf::int32 value);
-
   // optional int32 RpcId = 90;
   void clear_rpcid();
   static const int kRpcIdFieldNumber = 90;
   ::google::protobuf::int32 rpcid() const;
   void set_rpcid(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:Model.ActorTestRequest)
+  // optional int64 Key = 1;
+  void clear_key();
+  static const int kKeyFieldNumber = 1;
+  ::google::protobuf::int64 key() const;
+  void set_key(::google::protobuf::int64 value);
+
+  // optional int64 InstanceId = 2;
+  void clear_instanceid();
+  static const int kInstanceIdFieldNumber = 2;
+  ::google::protobuf::int64 instanceid() const;
+  void set_instanceid(::google::protobuf::int64 value);
+
+  // @@protoc_insertion_point(class_scope:Model.A2L_ObjectAddRequest)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   bool _is_default_instance_;
-  ::google::protobuf::int32 a_;
-  ::google::protobuf::int32 b_;
+  ::google::protobuf::int64 key_;
+  ::google::protobuf::int64 instanceid_;
   ::google::protobuf::int32 rpcid_;
   mutable int _cached_size_;
   friend void  protobuf_AddDesc_EtcMsg_2eproto();
@@ -764,32 +349,32 @@ class ActorTestRequest : public IActorRequest /* @@protoc_insertion_point(class_
   friend void protobuf_ShutdownFile_EtcMsg_2eproto();
 
   void InitAsDefaultInstance();
-  static ActorTestRequest* default_instance_;
+  static A2L_ObjectAddRequest* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class ActorTestResponse : public IActorResponse /* @@protoc_insertion_point(class_definition:Model.ActorTestResponse) */ {
+class L2A_ObjectAddResponse : public IActorResponse /* @@protoc_insertion_point(class_definition:Model.L2A_ObjectAddResponse) */ {
  public:
-  ActorTestResponse();
-  virtual ~ActorTestResponse();
+  L2A_ObjectAddResponse();
+  virtual ~L2A_ObjectAddResponse();
 
-  ActorTestResponse(const ActorTestResponse& from);
+  L2A_ObjectAddResponse(const L2A_ObjectAddResponse& from);
 
-  inline ActorTestResponse& operator=(const ActorTestResponse& from) {
+  inline L2A_ObjectAddResponse& operator=(const L2A_ObjectAddResponse& from) {
     CopyFrom(from);
     return *this;
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const ActorTestResponse& default_instance();
+  static const L2A_ObjectAddResponse& default_instance();
 
-  void Swap(ActorTestResponse* other);
+  void Swap(L2A_ObjectAddResponse* other);
 
   // implements Message ----------------------------------------------
 
-  inline ActorTestResponse* New() const { return New(NULL); }
+  inline L2A_ObjectAddResponse* New() const { return New(NULL); }
 
-  ActorTestResponse* New(::google::protobuf::Arena* arena) const;
+  L2A_ObjectAddResponse* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
   virtual int32_t GetError()const override {return error();}
@@ -798,11 +383,11 @@ class ActorTestResponse : public IActorResponse /* @@protoc_insertion_point(clas
   virtual void SetMessage(const ::std::string& val)override { set_message(val);}
   virtual int32_t GetRpcId()const override {return rpcid();}
   virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
-  virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::ActorTestResponse;}
-  virtual Type GetType()const override {return typeof(ActorTestResponse);}
+  virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::L2A_ObjectAddResponse;}
+  virtual Type GetType()const override {return typeof(L2A_ObjectAddResponse);}
   virtual EMessageType GetMessageType()const override {return EMessageType::IActorResponse;}
-  void CopyFrom(const ActorTestResponse& from);
-  void MergeFrom(const ActorTestResponse& from);
+  void CopyFrom(const L2A_ObjectAddResponse& from);
+  void MergeFrom(const L2A_ObjectAddResponse& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -821,7 +406,7 @@ class ActorTestResponse : public IActorResponse /* @@protoc_insertion_point(clas
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(ActorTestResponse* other);
+  void InternalSwap(L2A_ObjectAddResponse* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _internal_metadata_.arena();
@@ -836,12 +421,6 @@ class ActorTestResponse : public IActorResponse /* @@protoc_insertion_point(clas
   // nested types ----------------------------------------------------
 
   // accessors -------------------------------------------------------
-
-  // optional int32 Sum = 1;
-  void clear_sum();
-  static const int kSumFieldNumber = 1;
-  ::google::protobuf::int32 sum() const;
-  void set_sum(::google::protobuf::int32 value);
 
   // optional int32 RpcId = 90;
   void clear_rpcid();
@@ -866,54 +445,55 @@ class ActorTestResponse : public IActorResponse /* @@protoc_insertion_point(clas
   ::std::string* release_message();
   void set_allocated_message(::std::string* message);
 
-  // @@protoc_insertion_point(class_scope:Model.ActorTestResponse)
+  // @@protoc_insertion_point(class_scope:Model.L2A_ObjectAddResponse)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   bool _is_default_instance_;
-  ::google::protobuf::int32 sum_;
   ::google::protobuf::int32 rpcid_;
-  ::google::protobuf::internal::ArenaStringPtr message_;
   ::google::protobuf::int32 error_;
+  ::google::protobuf::internal::ArenaStringPtr message_;
   mutable int _cached_size_;
   friend void  protobuf_AddDesc_EtcMsg_2eproto();
   friend void protobuf_AssignDesc_EtcMsg_2eproto();
   friend void protobuf_ShutdownFile_EtcMsg_2eproto();
 
   void InitAsDefaultInstance();
-  static ActorTestResponse* default_instance_;
+  static L2A_ObjectAddResponse* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class ActorMessageTest : public IMessage /* @@protoc_insertion_point(class_definition:Model.ActorMessageTest) */ {
+class A2L_ObjectLockRequest : public IActorRequest /* @@protoc_insertion_point(class_definition:Model.A2L_ObjectLockRequest) */ {
  public:
-  ActorMessageTest();
-  virtual ~ActorMessageTest();
+  A2L_ObjectLockRequest();
+  virtual ~A2L_ObjectLockRequest();
 
-  ActorMessageTest(const ActorMessageTest& from);
+  A2L_ObjectLockRequest(const A2L_ObjectLockRequest& from);
 
-  inline ActorMessageTest& operator=(const ActorMessageTest& from) {
+  inline A2L_ObjectLockRequest& operator=(const A2L_ObjectLockRequest& from) {
     CopyFrom(from);
     return *this;
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const ActorMessageTest& default_instance();
+  static const A2L_ObjectLockRequest& default_instance();
 
-  void Swap(ActorMessageTest* other);
+  void Swap(A2L_ObjectLockRequest* other);
 
   // implements Message ----------------------------------------------
 
-  inline ActorMessageTest* New() const { return New(NULL); }
+  inline A2L_ObjectLockRequest* New() const { return New(NULL); }
 
-  ActorMessageTest* New(::google::protobuf::Arena* arena) const;
+  A2L_ObjectLockRequest* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::ActorMessageTest;}
-  virtual Type GetType()const override {return typeof(ActorMessageTest);}
-  virtual EMessageType GetMessageType()const override {return EMessageType::IMessage;}
-  void CopyFrom(const ActorMessageTest& from);
-  void MergeFrom(const ActorMessageTest& from);
+  virtual int32_t GetRpcId()const override {return rpcid();}
+  virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
+  virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::A2L_ObjectLockRequest;}
+  virtual Type GetType()const override {return typeof(A2L_ObjectLockRequest);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IActorRequest;}
+  void CopyFrom(const A2L_ObjectLockRequest& from);
+  void MergeFrom(const A2L_ObjectLockRequest& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -932,7 +512,7 @@ class ActorMessageTest : public IMessage /* @@protoc_insertion_point(class_defin
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(ActorMessageTest* other);
+  void InternalSwap(A2L_ObjectLockRequest* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _internal_metadata_.arena();
@@ -948,18 +528,775 @@ class ActorMessageTest : public IMessage /* @@protoc_insertion_point(class_defin
 
   // accessors -------------------------------------------------------
 
-  // @@protoc_insertion_point(class_scope:Model.ActorMessageTest)
+  // optional int32 RpcId = 90;
+  void clear_rpcid();
+  static const int kRpcIdFieldNumber = 90;
+  ::google::protobuf::int32 rpcid() const;
+  void set_rpcid(::google::protobuf::int32 value);
+
+  // optional int64 Key = 1;
+  void clear_key();
+  static const int kKeyFieldNumber = 1;
+  ::google::protobuf::int64 key() const;
+  void set_key(::google::protobuf::int64 value);
+
+  // @@protoc_insertion_point(class_scope:Model.A2L_ObjectLockRequest)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   bool _is_default_instance_;
+  ::google::protobuf::int64 key_;
+  ::google::protobuf::int32 rpcid_;
   mutable int _cached_size_;
   friend void  protobuf_AddDesc_EtcMsg_2eproto();
   friend void protobuf_AssignDesc_EtcMsg_2eproto();
   friend void protobuf_ShutdownFile_EtcMsg_2eproto();
 
   void InitAsDefaultInstance();
-  static ActorMessageTest* default_instance_;
+  static A2L_ObjectLockRequest* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class L2A_ObjectLockResponse : public IActorResponse /* @@protoc_insertion_point(class_definition:Model.L2A_ObjectLockResponse) */ {
+ public:
+  L2A_ObjectLockResponse();
+  virtual ~L2A_ObjectLockResponse();
+
+  L2A_ObjectLockResponse(const L2A_ObjectLockResponse& from);
+
+  inline L2A_ObjectLockResponse& operator=(const L2A_ObjectLockResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const L2A_ObjectLockResponse& default_instance();
+
+  void Swap(L2A_ObjectLockResponse* other);
+
+  // implements Message ----------------------------------------------
+
+  inline L2A_ObjectLockResponse* New() const { return New(NULL); }
+
+  L2A_ObjectLockResponse* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  virtual int32_t GetError()const override {return error();}
+  virtual void SetError(const int32_t val)override { set_error(val);}
+  virtual const ::std::string& GetMessage()const override {return message();}
+  virtual void SetMessage(const ::std::string& val)override { set_message(val);}
+  virtual int32_t GetRpcId()const override {return rpcid();}
+  virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
+  virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::L2A_ObjectLockResponse;}
+  virtual Type GetType()const override {return typeof(L2A_ObjectLockResponse);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IActorResponse;}
+  void CopyFrom(const L2A_ObjectLockResponse& from);
+  void MergeFrom(const L2A_ObjectLockResponse& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const {
+    return InternalSerializeWithCachedSizesToArray(false, output);
+  }
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(L2A_ObjectLockResponse* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 RpcId = 90;
+  void clear_rpcid();
+  static const int kRpcIdFieldNumber = 90;
+  ::google::protobuf::int32 rpcid() const;
+  void set_rpcid(::google::protobuf::int32 value);
+
+  // optional int32 Error = 91;
+  void clear_error();
+  static const int kErrorFieldNumber = 91;
+  ::google::protobuf::int32 error() const;
+  void set_error(::google::protobuf::int32 value);
+
+  // optional string Message = 92;
+  void clear_message();
+  static const int kMessageFieldNumber = 92;
+  const ::std::string& message() const;
+  void set_message(const ::std::string& value);
+  void set_message(const char* value);
+  void set_message(const char* value, size_t size);
+  ::std::string* mutable_message();
+  ::std::string* release_message();
+  void set_allocated_message(::std::string* message);
+
+  // @@protoc_insertion_point(class_scope:Model.L2A_ObjectLockResponse)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  ::google::protobuf::int32 rpcid_;
+  ::google::protobuf::int32 error_;
+  ::google::protobuf::internal::ArenaStringPtr message_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_EtcMsg_2eproto();
+  friend void protobuf_AssignDesc_EtcMsg_2eproto();
+  friend void protobuf_ShutdownFile_EtcMsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static L2A_ObjectLockResponse* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class A2L_ObjectUnLockRequest : public IActorRequest /* @@protoc_insertion_point(class_definition:Model.A2L_ObjectUnLockRequest) */ {
+ public:
+  A2L_ObjectUnLockRequest();
+  virtual ~A2L_ObjectUnLockRequest();
+
+  A2L_ObjectUnLockRequest(const A2L_ObjectUnLockRequest& from);
+
+  inline A2L_ObjectUnLockRequest& operator=(const A2L_ObjectUnLockRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const A2L_ObjectUnLockRequest& default_instance();
+
+  void Swap(A2L_ObjectUnLockRequest* other);
+
+  // implements Message ----------------------------------------------
+
+  inline A2L_ObjectUnLockRequest* New() const { return New(NULL); }
+
+  A2L_ObjectUnLockRequest* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  virtual int32_t GetRpcId()const override {return rpcid();}
+  virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
+  virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::A2L_ObjectUnLockRequest;}
+  virtual Type GetType()const override {return typeof(A2L_ObjectUnLockRequest);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IActorRequest;}
+  void CopyFrom(const A2L_ObjectUnLockRequest& from);
+  void MergeFrom(const A2L_ObjectUnLockRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const {
+    return InternalSerializeWithCachedSizesToArray(false, output);
+  }
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(A2L_ObjectUnLockRequest* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 RpcId = 90;
+  void clear_rpcid();
+  static const int kRpcIdFieldNumber = 90;
+  ::google::protobuf::int32 rpcid() const;
+  void set_rpcid(::google::protobuf::int32 value);
+
+  // optional int64 Key = 1;
+  void clear_key();
+  static const int kKeyFieldNumber = 1;
+  ::google::protobuf::int64 key() const;
+  void set_key(::google::protobuf::int64 value);
+
+  // optional int64 OldInstanceId = 2;
+  void clear_oldinstanceid();
+  static const int kOldInstanceIdFieldNumber = 2;
+  ::google::protobuf::int64 oldinstanceid() const;
+  void set_oldinstanceid(::google::protobuf::int64 value);
+
+  // optional int64 InstanceId = 3;
+  void clear_instanceid();
+  static const int kInstanceIdFieldNumber = 3;
+  ::google::protobuf::int64 instanceid() const;
+  void set_instanceid(::google::protobuf::int64 value);
+
+  // @@protoc_insertion_point(class_scope:Model.A2L_ObjectUnLockRequest)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  ::google::protobuf::int64 key_;
+  ::google::protobuf::int64 oldinstanceid_;
+  ::google::protobuf::int64 instanceid_;
+  ::google::protobuf::int32 rpcid_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_EtcMsg_2eproto();
+  friend void protobuf_AssignDesc_EtcMsg_2eproto();
+  friend void protobuf_ShutdownFile_EtcMsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static A2L_ObjectUnLockRequest* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class L2A_ObjectUnLockResponse : public IActorResponse /* @@protoc_insertion_point(class_definition:Model.L2A_ObjectUnLockResponse) */ {
+ public:
+  L2A_ObjectUnLockResponse();
+  virtual ~L2A_ObjectUnLockResponse();
+
+  L2A_ObjectUnLockResponse(const L2A_ObjectUnLockResponse& from);
+
+  inline L2A_ObjectUnLockResponse& operator=(const L2A_ObjectUnLockResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const L2A_ObjectUnLockResponse& default_instance();
+
+  void Swap(L2A_ObjectUnLockResponse* other);
+
+  // implements Message ----------------------------------------------
+
+  inline L2A_ObjectUnLockResponse* New() const { return New(NULL); }
+
+  L2A_ObjectUnLockResponse* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  virtual int32_t GetError()const override {return error();}
+  virtual void SetError(const int32_t val)override { set_error(val);}
+  virtual const ::std::string& GetMessage()const override {return message();}
+  virtual void SetMessage(const ::std::string& val)override { set_message(val);}
+  virtual int32_t GetRpcId()const override {return rpcid();}
+  virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
+  virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::L2A_ObjectUnLockResponse;}
+  virtual Type GetType()const override {return typeof(L2A_ObjectUnLockResponse);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IActorResponse;}
+  void CopyFrom(const L2A_ObjectUnLockResponse& from);
+  void MergeFrom(const L2A_ObjectUnLockResponse& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const {
+    return InternalSerializeWithCachedSizesToArray(false, output);
+  }
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(L2A_ObjectUnLockResponse* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 RpcId = 90;
+  void clear_rpcid();
+  static const int kRpcIdFieldNumber = 90;
+  ::google::protobuf::int32 rpcid() const;
+  void set_rpcid(::google::protobuf::int32 value);
+
+  // optional int32 Error = 91;
+  void clear_error();
+  static const int kErrorFieldNumber = 91;
+  ::google::protobuf::int32 error() const;
+  void set_error(::google::protobuf::int32 value);
+
+  // optional string Message = 92;
+  void clear_message();
+  static const int kMessageFieldNumber = 92;
+  const ::std::string& message() const;
+  void set_message(const ::std::string& value);
+  void set_message(const char* value);
+  void set_message(const char* value, size_t size);
+  ::std::string* mutable_message();
+  ::std::string* release_message();
+  void set_allocated_message(::std::string* message);
+
+  // @@protoc_insertion_point(class_scope:Model.L2A_ObjectUnLockResponse)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  ::google::protobuf::int32 rpcid_;
+  ::google::protobuf::int32 error_;
+  ::google::protobuf::internal::ArenaStringPtr message_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_EtcMsg_2eproto();
+  friend void protobuf_AssignDesc_EtcMsg_2eproto();
+  friend void protobuf_ShutdownFile_EtcMsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static L2A_ObjectUnLockResponse* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class A2L_ObjectRemoveRequest : public IActorRequest /* @@protoc_insertion_point(class_definition:Model.A2L_ObjectRemoveRequest) */ {
+ public:
+  A2L_ObjectRemoveRequest();
+  virtual ~A2L_ObjectRemoveRequest();
+
+  A2L_ObjectRemoveRequest(const A2L_ObjectRemoveRequest& from);
+
+  inline A2L_ObjectRemoveRequest& operator=(const A2L_ObjectRemoveRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const A2L_ObjectRemoveRequest& default_instance();
+
+  void Swap(A2L_ObjectRemoveRequest* other);
+
+  // implements Message ----------------------------------------------
+
+  inline A2L_ObjectRemoveRequest* New() const { return New(NULL); }
+
+  A2L_ObjectRemoveRequest* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  virtual int32_t GetRpcId()const override {return rpcid();}
+  virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
+  virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::A2L_ObjectRemoveRequest;}
+  virtual Type GetType()const override {return typeof(A2L_ObjectRemoveRequest);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IActorRequest;}
+  void CopyFrom(const A2L_ObjectRemoveRequest& from);
+  void MergeFrom(const A2L_ObjectRemoveRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const {
+    return InternalSerializeWithCachedSizesToArray(false, output);
+  }
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(A2L_ObjectRemoveRequest* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 RpcId = 90;
+  void clear_rpcid();
+  static const int kRpcIdFieldNumber = 90;
+  ::google::protobuf::int32 rpcid() const;
+  void set_rpcid(::google::protobuf::int32 value);
+
+  // optional int64 Key = 1;
+  void clear_key();
+  static const int kKeyFieldNumber = 1;
+  ::google::protobuf::int64 key() const;
+  void set_key(::google::protobuf::int64 value);
+
+  // @@protoc_insertion_point(class_scope:Model.A2L_ObjectRemoveRequest)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  ::google::protobuf::int64 key_;
+  ::google::protobuf::int32 rpcid_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_EtcMsg_2eproto();
+  friend void protobuf_AssignDesc_EtcMsg_2eproto();
+  friend void protobuf_ShutdownFile_EtcMsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static A2L_ObjectRemoveRequest* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class L2A_ObjectRemoveResponse : public IActorResponse /* @@protoc_insertion_point(class_definition:Model.L2A_ObjectRemoveResponse) */ {
+ public:
+  L2A_ObjectRemoveResponse();
+  virtual ~L2A_ObjectRemoveResponse();
+
+  L2A_ObjectRemoveResponse(const L2A_ObjectRemoveResponse& from);
+
+  inline L2A_ObjectRemoveResponse& operator=(const L2A_ObjectRemoveResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const L2A_ObjectRemoveResponse& default_instance();
+
+  void Swap(L2A_ObjectRemoveResponse* other);
+
+  // implements Message ----------------------------------------------
+
+  inline L2A_ObjectRemoveResponse* New() const { return New(NULL); }
+
+  L2A_ObjectRemoveResponse* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  virtual int32_t GetError()const override {return error();}
+  virtual void SetError(const int32_t val)override { set_error(val);}
+  virtual const ::std::string& GetMessage()const override {return message();}
+  virtual void SetMessage(const ::std::string& val)override { set_message(val);}
+  virtual int32_t GetRpcId()const override {return rpcid();}
+  virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
+  virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::L2A_ObjectRemoveResponse;}
+  virtual Type GetType()const override {return typeof(L2A_ObjectRemoveResponse);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IActorResponse;}
+  void CopyFrom(const L2A_ObjectRemoveResponse& from);
+  void MergeFrom(const L2A_ObjectRemoveResponse& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const {
+    return InternalSerializeWithCachedSizesToArray(false, output);
+  }
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(L2A_ObjectRemoveResponse* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 RpcId = 90;
+  void clear_rpcid();
+  static const int kRpcIdFieldNumber = 90;
+  ::google::protobuf::int32 rpcid() const;
+  void set_rpcid(::google::protobuf::int32 value);
+
+  // optional int32 Error = 91;
+  void clear_error();
+  static const int kErrorFieldNumber = 91;
+  ::google::protobuf::int32 error() const;
+  void set_error(::google::protobuf::int32 value);
+
+  // optional string Message = 92;
+  void clear_message();
+  static const int kMessageFieldNumber = 92;
+  const ::std::string& message() const;
+  void set_message(const ::std::string& value);
+  void set_message(const char* value);
+  void set_message(const char* value, size_t size);
+  ::std::string* mutable_message();
+  ::std::string* release_message();
+  void set_allocated_message(::std::string* message);
+
+  // @@protoc_insertion_point(class_scope:Model.L2A_ObjectRemoveResponse)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  ::google::protobuf::int32 rpcid_;
+  ::google::protobuf::int32 error_;
+  ::google::protobuf::internal::ArenaStringPtr message_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_EtcMsg_2eproto();
+  friend void protobuf_AssignDesc_EtcMsg_2eproto();
+  friend void protobuf_ShutdownFile_EtcMsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static L2A_ObjectRemoveResponse* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class A2L_ObjectGetRequest : public IActorRequest /* @@protoc_insertion_point(class_definition:Model.A2L_ObjectGetRequest) */ {
+ public:
+  A2L_ObjectGetRequest();
+  virtual ~A2L_ObjectGetRequest();
+
+  A2L_ObjectGetRequest(const A2L_ObjectGetRequest& from);
+
+  inline A2L_ObjectGetRequest& operator=(const A2L_ObjectGetRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const A2L_ObjectGetRequest& default_instance();
+
+  void Swap(A2L_ObjectGetRequest* other);
+
+  // implements Message ----------------------------------------------
+
+  inline A2L_ObjectGetRequest* New() const { return New(NULL); }
+
+  A2L_ObjectGetRequest* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  virtual int32_t GetRpcId()const override {return rpcid();}
+  virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
+  virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::A2L_ObjectGetRequest;}
+  virtual Type GetType()const override {return typeof(A2L_ObjectGetRequest);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IActorRequest;}
+  void CopyFrom(const A2L_ObjectGetRequest& from);
+  void MergeFrom(const A2L_ObjectGetRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const {
+    return InternalSerializeWithCachedSizesToArray(false, output);
+  }
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(A2L_ObjectGetRequest* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 RpcId = 90;
+  void clear_rpcid();
+  static const int kRpcIdFieldNumber = 90;
+  ::google::protobuf::int32 rpcid() const;
+  void set_rpcid(::google::protobuf::int32 value);
+
+  // optional int64 Key = 1;
+  void clear_key();
+  static const int kKeyFieldNumber = 1;
+  ::google::protobuf::int64 key() const;
+  void set_key(::google::protobuf::int64 value);
+
+  // @@protoc_insertion_point(class_scope:Model.A2L_ObjectGetRequest)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  ::google::protobuf::int64 key_;
+  ::google::protobuf::int32 rpcid_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_EtcMsg_2eproto();
+  friend void protobuf_AssignDesc_EtcMsg_2eproto();
+  friend void protobuf_ShutdownFile_EtcMsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static A2L_ObjectGetRequest* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class L2A_ObjectGetResponse : public IActorResponse /* @@protoc_insertion_point(class_definition:Model.L2A_ObjectGetResponse) */ {
+ public:
+  L2A_ObjectGetResponse();
+  virtual ~L2A_ObjectGetResponse();
+
+  L2A_ObjectGetResponse(const L2A_ObjectGetResponse& from);
+
+  inline L2A_ObjectGetResponse& operator=(const L2A_ObjectGetResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const L2A_ObjectGetResponse& default_instance();
+
+  void Swap(L2A_ObjectGetResponse* other);
+
+  // implements Message ----------------------------------------------
+
+  inline L2A_ObjectGetResponse* New() const { return New(NULL); }
+
+  L2A_ObjectGetResponse* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  virtual int32_t GetError()const override {return error();}
+  virtual void SetError(const int32_t val)override { set_error(val);}
+  virtual const ::std::string& GetMessage()const override {return message();}
+  virtual void SetMessage(const ::std::string& val)override { set_message(val);}
+  virtual int32_t GetRpcId()const override {return rpcid();}
+  virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
+  virtual uint16_t GetOpcode()const override {return EtcMsgOpcode::L2A_ObjectGetResponse;}
+  virtual Type GetType()const override {return typeof(L2A_ObjectGetResponse);}
+  virtual EMessageType GetMessageType()const override {return EMessageType::IActorResponse;}
+  void CopyFrom(const L2A_ObjectGetResponse& from);
+  void MergeFrom(const L2A_ObjectGetResponse& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const {
+    return InternalSerializeWithCachedSizesToArray(false, output);
+  }
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(L2A_ObjectGetResponse* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 RpcId = 90;
+  void clear_rpcid();
+  static const int kRpcIdFieldNumber = 90;
+  ::google::protobuf::int32 rpcid() const;
+  void set_rpcid(::google::protobuf::int32 value);
+
+  // optional int32 Error = 91;
+  void clear_error();
+  static const int kErrorFieldNumber = 91;
+  ::google::protobuf::int32 error() const;
+  void set_error(::google::protobuf::int32 value);
+
+  // optional string Message = 92;
+  void clear_message();
+  static const int kMessageFieldNumber = 92;
+  const ::std::string& message() const;
+  void set_message(const ::std::string& value);
+  void set_message(const char* value);
+  void set_message(const char* value, size_t size);
+  ::std::string* mutable_message();
+  ::std::string* release_message();
+  void set_allocated_message(::std::string* message);
+
+  // optional int64 InstanceId = 1;
+  void clear_instanceid();
+  static const int kInstanceIdFieldNumber = 1;
+  ::google::protobuf::int64 instanceid() const;
+  void set_instanceid(::google::protobuf::int64 value);
+
+  // @@protoc_insertion_point(class_scope:Model.L2A_ObjectGetResponse)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  ::google::protobuf::int32 rpcid_;
+  ::google::protobuf::int32 error_;
+  ::google::protobuf::internal::ArenaStringPtr message_;
+  ::google::protobuf::int64 instanceid_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_EtcMsg_2eproto();
+  friend void protobuf_AssignDesc_EtcMsg_2eproto();
+  friend void protobuf_ShutdownFile_EtcMsg_2eproto();
+
+  void InitAsDefaultInstance();
+  static L2A_ObjectGetResponse* default_instance_;
 };
 // ===================================================================
 
@@ -967,128 +1304,6 @@ class ActorMessageTest : public IMessage /* @@protoc_insertion_point(class_defin
 // ===================================================================
 
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
-// Struct_Position
-
-// optional int32 x = 1;
-inline void Struct_Position::clear_x() {
-  x_ = 0;
-}
-inline ::google::protobuf::int32 Struct_Position::x() const {
-  // @@protoc_insertion_point(field_get:Model.Struct_Position.x)
-  return x_;
-}
-inline void Struct_Position::set_x(::google::protobuf::int32 value) {
-  
-  x_ = value;
-  // @@protoc_insertion_point(field_set:Model.Struct_Position.x)
-}
-
-// optional int32 y = 2;
-inline void Struct_Position::clear_y() {
-  y_ = 0;
-}
-inline ::google::protobuf::int32 Struct_Position::y() const {
-  // @@protoc_insertion_point(field_get:Model.Struct_Position.y)
-  return y_;
-}
-inline void Struct_Position::set_y(::google::protobuf::int32 value) {
-  
-  y_ = value;
-  // @@protoc_insertion_point(field_set:Model.Struct_Position.y)
-}
-
-// -------------------------------------------------------------------
-
-// MessageHead
-
-// optional int32 RpcId = 90;
-inline void MessageHead::clear_rpcid() {
-  rpcid_ = 0;
-}
-inline ::google::protobuf::int32 MessageHead::rpcid() const {
-  // @@protoc_insertion_point(field_get:Model.MessageHead.RpcId)
-  return rpcid_;
-}
-inline void MessageHead::set_rpcid(::google::protobuf::int32 value) {
-  
-  rpcid_ = value;
-  // @@protoc_insertion_point(field_set:Model.MessageHead.RpcId)
-}
-
-// optional int32 Error = 91;
-inline void MessageHead::clear_error() {
-  error_ = 0;
-}
-inline ::google::protobuf::int32 MessageHead::error() const {
-  // @@protoc_insertion_point(field_get:Model.MessageHead.Error)
-  return error_;
-}
-inline void MessageHead::set_error(::google::protobuf::int32 value) {
-  
-  error_ = value;
-  // @@protoc_insertion_point(field_set:Model.MessageHead.Error)
-}
-
-// optional string Message = 92;
-inline void MessageHead::clear_message() {
-  message_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& MessageHead::message() const {
-  // @@protoc_insertion_point(field_get:Model.MessageHead.Message)
-  return message_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void MessageHead::set_message(const ::std::string& value) {
-  
-  message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:Model.MessageHead.Message)
-}
-inline void MessageHead::set_message(const char* value) {
-  
-  message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:Model.MessageHead.Message)
-}
-inline void MessageHead::set_message(const char* value, size_t size) {
-  
-  message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:Model.MessageHead.Message)
-}
-inline ::std::string* MessageHead::mutable_message() {
-  
-  // @@protoc_insertion_point(field_mutable:Model.MessageHead.Message)
-  return message_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* MessageHead::release_message() {
-  // @@protoc_insertion_point(field_release:Model.MessageHead.Message)
-  
-  return message_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void MessageHead::set_allocated_message(::std::string* message) {
-  if (message != NULL) {
-    
-  } else {
-    
-  }
-  message_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), message);
-  // @@protoc_insertion_point(field_set_allocated:Model.MessageHead.Message)
-}
-
-// optional int64 ActorId = 93;
-inline void MessageHead::clear_actorid() {
-  actorid_ = GOOGLE_LONGLONG(0);
-}
-inline ::google::protobuf::int64 MessageHead::actorid() const {
-  // @@protoc_insertion_point(field_get:Model.MessageHead.ActorId)
-  return actorid_;
-}
-inline void MessageHead::set_actorid(::google::protobuf::int64 value) {
-  
-  actorid_ = value;
-  // @@protoc_insertion_point(field_set:Model.MessageHead.ActorId)
-}
-
-// -------------------------------------------------------------------
-
 // ActorRequest
 
 // optional int32 RpcId = 90;
@@ -1183,281 +1398,607 @@ inline void ActorResponse::set_allocated_message(::std::string* message) {
 
 // -------------------------------------------------------------------
 
-// TestRequest
-
-// optional int32 A = 1;
-inline void TestRequest::clear_a() {
-  a_ = 0;
-}
-inline ::google::protobuf::int32 TestRequest::a() const {
-  // @@protoc_insertion_point(field_get:Model.TestRequest.A)
-  return a_;
-}
-inline void TestRequest::set_a(::google::protobuf::int32 value) {
-  
-  a_ = value;
-  // @@protoc_insertion_point(field_set:Model.TestRequest.A)
-}
-
-// optional int32 B = 2;
-inline void TestRequest::clear_b() {
-  b_ = 0;
-}
-inline ::google::protobuf::int32 TestRequest::b() const {
-  // @@protoc_insertion_point(field_get:Model.TestRequest.B)
-  return b_;
-}
-inline void TestRequest::set_b(::google::protobuf::int32 value) {
-  
-  b_ = value;
-  // @@protoc_insertion_point(field_set:Model.TestRequest.B)
-}
+// A2L_ObjectAddRequest
 
 // optional int32 RpcId = 90;
-inline void TestRequest::clear_rpcid() {
+inline void A2L_ObjectAddRequest::clear_rpcid() {
   rpcid_ = 0;
 }
-inline ::google::protobuf::int32 TestRequest::rpcid() const {
-  // @@protoc_insertion_point(field_get:Model.TestRequest.RpcId)
+inline ::google::protobuf::int32 A2L_ObjectAddRequest::rpcid() const {
+  // @@protoc_insertion_point(field_get:Model.A2L_ObjectAddRequest.RpcId)
   return rpcid_;
 }
-inline void TestRequest::set_rpcid(::google::protobuf::int32 value) {
+inline void A2L_ObjectAddRequest::set_rpcid(::google::protobuf::int32 value) {
   
   rpcid_ = value;
-  // @@protoc_insertion_point(field_set:Model.TestRequest.RpcId)
+  // @@protoc_insertion_point(field_set:Model.A2L_ObjectAddRequest.RpcId)
+}
+
+// optional int64 Key = 1;
+inline void A2L_ObjectAddRequest::clear_key() {
+  key_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 A2L_ObjectAddRequest::key() const {
+  // @@protoc_insertion_point(field_get:Model.A2L_ObjectAddRequest.Key)
+  return key_;
+}
+inline void A2L_ObjectAddRequest::set_key(::google::protobuf::int64 value) {
+  
+  key_ = value;
+  // @@protoc_insertion_point(field_set:Model.A2L_ObjectAddRequest.Key)
+}
+
+// optional int64 InstanceId = 2;
+inline void A2L_ObjectAddRequest::clear_instanceid() {
+  instanceid_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 A2L_ObjectAddRequest::instanceid() const {
+  // @@protoc_insertion_point(field_get:Model.A2L_ObjectAddRequest.InstanceId)
+  return instanceid_;
+}
+inline void A2L_ObjectAddRequest::set_instanceid(::google::protobuf::int64 value) {
+  
+  instanceid_ = value;
+  // @@protoc_insertion_point(field_set:Model.A2L_ObjectAddRequest.InstanceId)
 }
 
 // -------------------------------------------------------------------
 
-// TestResponse
-
-// optional int32 Sum = 1;
-inline void TestResponse::clear_sum() {
-  sum_ = 0;
-}
-inline ::google::protobuf::int32 TestResponse::sum() const {
-  // @@protoc_insertion_point(field_get:Model.TestResponse.Sum)
-  return sum_;
-}
-inline void TestResponse::set_sum(::google::protobuf::int32 value) {
-  
-  sum_ = value;
-  // @@protoc_insertion_point(field_set:Model.TestResponse.Sum)
-}
+// L2A_ObjectAddResponse
 
 // optional int32 RpcId = 90;
-inline void TestResponse::clear_rpcid() {
+inline void L2A_ObjectAddResponse::clear_rpcid() {
   rpcid_ = 0;
 }
-inline ::google::protobuf::int32 TestResponse::rpcid() const {
-  // @@protoc_insertion_point(field_get:Model.TestResponse.RpcId)
+inline ::google::protobuf::int32 L2A_ObjectAddResponse::rpcid() const {
+  // @@protoc_insertion_point(field_get:Model.L2A_ObjectAddResponse.RpcId)
   return rpcid_;
 }
-inline void TestResponse::set_rpcid(::google::protobuf::int32 value) {
+inline void L2A_ObjectAddResponse::set_rpcid(::google::protobuf::int32 value) {
   
   rpcid_ = value;
-  // @@protoc_insertion_point(field_set:Model.TestResponse.RpcId)
+  // @@protoc_insertion_point(field_set:Model.L2A_ObjectAddResponse.RpcId)
 }
 
 // optional int32 Error = 91;
-inline void TestResponse::clear_error() {
+inline void L2A_ObjectAddResponse::clear_error() {
   error_ = 0;
 }
-inline ::google::protobuf::int32 TestResponse::error() const {
-  // @@protoc_insertion_point(field_get:Model.TestResponse.Error)
+inline ::google::protobuf::int32 L2A_ObjectAddResponse::error() const {
+  // @@protoc_insertion_point(field_get:Model.L2A_ObjectAddResponse.Error)
   return error_;
 }
-inline void TestResponse::set_error(::google::protobuf::int32 value) {
+inline void L2A_ObjectAddResponse::set_error(::google::protobuf::int32 value) {
   
   error_ = value;
-  // @@protoc_insertion_point(field_set:Model.TestResponse.Error)
+  // @@protoc_insertion_point(field_set:Model.L2A_ObjectAddResponse.Error)
 }
 
 // optional string Message = 92;
-inline void TestResponse::clear_message() {
+inline void L2A_ObjectAddResponse::clear_message() {
   message_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& TestResponse::message() const {
-  // @@protoc_insertion_point(field_get:Model.TestResponse.Message)
+inline const ::std::string& L2A_ObjectAddResponse::message() const {
+  // @@protoc_insertion_point(field_get:Model.L2A_ObjectAddResponse.Message)
   return message_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void TestResponse::set_message(const ::std::string& value) {
+inline void L2A_ObjectAddResponse::set_message(const ::std::string& value) {
   
   message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:Model.TestResponse.Message)
+  // @@protoc_insertion_point(field_set:Model.L2A_ObjectAddResponse.Message)
 }
-inline void TestResponse::set_message(const char* value) {
+inline void L2A_ObjectAddResponse::set_message(const char* value) {
   
   message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:Model.TestResponse.Message)
+  // @@protoc_insertion_point(field_set_char:Model.L2A_ObjectAddResponse.Message)
 }
-inline void TestResponse::set_message(const char* value, size_t size) {
+inline void L2A_ObjectAddResponse::set_message(const char* value, size_t size) {
   
   message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:Model.TestResponse.Message)
+  // @@protoc_insertion_point(field_set_pointer:Model.L2A_ObjectAddResponse.Message)
 }
-inline ::std::string* TestResponse::mutable_message() {
+inline ::std::string* L2A_ObjectAddResponse::mutable_message() {
   
-  // @@protoc_insertion_point(field_mutable:Model.TestResponse.Message)
+  // @@protoc_insertion_point(field_mutable:Model.L2A_ObjectAddResponse.Message)
   return message_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* TestResponse::release_message() {
-  // @@protoc_insertion_point(field_release:Model.TestResponse.Message)
+inline ::std::string* L2A_ObjectAddResponse::release_message() {
+  // @@protoc_insertion_point(field_release:Model.L2A_ObjectAddResponse.Message)
   
   return message_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void TestResponse::set_allocated_message(::std::string* message) {
+inline void L2A_ObjectAddResponse::set_allocated_message(::std::string* message) {
   if (message != NULL) {
     
   } else {
     
   }
   message_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), message);
-  // @@protoc_insertion_point(field_set_allocated:Model.TestResponse.Message)
+  // @@protoc_insertion_point(field_set_allocated:Model.L2A_ObjectAddResponse.Message)
 }
 
 // -------------------------------------------------------------------
 
-// ActorTestRequest
-
-// optional int32 A = 1;
-inline void ActorTestRequest::clear_a() {
-  a_ = 0;
-}
-inline ::google::protobuf::int32 ActorTestRequest::a() const {
-  // @@protoc_insertion_point(field_get:Model.ActorTestRequest.A)
-  return a_;
-}
-inline void ActorTestRequest::set_a(::google::protobuf::int32 value) {
-  
-  a_ = value;
-  // @@protoc_insertion_point(field_set:Model.ActorTestRequest.A)
-}
-
-// optional int32 B = 2;
-inline void ActorTestRequest::clear_b() {
-  b_ = 0;
-}
-inline ::google::protobuf::int32 ActorTestRequest::b() const {
-  // @@protoc_insertion_point(field_get:Model.ActorTestRequest.B)
-  return b_;
-}
-inline void ActorTestRequest::set_b(::google::protobuf::int32 value) {
-  
-  b_ = value;
-  // @@protoc_insertion_point(field_set:Model.ActorTestRequest.B)
-}
+// A2L_ObjectLockRequest
 
 // optional int32 RpcId = 90;
-inline void ActorTestRequest::clear_rpcid() {
+inline void A2L_ObjectLockRequest::clear_rpcid() {
   rpcid_ = 0;
 }
-inline ::google::protobuf::int32 ActorTestRequest::rpcid() const {
-  // @@protoc_insertion_point(field_get:Model.ActorTestRequest.RpcId)
+inline ::google::protobuf::int32 A2L_ObjectLockRequest::rpcid() const {
+  // @@protoc_insertion_point(field_get:Model.A2L_ObjectLockRequest.RpcId)
   return rpcid_;
 }
-inline void ActorTestRequest::set_rpcid(::google::protobuf::int32 value) {
+inline void A2L_ObjectLockRequest::set_rpcid(::google::protobuf::int32 value) {
   
   rpcid_ = value;
-  // @@protoc_insertion_point(field_set:Model.ActorTestRequest.RpcId)
+  // @@protoc_insertion_point(field_set:Model.A2L_ObjectLockRequest.RpcId)
+}
+
+// optional int64 Key = 1;
+inline void A2L_ObjectLockRequest::clear_key() {
+  key_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 A2L_ObjectLockRequest::key() const {
+  // @@protoc_insertion_point(field_get:Model.A2L_ObjectLockRequest.Key)
+  return key_;
+}
+inline void A2L_ObjectLockRequest::set_key(::google::protobuf::int64 value) {
+  
+  key_ = value;
+  // @@protoc_insertion_point(field_set:Model.A2L_ObjectLockRequest.Key)
 }
 
 // -------------------------------------------------------------------
 
-// ActorTestResponse
-
-// optional int32 Sum = 1;
-inline void ActorTestResponse::clear_sum() {
-  sum_ = 0;
-}
-inline ::google::protobuf::int32 ActorTestResponse::sum() const {
-  // @@protoc_insertion_point(field_get:Model.ActorTestResponse.Sum)
-  return sum_;
-}
-inline void ActorTestResponse::set_sum(::google::protobuf::int32 value) {
-  
-  sum_ = value;
-  // @@protoc_insertion_point(field_set:Model.ActorTestResponse.Sum)
-}
+// L2A_ObjectLockResponse
 
 // optional int32 RpcId = 90;
-inline void ActorTestResponse::clear_rpcid() {
+inline void L2A_ObjectLockResponse::clear_rpcid() {
   rpcid_ = 0;
 }
-inline ::google::protobuf::int32 ActorTestResponse::rpcid() const {
-  // @@protoc_insertion_point(field_get:Model.ActorTestResponse.RpcId)
+inline ::google::protobuf::int32 L2A_ObjectLockResponse::rpcid() const {
+  // @@protoc_insertion_point(field_get:Model.L2A_ObjectLockResponse.RpcId)
   return rpcid_;
 }
-inline void ActorTestResponse::set_rpcid(::google::protobuf::int32 value) {
+inline void L2A_ObjectLockResponse::set_rpcid(::google::protobuf::int32 value) {
   
   rpcid_ = value;
-  // @@protoc_insertion_point(field_set:Model.ActorTestResponse.RpcId)
+  // @@protoc_insertion_point(field_set:Model.L2A_ObjectLockResponse.RpcId)
 }
 
 // optional int32 Error = 91;
-inline void ActorTestResponse::clear_error() {
+inline void L2A_ObjectLockResponse::clear_error() {
   error_ = 0;
 }
-inline ::google::protobuf::int32 ActorTestResponse::error() const {
-  // @@protoc_insertion_point(field_get:Model.ActorTestResponse.Error)
+inline ::google::protobuf::int32 L2A_ObjectLockResponse::error() const {
+  // @@protoc_insertion_point(field_get:Model.L2A_ObjectLockResponse.Error)
   return error_;
 }
-inline void ActorTestResponse::set_error(::google::protobuf::int32 value) {
+inline void L2A_ObjectLockResponse::set_error(::google::protobuf::int32 value) {
   
   error_ = value;
-  // @@protoc_insertion_point(field_set:Model.ActorTestResponse.Error)
+  // @@protoc_insertion_point(field_set:Model.L2A_ObjectLockResponse.Error)
 }
 
 // optional string Message = 92;
-inline void ActorTestResponse::clear_message() {
+inline void L2A_ObjectLockResponse::clear_message() {
   message_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& ActorTestResponse::message() const {
-  // @@protoc_insertion_point(field_get:Model.ActorTestResponse.Message)
+inline const ::std::string& L2A_ObjectLockResponse::message() const {
+  // @@protoc_insertion_point(field_get:Model.L2A_ObjectLockResponse.Message)
   return message_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void ActorTestResponse::set_message(const ::std::string& value) {
+inline void L2A_ObjectLockResponse::set_message(const ::std::string& value) {
   
   message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:Model.ActorTestResponse.Message)
+  // @@protoc_insertion_point(field_set:Model.L2A_ObjectLockResponse.Message)
 }
-inline void ActorTestResponse::set_message(const char* value) {
+inline void L2A_ObjectLockResponse::set_message(const char* value) {
   
   message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:Model.ActorTestResponse.Message)
+  // @@protoc_insertion_point(field_set_char:Model.L2A_ObjectLockResponse.Message)
 }
-inline void ActorTestResponse::set_message(const char* value, size_t size) {
+inline void L2A_ObjectLockResponse::set_message(const char* value, size_t size) {
   
   message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:Model.ActorTestResponse.Message)
+  // @@protoc_insertion_point(field_set_pointer:Model.L2A_ObjectLockResponse.Message)
 }
-inline ::std::string* ActorTestResponse::mutable_message() {
+inline ::std::string* L2A_ObjectLockResponse::mutable_message() {
   
-  // @@protoc_insertion_point(field_mutable:Model.ActorTestResponse.Message)
+  // @@protoc_insertion_point(field_mutable:Model.L2A_ObjectLockResponse.Message)
   return message_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* ActorTestResponse::release_message() {
-  // @@protoc_insertion_point(field_release:Model.ActorTestResponse.Message)
+inline ::std::string* L2A_ObjectLockResponse::release_message() {
+  // @@protoc_insertion_point(field_release:Model.L2A_ObjectLockResponse.Message)
   
   return message_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void ActorTestResponse::set_allocated_message(::std::string* message) {
+inline void L2A_ObjectLockResponse::set_allocated_message(::std::string* message) {
   if (message != NULL) {
     
   } else {
     
   }
   message_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), message);
-  // @@protoc_insertion_point(field_set_allocated:Model.ActorTestResponse.Message)
+  // @@protoc_insertion_point(field_set_allocated:Model.L2A_ObjectLockResponse.Message)
 }
 
 // -------------------------------------------------------------------
 
-// ActorMessageTest
+// A2L_ObjectUnLockRequest
+
+// optional int32 RpcId = 90;
+inline void A2L_ObjectUnLockRequest::clear_rpcid() {
+  rpcid_ = 0;
+}
+inline ::google::protobuf::int32 A2L_ObjectUnLockRequest::rpcid() const {
+  // @@protoc_insertion_point(field_get:Model.A2L_ObjectUnLockRequest.RpcId)
+  return rpcid_;
+}
+inline void A2L_ObjectUnLockRequest::set_rpcid(::google::protobuf::int32 value) {
+  
+  rpcid_ = value;
+  // @@protoc_insertion_point(field_set:Model.A2L_ObjectUnLockRequest.RpcId)
+}
+
+// optional int64 Key = 1;
+inline void A2L_ObjectUnLockRequest::clear_key() {
+  key_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 A2L_ObjectUnLockRequest::key() const {
+  // @@protoc_insertion_point(field_get:Model.A2L_ObjectUnLockRequest.Key)
+  return key_;
+}
+inline void A2L_ObjectUnLockRequest::set_key(::google::protobuf::int64 value) {
+  
+  key_ = value;
+  // @@protoc_insertion_point(field_set:Model.A2L_ObjectUnLockRequest.Key)
+}
+
+// optional int64 OldInstanceId = 2;
+inline void A2L_ObjectUnLockRequest::clear_oldinstanceid() {
+  oldinstanceid_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 A2L_ObjectUnLockRequest::oldinstanceid() const {
+  // @@protoc_insertion_point(field_get:Model.A2L_ObjectUnLockRequest.OldInstanceId)
+  return oldinstanceid_;
+}
+inline void A2L_ObjectUnLockRequest::set_oldinstanceid(::google::protobuf::int64 value) {
+  
+  oldinstanceid_ = value;
+  // @@protoc_insertion_point(field_set:Model.A2L_ObjectUnLockRequest.OldInstanceId)
+}
+
+// optional int64 InstanceId = 3;
+inline void A2L_ObjectUnLockRequest::clear_instanceid() {
+  instanceid_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 A2L_ObjectUnLockRequest::instanceid() const {
+  // @@protoc_insertion_point(field_get:Model.A2L_ObjectUnLockRequest.InstanceId)
+  return instanceid_;
+}
+inline void A2L_ObjectUnLockRequest::set_instanceid(::google::protobuf::int64 value) {
+  
+  instanceid_ = value;
+  // @@protoc_insertion_point(field_set:Model.A2L_ObjectUnLockRequest.InstanceId)
+}
+
+// -------------------------------------------------------------------
+
+// L2A_ObjectUnLockResponse
+
+// optional int32 RpcId = 90;
+inline void L2A_ObjectUnLockResponse::clear_rpcid() {
+  rpcid_ = 0;
+}
+inline ::google::protobuf::int32 L2A_ObjectUnLockResponse::rpcid() const {
+  // @@protoc_insertion_point(field_get:Model.L2A_ObjectUnLockResponse.RpcId)
+  return rpcid_;
+}
+inline void L2A_ObjectUnLockResponse::set_rpcid(::google::protobuf::int32 value) {
+  
+  rpcid_ = value;
+  // @@protoc_insertion_point(field_set:Model.L2A_ObjectUnLockResponse.RpcId)
+}
+
+// optional int32 Error = 91;
+inline void L2A_ObjectUnLockResponse::clear_error() {
+  error_ = 0;
+}
+inline ::google::protobuf::int32 L2A_ObjectUnLockResponse::error() const {
+  // @@protoc_insertion_point(field_get:Model.L2A_ObjectUnLockResponse.Error)
+  return error_;
+}
+inline void L2A_ObjectUnLockResponse::set_error(::google::protobuf::int32 value) {
+  
+  error_ = value;
+  // @@protoc_insertion_point(field_set:Model.L2A_ObjectUnLockResponse.Error)
+}
+
+// optional string Message = 92;
+inline void L2A_ObjectUnLockResponse::clear_message() {
+  message_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& L2A_ObjectUnLockResponse::message() const {
+  // @@protoc_insertion_point(field_get:Model.L2A_ObjectUnLockResponse.Message)
+  return message_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void L2A_ObjectUnLockResponse::set_message(const ::std::string& value) {
+  
+  message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:Model.L2A_ObjectUnLockResponse.Message)
+}
+inline void L2A_ObjectUnLockResponse::set_message(const char* value) {
+  
+  message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:Model.L2A_ObjectUnLockResponse.Message)
+}
+inline void L2A_ObjectUnLockResponse::set_message(const char* value, size_t size) {
+  
+  message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:Model.L2A_ObjectUnLockResponse.Message)
+}
+inline ::std::string* L2A_ObjectUnLockResponse::mutable_message() {
+  
+  // @@protoc_insertion_point(field_mutable:Model.L2A_ObjectUnLockResponse.Message)
+  return message_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* L2A_ObjectUnLockResponse::release_message() {
+  // @@protoc_insertion_point(field_release:Model.L2A_ObjectUnLockResponse.Message)
+  
+  return message_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void L2A_ObjectUnLockResponse::set_allocated_message(::std::string* message) {
+  if (message != NULL) {
+    
+  } else {
+    
+  }
+  message_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), message);
+  // @@protoc_insertion_point(field_set_allocated:Model.L2A_ObjectUnLockResponse.Message)
+}
+
+// -------------------------------------------------------------------
+
+// A2L_ObjectRemoveRequest
+
+// optional int32 RpcId = 90;
+inline void A2L_ObjectRemoveRequest::clear_rpcid() {
+  rpcid_ = 0;
+}
+inline ::google::protobuf::int32 A2L_ObjectRemoveRequest::rpcid() const {
+  // @@protoc_insertion_point(field_get:Model.A2L_ObjectRemoveRequest.RpcId)
+  return rpcid_;
+}
+inline void A2L_ObjectRemoveRequest::set_rpcid(::google::protobuf::int32 value) {
+  
+  rpcid_ = value;
+  // @@protoc_insertion_point(field_set:Model.A2L_ObjectRemoveRequest.RpcId)
+}
+
+// optional int64 Key = 1;
+inline void A2L_ObjectRemoveRequest::clear_key() {
+  key_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 A2L_ObjectRemoveRequest::key() const {
+  // @@protoc_insertion_point(field_get:Model.A2L_ObjectRemoveRequest.Key)
+  return key_;
+}
+inline void A2L_ObjectRemoveRequest::set_key(::google::protobuf::int64 value) {
+  
+  key_ = value;
+  // @@protoc_insertion_point(field_set:Model.A2L_ObjectRemoveRequest.Key)
+}
+
+// -------------------------------------------------------------------
+
+// L2A_ObjectRemoveResponse
+
+// optional int32 RpcId = 90;
+inline void L2A_ObjectRemoveResponse::clear_rpcid() {
+  rpcid_ = 0;
+}
+inline ::google::protobuf::int32 L2A_ObjectRemoveResponse::rpcid() const {
+  // @@protoc_insertion_point(field_get:Model.L2A_ObjectRemoveResponse.RpcId)
+  return rpcid_;
+}
+inline void L2A_ObjectRemoveResponse::set_rpcid(::google::protobuf::int32 value) {
+  
+  rpcid_ = value;
+  // @@protoc_insertion_point(field_set:Model.L2A_ObjectRemoveResponse.RpcId)
+}
+
+// optional int32 Error = 91;
+inline void L2A_ObjectRemoveResponse::clear_error() {
+  error_ = 0;
+}
+inline ::google::protobuf::int32 L2A_ObjectRemoveResponse::error() const {
+  // @@protoc_insertion_point(field_get:Model.L2A_ObjectRemoveResponse.Error)
+  return error_;
+}
+inline void L2A_ObjectRemoveResponse::set_error(::google::protobuf::int32 value) {
+  
+  error_ = value;
+  // @@protoc_insertion_point(field_set:Model.L2A_ObjectRemoveResponse.Error)
+}
+
+// optional string Message = 92;
+inline void L2A_ObjectRemoveResponse::clear_message() {
+  message_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& L2A_ObjectRemoveResponse::message() const {
+  // @@protoc_insertion_point(field_get:Model.L2A_ObjectRemoveResponse.Message)
+  return message_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void L2A_ObjectRemoveResponse::set_message(const ::std::string& value) {
+  
+  message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:Model.L2A_ObjectRemoveResponse.Message)
+}
+inline void L2A_ObjectRemoveResponse::set_message(const char* value) {
+  
+  message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:Model.L2A_ObjectRemoveResponse.Message)
+}
+inline void L2A_ObjectRemoveResponse::set_message(const char* value, size_t size) {
+  
+  message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:Model.L2A_ObjectRemoveResponse.Message)
+}
+inline ::std::string* L2A_ObjectRemoveResponse::mutable_message() {
+  
+  // @@protoc_insertion_point(field_mutable:Model.L2A_ObjectRemoveResponse.Message)
+  return message_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* L2A_ObjectRemoveResponse::release_message() {
+  // @@protoc_insertion_point(field_release:Model.L2A_ObjectRemoveResponse.Message)
+  
+  return message_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void L2A_ObjectRemoveResponse::set_allocated_message(::std::string* message) {
+  if (message != NULL) {
+    
+  } else {
+    
+  }
+  message_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), message);
+  // @@protoc_insertion_point(field_set_allocated:Model.L2A_ObjectRemoveResponse.Message)
+}
+
+// -------------------------------------------------------------------
+
+// A2L_ObjectGetRequest
+
+// optional int32 RpcId = 90;
+inline void A2L_ObjectGetRequest::clear_rpcid() {
+  rpcid_ = 0;
+}
+inline ::google::protobuf::int32 A2L_ObjectGetRequest::rpcid() const {
+  // @@protoc_insertion_point(field_get:Model.A2L_ObjectGetRequest.RpcId)
+  return rpcid_;
+}
+inline void A2L_ObjectGetRequest::set_rpcid(::google::protobuf::int32 value) {
+  
+  rpcid_ = value;
+  // @@protoc_insertion_point(field_set:Model.A2L_ObjectGetRequest.RpcId)
+}
+
+// optional int64 Key = 1;
+inline void A2L_ObjectGetRequest::clear_key() {
+  key_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 A2L_ObjectGetRequest::key() const {
+  // @@protoc_insertion_point(field_get:Model.A2L_ObjectGetRequest.Key)
+  return key_;
+}
+inline void A2L_ObjectGetRequest::set_key(::google::protobuf::int64 value) {
+  
+  key_ = value;
+  // @@protoc_insertion_point(field_set:Model.A2L_ObjectGetRequest.Key)
+}
+
+// -------------------------------------------------------------------
+
+// L2A_ObjectGetResponse
+
+// optional int32 RpcId = 90;
+inline void L2A_ObjectGetResponse::clear_rpcid() {
+  rpcid_ = 0;
+}
+inline ::google::protobuf::int32 L2A_ObjectGetResponse::rpcid() const {
+  // @@protoc_insertion_point(field_get:Model.L2A_ObjectGetResponse.RpcId)
+  return rpcid_;
+}
+inline void L2A_ObjectGetResponse::set_rpcid(::google::protobuf::int32 value) {
+  
+  rpcid_ = value;
+  // @@protoc_insertion_point(field_set:Model.L2A_ObjectGetResponse.RpcId)
+}
+
+// optional int32 Error = 91;
+inline void L2A_ObjectGetResponse::clear_error() {
+  error_ = 0;
+}
+inline ::google::protobuf::int32 L2A_ObjectGetResponse::error() const {
+  // @@protoc_insertion_point(field_get:Model.L2A_ObjectGetResponse.Error)
+  return error_;
+}
+inline void L2A_ObjectGetResponse::set_error(::google::protobuf::int32 value) {
+  
+  error_ = value;
+  // @@protoc_insertion_point(field_set:Model.L2A_ObjectGetResponse.Error)
+}
+
+// optional string Message = 92;
+inline void L2A_ObjectGetResponse::clear_message() {
+  message_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& L2A_ObjectGetResponse::message() const {
+  // @@protoc_insertion_point(field_get:Model.L2A_ObjectGetResponse.Message)
+  return message_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void L2A_ObjectGetResponse::set_message(const ::std::string& value) {
+  
+  message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:Model.L2A_ObjectGetResponse.Message)
+}
+inline void L2A_ObjectGetResponse::set_message(const char* value) {
+  
+  message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:Model.L2A_ObjectGetResponse.Message)
+}
+inline void L2A_ObjectGetResponse::set_message(const char* value, size_t size) {
+  
+  message_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:Model.L2A_ObjectGetResponse.Message)
+}
+inline ::std::string* L2A_ObjectGetResponse::mutable_message() {
+  
+  // @@protoc_insertion_point(field_mutable:Model.L2A_ObjectGetResponse.Message)
+  return message_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* L2A_ObjectGetResponse::release_message() {
+  // @@protoc_insertion_point(field_release:Model.L2A_ObjectGetResponse.Message)
+  
+  return message_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void L2A_ObjectGetResponse::set_allocated_message(::std::string* message) {
+  if (message != NULL) {
+    
+  } else {
+    
+  }
+  message_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), message);
+  // @@protoc_insertion_point(field_set_allocated:Model.L2A_ObjectGetResponse.Message)
+}
+
+// optional int64 InstanceId = 1;
+inline void L2A_ObjectGetResponse::clear_instanceid() {
+  instanceid_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 L2A_ObjectGetResponse::instanceid() const {
+  // @@protoc_insertion_point(field_get:Model.L2A_ObjectGetResponse.InstanceId)
+  return instanceid_;
+}
+inline void L2A_ObjectGetResponse::set_instanceid(::google::protobuf::int64 value) {
+  
+  instanceid_ = value;
+  // @@protoc_insertion_point(field_set:Model.L2A_ObjectGetResponse.InstanceId)
+}
 
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

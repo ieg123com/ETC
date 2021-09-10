@@ -3,21 +3,6 @@ syntax = "proto3";
 // Model 消息,框架内部消息
 package Model;
 
-message Struct_Position
-{
-	int32 x =1;
-	int32 y=2;
-}
-
-
-// 消息头
-message MessageHead	// IMessage
-{
-	int32 RpcId = 90;
-	int32 Error = 91;
-	string Message = 92;
-	int64 ActorId = 93;
-}
 
 
 // Actor默认请求
@@ -38,46 +23,101 @@ message ActorResponse	// IActorResponse
 
 
 
-// ResponseType TestResponse
-message TestRequest	// IActorLocationRequest
+
+// =================== Location app ===================
+// Location 添加对象消息
+// ResponseType L2A_ObjectAddResponse
+message A2L_ObjectAddRequest	// IActorRequest
 {
-	int32 A = 1;
-	int32 B = 2;
-	
 	int32 RpcId = 90;
+	
+	int64 Key	= 1;
+	int64 InstanceId = 2;
 }
 
-message TestResponse	// IActorLocationResponse
+message L2A_ObjectAddResponse	// IActorResponse
 {
-	int32 Sum = 1;
-	
-	int32 RpcId = 90;
-	int32 Error = 91;
-	string Message = 92;
-}
-
-// ResponseType ActorTestResponse
-message ActorTestRequest	// IActorRequest
-{
-	int32 A = 1;
-	int32 B = 2;
-	
-	int32 RpcId = 90;
-}
-
-message ActorTestResponse	// IActorResponse
-{
-	int32 Sum = 1;
 	
 	int32 RpcId = 90;
 	int32 Error = 91;
-	string Message = 92;
+	string Message = 92;	
 }
 
-message ActorMessageTest// IMessage
+// Location 锁住对象消息
+// ResponseType L2A_ObjectLockResponse
+message A2L_ObjectLockRequest	// IActorRequest
+{
+	int32 RpcId = 90;
+	
+	int64 Key	= 1;
+}
+
+message L2A_ObjectLockResponse	// IActorResponse
 {
 	
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;	
 }
+
+// Location 解锁对象消息
+// ResponseType L2A_ObjectUnLockResponse
+message A2L_ObjectUnLockRequest	// IActorRequest
+{
+	int32 RpcId = 90;
+	
+	int64 Key	= 1;
+	// 原始的实例id
+	int64 OldInstanceId = 2;
+	// 现在的实例id
+	int64 InstanceId = 3;
+}
+
+message L2A_ObjectUnLockResponse	// IActorResponse
+{
+	
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;	
+}
+
+// Location 移除对象消息
+// ResponseType L2A_AddObjectResponse
+message A2L_ObjectRemoveRequest	// IActorRequest
+{
+	int32 RpcId = 90;
+	
+	int64 Key	= 1;
+}
+
+message L2A_ObjectRemoveResponse	// IActorResponse
+{
+	
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;	
+}
+
+// Location 获取对象消息
+// ResponseType L2A_AddObjectResponse
+message A2L_ObjectGetRequest	// IActorRequest
+{
+	int32 RpcId = 90;
+	
+	int64 Key	= 1;
+}
+
+message L2A_ObjectGetResponse	// IActorResponse
+{
+	
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;	
+	
+	int64 InstanceId	= 1;
+}
+
+
 
 
 

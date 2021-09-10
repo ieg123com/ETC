@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+// Model 消息,框架内部消息
+package Model;
+
+message Struct_Position
+{
+	int32 x =1;
+	int32 y=2;
+}
+
+
+// 消息头
+message MessageHead	// IMessage
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	int64 ActorId = 93;
+}
+
+
+// ResponseType ActorLocationTestResponse
+message ActorLocationTestRequest	// IActorLocationRequest
+{
+	int32 A = 1;
+	int32 B = 2;
+	
+	int32 RpcId = 90;
+}
+
+message ActorLocationTestResponse	// IActorLocationResponse
+{
+	int32 Sum = 1;
+	
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
+
+message ActorLocationMessageTest	// IActorLocationMessage
+{
+	string test_ctx = 1;
+	
+	int32 RpcId = 90;
+}
+
+// ResponseType ActorTestResponse
+message ActorTestRequest	// IActorRequest
+{
+	int32 A = 1;
+	int32 B = 2;
+	
+	int32 RpcId = 90;
+}
+
+message ActorTestResponse	// IActorResponse
+{
+	int32 Sum = 1;
+	
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
+
+message ActorMessageTest// IActorMessage
+{
+	
+}
+
+
+
