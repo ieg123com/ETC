@@ -10,6 +10,7 @@ namespace Model
 		else if (str == "List")return EAppType::List;
 		else if (str == "Map")return EAppType::Map;
 		else if (str == "Location")return EAppType::Location;
+		else if (str == "AllServer")return EAppType::AllServer;
 		else return EAppType::None;
 	}
 

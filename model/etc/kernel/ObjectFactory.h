@@ -174,7 +174,7 @@ namespace Model
 			}
 			if (instance_id == 0)
 			{
-				obj->__RefreshObjectID();
+				obj->__RefreshInstanceId();
 			}
 			else {
 				obj->m_instance_id = instance_id;

@@ -541,6 +541,18 @@ class A2L_ObjectLockRequest : public IActorRequest /* @@protoc_insertion_point(c
   ::google::protobuf::int64 key() const;
   void set_key(::google::protobuf::int64 value);
 
+  // optional int64 InstanceId = 2;
+  void clear_instanceid();
+  static const int kInstanceIdFieldNumber = 2;
+  ::google::protobuf::int64 instanceid() const;
+  void set_instanceid(::google::protobuf::int64 value);
+
+  // optional int32 Time = 3;
+  void clear_time();
+  static const int kTimeFieldNumber = 3;
+  ::google::protobuf::int32 time() const;
+  void set_time(::google::protobuf::int32 value);
+
   // @@protoc_insertion_point(class_scope:Model.A2L_ObjectLockRequest)
  private:
 
@@ -548,6 +560,8 @@ class A2L_ObjectLockRequest : public IActorRequest /* @@protoc_insertion_point(c
   bool _is_default_instance_;
   ::google::protobuf::int64 key_;
   ::google::protobuf::int32 rpcid_;
+  ::google::protobuf::int32 time_;
+  ::google::protobuf::int64 instanceid_;
   mutable int _cached_size_;
   friend void  protobuf_AddDesc_EtcMsg_2eproto();
   friend void protobuf_AssignDesc_EtcMsg_2eproto();
@@ -1549,6 +1563,34 @@ inline void A2L_ObjectLockRequest::set_key(::google::protobuf::int64 value) {
   
   key_ = value;
   // @@protoc_insertion_point(field_set:Model.A2L_ObjectLockRequest.Key)
+}
+
+// optional int64 InstanceId = 2;
+inline void A2L_ObjectLockRequest::clear_instanceid() {
+  instanceid_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 A2L_ObjectLockRequest::instanceid() const {
+  // @@protoc_insertion_point(field_get:Model.A2L_ObjectLockRequest.InstanceId)
+  return instanceid_;
+}
+inline void A2L_ObjectLockRequest::set_instanceid(::google::protobuf::int64 value) {
+  
+  instanceid_ = value;
+  // @@protoc_insertion_point(field_set:Model.A2L_ObjectLockRequest.InstanceId)
+}
+
+// optional int32 Time = 3;
+inline void A2L_ObjectLockRequest::clear_time() {
+  time_ = 0;
+}
+inline ::google::protobuf::int32 A2L_ObjectLockRequest::time() const {
+  // @@protoc_insertion_point(field_get:Model.A2L_ObjectLockRequest.Time)
+  return time_;
+}
+inline void A2L_ObjectLockRequest::set_time(::google::protobuf::int32 value) {
+  
+  time_ = value;
+  // @@protoc_insertion_point(field_set:Model.A2L_ObjectLockRequest.Time)
 }
 
 // -------------------------------------------------------------------

@@ -12,6 +12,7 @@ namespace Model
 	{
 	public:
 
+
 		template<typename T>
 		std::shared_ptr<T> AddComponent(const bool from_pool = true) {
 

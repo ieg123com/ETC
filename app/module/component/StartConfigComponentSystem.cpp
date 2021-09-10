@@ -56,6 +56,7 @@ namespace Hotfix
 				}
 			}
 
+
 			self->startConfig = self->Get(app_id);
 
 		}

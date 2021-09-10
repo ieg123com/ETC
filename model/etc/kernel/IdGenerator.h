@@ -50,7 +50,7 @@ struct IdStruct
 
 
 
-
+// 实例id结构体
 struct InstanceIdStruct
 {
 	static const uint32_t MaxValue = (uint32_t)(0x3ffff);
@@ -101,6 +101,60 @@ struct InstanceIdStruct
 };
 
 
+// 实体id结构体
+struct UnitIdStruct
+{
+	static const uint32_t MaxValue = (uint32_t)(0xffff);
+
+	uint32_t	time;		// 30bit	34年
+	uint16_t	zone;		// 10bit	1024区
+	uint8_t		process;	// 8bit		每个区支持 256 进程
+	uint16_t	value;		// 16bit	每秒产生 65536 id
+
+	int64_t ToLong(){
+		uint64_t result = 0;
+		result |= value;
+		result |= (uint64_t)process << 16;
+		result |= (uint64_t)zone << 24;
+		result |= (uint64_t)time << 34;
+		return (int64_t)result;
+	}
+
+	UnitIdStruct() {
+		time = 0;
+		zone = 0;
+		process = 0;
+		value = 0;
+	}
+
+	UnitIdStruct(const int32_t z, const int32_t pid, const uint32_t t, const uint16_t val){
+		time = t;
+		process = (uint8_t)(pid % 256);
+		value = val;
+		zone = (uint16_t)z;
+	}
+
+	UnitIdStruct(const int64_t id){
+		uint64_t result = (uint64_t)id;
+		value = (uint16_t)(result & UINT16_MAX);
+		result >>= 16;
+		process = (uint8_t)(result & UINT8_MAX);
+		result >>= 8;
+		zone = (uint16_t)(result & 0x03ff);
+		result >>= 10;
+		time = (uint32_t)result;
+	}
+
+	std::string ToString(){
+		return "time:" + std::to_string(time) + " zone:" + std::to_string(zone) + " process:" + std::to_string(process) + " value:" + std::to_string(value);
+	}
+
+	static int32_t GetUnitZone(const int64_t unitId){
+		return (int32_t)((unitId >> 24) & 0x03ff); // 取出10bit
+	}
+};
+
+
 
 class IdGenerator
 {
@@ -108,7 +162,8 @@ class IdGenerator
 	time_t	m_epoch_this_year;
 
 	InstanceIdStruct	m_instance_id_struct;
-	IdStruct		m_id_struct;
+	IdStruct			m_id_struct;
+	UnitIdStruct		m_unit_id_struct;
 
 public:
 
@@ -134,7 +189,28 @@ public:
 	
 	int64_t GenerateInstanceId();
 
-	int64_t GenerateID();
+	int64_t GenerateId();
+
+	int64_t GenerateUnitId();
+
+
+
+	static int64_t GenInstanceId();
+	static int64_t GenId();
+	static int64_t GenUnitId();
+
 
 };
 
+
+inline int64_t IdGenerator::GenInstanceId() {
+	return IdGenerator::Instance->GenerateInstanceId();
+}
+
+inline int64_t IdGenerator::GenId() {
+	return IdGenerator::Instance->GenerateId();
+}
+
+inline int64_t IdGenerator::GenUnitId() {
+	return IdGenerator::Instance->GenerateUnitId();
+}

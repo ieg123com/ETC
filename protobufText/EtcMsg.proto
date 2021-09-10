@@ -50,6 +50,8 @@ message A2L_ObjectLockRequest	// IActorRequest
 	int32 RpcId = 90;
 	
 	int64 Key	= 1;
+	int64 InstanceId = 2;
+	int32 Time		=3;
 }
 
 message L2A_ObjectLockResponse	// IActorResponse

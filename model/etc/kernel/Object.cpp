@@ -46,7 +46,7 @@ namespace Model
 		Game::System().m_ObjectDebug.IncreaseObject(m_object_type.GetName());
 	}
 
-	void Object::__RefreshObjectID()
+	void Object::__RefreshInstanceId()
 	{
 		m_instance_id = IdGenerator::Instance->GenerateInstanceId();
 	}

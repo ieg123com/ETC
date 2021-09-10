@@ -19,4 +19,4 @@
 
 
 #include "actor/ActorMessageSenderComponent.h"
-#include "actor/ActorLocationSenderComponent.h"
+#include "actorlocation/ActorLocationSenderComponent.h"

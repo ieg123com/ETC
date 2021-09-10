@@ -11,7 +11,8 @@ CoMutex::CoMutex()
 
 CoMutex::~CoMutex()
 {
-//    assert(lock_.try_lock());
+    assert(is_lock());
+   // if (is_lock()) unlock();
 }
 
 void CoMutex::lock()

@@ -94,12 +94,38 @@ int main(int argc,char* argv[])
 				Game::World()->AddComponent<OpcodeTypeComponent>();
 				Game::World()->AddComponent<MessageDispatcherComponent>();
 				break;
+			case EAppType::AllServer:
+				// Net
+				Game::World()->AddComponent<NetOuterComponent, const IPEndPoint&>(start_config->OuterAddress);
+				Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(start_config->InnerAddress);
+				
+				
+				// 消息分发
+				Game::World()->AddComponent<OpcodeTypeComponent>();
+				Game::World()->AddComponent<MessageDispatcherComponent>();
+				Game::World()->AddComponent<ActorMessageDispatcherComponent>();
+				Game::World()->AddComponent<ActorMessageSenderComponent>();
+
+
+				break;
 			default:
 				throw std::exception("命令行参数 AppType 不正确");
 				break;
 			}
 
 			TimerComponent::Instance->RegisterOnceTimer(1000, ::Hotfix::StartTest);
+			TimerComponent::Instance->RegisterRepeatedTimer(500, [] {LOG_INFO("wait"); });
+
+			co::CoMutex lock;
+			TimerComponent::Instance->RegisterRepeatedTimer(1000, [&] {
+				LOG_INFO("start timer");
+				lock.lock();
+				co_sleep(10000);
+				lock.unlock();
+				LOG_INFO("over timer");
+
+				});
+
 
 			LOG_INFO("》》》》》》启动成功");
 			while (true)

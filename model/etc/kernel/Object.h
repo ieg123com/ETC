@@ -22,6 +22,8 @@ namespace Model
 
 		/** @brief	父类对象*/
 		std::shared_ptr<Object> m_host;
+		/** @brief	对象id*/
+		int64_t Id;
 
 		Object();
 		~Object();
@@ -34,7 +36,7 @@ namespace Model
 		inline bool IsDisposed()const {
 			return m_disposed;
 		}
-
+		/** @brief 实例id */
 		inline InstanceID InstanceId()const {
 			return m_instance_id;
 		}
@@ -78,12 +80,12 @@ namespace Model
 		// debug 用
 		void DebugIncreaseSelf();
 
-		// 刷新对象id
-		void __RefreshObjectID();
+		// 刷新实例id
+		void __RefreshInstanceId();
 
 	private:
 
-
+		// 实例id
 		InstanceID	m_instance_id;
 		// 对象类型
 		ObjectType	m_object_type;

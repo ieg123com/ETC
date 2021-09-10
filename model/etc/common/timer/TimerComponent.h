@@ -5,6 +5,8 @@
 #include <functional>
 #include "Component.h"
 #include "kernel/Entity.h"
+#include "coroutine.h"
+
 
 using namespace Model;
 // 计时器类型
@@ -16,15 +18,18 @@ enum class ETimerType :uint8_t
 };
 
 
+
 class TimerAction :
 	public GEntity
 {
 public:
 	using CallBack = std::function<void()>;
 
+
 	ETimerType TimerType;
 
 	CallBack Callback;
+
 	// 执行时间间隔
 	time_t	Time;
 };

@@ -11,8 +11,8 @@ class ActorMessageSender;
 class ActorMessageSenderComponent :
 	public Component
 {
-	// actor 消息超市时间
-	const time_t OUTTIME_TIME = 10 * 1000;
+	// actor 消息超时时间
+	const time_t OUTTIME_TIME = 40 * 1000;
 	// rpc id 增值
 	int32_t m_rpc_id;
 	// 记录所有已经发送的actor请求消息，等待回复
@@ -37,6 +37,7 @@ public:
 	void Send(const int64_t actor_id, const std::shared_ptr<IActorMessage>& message);
 
 	// 发送一条消息
+	// 返回一条对象的回复消息，出现问题时将抛出异常
 	template<typename T>
 	std::shared_ptr<T> Call(const int64_t actor_id, const std::shared_ptr<IActorRequest>& request) {
 		if (actor_id == 0)
@@ -44,6 +45,14 @@ public:
 		int32_t rpc_id = __GetRpcId();
 		request->SetRpcId(rpc_id);
 		return std::static_pointer_cast<T>(__Call(actor_id, rpc_id, request));
+	}
+
+	std::shared_ptr<IActorResponse> Call(const int64_t actor_id, const std::shared_ptr<IActorRequest>& request) {
+		if (actor_id == 0)
+			throw std::exception(std::format("actor id is 0 : %s", request->GetTypeName().c_str()).c_str());
+		int32_t rpc_id = __GetRpcId();
+		request->SetRpcId(rpc_id);
+		return __Call(actor_id, rpc_id, request);
 	}
 
 	void RunMessage(const int64_t actor_id, const std::shared_ptr<IActorResponse>& response);

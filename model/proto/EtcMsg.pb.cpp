@@ -156,9 +156,11 @@ void protobuf_AssignDesc_EtcMsg_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(L2A_ObjectAddResponse, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(L2A_ObjectAddResponse, _is_default_instance_));
   A2L_ObjectLockRequest_descriptor_ = file->message_type(4);
-  static const int A2L_ObjectLockRequest_offsets_[2] = {
+  static const int A2L_ObjectLockRequest_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(A2L_ObjectLockRequest, rpcid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(A2L_ObjectLockRequest, key_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(A2L_ObjectLockRequest, instanceid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(A2L_ObjectLockRequest, time_),
   };
   A2L_ObjectLockRequest_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
@@ -372,22 +374,22 @@ void protobuf_AddDesc_EtcMsg_2eproto() {
     "A2L_ObjectAddRequest\022\r\n\005RpcId\030Z \001(\005\022\013\n\003K"
     "ey\030\001 \001(\003\022\022\n\nInstanceId\030\002 \001(\003\"F\n\025L2A_Obje"
     "ctAddResponse\022\r\n\005RpcId\030Z \001(\005\022\r\n\005Error\030[ "
-    "\001(\005\022\017\n\007Message\030\\ \001(\t\"3\n\025A2L_ObjectLockRe"
-    "quest\022\r\n\005RpcId\030Z \001(\005\022\013\n\003Key\030\001 \001(\003\"G\n\026L2A"
-    "_ObjectLockResponse\022\r\n\005RpcId\030Z \001(\005\022\r\n\005Er"
-    "ror\030[ \001(\005\022\017\n\007Message\030\\ \001(\t\"`\n\027A2L_Object"
-    "UnLockRequest\022\r\n\005RpcId\030Z \001(\005\022\013\n\003Key\030\001 \001("
-    "\003\022\025\n\rOldInstanceId\030\002 \001(\003\022\022\n\nInstanceId\030\003"
-    " \001(\003\"I\n\030L2A_ObjectUnLockResponse\022\r\n\005RpcI"
-    "d\030Z \001(\005\022\r\n\005Error\030[ \001(\005\022\017\n\007Message\030\\ \001(\t\""
-    "5\n\027A2L_ObjectRemoveRequest\022\r\n\005RpcId\030Z \001("
-    "\005\022\013\n\003Key\030\001 \001(\003\"I\n\030L2A_ObjectRemoveRespon"
-    "se\022\r\n\005RpcId\030Z \001(\005\022\r\n\005Error\030[ \001(\005\022\017\n\007Mess"
-    "age\030\\ \001(\t\"2\n\024A2L_ObjectGetRequest\022\r\n\005Rpc"
-    "Id\030Z \001(\005\022\013\n\003Key\030\001 \001(\003\"Z\n\025L2A_ObjectGetRe"
-    "sponse\022\r\n\005RpcId\030Z \001(\005\022\r\n\005Error\030[ \001(\005\022\017\n\007"
-    "Message\030\\ \001(\t\022\022\n\nInstanceId\030\001 \001(\003b\006proto"
-    "3", 841);
+    "\001(\005\022\017\n\007Message\030\\ \001(\t\"U\n\025A2L_ObjectLockRe"
+    "quest\022\r\n\005RpcId\030Z \001(\005\022\013\n\003Key\030\001 \001(\003\022\022\n\nIns"
+    "tanceId\030\002 \001(\003\022\014\n\004Time\030\003 \001(\005\"G\n\026L2A_Objec"
+    "tLockResponse\022\r\n\005RpcId\030Z \001(\005\022\r\n\005Error\030[ "
+    "\001(\005\022\017\n\007Message\030\\ \001(\t\"`\n\027A2L_ObjectUnLock"
+    "Request\022\r\n\005RpcId\030Z \001(\005\022\013\n\003Key\030\001 \001(\003\022\025\n\rO"
+    "ldInstanceId\030\002 \001(\003\022\022\n\nInstanceId\030\003 \001(\003\"I"
+    "\n\030L2A_ObjectUnLockResponse\022\r\n\005RpcId\030Z \001("
+    "\005\022\r\n\005Error\030[ \001(\005\022\017\n\007Message\030\\ \001(\t\"5\n\027A2L"
+    "_ObjectRemoveRequest\022\r\n\005RpcId\030Z \001(\005\022\013\n\003K"
+    "ey\030\001 \001(\003\"I\n\030L2A_ObjectRemoveResponse\022\r\n\005"
+    "RpcId\030Z \001(\005\022\r\n\005Error\030[ \001(\005\022\017\n\007Message\030\\ "
+    "\001(\t\"2\n\024A2L_ObjectGetRequest\022\r\n\005RpcId\030Z \001"
+    "(\005\022\013\n\003Key\030\001 \001(\003\"Z\n\025L2A_ObjectGetResponse"
+    "\022\r\n\005RpcId\030Z \001(\005\022\r\n\005Error\030[ \001(\005\022\017\n\007Messag"
+    "e\030\\ \001(\t\022\022\n\nInstanceId\030\001 \001(\003b\006proto3", 875);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "EtcMsg.proto", &protobuf_RegisterTypes);
   ActorRequest::default_instance_ = new ActorRequest();
@@ -1847,6 +1849,8 @@ void L2A_ObjectAddResponse::clear_message() {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int A2L_ObjectLockRequest::kRpcIdFieldNumber;
 const int A2L_ObjectLockRequest::kKeyFieldNumber;
+const int A2L_ObjectLockRequest::kInstanceIdFieldNumber;
+const int A2L_ObjectLockRequest::kTimeFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 A2L_ObjectLockRequest::A2L_ObjectLockRequest()
@@ -1872,6 +1876,8 @@ void A2L_ObjectLockRequest::SharedCtor() {
   _cached_size_ = 0;
   rpcid_ = 0;
   key_ = GOOGLE_LONGLONG(0);
+  instanceid_ = GOOGLE_LONGLONG(0);
+  time_ = 0;
 }
 
 A2L_ObjectLockRequest::~A2L_ObjectLockRequest() {
@@ -1927,7 +1933,7 @@ void A2L_ObjectLockRequest::Clear() {
            ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
 } while (0)
 
-  ZR_(key_, rpcid_);
+  ZR_(key_, instanceid_);
 
 #undef ZR_HELPER_
 #undef ZR_
@@ -1950,6 +1956,36 @@ bool A2L_ObjectLockRequest::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
                  input, &key_)));
+
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_InstanceId;
+        break;
+      }
+
+      // optional int64 InstanceId = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_InstanceId:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &instanceid_)));
+
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(24)) goto parse_Time;
+        break;
+      }
+
+      // optional int32 Time = 3;
+      case 3: {
+        if (tag == 24) {
+         parse_Time:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &time_)));
 
         } else {
           goto handle_unusual;
@@ -2002,6 +2038,16 @@ void A2L_ObjectLockRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt64(1, this->key(), output);
   }
 
+  // optional int64 InstanceId = 2;
+  if (this->instanceid() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(2, this->instanceid(), output);
+  }
+
+  // optional int32 Time = 3;
+  if (this->time() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->time(), output);
+  }
+
   // optional int32 RpcId = 90;
   if (this->rpcid() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteInt32(90, this->rpcid(), output);
@@ -2016,6 +2062,16 @@ void A2L_ObjectLockRequest::SerializeWithCachedSizes(
   // optional int64 Key = 1;
   if (this->key() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt64ToArray(1, this->key(), target);
+  }
+
+  // optional int64 InstanceId = 2;
+  if (this->instanceid() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt64ToArray(2, this->instanceid(), target);
+  }
+
+  // optional int32 Time = 3;
+  if (this->time() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->time(), target);
   }
 
   // optional int32 RpcId = 90;
@@ -2043,6 +2099,20 @@ int A2L_ObjectLockRequest::ByteSize() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int64Size(
         this->key());
+  }
+
+  // optional int64 InstanceId = 2;
+  if (this->instanceid() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->instanceid());
+  }
+
+  // optional int32 Time = 3;
+  if (this->time() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->time());
   }
 
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
@@ -2079,6 +2149,12 @@ void A2L_ObjectLockRequest::MergeFrom(const A2L_ObjectLockRequest& from) {
   if (from.key() != 0) {
     set_key(from.key());
   }
+  if (from.instanceid() != 0) {
+    set_instanceid(from.instanceid());
+  }
+  if (from.time() != 0) {
+    set_time(from.time());
+  }
 }
 
 void A2L_ObjectLockRequest::CopyFrom(const ::google::protobuf::Message& from) {
@@ -2107,6 +2183,8 @@ void A2L_ObjectLockRequest::Swap(A2L_ObjectLockRequest* other) {
 void A2L_ObjectLockRequest::InternalSwap(A2L_ObjectLockRequest* other) {
   std::swap(rpcid_, other->rpcid_);
   std::swap(key_, other->key_);
+  std::swap(instanceid_, other->instanceid_);
+  std::swap(time_, other->time_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -2148,6 +2226,34 @@ void A2L_ObjectLockRequest::clear_key() {
   
   key_ = value;
   // @@protoc_insertion_point(field_set:Model.A2L_ObjectLockRequest.Key)
+}
+
+// optional int64 InstanceId = 2;
+void A2L_ObjectLockRequest::clear_instanceid() {
+  instanceid_ = GOOGLE_LONGLONG(0);
+}
+ ::google::protobuf::int64 A2L_ObjectLockRequest::instanceid() const {
+  // @@protoc_insertion_point(field_get:Model.A2L_ObjectLockRequest.InstanceId)
+  return instanceid_;
+}
+ void A2L_ObjectLockRequest::set_instanceid(::google::protobuf::int64 value) {
+  
+  instanceid_ = value;
+  // @@protoc_insertion_point(field_set:Model.A2L_ObjectLockRequest.InstanceId)
+}
+
+// optional int32 Time = 3;
+void A2L_ObjectLockRequest::clear_time() {
+  time_ = 0;
+}
+ ::google::protobuf::int32 A2L_ObjectLockRequest::time() const {
+  // @@protoc_insertion_point(field_get:Model.A2L_ObjectLockRequest.Time)
+  return time_;
+}
+ void A2L_ObjectLockRequest::set_time(::google::protobuf::int32 value) {
+  
+  time_ = value;
+  // @@protoc_insertion_point(field_set:Model.A2L_ObjectLockRequest.Time)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

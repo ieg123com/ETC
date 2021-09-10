@@ -31,7 +31,7 @@ int64_t IdGenerator::GenerateInstanceId() {
 	return m_instance_id_struct.ToLong();
 }
 
-int64_t IdGenerator::GenerateID()
+int64_t IdGenerator::GenerateId()
 {
 	uint32_t now_time = TimeSincePrjectStart();
 	if (m_id_struct.time == 0)
@@ -57,4 +57,32 @@ int64_t IdGenerator::GenerateID()
 		m_id_struct.time++;
 	}
 	return m_id_struct.ToLong();
+}
+
+int64_t IdGenerator::GenerateUnitId()
+{
+	uint32_t now_time = TimeSincePrjectStart();
+	if (m_unit_id_struct.time == 0)
+	{
+		// 第一次获取
+		m_unit_id_struct.process = Game::Options().AppId;
+	}
+
+
+	if (m_unit_id_struct.time < now_time)
+	{
+		m_unit_id_struct.time = now_time;
+		m_unit_id_struct.value = 0;
+	}
+	else {
+		m_unit_id_struct.value++;
+	}
+
+	if (m_unit_id_struct.value >= UnitIdStruct::MaxValue)
+	{
+		// 借下一秒时间
+		m_unit_id_struct.value = 0;
+		m_unit_id_struct.time++;
+	}
+	return m_unit_id_struct.ToLong();
 }

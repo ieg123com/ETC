@@ -1,6 +1,7 @@
 ﻿#include "TimerComponent.h"
 #include "Game.h"
 #include "etc/etc.h"
+#include "coroutine.h"
 
 
 class TimerActionAwakeSystem :public AwakeSystem<TimerAction, time_t, TimerAction::CallBack&, ETimerType>
@@ -101,17 +102,26 @@ void TimerComponent::Update()
 	while (!m_timeout_timerid.empty())
 	{
 		InstanceID timer_id = m_timeout_timerid.front();
-		auto found = m_timers.find(timer_id);
 		m_timeout_timerid.pop();
+		auto found = m_timers.find(timer_id);
 		if (found == m_timers.end())continue;
-		try {
-			__Run(now_time, found->second);
-		}
-		catch (std::exception& e)
-		{
-			LOG_ERROR("Timer error: 执行timer时发生错误,timer_id = {} ({})", timer_id,e.what());
-		}
+		auto timer = found->second;
+		go[=]{
+			try {
+				__Run(now_time, timer);
+			}
+			catch (std::exception& e)
+			{
+				LOG_ERROR("Timer error: 执行timer时发生错误,timer_id = {} ({})", timer_id, e.what());
+			}
+			catch (...)
+			{
+				LOG_ERROR("Timer error: 执行timer时发生错误,timer_id = {} (未知错误)");
+			}
+		};
+		
 	}
+		
 }
 
 void TimerComponent::Destroy()

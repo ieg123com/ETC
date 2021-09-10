@@ -199,6 +199,10 @@ FILE(GLOB MODULE_FILES "./module/*.cpp" "./module/*.h")
 set(MODULE_ACTOR_FILES "")
 FILE(GLOB MODULE_ACTOR_FILES "./module/actor/*.cpp" "./module/actor/*.h")
 
+# actorlocation
+set(MODULE_ACTOR_LOCATION_FILES "")
+FILE(GLOB MODULE_ACTOR_LOCATION_FILES "./module/actorlocation/*.cpp" "./module/actorlocation/*.h")
+
 # memory
 set(MODULE_MEMORY_FILES "")
 FILE(GLOB MODULE_MEMORY_FILES "./module/memory/*.cpp" "./module/memory/*.h")
@@ -211,6 +215,10 @@ FILE(GLOB MODULE_MESSAGE_FILES "./module/message/*.cpp" "./module/message/*.h")
 # message interface
 set(MODULE_MESSAGE_INTERFACE_FILES "")
 FILE(GLOB MODULE_MESSAGE_INTERFACE_FILES "./module/message/interface/*.cpp" "./module/message/interface/*.h")
+
+# coroutine
+set(MODULE_COROUTINE_FILES "")
+FILE(GLOB MODULE_COROUTINE_FILES "./module/coroutine/*.cpp" "./module/coroutine/*.h")
 
 # other
 set(MODULE_OTHER_FILES "")
@@ -225,11 +233,15 @@ set(MODULE_COMPONENT_CONFIG_FILES "")
 FILE(GLOB MODULE_COMPONENT_CONFIG_FILES "./module/component/config/*.cpp" "./module/component/config/*.h")
 
 
+
+
 source_group(module						FILES ${MODULE_FILES})
 source_group(module\\actor				FILES ${MODULE_ACTOR_FILES})
+source_group(module\\actorlocation		FILES ${MODULE_ACTOR_LOCATION_FILES})
 source_group(module\\memory				FILES ${MODULE_MEMORY_FILES})
 source_group(module\\message			FILES ${MODULE_MESSAGE_FILES})
 source_group(module\\message\\interface	FILES ${MODULE_MESSAGE_INTERFACE_FILES})
+source_group(module\\coroutine			FILES ${MODULE_COROUTINE_FILES})
 source_group(module\\other				FILES ${MODULE_OTHER_FILES})
 source_group(module\\component			FILES ${MODULE_COMPONENT_FILES})
 source_group(module\\component\\config	FILES ${MODULE_COMPONENT_CONFIG_FILES})
@@ -238,9 +250,11 @@ source_group(module\\component\\config	FILES ${MODULE_COMPONENT_CONFIG_FILES})
 LIST(APPEND ALL_OBJECT
 	${MODULE_FILES}
 	${MODULE_ACTOR_FILES}
+	${MODULE_ACTOR_LOCATION_FILES}
 	${MODULE_MEMORY_FILES}
 	${MODULE_MESSAGE_FILES}
 	${MODULE_MESSAGE_INTERFACE_FILES}
+	${MODULE_COROUTINE_FILES}
 	${MODULE_OTHER_FILES}
 	${MODULE_COMPONENT_FILES}
 	${MODULE_COMPONENT_CONFIG_FILES})
@@ -249,10 +263,10 @@ LIST(APPEND ALL_OBJECT
 
 # 通信协议
 set(PROTO_FILES "")
-FILE(GLOB PROTO_FILES "./proto/*.cc" "./proto/*.h")
+FILE(GLOB PROTO_FILES "./proto/*.cpp" "./proto/*.h")
 
 set(PROTO_OPCODE_FILES "")
-FILE(GLOB PROTO_OPCODE_FILES "./proto/opcode/*.cc" "./proto/opcode/*.h")
+FILE(GLOB PROTO_OPCODE_FILES "./proto/opcode/*.cpp" "./proto/opcode/*.h")
 
 
 source_group(proto						FILES ${PROTO_FILES})

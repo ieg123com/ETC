@@ -43,16 +43,17 @@ public:
 		}
 		bool ret = true;
 		Json new_json = json->child;
-		while(new_json = cJSON_Next(new_json))
-		{
-			t_ptr cfg = std::make_shared<T>();
-			if (!cfg->Parse(new_json)) {
-				LOG_ERROR("加载配置出错!({})", path);
-				ret = false;
-				break;
-			}
-			Insert(cfg);
-		}
+		if (new_json)
+			do
+			{
+				t_ptr cfg = std::make_shared<T>();
+				if (!cfg->Parse(new_json)) {
+					LOG_ERROR("加载配置出错!({})", path);
+					ret = false;
+					break;
+				}
+				Insert(cfg);
+			} while (new_json = cJSON_Next(new_json));
 		cJSON_Delete(json);
 		return ret;
 	}
