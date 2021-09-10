@@ -24,7 +24,7 @@ public:
 	void RegisterMessage(const uint16_t opcode, const std::shared_ptr<IMActorHandler>& handler);
 
 
-	void Handle(const std::shared_ptr<GEntity>& entity,const uint16_t opcode, IMessage* message, FMPReply& reply);
+	void Handle(const std::shared_ptr<GEntity>& entity,const uint16_t opcode, IMessage* message, const FMPReply& reply);
 
 
 

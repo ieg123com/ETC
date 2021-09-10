@@ -28,7 +28,7 @@ namespace Model
 
 	// protobuf 协议生成代码使用
 	// 用来告诉其他组件，这条请求协议的回复类型
-	class ProtoResponseMessage : public Reflection::BaseAttribute<ProtoMessage>
+	class ProtoResponseMessage : public Reflection::BaseAttribute<ProtoResponseMessage>
 	{
 	public:
 		ProtoResponseMessage(const Type& tp)

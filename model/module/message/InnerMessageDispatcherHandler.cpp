@@ -29,6 +29,7 @@ void InnerMessageDispatcherHandler::HandleIActorMessage(const int64_t actor_id, 
 	switch (mailbox_componet->MailBoxType)
 	{
 	case MailBoxType::MessageDispatcher:
+		ActorMessageDispatcherComponent::Instance->Handle(entity, message->GetOpcode(), message.get(), nullptr);
 
 		break;
 	case MailBoxType::GateSession:
@@ -63,7 +64,6 @@ void InnerMessageDispatcherHandler::HandleIActorRequest(const int64_t actor_id, 
 		return;
 	}
 
-	//auto message_req = OpcodeTypeComponent::Instance->CreateInstanceTry(request->GetOpcode());
 
 	switch (mailbox_componet->MailBoxType)
 	{

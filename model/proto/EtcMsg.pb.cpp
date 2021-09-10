@@ -37,8 +37,8 @@ REF(ActorRequest,ProtoResponseMessage(typeof(ActorResponse)));
 REF(A2L_ObjectAddRequest,ProtoResponseMessage(typeof(L2A_ObjectAddResponse)));
 REF(A2L_ObjectLockRequest,ProtoResponseMessage(typeof(L2A_ObjectLockResponse)));
 REF(A2L_ObjectUnLockRequest,ProtoResponseMessage(typeof(L2A_ObjectUnLockResponse)));
-REF(A2L_ObjectRemoveRequest,ProtoResponseMessage(typeof(L2A_AddObjectResponse)));
-REF(A2L_ObjectGetRequest,ProtoResponseMessage(typeof(L2A_AddObjectResponse)));
+REF(A2L_ObjectRemoveRequest,ProtoResponseMessage(typeof(L2A_ObjectRemoveResponse)));
+REF(A2L_ObjectGetRequest,ProtoResponseMessage(typeof(L2A_ObjectGetResponse)));
 
 namespace {
 

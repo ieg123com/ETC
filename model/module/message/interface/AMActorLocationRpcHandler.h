@@ -15,7 +15,7 @@ public:
 	static_assert(std::is_base_of<IActorLocationResponse, Response>::value,
 		"The Response type in MActorLocationRocHandler needs needs to be inherited from 'IActorLocationRepsonse'");
 
-	virtual void Handle(const std::shared_ptr<GEntity>& entity, IMessage* message, FMPReply& reply) override
+	virtual void Handle(const std::shared_ptr<GEntity>& entity, IMessage* message, const FMPReply& reply) override
 	{
 		try {
 			Request* request = dynamic_cast<Request*>(message);

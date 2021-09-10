@@ -8,6 +8,7 @@
 #include "type/type_factory.h"
 #include "opcode/EtcMsgOpcode.h"
 #include "module/message/MessageDefines.h"
+#include "etc/etc_config.h"
 
 #include <google/protobuf/stubs/common.h>
 

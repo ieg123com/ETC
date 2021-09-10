@@ -189,7 +189,9 @@ void protobuf_AssignDesc_DemoMsg_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ActorTestResponse, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ActorTestResponse, _is_default_instance_));
   ActorMessageTest_descriptor_ = file->message_type(7);
-  static const int ActorMessageTest_offsets_[1] = {
+  static const int ActorMessageTest_offsets_[2] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ActorMessageTest, rpcid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ActorMessageTest, msg_ctx_),
   };
   ActorMessageTest_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
@@ -274,8 +276,8 @@ void protobuf_AddDesc_DemoMsg_2eproto() {
     "\020ActorTestRequest\022\t\n\001A\030\001 \001(\005\022\t\n\001B\030\002 \001(\005\022"
     "\r\n\005RpcId\030Z \001(\005\"O\n\021ActorTestResponse\022\013\n\003S"
     "um\030\001 \001(\005\022\r\n\005RpcId\030Z \001(\005\022\r\n\005Error\030[ \001(\005\022\017"
-    "\n\007Message\030\\ \001(\t\"\022\n\020ActorMessageTestb\006pro"
-    "to3", 523);
+    "\n\007Message\030\\ \001(\t\"2\n\020ActorMessageTest\022\r\n\005R"
+    "pcId\030Z \001(\005\022\017\n\007msg_ctx\030\001 \001(\tb\006proto3", 555);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "DemoMsg.proto", &protobuf_RegisterTypes);
   Struct_Position::default_instance_ = new Struct_Position();
@@ -3064,6 +3066,8 @@ void ActorTestResponse::clear_message() {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int ActorMessageTest::kRpcIdFieldNumber;
+const int ActorMessageTest::kMsgCtxFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 ActorMessageTest::ActorMessageTest()
@@ -3086,7 +3090,10 @@ ActorMessageTest::ActorMessageTest(const ActorMessageTest& from)
 
 void ActorMessageTest::SharedCtor() {
     _is_default_instance_ = false;
+  ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
+  rpcid_ = 0;
+  msg_ctx_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 ActorMessageTest::~ActorMessageTest() {
@@ -3095,6 +3102,7 @@ ActorMessageTest::~ActorMessageTest() {
 }
 
 void ActorMessageTest::SharedDtor() {
+  msg_ctx_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (this != default_instance_) {
   }
 }
@@ -3126,6 +3134,8 @@ ActorMessageTest* ActorMessageTest::New(::google::protobuf::Arena* arena) const 
 
 void ActorMessageTest::Clear() {
 // @@protoc_insertion_point(message_clear_start:Model.ActorMessageTest)
+  rpcid_ = 0;
+  msg_ctx_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 bool ActorMessageTest::MergePartialFromCodedStream(
@@ -3134,16 +3144,52 @@ bool ActorMessageTest::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   // @@protoc_insertion_point(parse_start:Model.ActorMessageTest)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(16383);
     tag = p.first;
     if (!p.second) goto handle_unusual;
-  handle_unusual:
-    if (tag == 0 ||
-        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-      goto success;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional string msg_ctx = 1;
+      case 1: {
+        if (tag == 10) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_msg_ctx()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->msg_ctx().data(), this->msg_ctx().length(),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "Model.ActorMessageTest.msg_ctx"));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(720)) goto parse_RpcId;
+        break;
+      }
+
+      // optional int32 RpcId = 90;
+      case 90: {
+        if (tag == 720) {
+         parse_RpcId:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &rpcid_)));
+
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
     }
-    DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
   }
 success:
   // @@protoc_insertion_point(parse_success:Model.ActorMessageTest)
@@ -3157,12 +3203,43 @@ failure:
 void ActorMessageTest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:Model.ActorMessageTest)
+  // optional string msg_ctx = 1;
+  if (this->msg_ctx().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->msg_ctx().data(), this->msg_ctx().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "Model.ActorMessageTest.msg_ctx");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->msg_ctx(), output);
+  }
+
+  // optional int32 RpcId = 90;
+  if (this->rpcid() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(90, this->rpcid(), output);
+  }
+
   // @@protoc_insertion_point(serialize_end:Model.ActorMessageTest)
 }
 
 ::google::protobuf::uint8* ActorMessageTest::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:Model.ActorMessageTest)
+  // optional string msg_ctx = 1;
+  if (this->msg_ctx().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->msg_ctx().data(), this->msg_ctx().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "Model.ActorMessageTest.msg_ctx");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        1, this->msg_ctx(), target);
+  }
+
+  // optional int32 RpcId = 90;
+  if (this->rpcid() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(90, this->rpcid(), target);
+  }
+
   // @@protoc_insertion_point(serialize_to_array_end:Model.ActorMessageTest)
   return target;
 }
@@ -3170,6 +3247,20 @@ void ActorMessageTest::SerializeWithCachedSizes(
 int ActorMessageTest::ByteSize() const {
 // @@protoc_insertion_point(message_byte_size_start:Model.ActorMessageTest)
   int total_size = 0;
+
+  // optional int32 RpcId = 90;
+  if (this->rpcid() != 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->rpcid());
+  }
+
+  // optional string msg_ctx = 1;
+  if (this->msg_ctx().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->msg_ctx());
+  }
 
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = total_size;
@@ -3199,6 +3290,13 @@ void ActorMessageTest::MergeFrom(const ActorMessageTest& from) {
   if (GOOGLE_PREDICT_FALSE(&from == this)) {
     ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
   }
+  if (from.rpcid() != 0) {
+    set_rpcid(from.rpcid());
+  }
+  if (from.msg_ctx().size() > 0) {
+
+    msg_ctx_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.msg_ctx_);
+  }
 }
 
 void ActorMessageTest::CopyFrom(const ::google::protobuf::Message& from) {
@@ -3225,6 +3323,8 @@ void ActorMessageTest::Swap(ActorMessageTest* other) {
   InternalSwap(other);
 }
 void ActorMessageTest::InternalSwap(ActorMessageTest* other) {
+  std::swap(rpcid_, other->rpcid_);
+  msg_ctx_.Swap(&other->msg_ctx_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -3239,6 +3339,64 @@ void ActorMessageTest::InternalSwap(ActorMessageTest* other) {
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // ActorMessageTest
+
+// optional int32 RpcId = 90;
+void ActorMessageTest::clear_rpcid() {
+  rpcid_ = 0;
+}
+ ::google::protobuf::int32 ActorMessageTest::rpcid() const {
+  // @@protoc_insertion_point(field_get:Model.ActorMessageTest.RpcId)
+  return rpcid_;
+}
+ void ActorMessageTest::set_rpcid(::google::protobuf::int32 value) {
+  
+  rpcid_ = value;
+  // @@protoc_insertion_point(field_set:Model.ActorMessageTest.RpcId)
+}
+
+// optional string msg_ctx = 1;
+void ActorMessageTest::clear_msg_ctx() {
+  msg_ctx_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ const ::std::string& ActorMessageTest::msg_ctx() const {
+  // @@protoc_insertion_point(field_get:Model.ActorMessageTest.msg_ctx)
+  return msg_ctx_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void ActorMessageTest::set_msg_ctx(const ::std::string& value) {
+  
+  msg_ctx_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:Model.ActorMessageTest.msg_ctx)
+}
+ void ActorMessageTest::set_msg_ctx(const char* value) {
+  
+  msg_ctx_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:Model.ActorMessageTest.msg_ctx)
+}
+ void ActorMessageTest::set_msg_ctx(const char* value, size_t size) {
+  
+  msg_ctx_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:Model.ActorMessageTest.msg_ctx)
+}
+ ::std::string* ActorMessageTest::mutable_msg_ctx() {
+  
+  // @@protoc_insertion_point(field_mutable:Model.ActorMessageTest.msg_ctx)
+  return msg_ctx_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ ::std::string* ActorMessageTest::release_msg_ctx() {
+  // @@protoc_insertion_point(field_release:Model.ActorMessageTest.msg_ctx)
+  
+  return msg_ctx_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void ActorMessageTest::set_allocated_msg_ctx(::std::string* msg_ctx) {
+  if (msg_ctx != NULL) {
+    
+  } else {
+    
+  }
+  msg_ctx_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), msg_ctx);
+  // @@protoc_insertion_point(field_set_allocated:Model.ActorMessageTest.msg_ctx)
+}
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 

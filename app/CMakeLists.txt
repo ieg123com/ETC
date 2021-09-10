@@ -139,6 +139,8 @@ if(MSVC)
 	
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT /EHa")
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd /EHa")
+
+	add_definitions(-DLIBETCREF_STATIC)
 else()
 	target_link_libraries(app mysqlclient libgo)
 endif()

@@ -82,7 +82,7 @@ message L2A_ObjectUnLockResponse	// IActorResponse
 }
 
 // Location 移除对象消息
-// ResponseType L2A_AddObjectResponse
+// ResponseType L2A_ObjectRemoveResponse
 message A2L_ObjectRemoveRequest	// IActorRequest
 {
 	int32 RpcId = 90;
@@ -99,7 +99,7 @@ message L2A_ObjectRemoveResponse	// IActorResponse
 }
 
 // Location 获取对象消息
-// ResponseType L2A_AddObjectResponse
+// ResponseType L2A_ObjectGetResponse
 message A2L_ObjectGetRequest	// IActorRequest
 {
 	int32 RpcId = 90;

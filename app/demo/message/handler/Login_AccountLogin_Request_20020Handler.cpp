@@ -1,7 +1,7 @@
 #include "model/module/message.h"
 #include "model/module/other/AppType.h"
-#include "model/proto/login.pb.h"
-#include "model/proto/EtcMsg.pb.h"
+#include "model/proto/DemoMsg.pb.h"
+#include "model/proto/Login.pb.h"
 #include "demo/Entity/PlayerEntity.h"
 #include "model/module/actor/MailBoxComponent.h"
 

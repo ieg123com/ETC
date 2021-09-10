@@ -65,7 +65,8 @@ message ActorTestResponse	// IActorResponse
 
 message ActorMessageTest// IActorMessage
 {
-	
+	int32 RpcId = 90;
+	string msg_ctx = 1;
 }
 
 

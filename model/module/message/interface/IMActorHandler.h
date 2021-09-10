@@ -11,6 +11,6 @@ class IMActorHandler :
 	public IMSystemHandler
 {
 public:
-	virtual void Handle(const std::shared_ptr<GEntity>& entity, IMessage* message, FMPReply& reply) = 0;
+	virtual void Handle(const std::shared_ptr<GEntity>& entity, IMessage* message, const FMPReply& reply) = 0;
 
 };

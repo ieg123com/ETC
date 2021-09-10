@@ -8,6 +8,7 @@
 #include "type/type_factory.h"
 #include "opcode/DemoMsgOpcode.h"
 #include "module/message/MessageDefines.h"
+#include "etc/etc_config.h"
 
 #include <google/protobuf/stubs/common.h>
 
@@ -851,11 +852,30 @@ class ActorMessageTest : public IActorMessage /* @@protoc_insertion_point(class_
 
   // accessors -------------------------------------------------------
 
+  // optional int32 RpcId = 90;
+  void clear_rpcid();
+  static const int kRpcIdFieldNumber = 90;
+  ::google::protobuf::int32 rpcid() const;
+  void set_rpcid(::google::protobuf::int32 value);
+
+  // optional string msg_ctx = 1;
+  void clear_msg_ctx();
+  static const int kMsgCtxFieldNumber = 1;
+  const ::std::string& msg_ctx() const;
+  void set_msg_ctx(const ::std::string& value);
+  void set_msg_ctx(const char* value);
+  void set_msg_ctx(const char* value, size_t size);
+  ::std::string* mutable_msg_ctx();
+  ::std::string* release_msg_ctx();
+  void set_allocated_msg_ctx(::std::string* msg_ctx);
+
   // @@protoc_insertion_point(class_scope:Model.ActorMessageTest)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   bool _is_default_instance_;
+  ::google::protobuf::internal::ArenaStringPtr msg_ctx_;
+  ::google::protobuf::int32 rpcid_;
   mutable int _cached_size_;
   friend void  protobuf_AddDesc_DemoMsg_2eproto();
   friend void protobuf_AssignDesc_DemoMsg_2eproto();
@@ -1327,6 +1347,64 @@ inline void ActorTestResponse::set_allocated_message(::std::string* message) {
 // -------------------------------------------------------------------
 
 // ActorMessageTest
+
+// optional int32 RpcId = 90;
+inline void ActorMessageTest::clear_rpcid() {
+  rpcid_ = 0;
+}
+inline ::google::protobuf::int32 ActorMessageTest::rpcid() const {
+  // @@protoc_insertion_point(field_get:Model.ActorMessageTest.RpcId)
+  return rpcid_;
+}
+inline void ActorMessageTest::set_rpcid(::google::protobuf::int32 value) {
+  
+  rpcid_ = value;
+  // @@protoc_insertion_point(field_set:Model.ActorMessageTest.RpcId)
+}
+
+// optional string msg_ctx = 1;
+inline void ActorMessageTest::clear_msg_ctx() {
+  msg_ctx_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& ActorMessageTest::msg_ctx() const {
+  // @@protoc_insertion_point(field_get:Model.ActorMessageTest.msg_ctx)
+  return msg_ctx_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void ActorMessageTest::set_msg_ctx(const ::std::string& value) {
+  
+  msg_ctx_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:Model.ActorMessageTest.msg_ctx)
+}
+inline void ActorMessageTest::set_msg_ctx(const char* value) {
+  
+  msg_ctx_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:Model.ActorMessageTest.msg_ctx)
+}
+inline void ActorMessageTest::set_msg_ctx(const char* value, size_t size) {
+  
+  msg_ctx_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:Model.ActorMessageTest.msg_ctx)
+}
+inline ::std::string* ActorMessageTest::mutable_msg_ctx() {
+  
+  // @@protoc_insertion_point(field_mutable:Model.ActorMessageTest.msg_ctx)
+  return msg_ctx_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* ActorMessageTest::release_msg_ctx() {
+  // @@protoc_insertion_point(field_release:Model.ActorMessageTest.msg_ctx)
+  
+  return msg_ctx_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void ActorMessageTest::set_allocated_msg_ctx(::std::string* msg_ctx) {
+  if (msg_ctx != NULL) {
+    
+  } else {
+    
+  }
+  msg_ctx_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), msg_ctx);
+  // @@protoc_insertion_point(field_set_allocated:Model.ActorMessageTest.msg_ctx)
+}
 
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
 // -------------------------------------------------------------------

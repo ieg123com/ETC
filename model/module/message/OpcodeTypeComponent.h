@@ -73,15 +73,15 @@ public:
 	uint16_t GetTypeOpcodeTry(const Type& tp)const;
 
 	// 获取消息类型
-	Type GetOpcodeTypeTry(const int16_t opcode)const;
+	Type GetOpcodeTypeTry(const uint16_t opcode)const;
 
 	// 获取回复消息类型
 	Type GetResponseTypeTry(const Type& tp)const;
 
 	// 获取回复消息id
-	uint16_t GetResponseOpcodeTry(const int16_t opcode);
+	uint16_t GetResponseOpcodeTry(const uint16_t opcode);
 
-	EMessageType GetMessageType(const int16_t opcode);
+	EMessageType GetMessageType(const uint16_t opcode);
 };
 
 
@@ -104,7 +104,7 @@ inline uint16_t OpcodeTypeComponent::GetTypeOpcodeTry(const Type& tp)const
 	return found->second;
 }
 
-inline Type OpcodeTypeComponent::GetOpcodeTypeTry(const int16_t opcode)const
+inline Type OpcodeTypeComponent::GetOpcodeTypeTry(const uint16_t opcode)const
 {
 	if (m_opcode_types[opcode])
 	{
@@ -123,7 +123,7 @@ inline Type OpcodeTypeComponent::GetResponseTypeTry(const Type& tp)const
 	return found->second;
 }
 
-inline uint16_t OpcodeTypeComponent::GetResponseOpcodeTry(const int16_t opcode)
+inline uint16_t OpcodeTypeComponent::GetResponseOpcodeTry(const uint16_t opcode)
 {
 	if (m_opcode_request_response[opcode] != 0)
 	{
@@ -135,7 +135,7 @@ inline uint16_t OpcodeTypeComponent::GetResponseOpcodeTry(const int16_t opcode)
 	return response_opcode;
 }
 
-inline EMessageType OpcodeTypeComponent::GetMessageType(const int16_t opcode)
+inline EMessageType OpcodeTypeComponent::GetMessageType(const uint16_t opcode)
 {
 	return m_opcode_msg_types[opcode];
 }

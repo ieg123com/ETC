@@ -23,7 +23,7 @@ void ActorMessageDispatcherComponent::RegisterMessage(const uint16_t opcode, con
 
 }
 
-void ActorMessageDispatcherComponent::Handle(const std::shared_ptr<GEntity>& entity, const uint16_t opcode, IMessage* message, FMPReply& reply)
+void ActorMessageDispatcherComponent::Handle(const std::shared_ptr<GEntity>& entity, const uint16_t opcode, IMessage* message, const FMPReply& reply)
 {
 	if (m_mactor_handler[opcode])
 	{

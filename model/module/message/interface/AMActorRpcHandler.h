@@ -14,7 +14,7 @@ public:
 		"The Request type in MActorRpcHandler needs needs to be inherited from 'IActorRequest'");
 	static_assert(std::is_base_of<IActorResponse, Response>::value,
 		"The Response type in MActorRpcHandler needs needs to be inherited from 'IActorResponse'");
-	virtual void Handle(const std::shared_ptr<GEntity>& entity, IMessage* message, FMPReply& reply) override
+	virtual void Handle(const std::shared_ptr<GEntity>& entity, IMessage* message, const FMPReply& reply) override
 	{
 		try
 		{

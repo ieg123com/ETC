@@ -11,7 +11,7 @@
 
 #undef GetMessage
 
-
+using Opcode = uint16_t;
 
 // 消息协议接口
 class IMessage :public ::google::protobuf::Message, public Model::ISupportTypeCreation 
