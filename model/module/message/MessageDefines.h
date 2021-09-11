@@ -40,12 +40,7 @@ public:
 	virtual void SetMessage(const ::std::string& val) = 0;
 };
 
-class IActorMessage : public IMessage
-{
-public:
-	virtual int32_t GetRpcId()const = 0;
-	virtual void SetRpcId(const int32_t val) = 0;
-};
+class IActorMessage : public IMessage {};
 
 class IActorRequest : public IRequest {};
 

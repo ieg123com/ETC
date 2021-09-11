@@ -16,13 +16,13 @@ namespace Model
 		template<typename T>
 		std::shared_ptr<T> AddComponent(const bool from_pool = true) {
 
-			if (m_component.find(typeof(T)) != m_component.end())
+			if (m_component.find(to_typeindex<T>()) != m_component.end())
 			{
 				throw std::exception("添加的组件已存在!");
 			}
 			auto obj = ObjectFactory::CreateWithHost<T>(shared_from_this(), from_pool);
 
-			m_component.insert(std::make_pair(typeof(T), obj));
+			m_component.insert(std::make_pair(to_typeindex<T>(), obj));
 
 			return obj;
 		}
@@ -30,13 +30,13 @@ namespace Model
 		template<typename T,typename A>
 		std::shared_ptr<T> AddComponent(A a,const bool from_pool = true) {
 
-			if (m_component.find(typeof(T)) != m_component.end())
+			if (m_component.find(to_typeindex<T>()) != m_component.end())
 			{
 				throw std::exception("添加的组件已存在!");
 			}
 			auto obj = ObjectFactory::CreateWithHost<T,A>(shared_from_this(), a,from_pool);
 
-			m_component.insert(std::make_pair(typeof(T), obj));
+			m_component.insert(std::make_pair(to_typeindex<T>(), obj));
 
 			return obj;
 		}
@@ -44,13 +44,13 @@ namespace Model
 		template<typename T, typename A,typename B>
 		std::shared_ptr<T> AddComponent(A a,B b, const bool from_pool = true) {
 
-			if (m_component.find(typeof(T)) != m_component.end())
+			if (m_component.find(to_typeindex<T>()) != m_component.end())
 			{
 				throw std::exception("添加的组件已存在!");
 			}
 			auto obj = ObjectFactory::CreateWithHost<T, A,B>(shared_from_this(), a,b, from_pool);
 
-			m_component.insert(std::make_pair(typeof(T), obj));
+			m_component.insert(std::make_pair(to_typeindex<T>(), obj));
 
 			return obj;
 		}
@@ -58,13 +58,13 @@ namespace Model
 		template<typename T, typename A, typename B,typename C>
 		std::shared_ptr<T> AddComponent(A a, B b,C c, const bool from_pool = true) {
 
-			if (m_component.find(typeof(T)) != m_component.end())
+			if (m_component.find(to_typeindex<T>()) != m_component.end())
 			{
 				throw std::exception("添加的组件已存在!");
 			}
 			auto obj = ObjectFactory::CreateWithHost<T, A, B,C>(shared_from_this(), a, b,c, from_pool);
 
-			m_component.insert(std::make_pair(typeof(T), obj));
+			m_component.insert(std::make_pair(to_typeindex<T>(), obj));
 
 			return obj;
 		}
@@ -73,7 +73,7 @@ namespace Model
 
 		template<typename T>
 		std::shared_ptr<T> GetComponent() {
-			auto find_obj = m_component.find(typeof(T));
+			auto find_obj = m_component.find(to_typeindex<T>());
 			if (find_obj == m_component.end())
 			{
 				return nullptr;
@@ -83,7 +83,7 @@ namespace Model
 
 		template<typename T>
 		void RemoveComponent() {
-			auto find_obj = m_component.find(typeof(T));
+			auto find_obj = m_component.find(to_typeindex<T>());
 			if (find_obj != m_component.end())
 			{
 				auto obj = find_obj->second;
@@ -97,7 +97,9 @@ namespace Model
 		virtual void Dispose() override;
 
 	private:
-		std::unordered_map<Type, std::shared_ptr<Component>>	m_component;
+
+	private:
+		std::unordered_map<TypeIndex, std::shared_ptr<Component>>	m_component;
 
 
 

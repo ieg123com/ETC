@@ -1,5 +1,6 @@
 #pragma once
 #include "kernel/Entity.h"
+#include "etc/etc_err.h"
 
 using namespace Model;
 
@@ -12,6 +13,6 @@ public:
 	// 最后发送时间
 	time_t		LastSendTime;
 
-	
+	ETC_ERR		Error;
 
 };

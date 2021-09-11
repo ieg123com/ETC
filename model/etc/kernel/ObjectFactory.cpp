@@ -8,6 +8,7 @@ namespace Model
 	std::shared_ptr<Object> ObjectFactory::Create(const std::string& type_name, const bool from_pool) {
 		if (auto obj = InternalCreate(type_name, from_pool))
 		{
+			obj->Id = IdGenerator::GenId();
 			Game::Event().Awake(obj);
 			Game::Event().Load(obj);
 			return obj;
@@ -19,6 +20,7 @@ namespace Model
 	{
 		if (auto obj = InternalCreate(type_name, from_pool))
 		{
+			obj->Id = IdGenerator::GenId();
 			Game::Event().Awake(obj);
 			Game::Event().Load(obj);
 			return obj;
@@ -30,7 +32,8 @@ namespace Model
 	{
 		if (auto obj = InternalCreate(type_name, from_pool))
 		{
-			obj->m_host = host;
+			obj->Id = IdGenerator::GenId();
+			host->AddChild(obj);
 			Game::Event().Awake(obj);
 			Game::Event().Load(obj);
 			return obj;
@@ -42,7 +45,8 @@ namespace Model
 	{
 		if (auto obj = InternalCreate(type_name, from_pool))
 		{
-			obj->m_host = host;
+			obj->Id = IdGenerator::GenId();
+			host->AddChild(obj);
 			Game::Event().Awake(obj);
 			Game::Event().Load(obj);
 			return obj;

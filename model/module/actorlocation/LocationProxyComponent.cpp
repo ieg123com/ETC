@@ -5,8 +5,9 @@
 #include "proto/EtcMsg.pb.h"
 
 
+LocationProxyComponent* LocationProxyComponent::Instance = nullptr;
 
-void LocationProxyComponent::Add(const int64_t key, const int64_t instance_id)
+void LocationProxyComponent::Add(const ID key, const InstanceID instance_id)
 {
 	auto request = std::make_shared<A2L_ObjectAddRequest>();
 	request->set_key(key);
@@ -14,7 +15,7 @@ void LocationProxyComponent::Add(const int64_t key, const int64_t instance_id)
 	ActorMessageSenderComponent::Instance->Call(GetLocationAppId(key), request);
 }
 
-void LocationProxyComponent::Lock(const int64_t key, const int64_t instance_id, const int32_t time)
+void LocationProxyComponent::Lock(const ID key, const InstanceID instance_id, const time_t time)
 {
 	auto request = std::make_shared<A2L_ObjectLockRequest>();
 	request->set_key(key);
@@ -23,7 +24,7 @@ void LocationProxyComponent::Lock(const int64_t key, const int64_t instance_id, 
 	ActorMessageSenderComponent::Instance->Call(GetLocationAppId(key), request);
 }
 
-void LocationProxyComponent::UnLock(const int64_t key, const int64_t old_instance_id, const int64_t instance_id)
+void LocationProxyComponent::UnLock(const ID key, const InstanceID old_instance_id, const InstanceID instance_id)
 {
 	auto request = std::make_shared<A2L_ObjectUnLockRequest>();
 	request->set_key(key);
@@ -32,14 +33,14 @@ void LocationProxyComponent::UnLock(const int64_t key, const int64_t old_instanc
 	ActorMessageSenderComponent::Instance->Call(GetLocationAppId(key), request);
 }
 
-void LocationProxyComponent::Remove(const int64_t key)
+void LocationProxyComponent::Remove(const ID key)
 {
 	auto request = std::make_shared<A2L_ObjectRemoveRequest>();
 	request->set_key(key);
 	ActorMessageSenderComponent::Instance->Call(GetLocationAppId(key), request);
 }
 
-int64_t LocationProxyComponent::Get(const int64_t key)
+InstanceID LocationProxyComponent::Get(const ID key)
 {
 	if (key == 0)
 	{
@@ -51,7 +52,7 @@ int64_t LocationProxyComponent::Get(const int64_t key)
 	return resqouse->instanceid();
 }
 
-InstanceID LocationProxyComponent::GetLocationAppId(const int64_t key)
+InstanceID LocationProxyComponent::GetLocationAppId(const InstanceID key)
 {
 	return StartConfigComponent::Instance->LocationConfig->InstanceId;
 }

@@ -5,7 +5,7 @@
 #include "module/actor/ActorMessageSenderComponent.h"
 #include "proto/EtcMsg.pb.h"
 
-void InnerMessageDispatcherHandler::HandleIActorMessage(const int64_t actor_id, const std::shared_ptr<IActorMessage>& message, FMPReply& reply)
+void InnerMessageDispatcherHandler::HandleIActorMessage(const int64_t actor_id, const std::shared_ptr<IActorMessage>& message)
 {
 	std::shared_ptr<GEntity> entity;
 	if (auto obj = Game::Event().GetObject(actor_id))
@@ -15,14 +15,18 @@ void InnerMessageDispatcherHandler::HandleIActorMessage(const int64_t actor_id, 
 	if (entity == nullptr)
 	{
 		// 没有找到acotr
-		FailResponse(message->GetOpcode(), ETC_ERR::NotFoundActor, reply);
+		LOG_ERROR("not found actor: {} {}",
+			actor_id,
+			message->GetType().full_name());
 		return;
 	}
 	auto mailbox_componet = entity->GetComponent<MailBoxComponent>();
 	if (mailbox_componet == nullptr)
 	{
 		// Actor中没有MailBoxComponent
-		FailResponse(message->GetOpcode(), ETC_ERR::ActorNoMailBoxComponent, reply);
+		LOG_ERROR("actor not add MailBoxComponent : {} {}",
+			entity->GetObjectType().GetName(),
+			message->GetType().full_name());
 		return;
 	}
 
@@ -43,7 +47,7 @@ void InnerMessageDispatcherHandler::HandleIActorMessage(const int64_t actor_id, 
 
 }
 
-void InnerMessageDispatcherHandler::HandleIActorRequest(const int64_t actor_id, const std::shared_ptr<IActorRequest>& request, FMPReply& reply)
+void InnerMessageDispatcherHandler::HandleIActorRequest(const int64_t actor_id, const std::shared_ptr<IActorRequest>& request, const FMPReply& reply)
 {
 	std::shared_ptr<GEntity> entity;
 	if (auto obj = Game::Event().GetObject(actor_id))
@@ -83,7 +87,7 @@ void InnerMessageDispatcherHandler::HandleIActorResponse(const int64_t actor_id,
 	ActorMessageSenderComponent::Instance->RunMessage(actor_id, response);
 }
 
-void InnerMessageDispatcherHandler::FailResponse(const uint16_t opcode, const ETC_ERR error, FMPReply& reply)
+void InnerMessageDispatcherHandler::FailResponse(const uint16_t opcode, const ETC_ERR error, const FMPReply& reply)
 {
 	auto message = OpcodeTypeComponent::Instance->CreateResponseInstanceTry(opcode);
 	if (auto response = dynamic_cast<IResponse*>(message.get()))

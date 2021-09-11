@@ -44,13 +44,7 @@ void InnerMessageDispatcher::Dispatch(const std::shared_ptr<Session>& session, c
 	case EMessageType::IActorMessage:
 	{
 		auto message = std::dynamic_pointer_cast<IActorMessage>(proto_message);
-		InstanceID instance_id = session->InstanceId();
-		FMPReply reply = [=](IResponse* response)->void {
-			if (session->InstanceId() != instance_id)return;// 在处理消息的这段时间，会话已经被断开了
-			response->SetRpcId(message->GetRpcId());
-			session->Reply(response);
-		};
-		InnerMessageDispatcherHandler::HandleIActorMessage(actor_id, message, reply);
+		InnerMessageDispatcherHandler::HandleIActorMessage(actor_id, message);
 	}
 		break;
 	case EMessageType::IActorRequest:

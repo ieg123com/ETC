@@ -22,15 +22,28 @@ namespace Model
 			Game::System().m_ObjectDebug.DeductObject(m_object_type.GetName());
 	}
 
+
 	void Object::Dispose() {
 		if (IsDisposed())return;
 		m_disposed = true;
-		Game::Event().Destroy(shared_from_this());
 
+		// 清理Children对象
+		auto children = std::move(Children);
+		for (auto& item : children)
+		{
+			item.second->Dispose();
+		}
+		children.clear();
+		// 将自己从父对象移除
+		if (m_host)m_host->RemoveChild(Self());
+
+		// 发送销毁事件
+		Game::Event().Destroy(shared_from_this());
 		Game::Event().RemoveObject(shared_from_this());
 
 		m_host.reset();
 		m_instance_id = 0;
+		Id = 0;
 
 
 		if (m_is_from_pool == true)

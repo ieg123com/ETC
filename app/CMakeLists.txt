@@ -83,6 +83,11 @@ FILE(GLOB MODULE_ACTOR_FILES "./module/actor/*.cpp" "./module/actor/*.h")
 set(MODULE_ACTOR_HANDLER_FILES "")
 FILE(GLOB MODULE_ACTOR_HANDLER_FILES "./module/actor/handler/*.cpp" "./module/actor/handler/*.h")
 
+
+# actor location
+set(MODULE_ACTOR_LOCATION_FILES "")
+FILE(GLOB MODULE_ACTOR_LOCATION_FILES "./module/actorlocation/*.cpp" "./module/actorlocation/*.h")
+
 source_group(module						FILES ${MODULE_FILES})
 source_group(module\\message			FILES ${MODULE_MESSAGE_FILES})
 source_group(module\\component			FILES ${MODULE_COMPONENT_FILES})
@@ -93,6 +98,7 @@ source_group(module\\handler\\etc_msg	FILES ${MODULE_HANDLER_ETC_MSG_FILES})
 source_group(module\\init				FILES ${MODULE_INIT_FILES})
 source_group(module\\actor				FILES ${MODULE_ACTOR_FILES})
 source_group(module\\actor\\handler		FILES ${MODULE_ACTOR_HANDLER_FILES})
+source_group(module\\actorlocation		FILES ${MODULE_ACTOR_LOCATION_FILES})
 
 
 LIST(APPEND ALL_OBJECT
@@ -105,7 +111,8 @@ LIST(APPEND ALL_OBJECT
 	${MODULE_HANDLER_ETC_MSG_FILES}
 	${MODULE_INIT_FILES}
 	${MODULE_ACTOR_FILES}
-	${MODULE_ACTOR_HANDLER_FILES})
+	${MODULE_ACTOR_HANDLER_FILES}
+	${MODULE_ACTOR_LOCATION_FILES})
 
 #========================Demo加载==============================
 
@@ -141,6 +148,9 @@ if(MSVC)
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd /EHa")
 
 	add_definitions(-DLIBETCREF_STATIC)
+			# 测试配置生成
+	#add_test(app WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+	add_test(app --AppId=1 --AppType=AllServer)
 else()
 	target_link_libraries(app mysqlclient libgo)
 endif()

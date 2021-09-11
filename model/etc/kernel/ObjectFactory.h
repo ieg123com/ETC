@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Game.h"
+#include "IdGenerator.h"
 
 namespace Model
 {
@@ -14,6 +15,7 @@ namespace Model
 			static_assert(std::is_base_of<Object, T>::value,
 				"The create object must inherit Object!");
 			auto obj = InternalCreate<T>(0,from_pool);
+			obj->Id = IdGenerator::GenId();
 			Game::Event().Awake(obj);
 			Game::Event().Load(obj);
 			return obj;
@@ -25,7 +27,8 @@ namespace Model
 			static_assert(std::is_base_of<Object, T>::value,
 				"The create object must inherit Object!");
 			auto obj = InternalCreate<T>(0,from_pool);
-			Game::Event().Awake<A>(obj,a);
+			obj->Id = IdGenerator::GenId();
+			Game::Event().Awake<A>(obj, a);
 			Game::Event().Load(obj);
 			return obj;
 		}
@@ -36,7 +39,8 @@ namespace Model
 			static_assert(std::is_base_of<Object, T>::value,
 				"The create object must inherit Object!");
 			auto obj = InternalCreate<T>(0,from_pool);
-			Game::Event().Awake<A,B>(obj, a,b);
+			obj->Id = IdGenerator::GenId();
+			Game::Event().Awake<A, B>(obj, a, b);
 			Game::Event().Load(obj);
 			return obj;
 		}
@@ -47,7 +51,8 @@ namespace Model
 			static_assert(std::is_base_of<Object, T>::value,
 				"The create object must inherit Object!");
 			auto obj = InternalCreate<T>(0,from_pool);
-			Game::Event().Awake<A, B,C>(obj, a, b,c);
+			obj->Id = IdGenerator::GenId();
+			Game::Event().Awake<A, B, C>(obj, a, b, c);
 			Game::Event().Load(obj);
 			return obj;
 		}
@@ -56,7 +61,6 @@ namespace Model
 		static std::shared_ptr<Object> TryCreate(const std::string& type_name, const bool from_pool = false);
 #pragma endregion
 
-
 #pragma region CreateWithInstanceId
 		template<typename T>
 		static std::shared_ptr<T> CreateWithInstanceId(const InstanceID instance_id,const bool from_pool = false) {
@@ -64,6 +68,7 @@ namespace Model
 			static_assert(std::is_base_of<Object, T>::value,
 				"The create object must inherit Object!");
 			auto obj = InternalCreate<T>(instance_id, from_pool);
+			obj->Id = IdGenerator::GenId();
 			Game::Event().Awake(obj);
 			Game::Event().Load(obj);
 			return obj;
@@ -75,6 +80,7 @@ namespace Model
 			static_assert(std::is_base_of<Object, T>::value,
 				"The create object must inherit Object!");
 			auto obj = InternalCreate<T>(instance_id, from_pool);
+			obj->Id = IdGenerator::GenId();
 			Game::Event().Awake<A>(obj, a);
 			Game::Event().Load(obj);
 			return obj;
@@ -86,6 +92,7 @@ namespace Model
 			static_assert(std::is_base_of<Object, T>::value,
 				"The create object must inherit Object!");
 			auto obj = InternalCreate<T>(instance_id, from_pool);
+			obj->Id = IdGenerator::GenId();
 			Game::Event().Awake<A, B>(obj, a, b);
 			Game::Event().Load(obj);
 			return obj;
@@ -97,6 +104,165 @@ namespace Model
 			static_assert(std::is_base_of<Object, T>::value,
 				"The create object must inherit Object!");
 			auto obj = InternalCreate<T>(instance_id, from_pool);
+			obj->Id = IdGenerator::GenId();
+			Game::Event().Awake<A, B, C>(obj, a, b, c);
+			Game::Event().Load(obj);
+			return obj;
+		}
+#pragma endregion
+
+#pragma region CreateWithHostAndInstanceId
+		template<typename T>
+		static std::shared_ptr<T> CreateWithHostAndInstanceId(const std::shared_ptr<Object>& host, const InstanceID instance_id, const bool from_pool = false) {
+			// 对象必须继承 Object
+			static_assert(std::is_base_of<Object, T>::value,
+				"The create object must inherit Object!");
+			auto obj = InternalCreate<T>(instance_id, from_pool);
+			obj->Id = IdGenerator::GenId();
+			host->AddChild(obj);
+			Game::Event().Awake(obj);
+			Game::Event().Load(obj);
+			return obj;
+		}
+
+		template<typename T, typename A>
+		static std::shared_ptr<T> CreateWithHostAndInstanceId(const std::shared_ptr<Object>& host, const InstanceID instance_id, A a, const bool from_pool = false) {
+			// 对象必须继承 Object
+			static_assert(std::is_base_of<Object, T>::value,
+				"The create object must inherit Object!");
+			auto obj = InternalCreate<T>(instance_id, from_pool);
+			obj->Id = IdGenerator::GenId();
+			host->AddChild(obj);
+			Game::Event().Awake<A>(obj, a);
+			Game::Event().Load(obj);
+			return obj;
+		}
+
+		template<typename T, typename A, typename B>
+		static std::shared_ptr<T> CreateWithHostAndInstanceId(const std::shared_ptr<Object>& host, const InstanceID instance_id, A a, B b, const bool from_pool = false) {
+			// 对象必须继承 Object
+			static_assert(std::is_base_of<Object, T>::value,
+				"The create object must inherit Object!");
+			auto obj = InternalCreate<T>(instance_id, from_pool);
+			obj->Id = IdGenerator::GenId();
+			host->AddChild(obj);
+			Game::Event().Awake<A, B>(obj, a, b);
+			Game::Event().Load(obj);
+			return obj;
+		}
+
+		template<typename T, typename A, typename B, typename C>
+		static std::shared_ptr<T> CreateWithHostAndInstanceId(const std::shared_ptr<Object>& host, const InstanceID instance_id, A a, B b, C c, const bool from_pool = false) {
+			// 对象必须继承 Object
+			static_assert(std::is_base_of<Object, T>::value,
+				"The create object must inherit Object!");
+			auto obj = InternalCreate<T>(instance_id, from_pool);
+			obj->Id = IdGenerator::GenId();
+			host->AddChild(obj);
+			Game::Event().Awake<A, B, C>(obj, a, b, c);
+			Game::Event().Load(obj);
+			return obj;
+		}
+#pragma endregion
+
+#pragma region CreateWithId
+		template<typename T>
+		static std::shared_ptr<T> CreateWithId(const ID id, const bool from_pool = false) {
+			// 对象必须继承 Object
+			static_assert(std::is_base_of<Object, T>::value,
+				"The create object must inherit Object!");
+			auto obj = InternalCreate<T>(0, from_pool);
+			obj->Id = id;
+			Game::Event().Awake(obj);
+			Game::Event().Load(obj);
+			return obj;
+		}
+
+		template<typename T, typename A>
+		static std::shared_ptr<T> CreateWithId(const ID id, A a, const bool from_pool = false) {
+			// 对象必须继承 Object
+			static_assert(std::is_base_of<Object, T>::value,
+				"The create object must inherit Object!");
+			auto obj = InternalCreate<T>(0, from_pool);
+			obj->Id = id;
+			Game::Event().Awake<A>(obj, a);
+			Game::Event().Load(obj);
+			return obj;
+		}
+
+		template<typename T, typename A, typename B>
+		static std::shared_ptr<T> CreateWithId(const ID id, A a, B b, const bool from_pool = false) {
+			// 对象必须继承 Object
+			static_assert(std::is_base_of<Object, T>::value,
+				"The create object must inherit Object!");
+			auto obj = InternalCreate<T>(0, from_pool);
+			obj->Id = id;
+			Game::Event().Awake<A, B>(obj, a, b);
+			Game::Event().Load(obj);
+			return obj;
+		}
+
+		template<typename T, typename A, typename B, typename C>
+		static std::shared_ptr<T> CreateWithId(const ID id, A a, B b, C c, const bool from_pool = false) {
+			// 对象必须继承 Object
+			static_assert(std::is_base_of<Object, T>::value,
+				"The create object must inherit Object!");
+			auto obj = InternalCreate<T>(0, from_pool);
+			obj->Id = id;
+			Game::Event().Awake<A, B, C>(obj, a, b, c);
+			Game::Event().Load(obj);
+			return obj;
+		}
+#pragma endregion
+
+#pragma region CreateWithHostAndId
+		template<typename T>
+		static std::shared_ptr<T> CreateWithHostAndId(const std::shared_ptr<Object>& host, const ID id, const bool from_pool = false) {
+			// 对象必须继承 Object
+			static_assert(std::is_base_of<Object, T>::value,
+				"The create object must inherit Object!");
+			auto obj = InternalCreate<T>(0, from_pool);
+			obj->Id = id;
+			host->AddChild(obj);
+			Game::Event().Awake(obj);
+			Game::Event().Load(obj);
+			return obj;
+		}
+
+		template<typename T, typename A>
+		static std::shared_ptr<T> CreateWithHostAndId(const std::shared_ptr<Object>& host, const ID id, A a, const bool from_pool = false) {
+			// 对象必须继承 Object
+			static_assert(std::is_base_of<Object, T>::value,
+				"The create object must inherit Object!");
+			auto obj = InternalCreate<T>(0, from_pool);
+			obj->Id = id;
+			host->AddChild(obj);
+			Game::Event().Awake<A>(obj, a);
+			Game::Event().Load(obj);
+			return obj;
+		}
+
+		template<typename T, typename A, typename B>
+		static std::shared_ptr<T> CreateWithHostAndId(const std::shared_ptr<Object>& host, const ID id, A a, B b, const bool from_pool = false) {
+			// 对象必须继承 Object
+			static_assert(std::is_base_of<Object, T>::value,
+				"The create object must inherit Object!");
+			auto obj = InternalCreate<T>(0, from_pool);
+			obj->Id = id;
+			host->AddChild(obj);
+			Game::Event().Awake<A, B>(obj, a, b);
+			Game::Event().Load(obj);
+			return obj;
+		}
+
+		template<typename T, typename A, typename B, typename C>
+		static std::shared_ptr<T> CreateWithHostAndId(const std::shared_ptr<Object>& host, const ID id, A a, B b, C c, const bool from_pool = false) {
+			// 对象必须继承 Object
+			static_assert(std::is_base_of<Object, T>::value,
+				"The create object must inherit Object!");
+			auto obj = InternalCreate<T>(0, from_pool);
+			obj->Id = id;
+			host->AddChild(obj);
 			Game::Event().Awake<A, B, C>(obj, a, b, c);
 			Game::Event().Load(obj);
 			return obj;
@@ -109,7 +275,8 @@ namespace Model
 			static_assert(std::is_base_of<Object, T>::value,
 				"The create object must inherit Object!");
 			auto obj = InternalCreate<T>(0,from_pool);
-			obj->m_host = host;
+			obj->Id = IdGenerator::GenId();
+			host->AddChild(obj);
 			Game::Event().Awake(obj);
 			Game::Event().Load(obj);
 			return obj;
@@ -121,7 +288,8 @@ namespace Model
 			static_assert(std::is_base_of<Object, T>::value,
 				"The create object must inherit Object!");
 			auto obj = InternalCreate<T>(0,from_pool);
-			obj->m_host = host;
+			obj->Id = IdGenerator::GenId();
+			host->AddChild(obj);
 			Game::Event().Awake<A>(obj,a);
 			Game::Event().Load(obj);
 			return obj;
@@ -133,7 +301,8 @@ namespace Model
 			static_assert(std::is_base_of<Object, T>::value,
 				"The create object must inherit Object!");
 			auto obj = InternalCreate<T>(0,from_pool);
-			obj->m_host = host;
+			obj->Id = IdGenerator::GenId();
+			host->AddChild(obj);
 			Game::Event().Awake<A,B>(obj, a,b);
 			Game::Event().Load(obj);
 			return obj;
@@ -145,7 +314,8 @@ namespace Model
 			static_assert(std::is_base_of<Object, T>::value,
 				"The create object must inherit Object!");
 			auto obj = InternalCreate<T>(0,from_pool);
-			obj->m_host = host;
+			obj->Id = IdGenerator::GenId();
+			host->AddChild(obj);
 			Game::Event().Awake<A, B,C>(obj, a, b,c);
 			Game::Event().Load(obj);
 			return obj;

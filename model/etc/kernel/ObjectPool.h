@@ -16,7 +16,7 @@ namespace Model
 			static_assert(std::is_base_of<Object, T>::value,
 				"The fetch object must inherit Object!");
 			std::shared_ptr<T> obj;
-			auto found = m_pool.find(typeof(T));
+			auto found = m_pool.find(to_typeindex<T>());
 			if (found != m_pool.end())
 			{
 				if (!found->second.empty())
@@ -37,7 +37,7 @@ namespace Model
 		}
 
 		void Recycle(const std::shared_ptr<Object>& obj) {
-			m_pool[obj->m_object_type.m_type].push(obj);
+			m_pool[obj->m_object_type.GetTypeIndex()].push(obj);
 		}
 
 
@@ -51,7 +51,7 @@ namespace Model
 			for (auto& item : m_pool)
 			{
 				ctx += "[";
-				ctx += (item.first.name() + 6);
+				ctx += to_type(item.first).full_name();
 				ctx += "] (";
 				ctx += std::to_string(item.second.size());
 				ctx += ")\n";
@@ -61,6 +61,6 @@ namespace Model
 
 	private:
 
-		std::unordered_map<Type, std::queue<std::shared_ptr<Object>>>	m_pool;
+		std::unordered_map<TypeIndex, std::queue<std::shared_ptr<Object>>>	m_pool;
 	};
 }

@@ -13,8 +13,13 @@
 
 
 // 后续接入json
+namespace Model
+{
+	using InstanceID = long long;
 
-typedef long long InstanceID;
+	using ID = long long;
+}
+
 
 // 使用这个，没法查找引用
 //typedef EntityEventType EventType;

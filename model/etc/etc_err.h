@@ -11,6 +11,12 @@ enum class ETC_ERR : int32_t
 
 	ActorNoMailBoxComponent = 160000,
 	ActorTimeout			= 160001,
+	ActorLocationSenderTimeout = 160002,
+	ActorLocationSenderTimeout2 = 160003,
+	ActorLocationSenderTimeout3 = 160004,
+
+
+
 
 
 	HandleRpcMessageException	= 170000,

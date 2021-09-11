@@ -10,11 +10,11 @@ namespace Model
 		auto obj = ObjectFactory::TryCreateWithHost(shared_from_this(), name);
 		if (auto com = obj->Get<Component>())
 		{
-			if (m_component.find(com->GetObjectType().m_type) != m_component.end())
+			if (m_component.find(com->GetObjectType().GetTypeIndex()) != m_component.end())
 			{
 				throw std::exception("添加的组件已存在!");
 			}
-			m_component.insert(make_pair(com->GetObjectType().m_type, com));
+			m_component.insert(make_pair(com->GetObjectType().GetTypeIndex(), com));
 			return com;
 		}
 		else {

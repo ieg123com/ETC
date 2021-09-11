@@ -31,6 +31,17 @@ if(MSVC)
     ${PROJECT_BINARY_DIR}/bin CACHE
     PATH "Directory where .exe and .dll files are dumped." FORCE)
 #	add_subdirectory(hiredis/win)
+
+add_test(app
+                test
+                -c 1000
+                -g 35000
+                -n 30
+                -t 100
+                -G 500
+                --check-grouplimit 1000
+                --check-connlimit 50
+                --check-stddev 50)
 else()
 #	add_subdirectory(hiredis/linux)
 endif()

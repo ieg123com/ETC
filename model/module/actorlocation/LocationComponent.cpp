@@ -1,7 +1,9 @@
 #include "LocationComponent.h"
 
 
-void LocationComponent::Add(const int64_t key, const int64_t instance_id)
+
+
+void LocationComponent::Add(const ID key, const InstanceID instance_id)
 {
 	auto lock = GetMutex(key);
 	lock->lock();
@@ -10,7 +12,7 @@ void LocationComponent::Add(const int64_t key, const int64_t instance_id)
 	lock->unlock();
 }
 
-void LocationComponent::Lock(const int64_t key, const int64_t instance_id, const time_t time)
+void LocationComponent::Lock(const ID key, const InstanceID instance_id, const time_t time)
 {
 	auto lock = GetMutex(key);
 	lock->lock();
@@ -22,7 +24,7 @@ void LocationComponent::Lock(const int64_t key, const int64_t instance_id, const
 	}
 }
 
-void LocationComponent::UnLock(const int64_t key, const int64_t old_instance_id, const int64_t new_instance_id)
+void LocationComponent::UnLock(const ID key, const InstanceID old_instance_id, const InstanceID new_instance_id)
 {
 	if (m_key_location[key] != old_instance_id)
 		return;
@@ -36,7 +38,7 @@ void LocationComponent::UnLock(const int64_t key, const int64_t old_instance_id,
 
 }
 
-void LocationComponent::Remove(const int64_t key)
+void LocationComponent::Remove(const ID key)
 {
 	auto lock = GetMutex(key);
 	lock->lock();
@@ -46,7 +48,7 @@ void LocationComponent::Remove(const int64_t key)
 	lock->unlock();
 }
 
-int64_t LocationComponent::Get(const int64_t key)
+int64_t LocationComponent::Get(const ID key)
 {
 	auto lock = GetMutex(key);
 	lock->lock();
@@ -56,7 +58,7 @@ int64_t LocationComponent::Get(const int64_t key)
 	return instance_id;
 }
 
-std::shared_ptr<co::CoMutex> LocationComponent::GetMutex(const int64_t key)
+std::shared_ptr<co::CoMutex> LocationComponent::GetMutex(const ID key)
 {
 	auto found = m_key_lock.find(key);
 	if (found == m_key_lock.end())

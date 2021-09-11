@@ -128,8 +128,6 @@ public:
 		return m_info->raw_name.c_str();
 	}
 
-
-
 };
 
 
@@ -144,4 +142,6 @@ namespace std
 		}
 	};
 }
+
+
 

@@ -9,18 +9,18 @@ class LocationProxyComponent:
 public:
 	static LocationProxyComponent* Instance;
 
-	void Add(const int64_t key, const int64_t instance_id);
+	void Add(const ID key, const InstanceID instance_id);
 	
-	void Lock(const int64_t key,const int64_t instance_id,const int32_t time);
+	void Lock(const ID key,const InstanceID instance_id,const time_t time);
 
-	void UnLock(const int64_t key, const int64_t old_instance_id, const int64_t instance_id);
+	void UnLock(const ID key, const InstanceID old_instance_id, const InstanceID instance_id);
 
-	void Remove(const int64_t key);
+	void Remove(const ID key);
 
-	int64_t Get(const int64_t key);
+	InstanceID Get(const ID key);
 
 
 	// 取出地址进程id
-	static InstanceID GetLocationAppId(const int64_t key);
+	static InstanceID GetLocationAppId(const InstanceID key);
 
 };

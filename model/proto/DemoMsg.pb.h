@@ -811,8 +811,6 @@ class ActorMessageTest : public IActorMessage /* @@protoc_insertion_point(class_
   ActorMessageTest* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  virtual int32_t GetRpcId()const override {return rpcid();}
-  virtual void SetRpcId(const int32_t val)override { set_rpcid(val);}
   virtual uint16_t GetOpcode()const override {return DemoMsgOpcode::ActorMessageTest;}
   virtual Type GetType()const override {return typeof(ActorMessageTest);}
   virtual EMessageType GetMessageType()const override {return EMessageType::IActorMessage;}

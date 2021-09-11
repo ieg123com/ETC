@@ -12,14 +12,8 @@ public:
 		std::shared_ptr<IActorResponse> actor_req;
 		switch (message->GetMessageType())
 		{
-		case EMessageType::IActorMessage:
-		case EMessageType::IActorLocationMessage:
-		{
-			auto request = dynamic_cast<IActorMessage*>(message.get());
-			actor_req = __CreateResponseTry(request->GetOpcode(), request->GetRpcId(), error);
-			break;
-		}
 		case EMessageType::IActorRequest:
+		case EMessageType::IActorLocationMessage:
 		case EMessageType::IActorLocationRequest:
 		{
 			auto request = dynamic_cast<IActorRequest*>(message.get());

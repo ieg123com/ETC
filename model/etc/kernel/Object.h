@@ -23,7 +23,7 @@ namespace Model
 		/** @brief	父类对象*/
 		std::shared_ptr<Object> m_host;
 		/** @brief	对象id*/
-		int64_t Id;
+		ID Id;
 
 		Object();
 		~Object();
@@ -72,6 +72,25 @@ namespace Model
 
 		inline const ObjectType& GetObjectType() { return m_object_type; }
 
+		/** @brief	子对象
+		 * key: id  value: child object
+		 * 
+		 *			        |—— Child
+		 *  树形结构 Host —————— Child
+		 *				    |—— Child
+		 */
+		std::unordered_map<ID, std::shared_ptr<Object>> Children;
+
+
+		void AddChild(const std::shared_ptr<Object>& obj);
+
+		void RemoveChild(const std::shared_ptr<Object>& obj);
+
+		template<typename T>
+		std::shared_ptr<T> GetChild(const ID id);
+
+
+
 	public:
 		/** @brief	销毁对象*/
 		virtual void Dispose();
@@ -100,4 +119,29 @@ namespace Model
 		friend class ObjectFactory;
 		friend class ObjectPool;
 	};
+
+
+
+
+
+	inline void Object::AddChild(const std::shared_ptr<Object>& obj){
+		if (Children.emplace(obj->Id, obj).second)
+		{
+			if (obj->m_host) obj->m_host->RemoveChild(obj);
+			obj->m_host = Self();
+		}
+	}
+
+	inline void Object::RemoveChild(const std::shared_ptr<Object>& obj){
+		Children.erase(obj->Id);
+		obj->m_host.reset();
+	}
+
+	template<typename T>
+	inline std::shared_ptr<T> Object::GetChild(const ID id){
+		auto found = Children.find(id);
+		if (found == Children.end())
+			return nullptr;
+		return std::dynamic_pointer_cast<T>(found->second);
+	}
 }
