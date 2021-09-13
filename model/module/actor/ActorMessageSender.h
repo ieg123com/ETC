@@ -22,6 +22,8 @@ public:
 	co::Channel<std::shared_ptr<IActorResponse>>	ProtoResponse;
 	// HasException = true，这个请求发生了异常，需要在调用时抛出
 	bool HasException;
+	// NeedException = true，需要抛出异常
+	bool NeedException;
 
 	std::exception Exception;
 
@@ -57,6 +59,7 @@ public:
 		instance->ActorId = actor_id;
 		instance->ProtoRequest = message;
 		instance->HasException = false;
+		instance->NeedException = false;
 		instance->CreateTime = Game::Time().NowServerMilliseconds();
 		return std::shared_ptr<ActorMessageSender>(instance, ActorMessageSenderPool::__Recycle);
 	}

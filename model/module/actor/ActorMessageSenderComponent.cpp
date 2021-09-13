@@ -78,12 +78,13 @@ void ActorMessageSenderComponent::RunMessage(const int64_t actor_id, const std::
 }
 
 
-std::shared_ptr<IActorResponse> ActorMessageSenderComponent::__Call(const int64_t actor_id, const int32_t rpc_id, const std::shared_ptr<IMessage>& message)
+std::shared_ptr<IActorResponse> ActorMessageSenderComponent::__Call(const int64_t actor_id, const int32_t rpc_id, const std::shared_ptr<IMessage>& message, const bool need_exception)
 {
 	if (actor_id == 0)
 		throw std::exception(std::format("actor id is 0 : %s", message->GetTypeName().c_str()).c_str());
 
 	auto actor_message = ActorMessageSenderPool::Instance().Fetch(actor_id, message);
+	actor_message->NeedException = need_exception;
 	m_request_callback.emplace(rpc_id, actor_message);
 
 	__Send(actor_id, message);

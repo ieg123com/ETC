@@ -2,11 +2,11 @@
 #include <memory>
 
 
-class IdGenerator;
 
 namespace Model
 {
 	class Dll;
+	class IdGenerator;
 
 
 	// 全局变量

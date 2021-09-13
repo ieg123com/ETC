@@ -19,6 +19,10 @@
 #include "kernel/ObjectRegisterAction.h"
 
 
+#include "common/timer/TimerComponent.h"
+
+
+
 #include "Game.h"
 
 

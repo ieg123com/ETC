@@ -19,7 +19,7 @@ namespace Hotfix
 	public:
 		virtual void Load(const std::shared_ptr<LocationProxyComponent>& self)override
 		{
-
+			LocationProxyComponent::Instance = self.get();
 		}
 	};
 	REF(LocationProxyComponentLoadSystem, ObjectSystem);

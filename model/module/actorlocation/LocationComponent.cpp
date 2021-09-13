@@ -6,10 +6,9 @@
 void LocationComponent::Add(const ID key, const InstanceID instance_id)
 {
 	auto lock = GetMutex(key);
-	lock->lock();
+	std::lock_guard<co::CoMutex> glock(*lock);
 	m_key_location[key] = instance_id;
 	LOG_DEBUG("location add key: {}  instance id: {}",key,instance_id);
-	lock->unlock();
 }
 
 void LocationComponent::Lock(const ID key, const InstanceID instance_id, const time_t time)
@@ -41,20 +40,18 @@ void LocationComponent::UnLock(const ID key, const InstanceID old_instance_id, c
 void LocationComponent::Remove(const ID key)
 {
 	auto lock = GetMutex(key);
-	lock->lock();
+	std::lock_guard<co::CoMutex> glock(*lock);
 	m_key_location.erase(key);
 	m_key_lock.erase(key);
 	LOG_DEBUG("location remove key: {}", key);
-	lock->unlock();
 }
 
 int64_t LocationComponent::Get(const ID key)
 {
 	auto lock = GetMutex(key);
-	lock->lock();
+	std::lock_guard<co::CoMutex> glock(*lock);
 	InstanceID instance_id = m_key_location[key];
 	LOG_DEBUG("location get key: {}  location id: {}", key, instance_id);
-	lock->unlock();
 	return instance_id;
 }
 
