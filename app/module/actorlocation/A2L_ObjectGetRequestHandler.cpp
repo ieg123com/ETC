@@ -5,12 +5,12 @@
 
 namespace Hotfix
 {
-	class A2L_ObjectGetRequestHandler : public AMActorRpcHandler<World, A2L_ObjectGetRequest, L2A_ObjectGetResponse>
+	class A2L_ObjectGetRequestHandler : public AMActorRpcHandler<App, A2L_ObjectGetRequest, L2A_ObjectGetResponse>
 	{
 	public:
-		virtual void Run(const std::shared_ptr<World>& world, A2L_ObjectGetRequest& request, L2A_ObjectGetResponse& response, FMReply& reply) override
+		virtual void Run(const std::shared_ptr<App>& app, A2L_ObjectGetRequest& request, L2A_ObjectGetResponse& response, FMReply& reply) override
 		{
-			response.set_instanceid(world->GetComponent<LocationComponent>()->Get(request.key()));
+			response.set_instanceid(app->GetComponent<LocationComponent>()->Get(request.key()));
 			reply();
 		}
 	};

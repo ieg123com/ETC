@@ -195,6 +195,10 @@ LIST(APPEND ALL_OBJECT
 set(MODULE_FILES "")
 FILE(GLOB MODULE_FILES "./module/*.cpp" "./module/*.h")
 
+# entity
+set(MODULE_ENTITY_FILES "")
+FILE(GLOB MODULE_ENTITY_FILES "./module/entity/*.cpp" "./module/entity/*.h")
+
 # actor
 set(MODULE_ACTOR_FILES "")
 FILE(GLOB MODULE_ACTOR_FILES "./module/actor/*.cpp" "./module/actor/*.h")
@@ -236,6 +240,7 @@ FILE(GLOB MODULE_COMPONENT_CONFIG_FILES "./module/component/config/*.cpp" "./mod
 
 
 source_group(module						FILES ${MODULE_FILES})
+source_group(module\\entity				FILES ${MODULE_ENTITY_FILES})
 source_group(module\\actor				FILES ${MODULE_ACTOR_FILES})
 source_group(module\\actorlocation		FILES ${MODULE_ACTOR_LOCATION_FILES})
 source_group(module\\memory				FILES ${MODULE_MEMORY_FILES})
@@ -249,6 +254,7 @@ source_group(module\\component\\config	FILES ${MODULE_COMPONENT_CONFIG_FILES})
 
 LIST(APPEND ALL_OBJECT
 	${MODULE_FILES}
+	${MODULE_ENTITY_FILES}
 	${MODULE_ACTOR_FILES}
 	${MODULE_ACTOR_LOCATION_FILES}
 	${MODULE_MEMORY_FILES}

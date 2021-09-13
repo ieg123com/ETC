@@ -1,48 +1,45 @@
 cmake_minimum_required(VERSION 2.8.9)
-project(test)
+project(config_build)
 
 
-include_directories(./ ../libgo)
-link_directories(../libs/mysql)
+link_directories(../libs/xlnt)
 
-include_directories(../model/etc ../model/etc/common ../model/etc/interface ../model/etc/kernel ../model/etc/system)
-include_directories(../model/base)
-include_directories(../model/config)
-
-
-#=================================基础服务加载================================
+#=================================基础加载================================
 set(ALL_OBJECT "")
  
-#服务底层
+#main
 set(MAIN_FILES "")
 FILE(GLOB MAIN_FILES "./*.cpp" "./*.h")
 
+set(JSON_FILES "")
+FILE(GLOB JSON_FILES "./json/*.c" "./json/*.cpp" "./json/*.h" "./json/*.hpp")
 
-source_group(main FILES ${MAIN_FILES} )
+set(STRING_FILES "")
+FILE(GLOB STRING_FILES "./string/*.cpp" "./string/*.h")
 
+source_group(\\ FILES ${MAIN_FILES} )
+source_group(json FILES ${JSON_FILES} )
+source_group(string FILES ${STRING_FILES} )
 
 
 list(APPEND ALL_OBJECT
-	${MAIN_FILES})
-
-
-
+	${MAIN_FILES}
+	${JSON_FILES}
+	${STRING_FILES})
 
 
 
 # Target
-add_executable(test
+add_executable(config_build
 	${ALL_OBJECT})
 
 
 if(MSVC)
-	target_link_libraries(test libmysql libgo ws2_32 wepoll redis model)
+	target_link_libraries(config_build xlnt)
 	ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS -D_WINSOCK_DEPRECATED_NO_WARNINGS -D_SPDLOG_ACTIVE_LEVEL)
 	
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
-else()
-	target_link_libraries(test mysqlclient libgo)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX)

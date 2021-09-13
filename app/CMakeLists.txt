@@ -88,6 +88,11 @@ FILE(GLOB MODULE_ACTOR_HANDLER_FILES "./module/actor/handler/*.cpp" "./module/ac
 set(MODULE_ACTOR_LOCATION_FILES "")
 FILE(GLOB MODULE_ACTOR_LOCATION_FILES "./module/actorlocation/*.cpp" "./module/actorlocation/*.h")
 
+# entity
+set(MODULE_ENTITY_FILES "")
+FILE(GLOB MODULE_ENTITY_FILES "./module/entity/*.cpp" "./module/entity/*.h")
+
+
 source_group(module						FILES ${MODULE_FILES})
 source_group(module\\message			FILES ${MODULE_MESSAGE_FILES})
 source_group(module\\component			FILES ${MODULE_COMPONENT_FILES})
@@ -99,6 +104,7 @@ source_group(module\\init				FILES ${MODULE_INIT_FILES})
 source_group(module\\actor				FILES ${MODULE_ACTOR_FILES})
 source_group(module\\actor\\handler		FILES ${MODULE_ACTOR_HANDLER_FILES})
 source_group(module\\actorlocation		FILES ${MODULE_ACTOR_LOCATION_FILES})
+source_group(module\\entity				FILES ${MODULE_ENTITY_FILES})
  
 
 LIST(APPEND ALL_OBJECT
@@ -112,7 +118,8 @@ LIST(APPEND ALL_OBJECT
 	${MODULE_INIT_FILES}
 	${MODULE_ACTOR_FILES}
 	${MODULE_ACTOR_HANDLER_FILES}
-	${MODULE_ACTOR_LOCATION_FILES})
+	${MODULE_ACTOR_LOCATION_FILES}
+	${MODULE_ENTITY_FILES})
 
 #========================Demo加载==============================
 

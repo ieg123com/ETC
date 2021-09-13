@@ -16,14 +16,4 @@ namespace Hotfix
 	REF(LocationComponentAwakeSystem, ObjectSystem);
 
 
-	class LocationComponentLoadSystem : public LoadSystem<LocationComponent>
-	{
-	public:
-		virtual void Load(const std::shared_ptr<LocationComponent>& self)override
-		{
-
-		}
-
-	};
-	REF(LocationComponentLoadSystem, ObjectSystem);
 }

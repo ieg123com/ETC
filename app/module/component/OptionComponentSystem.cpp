@@ -21,9 +21,9 @@ namespace Hotfix
 				std::string key = arg.substr(2, pos - 2);
 				std::string value = arg.substr(pos + 1, arg.size() - pos - 1);
 				LOG_WARN("key {} value {}", key, value);
-				if (key == "AppId")
+				if (key == "ProcessId")
 				{
-					self->Options.AppId = std::to<int32_t>(value);
+					self->Options.ProcessId = std::to<int32_t>(value);
 				}
 				if (key == "AppType")
 				{

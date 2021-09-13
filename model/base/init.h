@@ -23,13 +23,13 @@ namespace Model
 			std::string key = arg.substr(2, pos - 2);
 			std::string value = arg.substr(pos + 1, arg.size() - pos - 1);
 			LOG_WARN("key {} value {}", key, value);
-			if (key == "AppId")
+			if (key == "ProcessId")
 			{
-				Game::Options().AppId = std::to<int32_t>(value);
+				Game::Options().ProcessId = std::to<int32_t>(value);
 			}
-			if (key == "AppType")
+			if (key == "ProcessType")
 			{
-				Game::Options().AppType = ToAppType(value);
+				Game::Options().ProcessType = ToProcessType(value);
 			}
 		}
 	}
@@ -51,9 +51,7 @@ namespace Model
 
 		Game::Event().Add(DLLType::Model, Assembly::GetSharedPtr());
 
-		InstanceIdStruct instance_id_struct;
-		instance_id_struct.process = Game::Options().AppId;
-		GlobalGame::Instance->m_World = ObjectFactory::CreateWithInstanceId<World>(instance_id_struct.ToLong());
+		GlobalGame::Instance->m_World = ObjectFactory::Create<World>();
 
 	}
 

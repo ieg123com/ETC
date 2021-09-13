@@ -5,7 +5,7 @@ set(CMAKE_VERBOSE_MAKEFILE OFF)
 aux_source_directory(. DIRSRCS)
 
 # Add header file include directories
-include_directories(./ ./include ./hotfix ./libgo ./redis ./module ./protobuf)
+include_directories(./ ./include ./hotfix ./libgo ./redis ./module ./protobuf ./config_build)
 include_directories(./wepoll/include ./wepoll/src ./wepoll/src/regular ./wepoll/src/combined ./model)
 
 # Add block directories
@@ -15,6 +15,7 @@ add_subdirectory(hotfix)
 add_subdirectory(app)
 add_subdirectory(protobuf)
 add_subdirectory(redis)
+add_subdirectory(config_build)
 add_subdirectory(test)
 
 
@@ -32,16 +33,6 @@ if(MSVC)
     PATH "Directory where .exe and .dll files are dumped." FORCE)
 #	add_subdirectory(hiredis/win)
 
-add_test(app
-                test
-                -c 1000
-                -g 35000
-                -n 30
-                -t 100
-                -G 500
-                --check-grouplimit 1000
-                --check-connlimit 50
-                --check-stddev 50)
 else()
 #	add_subdirectory(hiredis/linux)
 endif()

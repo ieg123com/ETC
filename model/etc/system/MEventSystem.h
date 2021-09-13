@@ -185,7 +185,7 @@ namespace Model
 
 		// 执行自定义事件
 		template<typename ...Arg>
-		void Run(Arg...arg) {
+		void Publish(Arg...arg) {
 			auto &all_event = GetOrCreate(m_event_system, to_eventindex<Arg...>());
 			for (auto& action : all_event)
 			{
@@ -195,7 +195,7 @@ namespace Model
 
 		// 执行自定义对象事件
 		template<typename ...Arg>
-		void Run(const std::shared_ptr<Object>& target_obj, Arg...arg) {
+		void Publish(const std::shared_ptr<Object>& target_obj, Arg...arg) {
 			__ObjectEventOperationHandle();
 			auto& all_event = GetOrCreate(m_object_event, to_eventindex<Arg...>()).find(target_obj->InstanceId());
 			for (auto& action : all_event->second)

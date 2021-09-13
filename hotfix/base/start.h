@@ -29,7 +29,7 @@ namespace Hotfix
 
 		player->Uuid = 100;
 
-		Game::Event().Run<const std::string&>(player, "123");
+		Game::Event().Publish<const std::string&>(player, "123");
 		
 
 		LOG_INFO("ok");
@@ -39,8 +39,8 @@ namespace Hotfix
 		
 		try {
 			
-			Game::Event().Run<const std::string&>( "sss");
-			Game::Event().Run<const std::string&>("sss");
+			Game::Event().Publish<const std::string&>( "sss");
+			Game::Event().Publish<const std::string&>("sss");
 		}
 		catch (std::exception& e)
 		{

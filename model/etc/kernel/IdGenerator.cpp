@@ -11,7 +11,7 @@ namespace Model
 		if (m_instance_id_struct.time == 0)
 		{
 			// 第一次获取
-			m_instance_id_struct.process = Game::Options().AppId;
+			m_instance_id_struct.process = Game::Options().ProcessId;
 		}
 
 
@@ -39,7 +39,7 @@ namespace Model
 		if (m_id_struct.time == 0)
 		{
 			// 第一次获取
-			m_id_struct.process = Game::Options().AppId;
+			m_id_struct.process = Game::Options().ProcessId;
 		}
 
 
@@ -67,7 +67,7 @@ namespace Model
 		if (m_unit_id_struct.time == 0)
 		{
 			// 第一次获取
-			m_unit_id_struct.process = Game::Options().AppId;
+			m_unit_id_struct.process = Game::Options().ProcessId;
 		}
 
 

@@ -14,8 +14,8 @@ namespace Model
 	public:
 
 		static StartConfigComponent* Instance;
-		
-		std::unordered_map<int32_t, std::shared_ptr<StartConfig>>	__ConfigDict;
+		// key: process id  values: config
+		std::unordered_multimap<int32_t, std::shared_ptr<StartConfig>>	__ConfigDict;
 
 		std::shared_ptr<StartConfig> startConfig;
 		std::shared_ptr<StartConfig> LocationConfig;
@@ -23,13 +23,15 @@ namespace Model
 		std::shared_ptr<StartConfig> ListConfig;
 		std::shared_ptr<StartConfig> ChatConfig;
 		std::shared_ptr<StartConfig> SocialConfig;
+		// key: zone id  value: <key: map id  vlaue: config>
 		std::unordered_map<int32_t, std::shared_ptr<StartConfig>> MapConfig;
+		// key: zone id  value: config
 		std::unordered_map<int32_t, std::shared_ptr<StartConfig>> GateConfig;
 		
 		
 
 
-		std::shared_ptr<StartConfig> Get(const int32_t app_id);
+		std::vector<std::shared_ptr<StartConfig>> GetByProcess(const int32_t id);
 
 	};
 

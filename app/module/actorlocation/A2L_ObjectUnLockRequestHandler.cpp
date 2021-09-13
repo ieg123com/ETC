@@ -5,12 +5,12 @@
 
 namespace Hotfix
 {
-	class A2L_ObjectUnLockRequestHandler : public AMActorRpcHandler<World, A2L_ObjectUnLockRequest, L2A_ObjectUnLockResponse>
+	class A2L_ObjectUnLockRequestHandler : public AMActorRpcHandler<App, A2L_ObjectUnLockRequest, L2A_ObjectUnLockResponse>
 	{
 	public:
-		virtual void Run(const std::shared_ptr<World>& world, A2L_ObjectUnLockRequest& request, L2A_ObjectUnLockResponse& response, FMReply& reply) override
+		virtual void Run(const std::shared_ptr<App>& app, A2L_ObjectUnLockRequest& request, L2A_ObjectUnLockResponse& response, FMReply& reply) override
 		{
-			world->GetComponent<LocationComponent>()->UnLock(request.key(), request.oldinstanceid(), request.instanceid());
+			app->GetComponent<LocationComponent>()->UnLock(request.key(), request.oldinstanceid(), request.instanceid());
 			reply();
 		}
 	};

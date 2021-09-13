@@ -1,16 +1,18 @@
 #include "StartConfig.h"
-#include "config/Config_StartConfig.h"
+#include "config/Config_StartApp.h"
 #include "kernel/IdGenerator.h"
+#include "module/component/StartProcessConfigComponent.h"
 
 
 
-void StartConfig::Init(const std::shared_ptr<Config_StartConfig>& config)
+void StartConfig::Init(const std::shared_ptr<Config_StartApp>& config)
 {
 	AppId = config->Id;
+	ProcessId = config->Process;
+	ZoneId = config->Zone;
 	AppType = ToAppType(config->AppType);
-	OuterAddress = config->OuterAddress;
-	InnerAddress = config->InnerAddress;
-	InstanceIdStruct instance_id_struct;
-	instance_id_struct.process = AppId;
-	InstanceId = instance_id_struct.ToLong();
+	auto process_config = StartProcessConfigComponent::Instance->Get(ProcessId);
+	OuterAddress = IPEndPoint(process_config->OuterIP, config->OuterPort);
+	InnerAddress = process_config->InnerAddress;
+	InstanceId = InstanceIdStruct(ProcessId,AppId).ToLong();
 }

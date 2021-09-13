@@ -5,12 +5,12 @@
 
 namespace Hotfix
 {
-	class A2L_ObjectRemoveRequestHandler : public AMActorRpcHandler<World, A2L_ObjectRemoveRequest, L2A_ObjectRemoveResponse>
+	class A2L_ObjectRemoveRequestHandler : public AMActorRpcHandler<App, A2L_ObjectRemoveRequest, L2A_ObjectRemoveResponse>
 	{
 	public:
-		virtual void Run(const std::shared_ptr<World>& world, A2L_ObjectRemoveRequest& request, L2A_ObjectRemoveResponse& response, FMReply& reply) override
+		virtual void Run(const std::shared_ptr<App>& app, A2L_ObjectRemoveRequest& request, L2A_ObjectRemoveResponse& response, FMReply& reply) override
 		{
-			world->GetComponent<LocationComponent>()->Remove(request.key());
+			app->GetComponent<LocationComponent>()->Remove(request.key());
 			reply();
 		}
 	};

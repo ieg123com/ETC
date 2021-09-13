@@ -5,6 +5,7 @@
 
 namespace Model
 {
+	// 记录消息类型状态
 	class OpcodeTypeComponent :
 		public Component
 	{

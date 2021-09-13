@@ -1,8 +1,7 @@
 #include "ActorMessageSenderComponent.h"
 #include "module/message/NetInnerComponent.h"
 #include "module/message/OpcodeTypeComponent.h"
-#include "module/component/StartConfigComponent.h"
-#include "module/component/config/StartConfig.h"
+#include "module/component/StartProcessConfigComponent.h"
 #include "timer/TimerComponent.h"
 #include "ActorMessageSender.h"
 #include "ActorHandler.h"
@@ -119,12 +118,10 @@ void ActorMessageSenderComponent::__Send(const int64_t actor_id, const std::shar
 		throw std::exception(std::format("actor id is 0 : %s", message->GetTypeName().c_str()).c_str());
 
 	int32_t process = ProcessActorId(actor_id).Process;
-	if (auto process_config = StartConfigComponent::Instance->Get(process))
+	auto process_config = StartProcessConfigComponent::Instance->Get(process);
+	if (auto session = NetInnerComponent::Instance->Get(process_config->InnerAddress))
 	{
-		if (auto session = NetInnerComponent::Instance->Get(process_config->InnerAddress))
-		{
-			session->Send(actor_id, message.get());
-		}
+		session->Send(actor_id, message.get());
 	}
 }
 

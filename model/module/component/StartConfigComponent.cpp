@@ -6,14 +6,16 @@ namespace Model
 	StartConfigComponent* StartConfigComponent::Instance = nullptr;
 
 
-	std::shared_ptr<StartConfig> StartConfigComponent::Get(const int32_t app_id)
+	std::vector<std::shared_ptr<StartConfig>> StartConfigComponent::GetByProcess(const int32_t id)
 	{
-		auto found = __ConfigDict.find(app_id);
-		if (found == __ConfigDict.end())
+		std::vector<std::shared_ptr<StartConfig>> result;
+
+		for (auto found_range = __ConfigDict.equal_range(id); found_range.first != found_range.second; ++(found_range.first))
 		{
-			return nullptr;
+			result.push_back(found_range.first->second);
 		}
-		return found->second;
+
+		return std::move(result);
 	}
 
 }
