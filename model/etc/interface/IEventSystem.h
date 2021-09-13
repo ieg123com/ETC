@@ -13,7 +13,7 @@ namespace Model
 	{
 	public:
 		virtual const Type GetType()const = 0;
-		virtual const std::type_index GetCallbackType()const = 0;
+		virtual const TypeIndex GetCallbackType()const = 0;
 
 	};
 
@@ -21,7 +21,6 @@ namespace Model
 		public IEventSystem
 	{
 	public:
-
 	};
 
 	template<typename ...Arg>
@@ -44,7 +43,7 @@ namespace Model
 		}
 
 		virtual const Type GetType()const { return typeof(Object); }
-		virtual const std::type_index GetCallbackType()const { return typeid(void(Arg...)); }
+		virtual const TypeIndex GetCallbackType()const { return to_typeindex<void(Arg...)>(); }
 		virtual void Run(Arg...arg) = 0;
  	};
 
@@ -69,7 +68,7 @@ namespace Model
 		}
 
 		virtual const Type GetType()const { return typeof(T); }
-		virtual const std::type_index GetCallbackType()const { return typeid(void(Arg...)); }
+		virtual const TypeIndex GetCallbackType()const { return to_typeindex<void(Arg...)>(); }
 		virtual void Run(const std::shared_ptr<T>& self, Arg...arg) = 0;
 	};
 

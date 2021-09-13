@@ -30,7 +30,7 @@ namespace Model
 			}
 		}
 
-		// 默认对象事件系统
+		// 默认对象系统事件
 		m_awake_system.clear();
 		m_load_system.clear();
 		m_start_system.clear();
@@ -44,10 +44,8 @@ namespace Model
 			for (auto& attr : os_attr->second)
 			{
 				auto obj = TypeFactory::CreateInstance<IEventSystem>(attr);
-				if (obj)
-					LOG_INFO("Awake sytem {}:{}", attr.full_name(), attr.m_info->index);
-				else
-					LOG_ERROR("Awake sytem {}:{}", attr.full_name(), attr.m_info->index);
+				if (!obj)
+					LOG_WARN("System event 创建类型失败，请检测继承是否为'public'，type = {}:{}", attr.full_name(), attr.m_info->index);
 
 				if (auto sys = std::dynamic_pointer_cast<IAwakeSystem>(obj))
 				{
@@ -77,58 +75,34 @@ namespace Model
 		}
 
 
-		// 自定义事件系统
-		std::vector<std::pair<int32_t, Type>> all_event_attr;
-		for (auto& item : m_assemblys)
+		// 自定义事件
 		{
-			auto all_attr = item.second->GetType<Event>();
-			for (auto& attr : all_attr)
+			m_event_system.clear();
+			m_objevent_system.clear();
+
+			auto all_event_attr = GetAssemblysType<Event>();
+			for (auto& event_attr : all_event_attr)
 			{
-				if (auto eattr = std::dynamic_pointer_cast<Event>(attr))
+				auto event_obj = TypeFactory::CreateInstance<IEventSystem>(event_attr.first);
+				uint32_t event_id = GetOrGenEventIndex(to_type(event_obj->GetCallbackType()));
+				if (auto instance = std::dynamic_pointer_cast<IObjEventSystem>(event_obj))
 				{
-					all_event_attr.emplace_back(eattr->EventId, eattr->GetObjectType());
+					// 对象事件
+					GetOrCreate(m_objevent_system, event_id).emplace(instance->GetType(), instance);
+				}
+				else {
+					// 普通事件
+					GetOrCreate(m_event_system, event_id).push_back(event_obj);
 				}
 			}
-		}
 
-		m_event_system.clear();
-		for (auto& event_attr : all_event_attr)
-		{
-			if (auto event_obj = TypeFactory::CreateInstance<IEventSystem>(event_attr.second))
-			{
-				m_event_system.emplace(event_attr.first, event_obj);
-			}
-		}
-
-
-		// 自定义对象事件系统
-		std::vector<std::pair<int32_t, Type>> all_objevent_attr;
-		for (auto& item : m_assemblys)
-		{
-			auto all_attr = item.second->GetType<ObjEvent>();
-			for (auto& attr : all_attr)
-			{
-				if (auto eattr = std::dynamic_pointer_cast<ObjEvent>(attr))
-				{
-					all_objevent_attr.emplace_back(eattr->EventId, eattr->GetObjectType());
-				}
-			}
-		}
-
-		m_objevent_system.clear();
-		for (auto& event_attr : all_objevent_attr)
-		{
-			if (auto event_obj = TypeFactory::CreateInstance<IObjEventSystem>(event_attr.second))
-			{
-				m_objevent_system.emplace(std::make_pair(event_attr.first,event_obj->GetType()), event_obj);
-			}
 		}
 
 
 		{
 			// 自定义对象事件清除
 			m_object_event.clear();
-			while(!m_object_event_operation.empty())m_object_event_operation.pop();
+			while(!m_object_event_operate.empty())m_object_event_operate.pop();
 			
 			for (auto& item : m_objects)
 			{
@@ -138,49 +112,29 @@ namespace Model
 
 	}
 
-	void MEventSystem::RegisterObjectEvent(const std::shared_ptr<Object>& target_obj, const std::shared_ptr<Object>& self, const int32_t event_id) {
+	void MEventSystem::RegisterObjectEvent(const std::shared_ptr<Object>& self, const std::shared_ptr<Object>& reg_obj, const uint32_t event_id) {
 		static stObjectEventContext ctx;
-		if (!target_obj) throw std::exception("target_obj cannot be null");
-		if (!self) throw std::exception("self cannot be null");
+		if (!self) throw std::exception("target_obj cannot be null");
+		if (!reg_obj) throw std::exception("self cannot be null");
 		if (event_id == 0) throw std::exception("event_id cannot be empty");
 		ctx.status = EventCtxStatus::AddEvent;
-		ctx.target_obj = target_obj;
 		ctx.self = self;
+		ctx.reg_obj = reg_obj;
 		ctx.event_id = event_id;
-		m_object_event_operation.emplace(std::move(ctx));
+		m_object_event_operate.emplace(std::move(ctx));
 	}
 
-	void MEventSystem::RemoveObjectEvent(const std::shared_ptr<Object>& target_obj, const std::shared_ptr<Object>& self, const int32_t event_id)
+	void MEventSystem::RemoveObjectEvent(const std::shared_ptr<Object>& self, const std::shared_ptr<Object>& reg_obj, const uint32_t event_id)
 	{
 		static stObjectEventContext ctx;
-		if (!target_obj) throw std::exception("target_obj cannot be null");
-		if (!self) throw std::exception("self cannot be null");
+		if (!self) throw std::exception("target_obj cannot be null");
+		if (!reg_obj) throw std::exception("self cannot be null");
 		if (event_id == 0) throw std::exception("event_id cannot be empty");
 		ctx.status = EventCtxStatus::DeleteSpecificEventInObject;
-		ctx.target_obj = target_obj;
 		ctx.self = self;
+		ctx.reg_obj = reg_obj;
 		ctx.event_id = event_id;
-		m_object_event_operation.emplace(std::move(ctx));
-	}
-
-	void MEventSystem::RemoveObjectEvent(const std::shared_ptr<Object>& target_obj, const int32_t event_id)
-	{
-		static stObjectEventContext ctx;
-		if (!target_obj) throw std::exception("target_obj cannot be null");
-		if (event_id == 0) throw std::exception("event_id cannot be empty");
-		ctx.status = EventCtxStatus::DeleteSpecificEventInObject;
-		ctx.target_obj = target_obj;
-		ctx.event_id = event_id;
-		m_object_event_operation.emplace(std::move(ctx));
-	}
-
-	void MEventSystem::RemoveObjectEvent(const std::shared_ptr<Object>& target_obj)
-	{
-		stObjectEventContext ctx;
-		if (!target_obj) throw std::exception("target_obj cannot be null");
-		ctx.status = EventCtxStatus::DeleteAllEventInObject;
-		ctx.target_obj = target_obj;
-		m_object_event_operation.emplace(std::move(ctx));
+		m_object_event_operate.emplace(std::move(ctx));
 	}
 
 
@@ -200,20 +154,17 @@ namespace Model
 
 	void MEventSystem::__ObjectEventOperationHandle()
 	{
-		while (!m_object_event_operation.empty())
+		while (!m_object_event_operate.empty())
 		{
-			auto ctx = std::move(m_object_event_operation.front());
-			m_object_event_operation.pop();
+			auto ctx = std::move(m_object_event_operate.front());
+			m_object_event_operate.pop();
 			switch (ctx.status)
 			{
 			case EventCtxStatus::AddEvent:
 				__AddEvent(ctx);
 				break;
-			case EventCtxStatus::DeleteAllEventInObject:
-				__DeleteAllEventInObject(ctx);
-				break;
 			case EventCtxStatus::DeleteSpecificEventInObject:
-				__DeleteSpecificEventInObject(ctx);
+				__DeleteSpecificEventInObject(ctx.self_instanceid,ctx.reg_obj_instanceid,ctx.event_id);
 				break;
 			default:
 				break;
@@ -223,46 +174,49 @@ namespace Model
 
 	void MEventSystem::__AddEvent(const stObjectEventContext& ctx)
 	{
-		auto found_objevent_sys = m_objevent_system.find(std::make_pair(ctx.event_id,ctx.self->GetObjectType().m_type));
-		if (found_objevent_sys == m_objevent_system.end())
+		if (ctx.self->IsDisposed() || ctx.reg_obj->IsDisposed())return;
+		if (!Exist(m_objevent_system, ctx.event_id))return;
+
+		auto found_objevent_sys = m_objevent_system[ctx.event_id].find(ctx.reg_obj->GetObjectType().m_type);
+		if (found_objevent_sys == m_objevent_system[ctx.event_id].end())
 		{
+			// 没找到这个对象
 			return;
 		}
 
-		m_object_event[ctx.target_obj->InstanceId()][ctx.event_id].insert(
+		GetOrCreate(m_object_event, ctx.event_id)[ctx.self->InstanceId()].emplace(
+			ctx.reg_obj->InstanceId(),
 			std::make_pair(
-				ctx.self->InstanceId(),
-				std::make_pair(
-					ctx.self,
-					found_objevent_sys->second
-				)
+				ctx.reg_obj,
+				found_objevent_sys->second
 			)
 		);
+
 	}
 
-	void MEventSystem::__DeleteAllEventInObject(const stObjectEventContext& ctx)
+
+	void MEventSystem::__DeleteSpecificEventInObject(const InstanceID self_instanceid, const InstanceID reg_obj_instanceid, const uint32_t event_id, const bool cache_clear)
 	{
-		m_object_event.erase(ctx.target_obj->InstanceId());
+		if (m_object_event.size() <= event_id)
+		{
+			throw std::exception("删除事件时类型错误，无法定位到调用信息。检查移除事件时有没有注册!");
+		}
+		auto found = m_object_event[event_id].find(self_instanceid);
+		if (found == m_object_event[event_id].end())
+		{
+			return;
+		}
+		found->second.erase(reg_obj_instanceid);
 	}
 
-	void MEventSystem::__DeleteSpecificEventInObject(const stObjectEventContext& ctx)
+	uint32_t MEventSystem::GetOrGenEventIndex(const Type& tp)
 	{
-		if (ctx.self)
+		auto found = m_eventtype_to_index.find(tp);
+		if (found == m_eventtype_to_index.end())
 		{
-			// 删除到指定对象
-			auto found_object_event = m_object_event.find(ctx.target_obj->InstanceId());
-			if (found_object_event == m_object_event.end())return;
-			auto found_event_id = found_object_event->second.find(ctx.event_id);
-			if (found_event_id == found_object_event->second.end())return;
-			found_event_id->second.erase(ctx.self->InstanceId());
+			found = m_eventtype_to_index.emplace(tp, GlobalData::GetEventIndex()).first;
 		}
-		else 
-		{
-			// 删除到指定事件id
-			auto found_object_event = m_object_event.find(ctx.target_obj->InstanceId());
-			if (found_object_event == m_object_event.end())return;
-			found_object_event->second.erase(ctx.event_id);
-		}
+		return found->second;
 	}
 
 	void MEventSystem::AddObject(const std::shared_ptr<Object>& obj)
@@ -303,9 +257,6 @@ namespace Model
 			m_late_update_leave.push(obj->InstanceId());
 		}
 
-		RemoveObjectEvent(obj);
-
-		// 重新加载热更补丁时，需要处理事件问题
 	}
 
 	std::shared_ptr<Object> MEventSystem::GetObject(const InstanceID id) const

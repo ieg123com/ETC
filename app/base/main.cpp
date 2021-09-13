@@ -14,6 +14,7 @@
 #include "module/component/config/StartConfig.h"
 #include "module/actor/ActorMessageDispatcherComponent.h"
 #include "module/actor/ActorMessageSenderComponent.h"
+#include "module/other/SystemEventType.h"
 #include "etc/common/timer/TimerComponent.h"
 
 
@@ -50,6 +51,9 @@ int main(int argc,char* argv[])
 			{
 				throw std::exception("命令行参数 AppType 和配置中的不一致");
 			}
+
+			
+			Game::Event().Run<SystemEvent::AppStart&>(SystemEvent::AppStart());
 
 
 

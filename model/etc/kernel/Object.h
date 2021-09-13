@@ -72,13 +72,15 @@ namespace Model
 
 		inline const ObjectType& GetObjectType() { return m_object_type; }
 
-		/** @brief	子对象
-		 * key: id  value: child object
-		 * 
-		 *			        |—— Child
-		 *  树形结构 Host —————— Child
-		 *				    |—— Child
-		 */
+		/** 
+		* @brief	子对象
+		* @note
+		* key: id  value: child object
+		* 
+		*			        |—— Child
+		*  树形结构 Host —————— Child
+		*				    |—— Child
+		*/
 		std::unordered_map<ID, std::shared_ptr<Object>> Children;
 
 
@@ -88,8 +90,6 @@ namespace Model
 
 		template<typename T>
 		std::shared_ptr<T> GetChild(const ID id);
-
-
 
 	public:
 		/** @brief	销毁对象*/

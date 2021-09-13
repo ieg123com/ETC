@@ -6,6 +6,7 @@
 #include <queue>
 #include <vector>
 #include <set>
+#include <map>
 #include "IAwakeSystem.h"
 #include "IloadSystem.h"
 #include "IStartSystem.h"
@@ -50,7 +51,6 @@ namespace Model
 	enum class EventCtxStatus : uint8_t
 	{
 		AddEvent,						// 添加事件
-		DeleteAllEventInObject,			// 移除对象中的所有事件
 		DeleteSpecificEventInObject,	// 移除对象中的指定事件
 	};
 
@@ -60,9 +60,13 @@ namespace Model
 	struct stObjectEventContext
 	{
 		EventCtxStatus	status;
-		std::shared_ptr<Object> target_obj;
+		// 事件会添加到这个对象身上
 		std::shared_ptr<Object> self;
-		int32_t	event_id;
+		InstanceID	self_instanceid;
+		// 发起注册的对象，事件触发后会传递这个对象到事件实例
+		std::shared_ptr<Object> reg_obj;
+		InstanceID	reg_obj_instanceid;
+		uint32_t	event_id;
 
 	};
 
@@ -87,7 +91,7 @@ namespace Model
 			auto& all_obj = m_awake_system[index];
 			for (auto& item : all_obj)
 			{
-				if (item->GetCallbackType() == typeid(void(Arg...)))
+				if (item->GetCallbackType() == to_typeindex<void(Arg...)>())
 				{
 					((IAwake<Arg...>*)(item.get()))->Run(self, arg...);
 				}
@@ -150,11 +154,22 @@ namespace Model
 		}
 
 		template<typename T>
-		bool Exist(const std::vector<std::list<std::shared_ptr<T>>>& sys, const TypeIndex idx)
+		bool Exist(const std::vector<T>& sys, const TypeIndex idx)
 		{
 			if (sys.size() <= idx)return false;
 			if (sys[idx].empty())return false;
 			return true;
+		}
+
+		// 取出一个值的引用，如果vector长度不够，将自动扩容1.5倍。
+		template<typename T>
+		T& GetOrCreate(std::vector<T>& vec, const size_t index) {
+			if (vec.size() <= index)
+			{
+				// vector 长度不够
+				vec.resize((index+1) * 1.5f);
+			}
+			return vec[index];
 		}
 
 		template<typename T>
@@ -170,57 +185,63 @@ namespace Model
 
 		// 执行自定义事件
 		template<typename ...Arg>
-		void Run(const int32_t event_id, Arg...arg) {
-			auto all_event_range = m_event_system.equal_range(event_id);
-			while (all_event_range.first != all_event_range.second)
+		void Run(Arg...arg) {
+			auto &all_event = GetOrCreate(m_event_system, to_eventindex<Arg...>());
+			for (auto& action : all_event)
 			{
-				if (all_event_range.first->second->GetCallbackType() == typeid(void(Arg...)))
-				{
-					((IEvent<Arg...>*)(all_event_range.first->second.get()))->Handle(arg...);
-				}
-				else {
-					throw std::exception("事件参数不同");
-				}
-				++(all_event_range.first);
+				((IEvent<Arg...>*)(action.get()))->Handle(arg...);
 			}
 		}
 
 		// 执行自定义对象事件
 		template<typename ...Arg>
-		void Run(const std::shared_ptr<Object>& target_obj, const int32_t event_id, Arg...arg) {
+		void Run(const std::shared_ptr<Object>& target_obj, Arg...arg) {
 			__ObjectEventOperationHandle();
-			
-			auto found_objevent = m_object_event.find(target_obj->InstanceId());
-			if (found_objevent == m_object_event.end())return;
-			auto found_event_id = found_objevent->second.find(event_id);
-			if (found_event_id == found_objevent->second.end())return;
-			for (auto& item : found_event_id->second)
+			auto& all_event = GetOrCreate(m_object_event, to_eventindex<Arg...>()).find(target_obj->InstanceId());
+			for (auto& action : all_event->second)
 			{
-				if (item.second.second->GetCallbackType() == typeid(void(Arg...)))
-				{
-					if (item.second.first->IsDisposed())
-					{
-						RemoveObjectEvent(target_obj, item.second.first, event_id);
-					}
-					else {
-						((IObjEvent<Arg...>*)(item.second.second.get()))->Handle(item.second.first, arg...);
-					}
-				}
-
+				((IObjEvent<Arg...>*)(action.second.second.get()))->Handle(action.second.first, arg...);
 			}
 		}
 
+		/**
+		 * @brief	注册 对象事件
+		 * @param [in] self		挂载事件的对象，如 m_host 或 自己
+		 * @param [in] reg_obj	注册这个事件的对象。事件触发时，会将这个对象传过去
+		 * @attention	这个函数需要放到 LoadSystem 中调用，必须在 DestroySystem 中移除。
+		 * @code
+		 * RegisterObjectEvent<EventType::Hit&>(self->host,self);
+		 * @endcode
+		 */
+		template<typename ...Arg>
+		void RegisterObjectEvent(const std::shared_ptr<Object>& self, const std::shared_ptr<Object>& reg_obj) {
+			RegisterObjectEvent(self, reg_obj, to_eventindex<Arg...>());
+		}
 
-		void RegisterObjectEvent(const std::shared_ptr<Object>& target_obj, const std::shared_ptr<Object>& self, const int32_t event_id);
+		void RegisterObjectEvent(const std::shared_ptr<Object>& self, const std::shared_ptr<Object>& reg_obj, const uint32_t event_id);
 
-		void RemoveObjectEvent(const std::shared_ptr<Object>& target_obj, const std::shared_ptr<Object>& self, const int32_t event_id);
-		void RemoveObjectEvent(const std::shared_ptr<Object>& target_obj, const int32_t event_id);
-		void RemoveObjectEvent(const std::shared_ptr<Object>& target_obj);
+		/**
+		 * @brief	注册 对象事件
+		 * @param [in] self		挂载事件的对象，注册时填写的对象。
+		 * @param [in] reg_obj	注册这个事件的对象。注册时填写的对象。
+		 * @code
+		 * RemoveObjectEvent<EventType::Hit&>(self->host,self);
+		 * @endcode
+		 */
+		template<typename T>
+		void RemoveObjectEvent(const std::shared_ptr<Object>& self, const std::shared_ptr<Object>& reg_obj){
+			RemoveObjectEvent(self, reg_obj, to_eventindex<Arg...>());
+		}
+
+		void RemoveObjectEvent(const std::shared_ptr<Object>& self, const std::shared_ptr<Object>& reg_obj, const uint32_t event_id);
 
 
 		const std::unordered_map<DLLType, std::shared_ptr<Reflection::Assembly>>& GetAssemblys()const { return m_assemblys; };
 
-		// 获取这个特性的全部实例
+		/** 
+		 * @brief	获取这个特性的全部实例
+		 * @return	key: ObjectType  value: AttributeInstance
+		 */
 		template<typename T>
 		std::unordered_map<Type, std::shared_ptr<Reflection::IBaseAttribute>> GetAssemblysType() {
 			return std::move(GetAssemblysType(typeof(T)));
@@ -228,11 +249,7 @@ namespace Model
 
 		std::unordered_map<Type, std::shared_ptr<Reflection::IBaseAttribute>> GetAssemblysType(const Type& tp)const;
 
-	private:
-		void __ObjectEventOperationHandle();
-		void __AddEvent(const stObjectEventContext& ctx);
-		void __DeleteAllEventInObject(const stObjectEventContext& ctx);
-		void __DeleteSpecificEventInObject(const stObjectEventContext& ctx);
+
 	private:
 		// 记录每个模组内部用到的反射对象
 		std::unordered_map<DLLType, std::shared_ptr<Reflection::Assembly>>	m_assemblys;
@@ -249,18 +266,47 @@ namespace Model
 		std::vector<std::list<std::shared_ptr<ILateUpdateSystem>>>	m_late_update_system;
 		std::vector<std::list<std::shared_ptr<IDestroySystem>>>		m_destroy_system;
 
-		// 自定义事件
-		std::unordered_multimap<int32_t, std::shared_ptr<IEventSystem>>	m_event_system;
-		std::unordered_multimap<std::pair<int32_t,Type>, std::shared_ptr<IObjEventSystem>>	m_objevent_system;
 
-		using CObjectEventSystem = std::unordered_multimap<InstanceID,std::pair<std::shared_ptr<Object>, std::shared_ptr<IObjEventSystem>>>;
+	public:
+
+		// 获取事件类型的索引,没有的将会自动生成新的索引
+		uint32_t GetOrGenEventIndex(const Type& tp);
+		
+		template<typename ...Arg>
+		uint32_t to_eventindex() {
+			static uint32_t event_id = GetOrGenEventIndex(typeof(void(Arg...)));
+			return event_id;
+		}
+
+
+	private:
+		void __ObjectEventOperationHandle();
+		void __AddEvent(const stObjectEventContext& ctx);
+		// 删除挂在这对象上的全部事件
+		void __DeleteSpecificEventInObject(const InstanceID self_instanceid, const InstanceID reg_obj_instanceid, const uint32_t event_id,const bool cache_clear = true);
+
+	private:
+
+
+		// 自定义事件
+		// index: event id  values: event instance
+		std::vector<std::list<std::shared_ptr<IEventSystem>>>		m_event_system;
+		// 这里是从反射获取的对象事件，先储存起来，有注册函数调用
+		// index: event id  value: <key: reg_obj type  value: event instance>
+		std::vector<std::unordered_multimap<Type, std::shared_ptr<IObjEventSystem>>>	m_objevent_system;
+
+		// 对象回调实例
+		// key: 注册的对象instance id  value: <key: 注册的对象实例  value: 事件实例>
+		using CObjectEventSystem = std::unordered_multimap<InstanceID, std::pair<std::shared_ptr<Object>, std::shared_ptr<IObjEventSystem>>>;
 		// 自定义对象事件
-		std::unordered_map<InstanceID, std::unordered_map<int32_t,CObjectEventSystem>>	m_object_event;
+		// key: 事件挂载对象instance id  value: 注册对象回调实例
+		std::vector<std::unordered_map<InstanceID, CObjectEventSystem>>	m_object_event;
 
 		// 自定义对象事件待操作
-		std::queue<stObjectEventContext>	m_object_event_operation;
+		std::queue<stObjectEventContext>	m_object_event_operate;
 
 
+		std::unordered_map<Type, uint32_t>	m_eventtype_to_index;
 
 	public:
 

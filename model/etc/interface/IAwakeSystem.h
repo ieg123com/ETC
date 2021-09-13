@@ -20,6 +20,7 @@ namespace Model
 		virtual void Run(const std::shared_ptr<Object>& self, Arg ...arg) = 0;
 	};
 
+	// 对象通过 ObjectFactroy 创建时，将会触发
 	template<typename T,typename ...Arg>
 	class AwakeSystem :
 		public IAwake<Arg...>
@@ -31,7 +32,7 @@ namespace Model
 		}
 
 		virtual const Type GetType()const override { return typeof(T); }
-		virtual const std::type_index GetCallbackType()const { return typeid(void(Arg...)); }
+		virtual const TypeIndex GetCallbackType()const { return to_typeindex<void(Arg...)>(); }
 		virtual void Awake(const std::shared_ptr<T>& self, Arg...arg) = 0;
 
 	};

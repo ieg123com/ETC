@@ -12,6 +12,8 @@ namespace Model
 		virtual void Run(const std::shared_ptr<Object>& self) = 0;
 	};
 
+	// 对象通过 ObjectFactroy 创建时，会紧随 AwakeSystem 后面触发
+	// 当模组被载入时，也会触发
 	template<typename T>
 	class LoadSystem :
 		public ILoadSystem
@@ -22,7 +24,7 @@ namespace Model
 		}
 
 		virtual const Type GetType()const override { return typeof(T); }
-		virtual const std::type_index GetCallbackType()const { return typeid(void()); }
+		virtual const TypeIndex GetCallbackType()const { return to_typeindex<void()>(); }
 		virtual void Load(const std::shared_ptr<T>& self) = 0;
 	};
 }

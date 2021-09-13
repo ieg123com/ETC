@@ -25,7 +25,7 @@ namespace Hotfix
 		{
 			LOG_INFO("PlayerEntity Load");
 
-			Game::Event().RegisterObjectEvent(self, self,200);
+			//Game::Event().RegisterObjectEvent(self, self,200);
 		}
 	};
 	REF(PlayerEntityLoadSystem, ObjectSystem);
@@ -37,7 +37,7 @@ namespace Hotfix
 		virtual void Destroy(const std::shared_ptr<PlayerEntity>& self) override
 		{
 			LOG_INFO("PlayerEntity Destroy");
-			Game::Event().RemoveObjectEvent(self, self, 200);
+			//Game::Event().RemoveObjectEvent(self, self, 200);
 
 
 		}
@@ -64,7 +64,7 @@ namespace Hotfix
 			LOG_INFO("Test Event {}", str);
 		}
 	};
-	REF(TestEvent, Event(201));
+	REF(TestEvent, Event);
 
 	class TestObjEvent : public ObjEventSystem<PlayerEntity,const std::string&>
 	{
@@ -74,7 +74,7 @@ namespace Hotfix
 			LOG_INFO("Test ObjEvent [{}] {}", self->Uuid, str);
 		}
 	};
-	REF(TestObjEvent, ObjEvent(200));
+	REF(TestObjEvent, Event);
 
 
 }

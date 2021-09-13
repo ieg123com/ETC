@@ -99,7 +99,7 @@ source_group(module\\init				FILES ${MODULE_INIT_FILES})
 source_group(module\\actor				FILES ${MODULE_ACTOR_FILES})
 source_group(module\\actor\\handler		FILES ${MODULE_ACTOR_HANDLER_FILES})
 source_group(module\\actorlocation		FILES ${MODULE_ACTOR_LOCATION_FILES})
-
+ 
 
 LIST(APPEND ALL_OBJECT
 	${MODULE_FILES}
