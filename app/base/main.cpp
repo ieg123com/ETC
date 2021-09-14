@@ -39,7 +39,7 @@ int main(int argc,char* argv[])
 
 
 
-			//TimerComponent::Instance->RegisterOnceTimer(1000, ::Hotfix::StartTest);
+			TimerComponent::Instance->RegisterOnceTimer(1000, ::Hotfix::StartTest);
 
 
 			LOG_INFO("¡·¡·¡·¡·¡·¡·Æô¶¯³É¹¦");

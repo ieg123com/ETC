@@ -2,6 +2,8 @@
 #include "MessageDispatcherComponent.h"
 #include "OpcodeTypeComponent.h"
 #include "net/Session.h"
+#include "module/component/SessionPlayerComponent.h"
+#include "module/actorlocation/ActorLocationSenderComponent.h"
 
 
 
@@ -43,12 +45,29 @@ void OuterMessageDispatcher::Dispatch(const std::shared_ptr<Session>& session, c
 	}
 	case EMessageType::IActorLocationMessage:
 	{
-		break;
+		{
+			ID key = session->GetComponent<SessionPlayerComponent>()->GetIdByOpcode(opcode);
+			ActorLocationSenderComponent::Instance->Send(key, std::dynamic_pointer_cast<IActorRequest>(proto_msg));
+			break;
+		}
+		
 	}
 	case EMessageType::IActorLocationRequest:
 	{
-		// ActorLocation 消息，将收到的消息转发给需要的服务中
-		break;
+		{
+			// ActorLocation 消息，将收到的消息转发给需要的服务中
+			ID key = session->GetComponent<SessionPlayerComponent>()->GetIdByOpcode(opcode);
+			auto request = std::dynamic_pointer_cast<IActorRequest>(proto_msg);
+			int32_t rpc_id = request->GetRpcId();
+			InstanceID instance_id = session->InstanceId();
+			auto response = ActorLocationSenderComponent::Instance->Call<IActorResponse>(key, request);
+			if (instance_id == session->InstanceId())
+			{
+				response->SetRpcId(rpc_id);
+				session->Reply(response.get());
+			}
+			break;
+		}
 	}
 	default:
 		break;

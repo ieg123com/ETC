@@ -17,9 +17,12 @@ namespace Model
 
 		// 消息类型
 		std::vector<std::shared_ptr<IMHandler>>	m_message_handler;
+		
 
 	public:
 		static MessageDispatcherComponent* Instance;
+
+		std::vector<EAppType>		MessageAppType;
 
 		void Awake();
 
@@ -32,9 +35,7 @@ namespace Model
 
 
 
-
 	};
-
 
 
 }

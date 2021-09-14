@@ -18,6 +18,9 @@ namespace Model
 
 		std::vector<EMessageType>	m_opcode_msg_types;
 
+		// 外网opcode
+		std::vector<uint8_t>	m_outer_actor_message;
+
 	public:
 		static OpcodeTypeComponent* Instance;
 
@@ -34,6 +37,8 @@ namespace Model
 		// 绑定rpc消息
 		void __BindRpcMessage(const Type& request, const Type& response);
 
+		// 设置为外网消息
+		void __SetOuterActorMessage(const uint16_t opcode);
 
 		// 用协议码创建消息实例
 		std::shared_ptr<IMessage> CreateInstanceTry(const uint16_t opcode)const;
@@ -71,6 +76,8 @@ namespace Model
 		}
 
 
+		bool IsOuterActorMessage(const uint16_t opcode)const;
+
 		// 获取消息id
 		uint16_t GetTypeOpcodeTry(const Type& tp)const;
 
@@ -93,6 +100,10 @@ namespace Model
 
 
 
+	inline bool OpcodeTypeComponent::IsOuterActorMessage(const uint16_t opcode)const
+	{
+		return (m_outer_actor_message[opcode] == 1);
+	}
 
 
 

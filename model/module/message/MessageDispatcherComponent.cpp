@@ -15,11 +15,13 @@ namespace Model
 	void MessageDispatcherComponent::Awake()
 	{
 		m_message_handler.resize(UINT16_MAX + 1);
+		MessageAppType.resize(UINT16_MAX + 1);
 	}
 
 	void MessageDispatcherComponent::Clear()
 	{
 		for (auto& item : m_message_handler)item.reset();
+		memset(MessageAppType.data(), 0, sizeof(*(MessageAppType.data())) * MessageAppType.size());
 	}
 
 	void MessageDispatcherComponent::RegisterMessage(const uint16_t opcode, const std::shared_ptr<IMHandler>& handler)

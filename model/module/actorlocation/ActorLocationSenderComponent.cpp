@@ -68,6 +68,14 @@ namespace Model
 
 	std::shared_ptr<IActorResponse> ActorLocationSenderComponent::__CallInner(const std::shared_ptr<ActorLocationSender>& actor_location_sender, const std::shared_ptr<IActorRequest>& message)
 	{
+		if (actor_location_sender->Id == 0)
+		{
+			// Id as 0
+			auto response = OpcodeTypeComponent::CreateResponseInstanceTry<IActorResponse>(message->GetOpcode());
+			response->SetRpcId(message->GetRpcId());
+			response->SetError((int32_t)ETC_ERR::NotFoundActor);
+			return response;
+		}
 		int32_t fail_times = 0;
 		actor_location_sender->LastSendTime = Game::Time().NowServerMilliseconds();
 		InstanceID instance_id = actor_location_sender->InstanceId();

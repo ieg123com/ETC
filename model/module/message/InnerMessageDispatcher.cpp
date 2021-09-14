@@ -28,6 +28,35 @@ void InnerMessageDispatcher::Dispatch(const std::shared_ptr<Session>& session, c
 	{
 		return;
 	}
+	if (OpcodeTypeComponent::Instance->IsOuterActorMessage(opcode))
+	{
+		// 内网收到了外网的消息，可能是其他服务发的，让gate转发给玩家。或者gate广播的消息
+		auto obj = Game::Event().GetObject(actor_id);
+		if (obj == nullptr)
+		{
+			// 没有找到acotr
+			if (auto proto_message = OpcodeTypeComponent::Instance->CreateInstanceTry(opcode))
+			{
+				LOG_ERROR("not found actor: {}  {}",
+					actor_id,
+					proto_message->GetType().full_name());
+			}
+			else {
+				LOG_ERROR("not found actor: {}  opcode: {}",
+					actor_id,
+					opcode);
+			}
+			return;
+		}
+
+		if (auto gate_session = dynamic_cast<Session*>(obj.get()))
+		{
+			// 转发给客户端
+			gate_session->Send(opcode, pos, size);
+			return;
+		}
+	}
+
 
 	auto proto_message = OpcodeTypeComponent::Instance->CreateInstanceTry(opcode);
 	if (!proto_message->ParseFromArray(pos, size))
@@ -66,7 +95,6 @@ void InnerMessageDispatcher::Dispatch(const std::shared_ptr<Session>& session, c
 		auto response = std::dynamic_pointer_cast<IActorResponse>(proto_message);
 		InnerMessageDispatcherHandler::HandleIActorResponse(actor_id, response);
 		break;
-		
 	}
 
 }

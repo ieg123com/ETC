@@ -79,6 +79,13 @@ namespace Model
 		}
 	}
 
+	void Session::Send(const uint16_t opcode, const char* data, const size_t len)
+	{
+		m_data_sent.resize(sizeof(opcode) + len);
+		memcpy(&m_data_sent[0], &opcode, sizeof(opcode));
+		memcpy(&m_data_sent[sizeof(opcode)], data, len);
+		Send(m_data_sent.data(), m_data_sent.size());
+	}
 
 	void Session::Send(const int64_t actor_id, const IMessage* message)
 	{

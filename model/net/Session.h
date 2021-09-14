@@ -36,6 +36,8 @@ namespace Model
 		/** @brief 发送消息*/
 		void Send(const char* data, const size_t len);
 
+		void Send(const uint16_t opcode,const char* data, const size_t len);
+
 		void Send(const int64_t actor_id, const IMessage* message);
 
 		void Send(const IMessage* message);

@@ -236,6 +236,10 @@ FILE(GLOB MODULE_COMPONENT_FILES "./module/component/*.cpp" "./module/component/
 set(MODULE_COMPONENT_CONFIG_FILES "")
 FILE(GLOB MODULE_COMPONENT_CONFIG_FILES "./module/component/config/*.cpp" "./module/component/config/*.h")
 
+# mysql
+set(MODULE_MYSQL_FILES "")
+FILE(GLOB MODULE_MYSQL_FILES "./module/mysql/*.cpp" "./module/mysql/*.h")
+
 
 
 
@@ -250,6 +254,7 @@ source_group(module\\coroutine			FILES ${MODULE_COROUTINE_FILES})
 source_group(module\\other				FILES ${MODULE_OTHER_FILES})
 source_group(module\\component			FILES ${MODULE_COMPONENT_FILES})
 source_group(module\\component\\config	FILES ${MODULE_COMPONENT_CONFIG_FILES})
+source_group(module\\mysql				FILES ${MODULE_MYSQL_FILES})
 
 
 LIST(APPEND ALL_OBJECT
@@ -263,7 +268,8 @@ LIST(APPEND ALL_OBJECT
 	${MODULE_COROUTINE_FILES}
 	${MODULE_OTHER_FILES}
 	${MODULE_COMPONENT_FILES}
-	${MODULE_COMPONENT_CONFIG_FILES})
+	${MODULE_COMPONENT_CONFIG_FILES}
+	${MODULE_MYSQL_FILES})
 
 #========================协议==============================
 
@@ -300,12 +306,17 @@ LIST(APPEND ALL_OBJECT
 #========================Demo==============================
 include_directories(./demo)
 
+set(DEMO_FILES "")
+FILE(GLOB DEMO_FILES "./demo/*.h" "./demo/*.cpp")
+
 set(DEMO_ENTITY_FILES "")
 FILE(GLOB DEMO_ENTITY_FILES "./demo/Entity/*.h")
 
+source_group(demo								FILES ${DEMO_FILES})
 source_group(demo\\Entity						FILES ${DEMO_ENTITY_FILES})
 
 LIST(APPEND ALL_OBJECT
+	${DEMO_FILES}
 	${DEMO_ENTITY_FILES})
  
 

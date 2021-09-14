@@ -51,6 +51,10 @@ FILE(GLOB MODULE_FILES "./module/*.cpp" "./module/*.h")
 set(MODULE_MESSAGE_FILES "")
 FILE(GLOB MODULE_MESSAGE_FILES "./module/message/*.cpp" "./module/message/*.h")
 
+# Message handler 组件
+set(MODULE_MESSAGE_HANDLER_FILES "")
+FILE(GLOB MODULE_MESSAGE_HANDLER_FILES "./module/message/handler/*.cpp" "./module/message/handler/*.h")
+
 # Component
 set(MODULE_COMPONENT_FILES "")
 FILE(GLOB MODULE_COMPONENT_FILES "./module/component/*.cpp" "./module/component/*.h")
@@ -95,6 +99,7 @@ FILE(GLOB MODULE_ENTITY_FILES "./module/entity/*.cpp" "./module/entity/*.h")
 
 source_group(module						FILES ${MODULE_FILES})
 source_group(module\\message			FILES ${MODULE_MESSAGE_FILES})
+source_group(module\\message\\handler	FILES ${MODULE_MESSAGE_HANDLER_FILES})
 source_group(module\\component			FILES ${MODULE_COMPONENT_FILES})
 source_group(module\\component\\config	FILES ${MODULE_COMPONENT_CONFIG_FILES})
 source_group(module\\handler			FILES ${MODULE_HANDLER_FILES})
@@ -110,6 +115,7 @@ source_group(module\\entity				FILES ${MODULE_ENTITY_FILES})
 LIST(APPEND ALL_OBJECT
 	${MODULE_FILES}
 	${MODULE_MESSAGE_FILES}
+	${MODULE_MESSAGE_HANDLER_FILES}
 	${MODULE_COMPONENT_FILES}
 	${MODULE_COMPONENT_CONFIG_FILES}
 	${MODULE_HANDLER_FILES}

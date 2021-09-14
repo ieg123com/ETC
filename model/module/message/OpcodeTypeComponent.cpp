@@ -17,7 +17,9 @@ namespace Model
 		m_type_request_response.clear();
 		m_opcode_request_response.resize(UINT16_MAX + 1);
 		m_opcode_msg_types.resize(UINT16_MAX + 1);
+		m_outer_actor_message.resize(UINT16_MAX + 1);
 		memset(m_opcode_request_response.data(), 0, sizeof(*m_opcode_request_response.data()) * m_opcode_request_response.size());
+		memset(m_outer_actor_message.data(), 0, sizeof(*m_outer_actor_message.data()) * m_outer_actor_message.size());
 	}
 
 	void OpcodeTypeComponent::Destroy()
@@ -27,6 +29,7 @@ namespace Model
 		m_type_request_response.clear();
 		m_opcode_request_response.clear();
 		m_opcode_msg_types.size();
+		m_outer_actor_message.clear();
 	}
 
 	void OpcodeTypeComponent::__RegisterMessage(const Type& tp, const uint16_t opcode, const EMessageType msg_type)
@@ -46,6 +49,12 @@ namespace Model
 			throw std::exception(std::format("已绑定了相同类型的消息。request = %s,response = %s", request.full_name(), response.full_name()).c_str());
 		}
 	}
+
+	void OpcodeTypeComponent::__SetOuterActorMessage(const uint16_t opcode)
+	{
+		m_outer_actor_message[opcode] = 1;
+	}
+
 
 
 

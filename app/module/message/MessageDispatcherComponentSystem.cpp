@@ -37,14 +37,17 @@ namespace Hotfix
 				{
 					// 这是一个特性实例
 					auto attr = std::dynamic_pointer_cast<Message>(item.second);
-					// 检查触发器是否支持当前服务
-					if (!Is((EAppType)attr->appType, appTyep))continue;
+					
 					// 消息处理对象类型。（获取被这个特性实例包装的对象类型）
 					Type handler_type = attr->GetObjectType();
 					// 消息处理对象实例
 					if (auto handler = TypeFactory::CreateInstance<IMHandler>(handler_type))
 					{
 						auto message = TypeFactory::CreateInstance<IMessage>(handler->GetRequestType());
+						// 设置消息类型，Gate分发消息时用到
+						self->MessageAppType[message->GetOpcode()] = (EAppType)attr->appType;
+						// 检查触发器是否支持当前服务
+						if (!Is((EAppType)attr->appType, appTyep))continue;
 						// 为这组件注册消息到达后的触发实例
 						self->RegisterMessage(message->GetOpcode(), handler);
 					}
