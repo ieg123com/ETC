@@ -1,4 +1,4 @@
-# ETC C++服务端框架 （不完整的）
+# ETC C++服务端框架 Beta
 采用 ECS架构、协程，可以进行单线程无阻塞的方式进行开发。
 ECS 参考了 [ET](https://github.com/egametang/ET) 设计思路。(将计划使用 dll/so 支持逻辑热重载)
 
@@ -12,14 +12,13 @@ ECS 参考了 [ET](https://github.com/egametang/ET) 设计思路。(将计划使
 
 ### [wepoll](https://github.com/piscisaureus/wepoll)
 
-### [asyncplusplus](https://github.com/Amanieu/asyncplusplus)
 
 ## 继承关系
-![继承关系图](book/class_g_event__inherit__graph.png)
+![继承关系图](book/class_model_1_1_object__inherit__graph.png)
 
 ## 缺少的功能
 
-### Actor、mysql调度器、协程热更支持
+### DB调度器、协程热更支持
 
 ## 编译
 Win [下载Cmake](https://cmake.org/download/)
