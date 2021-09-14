@@ -31,7 +31,6 @@ namespace Hotfix
 					// 这是一个特性实例
 					auto attr = std::dynamic_pointer_cast<Message>(item.second);
 					// 检查触发器是否支持当前服务
-					LOG_INFO("attr->GetObjectType():{}", attr->GetObjectType().full_name());
 					if (!Is((EAppType)attr->appType, appTyep))continue;
 					// 消息处理对象类型。（获取被这个特性实例包装的对象类型）
 					Type handler_type = attr->GetObjectType();
@@ -39,7 +38,6 @@ namespace Hotfix
 					if (auto handler = TypeFactory::CreateInstance<IMActorHandler>(handler_type))
 					{
 						auto message = TypeFactory::CreateInstance<IMessage>(handler->GetRequestType());
-						LOG_INFO("actor message id:{}", message->GetOpcode());
 						// 为这组件注册消息到达后的触发实例
 						self->RegisterMessage(message->GetOpcode(), handler);
 					}

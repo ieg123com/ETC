@@ -29,4 +29,7 @@ void ActorMessageDispatcherComponent::Handle(const std::shared_ptr<GEntity>& ent
 	{
 		m_mactor_handler[opcode]->Handle(entity, message, reply);
 	}
+	else {
+		throw std::exception(std::format("处理消息出错，这条消息没有处理实例。 message: %s:%d", message->GetType().full_name(), opcode).c_str());
+	}
 }

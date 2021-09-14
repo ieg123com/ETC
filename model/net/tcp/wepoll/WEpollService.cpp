@@ -34,46 +34,11 @@ int WEpollService::co_epoll_wait(
 	int timeout)
 {
 
-
-// #ifdef _WIN32
-// 	// Win下 libgo 协程库不支持 iocp,用延迟的方法，尽可能的缩短触发时间。
-// 	// 完善后，计划在 Linux 下部署。
-// 	int fds_num = epoll_wait(m_epollfd, events, m_address_info.maxEvents, 0);
-// 	if (fds_num == 0)
-// 	{
-// 		std::this_thread::sleep_for(std::chrono::microseconds(10));
-// 		fds_num = epoll_wait(m_epollfd, events, m_address_info.maxEvents, 0);
-// 	}
-// #else
-// 	int fds_num = epoll_wait(m_epollfd, events, m_address_info.maxEvents, 1000);
-// #endif
-
-
 #if _WIN32
 	timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
-// 	timeval tv;
-// 	tv.tv_sec = 0;
-// 	tv.tv_usec = 10;
-// 
 	fd_set readfds;
 	memcpy(&readfds, &self->m_fd, sizeof(self->m_fd));
-// 	FD_ZERO(&readfds);
-// 	FD_SET(socket, &readfds);
-// 	FD_ZERO(&exceptfds);
-// 	FD_SET(socket, &exceptfds);
-	//time_t start_time = Game::Time().NowServerMilliseconds();
 	int n = select(0, &readfds, nullptr, nullptr, &tv);
-	//time_t end_time = Game::Time().NowServerMilliseconds();
-
-	//printf("select diff time %lld n %d\n", end_time - start_time, n);
-	//time_t start_time = Game::Time().NowServerMilliseconds();
-	//int n = co::await([=]()-> int {return epoll_wait(ephnd, events, maxevents, 1000); });
-	//time_t end_time = Game::Time().NowServerMilliseconds();
-	//int n = 0;
-	//return co::await([&]()-> int {return epoll_wait(ephnd, events, maxevents, timeout); });
-	//printf("select diff time %lld n %d\n", end_time - start_time, n);
-	//return n;
-	//co_yield;
 	return epoll_wait(ephnd, events, maxevents, 0);
 #else
 	return epoll_wait(ephnd, events, maxevents, timeout);
@@ -136,7 +101,6 @@ namespace Model
 			LOG_ERROR("当前组件已经在运作了");
 			return false;
 		}
-
 		m_address_info.address = address;
 
 		if (!ConnectAddress(m_address_info))
@@ -215,6 +179,8 @@ namespace Model
 #endif // _WIN32
 
 		m_tcp_socket = SOCKET_ERROR;
+
+		FD_ZERO(&m_fd);
 	}
 
 	void WEpollService::Destroy()
@@ -371,7 +337,7 @@ namespace Model
 			LastErrorMsg = strerror(errno);
 			return false;
 		}
-		FD_ZERO(&m_fd);
+		
 		FD_SET(m_tcp_socket, &m_fd);
 		return true;
 	}
@@ -451,8 +417,6 @@ namespace Model
 			LOG_ERROR("set conn sock nonblocking failed!");
 			return;
 		}
-		// 增加fd
-		FD_SET(conn_sock, &m_fd);
 
 
 		// 创建新会话
@@ -638,7 +602,6 @@ namespace Model
 
 	void WEpollService::StartEpollEventLoop()
 	{
-		LOG_INFO("StartEpollEventLoop");
 		epoll_event* events = new epoll_event[m_address_info.maxEvents];
 		while (m_epoll_status == EpollStatus::EPOLL_RUNNING)
 		{
@@ -791,10 +754,10 @@ namespace Model
 			return;
 		}
 
-		FD_CLR(epoll_event.data.fd, &m_fd);
 
 		stSocketContext* ctx = (stSocketContext*)epoll_event.data.ptr;
 		SessionID fd = ctx->session->SessionId;
+		
 		Close(fd);
 
 	}
@@ -802,7 +765,12 @@ namespace Model
 
 	bool WEpollService::__AddSocketCtx(const SessionID session_id, stSocketContext* ctx)
 	{
-		return m_all_socket_ctx.insert(std::make_pair(session_id, ctx)).second;
+		if (m_all_socket_ctx.insert(std::make_pair(session_id, ctx)).second)
+		{
+			FD_SET(session_id, &m_fd);
+			return true;
+		}
+		return false;
 	}
 
 	bool WEpollService::__RemoveSocketCtx(const SessionID session_id)
@@ -813,6 +781,7 @@ namespace Model
 			return false;
 		}
 		m_all_socket_ctx.erase(found);
+		FD_CLR(session_id, &m_fd);
 		return true;
 	}
 

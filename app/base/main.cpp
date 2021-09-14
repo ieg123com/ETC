@@ -34,25 +34,12 @@ int main(int argc,char* argv[])
 
 			LOG_INFO("==============================");
 
-
-
 			
 			Game::Event().Publish<SystemEvent::AppStart&>(SystemEvent::AppStart());
 
 
 
-			TimerComponent::Instance->RegisterOnceTimer(1000, ::Hotfix::StartTest);
-			TimerComponent::Instance->RegisterRepeatedTimer(500, [] {LOG_INFO("wait"); });
-
-			co::CoMutex lock;
-			TimerComponent::Instance->RegisterRepeatedTimer(1000, [&] {
-				LOG_INFO("start timer");
-				lock.lock();
-				co_sleep(10000);
-				lock.unlock();
-				LOG_INFO("over timer");
-
-				});
+			//TimerComponent::Instance->RegisterOnceTimer(1000, ::Hotfix::StartTest);
 
 
 			LOG_INFO("¡·¡·¡·¡·¡·¡·Æô¶¯³É¹¦");
