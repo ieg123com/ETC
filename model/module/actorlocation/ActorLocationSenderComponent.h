@@ -41,7 +41,7 @@ namespace Model
 			}
 			throw std::exception(std::format("无法转换类型: %s => %s",
 				msg_rpo->GetType().full_name(),
-				response->GetType().full_name()));
+				typeof(T).full_name()).c_str());
 		}
 
 

@@ -6,7 +6,7 @@
 
 
 template<typename T, typename Request, typename Response>
-class MActorLocationRpcHandler :
+class AMActorLocationRpcHandler :
 	public IMActorHandler
 {
 public:
@@ -24,7 +24,7 @@ public:
 				throw std::exception(std::format(
 					"转换消息类型失败: %s => %s",
 					message->GetType().full_name(),
-					typeof(request).full_name()).c_str());
+					typeof(Request).full_name()).c_str());
 			}
 
 			auto unit = std::dynamic_pointer_cast<T>(entity);
@@ -43,7 +43,7 @@ public:
 			};
 
 			try {
-				Run(unit, *request, response);
+				Run(unit, *request, response, areply);
 			}
 			catch (std::exception& e) {
 				LOG_ERROR("MActorLocationRpcHandler error: 处理消息出错:{} {}",

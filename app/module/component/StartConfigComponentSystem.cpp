@@ -14,6 +14,7 @@ namespace Hotfix
 		virtual void Awake(const std::shared_ptr<StartConfigComponent>& self) override
 		{
 			auto& all_config = ConfigComponent::Instance->GetAllConfig<Config_StartApp>();
+			Game::Options().AppType = EAppType::None;
 			for (auto& item : all_config)
 			{
 				if (auto config = item.second->To<Config_StartApp>())
@@ -21,11 +22,11 @@ namespace Hotfix
 					auto start_config = std::make_shared<StartConfig>();
 					start_config->Init(config);
 					self->__ConfigDict.insert(std::make_pair(start_config->ProcessId, start_config));
-					Game::Options().AppType = EAppType::None;
 					if (start_config->ProcessId == Game::Options().ProcessId)
 					{
 						// 记录进程拥有的服务
 						Game::Options().AppType = (EAppType)((uint32_t)(Game::Options().AppType) | (uint32_t)(start_config->AppType));
+						
 					}
 
 					if (Is(start_config->AppType, EAppType::Gate))

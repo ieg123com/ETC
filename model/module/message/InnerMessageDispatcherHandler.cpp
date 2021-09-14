@@ -72,8 +72,10 @@ void InnerMessageDispatcherHandler::HandleIActorRequest(const int64_t actor_id, 
 	switch (mailbox_componet->MailBoxType)
 	{
 	case MailBoxType::MessageDispatcher:
-	case MailBoxType::UnorderedMessageDispatcher:
 		ActorMessageDispatcherComponent::Instance->Handle(entity, request->GetOpcode(), request.get(), reply);
+		break;
+	case MailBoxType::UnorderedMessageDispatcher:
+		go[=]{ ActorMessageDispatcherComponent::Instance->Handle(entity, request->GetOpcode(), request.get(), reply); };
 		break;
 	case MailBoxType::GateSession:
 		// 需要转发给客户端的消息

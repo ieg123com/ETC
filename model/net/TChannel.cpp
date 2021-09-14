@@ -44,25 +44,26 @@ namespace Model
 	void TChannel::OnRead(const char* data, const size_t len)
 	{
 		m_memory_split.Write(data, len);
-		if (!m_memory_split.Unpack())
+		while (true)
 		{
-			return;
+			if (!m_memory_split.Unpack())
+			{
+				break;
+			}
+			// 消息解析完成
+			auto pack = std::make_shared<std::string>(std::move(m_memory_split.Data));
+			auto session = GetHost<Session>();
+			if (!m_channel.TryPush(std::move([session, pack] {
+				session->__networkcomponent->__MessageDispatcher->Dispatch(session, pack->data(), pack->size());
+				})))
+			{
+				// 缓存队列容量已满,当前会话发生了堵塞
+				LOG_WARN("读取数据时发现，缓存队列容量已满，当前会话发生了堵塞。(ip = {},fd = {})",
+					session->Address.ToString(), session->SessionId);
+				// 断开这个出现问题的会话
+				session->Dispose();
+			}
 		}
-		// 消息解析完成
-		auto pack = std::make_shared<std::string>(std::move(m_memory_split.Data));
-		auto session = GetHost<Session>();
-		if (!m_channel.TryPush(std::move([session, pack] {
-			session->__networkcomponent->__MessageDispatcher->Dispatch(session, pack->data(), pack->size());
-			})))
-		{
-			// 缓存队列容量已满,当前会话发生了堵塞
-			LOG_WARN("读取数据时发现，缓存队列容量已满，当前会话发生了堵塞。(ip = {},fd = {})",
-				session->Address.ToString(), session->SessionId);
-			// 断开这个出现问题的会话
-			session->Dispose();
-		}
-		
-
 	}
 
 	void TChannel::Send(const char* data, const size_t len)

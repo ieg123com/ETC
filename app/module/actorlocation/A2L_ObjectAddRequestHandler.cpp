@@ -10,6 +10,7 @@ namespace Hotfix
 	public:
 		virtual void Run(const std::shared_ptr<App>& app, A2L_ObjectAddRequest& request, L2A_ObjectAddResponse& response, FMReply& reply) override
 		{
+			LOG_INFO("Location Add: {}", request.ShortDebugString());
 			app->GetComponent<LocationComponent>()->Add(request.key(), request.instanceid());
 			reply();
 		}

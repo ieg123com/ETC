@@ -38,7 +38,6 @@ void InnerMessageDispatcher::Dispatch(const std::shared_ptr<Session>& session, c
 				"½âÎöÏûÏ¢Ê§°Ü! message type = %s",
 				proto_message->GetType().full_name()).c_str());
 	}
-
 	switch (msg_type)
 	{
 	case EMessageType::IActorMessage:

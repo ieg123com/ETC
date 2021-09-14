@@ -20,6 +20,7 @@
 
 #include "actor/ActorMessageSenderComponent.h"
 #include "actorlocation/ActorLocationSenderComponent.h"
+#include "actorlocation/LocationProxyComponent.h"
 
 
 

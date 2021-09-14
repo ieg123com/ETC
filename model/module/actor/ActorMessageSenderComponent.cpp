@@ -138,7 +138,7 @@ void ActorMessageSenderComponent::__Run(const std::shared_ptr<ActorMessageSender
 					actor_message->ProtoRequest->GetType().full_name(),
 					response->GetType().full_name()).c_str()));
 	}
-	else if (actor_message->HasException && IsRpcNeedThrowException((ETC_ERR)response->GetError()))
+	else if (actor_message->NeedException && IsRpcNeedThrowException((ETC_ERR)response->GetError()))
 	{
 		actor_message->SetException(std::exception(
 			std::format(

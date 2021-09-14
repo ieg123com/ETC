@@ -7,7 +7,7 @@
 
 
 template<typename T, typename Request>
-class MActorLocationHandler :
+class AMActorLocationHandler :
 	public IMActorHandler
 {
 public:
