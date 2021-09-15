@@ -236,10 +236,9 @@ FILE(GLOB MODULE_COMPONENT_FILES "./module/component/*.cpp" "./module/component/
 set(MODULE_COMPONENT_CONFIG_FILES "")
 FILE(GLOB MODULE_COMPONENT_CONFIG_FILES "./module/component/config/*.cpp" "./module/component/config/*.h")
 
-# mysql
-set(MODULE_MYSQL_FILES "")
-FILE(GLOB MODULE_MYSQL_FILES "./module/mysql/*.cpp" "./module/mysql/*.h")
-
+# db
+set(MODULE_DB_FILES "")
+FILE(GLOB MODULE_DB_FILES "./module/db/*.cpp" "./module/db/*.h")
 
 
 
@@ -254,7 +253,7 @@ source_group(module\\coroutine			FILES ${MODULE_COROUTINE_FILES})
 source_group(module\\other				FILES ${MODULE_OTHER_FILES})
 source_group(module\\component			FILES ${MODULE_COMPONENT_FILES})
 source_group(module\\component\\config	FILES ${MODULE_COMPONENT_CONFIG_FILES})
-source_group(module\\mysql				FILES ${MODULE_MYSQL_FILES})
+source_group(module\\db					FILES ${MODULE_DB_FILES})
 
 
 LIST(APPEND ALL_OBJECT
@@ -269,7 +268,7 @@ LIST(APPEND ALL_OBJECT
 	${MODULE_OTHER_FILES}
 	${MODULE_COMPONENT_FILES}
 	${MODULE_COMPONENT_CONFIG_FILES}
-	${MODULE_MYSQL_FILES})
+	${MODULE_DB_FILES})
 
 #========================协议==============================
 
