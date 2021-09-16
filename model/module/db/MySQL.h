@@ -30,13 +30,14 @@ namespace Model
 		virtual std::string GetString(const int idx) const override;
 		virtual time_t GetTime(const int idx) const override;
 
-		virtual void Next() override;
+		virtual bool Next() override;
 
 	private:
 		
 		MYSQL_ROW	m_row;
 		MYSQL_RES*	m_res;
 
+		friend class MySQL;
 	};
 
 
@@ -56,9 +57,10 @@ namespace Model
 
 
 	private:
-		MYSQL	m_mysql;
+		std::map<std::string, std::string> m_params;
+		std::shared_ptr<MYSQL>	m_mysql;
 
-
+		std::string m_cmd;
 
 	};
 

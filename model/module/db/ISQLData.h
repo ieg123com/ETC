@@ -24,7 +24,7 @@ namespace Model
 		virtual std::string GetString(const int idx) const = 0;
 		virtual time_t GetTime(const int idx) const = 0;
 
-		virtual void Next() = 0;
+		virtual bool Next() = 0;
 
 
 	};
