@@ -13,6 +13,7 @@
 #include "model/module/actor/ActorMessageSenderComponent.h"
 #include "model/module/actorlocation/LocationProxyComponent.h"
 #include "model/module/actorlocation/ActorLocationSenderComponent.h"
+#include "model/module/db/MySQLSchedulerComponent.h"
 #include "model/module/other/SystemEventType.h"
 #include "module/entity/AppFactory.h"
 
@@ -44,6 +45,8 @@ namespace Hotfix
 			Game::World()->AddComponent<LocationProxyComponent>();
 			// ·¢ËÍ actor location ÏûÏ¢
 			Game::World()->AddComponent<ActorLocationSenderComponent>();
+
+			Game::World()->AddComponent<MySQLSchedulerComponent>();
 
 			switch (Game::Options().ProcessType)
 			{

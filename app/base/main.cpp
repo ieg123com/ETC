@@ -40,7 +40,7 @@ int main(int argc,char* argv[])
 
 
 			TimerComponent::Instance->RegisterOnceTimer(1000, ::Hotfix::StartTest);
-
+			TimerComponent::Instance->RegisterRepeatedTimer(1000, [] {LOG_INFO("wait..."); });
 
 			LOG_INFO("¡·¡·¡·¡·¡·¡·Æô¶¯³É¹¦");
 			while (true)
