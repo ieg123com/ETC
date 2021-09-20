@@ -12,7 +12,10 @@ namespace Hotfix
 		TestActorLocation();
 
 		auto mysql = MySQLSchedulerComponent::Instance->Get(2);
-		
+		LOG_INFO("start");
+		mysql->Execute("update gamerole set game_class_level=2 where game_id=168;");
+		LOG_INFO("end");
+
 		auto res = mysql->Query("select * from gamerole limit 10;");
 
 		while (res->Next())

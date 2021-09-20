@@ -330,7 +330,7 @@ if(MSVC)
 	
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT /EHa")
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd /EHa")
-	add_definitions(-DETC_EXPORTS -DLIBASYNC_BUILD)
+	add_definitions(-DLIBETC_BUILD -DLIBASYNC_BUILD)
 else() 
 	target_link_libraries(model mysqlclient libgo)
 endif()

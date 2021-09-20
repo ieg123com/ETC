@@ -133,6 +133,24 @@ LIST(APPEND ALL_OBJECT
 	${MODULE_ENTITY_FILES}
 	${MODULE_DB_FILES})
 
+#========================Net加载==============================
+
+# net
+set(NET_FILES "")
+FILE(GLOB NET_FILES "./net/*.cpp" "./net/*.h")
+
+# net tcp wepoll
+set(NET_TCP_WEPOLL_FILES "")
+FILE(GLOB NET_TCP_WEPOLL_FILES "./net/tcp/wepoll/*.cpp" "./net/tcp/wepoll/*.h")
+
+
+source_group(net								FILES ${NET_FILES})
+source_group(net\\tcp\\wepoll					FILES ${NET_TCP_WEPOLL_FILES})
+
+LIST(APPEND ALL_OBJECT
+	${NET_FILES}
+	${NET_TCP_WEPOLL_FILES})
+
 #========================Demo加载==============================
 
 # demo message handler
