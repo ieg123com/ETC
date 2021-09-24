@@ -1,5 +1,5 @@
-# ETC C++服务端框架 Beta
-采用 ECS架构、协程，可以进行单线程无阻塞的方式进行开发。
+# ETC C++服务端分布式框架 Beta
+采用 ECS架构、分布式、协程，可以进行单线程无阻塞的方式进行开发。
 ECS 参考了 [ET](https://github.com/egametang/ET) 设计思路。(将计划使用 dll/so 支持逻辑热重载)
 
 ## 使用的库
