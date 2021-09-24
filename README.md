@@ -18,7 +18,7 @@ ECS 参考了 [ET](https://github.com/egametang/ET) 设计思路。(将计划使
 
 ## 缺少的功能
 
-### DB调度器、协程热更支持
+### 协程热更支持
 
 ## 编译
 Win [下载Cmake](https://cmake.org/download/)
