@@ -5,8 +5,12 @@
 
 namespace Model
 {
+	namespace async {
+		class Scheduler;
+	}
 	class Dll;
 	class IdGenerator;
+
 
 
 	// 全局变量
@@ -17,6 +21,7 @@ namespace Model
 		class GlobalGame*			game;
 		class GlobalData*			global_data;
 		IdGenerator*				id_generator;
+		async::Scheduler*			async_scheduler;
 	};
 
 

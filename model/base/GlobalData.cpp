@@ -11,5 +11,6 @@ namespace Model
 		m_attribute_id = 0;
 		m_type_index = 0;
 		m_event_index = 0;
+		m_async_task_id = 0;
 	}
 }

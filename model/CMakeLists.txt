@@ -41,14 +41,6 @@ FILE(GLOB ETC_ENTITY_FILES "./etc/entity/*.cpp" "./etc/entity/*.h")
 set(ETC_COMMON_TIMER_FILES "")
 FILE(GLOB ETC_COMMON_TIMER_FILES "./etc/common/timer/*.cpp" "./etc/common/timer/*.h")
 
-#协程
-set(ETC_COMMON_COROUTINE_FILES "")
-FILE(GLOB ETC_COMMON_COROUTINE_FILES "./etc/common/coroutine/*.cpp" "./etc/common/coroutine/*.h")
-
-#协程(异步)
-set(ETC_COMMON_COROUTINE_ASYNC_FILES "")
-FILE(GLOB ETC_COMMON_COROUTINE_ASYNC_FILES "./etc/common/coroutine/async/*.cpp" "./etc/common/coroutine/async/*.h")
-
 #AOI
 set(ETC_COMMON_AOI_FILES "")
 FILE(GLOB ETC_COMMON_AOI_FILES "./etc/common/aoi/*.cpp" "./etc/common/aoi/*.h")
@@ -69,8 +61,6 @@ source_group(etc\\entity					FILES ${ETC_ENTITY_FILES})
 source_group(etc\\interface					FILES ${ETC_INTERFACE_FILES})
 source_group(etc\\kernel\\event				FILES ${ETC_COMMON_EVENT_FILES})
 source_group(etc\\common\\timer				FILES ${ETC_COMMON_TIMER_FILES})
-source_group(etc\\common\\coroutine			FILES ${ETC_COMMON_COROUTINE_FILES})
-source_group(etc\\common\\coroutine\\async	FILES ${ETC_COMMON_COROUTINE_ASYNC_FILES})
 source_group(etc\\common\\aoi				FILES ${ETC_COMMON_AOI_FILES})
 source_group(etc\\common\\aoi\\skip_list	FILES ${ETC_COMMON_SKIP_LIST_FILES})
 
@@ -82,8 +72,6 @@ LIST(APPEND ALL_OBJECT
 	${ETC_INTERFACE_FILES}
 	${ETC_COMMON_EVENT_FILES}
 	${ETC_COMMON_TIMER_FILES}
-	${ETC_COMMON_COROUTINE_FILES}
-	${ETC_COMMON_COROUTINE_ASYNC_FILES}
 	${ETC_COMMON_AOI_FILES}
 	${ETC_COMMON_SKIP_LIST_FILES})
 
@@ -117,9 +105,13 @@ FILE(GLOB BASE_REFLECTION_FILES "./base/reflection/*.cpp" "./base/reflection/*.h
 set(BASE_ATTRIBUTE_FILES "")
 FILE(GLOB BASE_ATTRIBUTE_FILES "./base/attribute/*.cpp" "./base/attribute/*.h")
 
-#任务
-set(BASE_TASK_FILES "")
-FILE(GLOB BASE_TASK_FILES "./base/task/*.cpp" "./base/task/*.h")
+#异步
+set(BASE_ASYNC_FILES "")
+FILE(GLOB BASE_ASYNC_FILES "./base/async/*.cpp" "./base/async/*.h")
+
+#单例模式
+set(BASE_SINGLE_FILES "")
+FILE(GLOB BASE_SINGLE_FILES "./base/single/*.cpp" "./base/single/*.h")
 
 #helper
 set(BASE_HELPER_FILES "")
@@ -140,6 +132,7 @@ source_group(base\\type					FILES ${BASE_TYPE_FILES})
 source_group(base\\reflection			FILES ${BASE_REFLECTION_FILES})
 source_group(base\\attribute			FILES ${BASE_ATTRIBUTE_FILES})
 source_group(base\\task					FILES ${BASE_TASK_FILES})
+source_group(base\\async				FILES ${BASE_ASYNC_FILES})
 source_group(base\\single				FILES ${BASE_SINGLE_FILES})
 source_group(base\\helper				FILES ${BASE_HELPER_FILES})
 source_group(base\\helper\\dll			FILES ${BASE_HELPER_DLL_FILES})
@@ -152,6 +145,7 @@ LIST(APPEND ALL_OBJECT
 	${BASE_REFLECTION_FILES}
 	${BASE_ATTRIBUTE_FILES}
 	${BASE_TASK_FILES}
+	${BASE_ASYNC_FILES}
 	${BASE_SINGLE_FILES}
 	${BASE_HELPER_FILES}
 	${BASE_HELPER_DLL_FILES}

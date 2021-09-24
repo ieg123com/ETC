@@ -6,6 +6,7 @@
 #include "reflection/reflection.h"
 #include "kernel/ObjectFactory.h"
 #include "kernel/IdGenerator.h"
+#include "async/async.h"
 #include "GlobalData.h"
 #include "Game.h"
 
@@ -41,6 +42,7 @@ namespace Model
 		GlobalData::Instance = new GlobalData();
 		GlobalGame::Instance = new GlobalGame();
 		IdGenerator::Instance = new IdGenerator();
+		async::Scheduler::Instance = new async::Scheduler();
 		GlobalGame::Instance->Init();
 
 		ParseArguments(argc, argv);
@@ -63,6 +65,7 @@ namespace Model
 		global.global_data = GlobalData::Instance;
 		global.game = GlobalGame::Instance;
 		global.id_generator = IdGenerator::Instance;
+		global.async_scheduler = async::Scheduler::Instance;
 		return global;
 	}
 
@@ -73,5 +76,6 @@ namespace Model
 		GlobalData::Instance = global.global_data;
 		GlobalGame::Instance = global.game;
 		IdGenerator::Instance = global.id_generator;
+		async::Scheduler::Instance = global.async_scheduler;
 	}
 }

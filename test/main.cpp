@@ -9,7 +9,9 @@
 #include "model/module/message/NetOuterComponent.h"
 #define LIBASYNC_NUM_THREADS 20
 #include "coroutine/co_async.h"
+#include "model/base/async/async.h"
 #include <stdio.h>
+#include <stdint.h>
 //#include "CircularBuffer.h"
 
 using namespace std;
@@ -82,21 +84,26 @@ int ret_num()
 
 void test()
 {
+
+
+	int num = await []{ 
+		int n = 0; 
+		for (int i = 0; i < 10000; ++i) 
+		{
+			++n;
+		} 
+		return n; 
+	};
+
+	LOG_INFO("reault: {}", num);
+
+
+
+
+
 	LOG_INFO("test");
 	time_t start_time = Game::Time().NowServerMilliseconds();
-	auto num = co::await([]()->int {
-		//std::this_thread::sleep_for(std::chrono::milliseconds(10 * 1000));
-		return 1;
-		});
-	num = co::await([]()->int {
-		//std::this_thread::sleep_for(std::chrono::milliseconds(10 * 1000));
-		return 3;
-		});
-	num = co::await([]()->int {
-		//std::this_thread::sleep_for(std::chrono::milliseconds(10 * 1000));
-		return 3;
-		});
-	LOG_INFO("num {}", num);
+
 	time_t end_time = Game::Time().NowServerMilliseconds();
 	LOG_INFO("test 2  cost:{}",end_time-start_time);
 	MemorySplit	split;
@@ -213,6 +220,8 @@ int main(int argc, char* argv[])
 {
 	Model::Init(argc,argv);
 	g_scene = ObjectFactory::Create<Scene>();
+	Model::async::Scheduler::Instance->Start();
+
 // 	go network_server;
 // 	go network_client;
 //	go network;
