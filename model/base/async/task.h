@@ -100,9 +100,7 @@ namespace Model
 
 
 			virtual void run()override {
-				printf("task run A\n");
 				if (__State != TaskState::Pending)return;
-				printf("task run B\n");
 
 				// 设置这个任务正在执行中
 				__State = TaskState::UnWrapped;
@@ -119,9 +117,8 @@ namespace Model
 					__Exception = "Unknown error";
 					__State = TaskState::Canceled;
 				}
-				printf("task run C\n");
 
-				printf("channel %d\n",__Channel.TryPush(__State));
+				__Channel.TryPush(__State);
 			}
 
 			Result get() {

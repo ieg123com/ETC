@@ -8,7 +8,6 @@
 #include "model/module/message/NetInnerComponent.h"
 #include "model/module/message/NetOuterComponent.h"
 #define LIBASYNC_NUM_THREADS 20
-#include "coroutine/co_async.h"
 #include "model/base/async/async.h"
 #include <stdio.h>
 #include <stdint.h>
@@ -86,15 +85,7 @@ void test()
 {
 
 
-	int num = await []{ 
-		int n = 0; 
-		for (int i = 0; i < 10000; ++i) 
-		{
-			++n;
-		} 
-		return n; 
-	};
-
+	int num = await ret_num;
 	LOG_INFO("reault: {}", num);
 
 
