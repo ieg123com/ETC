@@ -1,7 +1,12 @@
 #include "Time.h"
 #include <chrono>
 
+#ifdef _WIN32
+#include <windows.h>
+#include <mmsystem.h>
 
+#pragma comment(lib,"Winmm.lib")
+#endif
 
 Time::Time()
 {
@@ -15,6 +20,14 @@ Time Time::Day(const time_t val)
 	time.m_time = *localtime(&now_time);
 	return time;
 }
+
+void Time::TimeBeginPeriod(const time_t u_period)
+{
+#ifdef _WIN32
+	::timeBeginPeriod(u_period);
+#endif
+}
+
 
 Time& Time::today()
 {

@@ -12,6 +12,8 @@ public:
 
 	static Time Day(const time_t val);
 
+	static void TimeBeginPeriod(const time_t u_period);
+
 	Time& today();
 	Time& now();
 	Time& year(const int32_t val);

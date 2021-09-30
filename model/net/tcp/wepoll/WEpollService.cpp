@@ -21,7 +21,6 @@
 
 #include "net/Session.h"
 #include "net/TChannel.h"
-#include "coroutine/co_async.h"
 
 
 // 异步 epoll wait

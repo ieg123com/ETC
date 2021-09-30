@@ -14,6 +14,16 @@ namespace Hotifx
 	};
 	REF(WEpollServiceAwakeSystem, ObjectSystem);
 
+	class WEpollServiceUpdateSystem : public UpdateSystem<WEpollService>
+	{
+	public:
+		virtual void Update(const std::shared_ptr<WEpollService>& self)override
+		{
+
+		}
+	};
+	REF(WEpollServiceUpdateSystem, ObjectSystem);
+
 	class WEpollServiceDestroySystem : public DestroySystem<WEpollService>
 	{
 	public:

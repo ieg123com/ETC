@@ -22,7 +22,7 @@ using namespace Model;
 int main(int argc,char* argv[])
 {
 
-
+	Time::TimeBeginPeriod(1);
 	go [=]{
 		Model::Init(argc,argv);
 	{
@@ -46,9 +46,13 @@ int main(int argc,char* argv[])
 			while (true)
 			{
 				try {
+					time_t begin_time = Game::Time().NowServerMilliseconds();
 					Model::Game::Event().Update();
 					Model::Game::Event().LateUpdate();
-					co_sleep(50);
+					co_sleep(1);
+					time_t end_time = Game::Time().NowServerMilliseconds();
+					LOG_INFO("update frame time:{}", end_time - begin_time);
+					
 				}
 				catch (std::exception& e)
 				{
