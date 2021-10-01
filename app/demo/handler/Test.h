@@ -9,8 +9,8 @@ namespace Hotfix
 
 	void StartTest() {
 		LOG_INFO("==========> ¿ªÊ¼²âÊÔ <===========");
-// 		TestActor();
-// 		TestActorLocation();
+ 		TestActor();
+ 		TestActorLocation();
 
 // 		auto mysql = MySQLSchedulerComponent::Instance->Get(2);
 // 		LOG_INFO("start");

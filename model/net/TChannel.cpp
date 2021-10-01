@@ -12,28 +12,6 @@
 
 namespace Model
 {
-	class TChannelAwakeSystem : public AwakeSystem<TChannel>
-	{
-	public:
-		virtual void Awake(const std::shared_ptr<TChannel>& self) override
-		{
-			self->Awake();
-			go[self]{
-				self->Start();
-			};
-		}
-	};
-	REF(TChannelAwakeSystem, ObjectSystem);
-
-	class TChannelDestroySystem : public DestroySystem<TChannel>
-	{
-	public:
-		virtual void Destroy(const std::shared_ptr<TChannel>& self) override
-		{
-			self->Destroy();
-		}
-	};
-	REF(TChannelDestroySystem, ObjectSystem);
 
 	TChannel::TChannel():
 		m_channel(NETWORK_CHANNEL_CAPACITY)
@@ -53,16 +31,17 @@ namespace Model
 			// 消息解析完成
 			auto pack = std::make_shared<std::string>(std::move(m_memory_split.Data));
 			auto session = GetHost<Session>();
-			if (!m_channel.TryPush(std::move([session, pack] {
-				session->__networkcomponent->__MessageDispatcher->Dispatch(session, pack->data(), pack->size());
-				})))
-			{
-				// 缓存队列容量已满,当前会话发生了堵塞
-				LOG_WARN("读取数据时发现，缓存队列容量已满，当前会话发生了堵塞。(ip = {},fd = {})",
-					session->Address.ToString(), session->SessionId);
-				// 断开这个出现问题的会话
-				session->Dispose();
-			}
+			session->__networkcomponent->__MessageDispatcher->Dispatch(session, pack->data(), pack->size());
+// 			if (!m_channel.TryPush(std::move([session, pack] {
+// 				session->__networkcomponent->__MessageDispatcher->Dispatch(session, pack->data(), pack->size());
+// 				})))
+// 			{
+// 				// 缓存队列容量已满,当前会话发生了堵塞
+// 				LOG_WARN("读取数据时发现，缓存队列容量已满，当前会话发生了堵塞。(ip = {},fd = {})",
+// 					session->Address.ToString(), session->SessionId);
+// 				// 断开这个出现问题的会话
+// 				session->Dispose();
+// 			}
 		}
 	}
 
@@ -85,18 +64,6 @@ namespace Model
 		uint16_t pack_size = len;
 		m_send_buffer.Write(&pack_size, sizeof(pack_size));
 		m_send_buffer.Write(data, len);
-
-		if (!m_channel.TryPush(std::move([this] {
-			this->StartSend();
-			})))
-		{
-			auto session = GetHost<Session>();
-			LOG_WARN("发送数据时发现，缓存队列容量已满，当前会话发生了堵塞。(ip = {},fd = {})",
-				session->Address.ToString(), session->SessionId);
-			// 断开这个出现问题的会话
-			session->Dispose();
-		}
-
 	}
 
 	void TChannel::Start()
@@ -128,42 +95,38 @@ namespace Model
 		m_session = __session;
 	}
 
+	void TChannel::LateUpdate()
+	{
+		__StartSend();
+	}
+
 	void TChannel::Destroy()
 	{
 		m_channel.TryPush(std::move([] {}));
 		IChannel::Destroy();
 	}
 
-	void TChannel::StartSend()
+	void TChannel::__StartSend()
 	{
-		if (auto service = m_session->__service)
+		if (m_send_buffer.Length() == 0)return;	// 没有需要发送的数据了
+		if (m_send_data.empty()) 
 		{
-			while (true)
-			{
-				if (m_send_buffer.Length() == 0)
-				{
-					// 没有要发的数据了
-					break;
-				}
-				if (m_send_data.empty())
-				{
-					m_send_data.resize(m_send_buffer.Length());
-					m_send_buffer.Read((char*)m_send_data.data(), m_send_data.size());
-				}
-				if (service->Send(m_session->SessionId, m_send_data.data(), m_send_data.size()))
-				{
-					uint16_t len, opcode = 0;
-					memcpy(&len, &m_send_data[0], sizeof(len));
-					memcpy(&opcode, &m_send_data[2], sizeof(opcode));
-					m_send_data.clear();
-				}
-				else {
-					// 发送失败
-					LOG_ERROR("发送数据失败 error:{}", service->LastError);
-					break;
-				}
-			}
-			
+			m_send_data.resize(m_send_buffer.Length());
+			m_send_buffer.Read((char*)m_send_data.data(), m_send_data.size());
+		}
+		LOG_INFO("__StartSend");
+		auto service = m_session->__service;
+
+		if (service->Send(m_session->SessionId, m_send_data.data(), m_send_data.size()))
+		{
+			uint16_t len, opcode = 0;
+			memcpy(&len, &m_send_data[0], sizeof(len));
+			memcpy(&opcode, &m_send_data[2], sizeof(opcode));
+			m_send_data.clear();
+		}
+		else {
+			// 发送失败
+			LOG_ERROR("发送数据失败 error:{}", service->LastError);
 		}
 		
 	}

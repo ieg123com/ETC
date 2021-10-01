@@ -46,12 +46,12 @@ int main(int argc,char* argv[])
 			while (true)
 			{
 				try {
-					time_t begin_time = Game::Time().NowServerMilliseconds();
+					//time_t begin_time = Game::Time().NowServerMilliseconds();
 					Model::Game::Event().Update();
 					Model::Game::Event().LateUpdate();
 					co_sleep(1);
-					time_t end_time = Game::Time().NowServerMilliseconds();
-					LOG_INFO("update frame time:{}", end_time - begin_time);
+					//time_t end_time = Game::Time().NowServerMilliseconds();
+					//LOG_INFO("update frame time:{}", end_time - begin_time);
 					
 				}
 				catch (std::exception& e)

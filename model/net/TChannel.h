@@ -21,11 +21,13 @@ namespace Model
 
 		void Awake();
 
+		void LateUpdate();
+
 		void Destroy();
 
 	private:
 
-		void StartSend();
+		void __StartSend();
 
 
 	private:
@@ -35,8 +37,14 @@ namespace Model
 		co::Channel<std::function<void()>>	m_channel;
 
 		MemorySplit	m_memory_split;
+
+		/**
+		 * @brief	下一帧需要发送的数据
+		 */
 		CircularBuffer m_send_buffer;
-		// 即将发送的数据
+		/**
+		 * @brief	已经发送，出现错误的消息
+		 */
 		std::string	m_send_data;
 	};
 }
