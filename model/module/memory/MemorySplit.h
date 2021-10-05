@@ -7,7 +7,7 @@
 
 namespace Model
 {
-	/** @brief 内存财富 */
+	/** @brief 数据拆分 */
 	class MemorySplit
 	{
 
@@ -21,6 +21,9 @@ namespace Model
 
 		// 添加要分割的数据
 		void AddData(const char* data, const size_t len);
+		/**
+		 * @brief	写入数据
+		 */
 		void Write(const char* data, const size_t len);
 
 		bool Unpack();

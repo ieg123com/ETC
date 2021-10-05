@@ -7,6 +7,10 @@ namespace Model
 	class Service;
 	class Session;
 
+	/**
+	 * @brief	服务操作通道
+	 * @note	host:Service -> child:IChannel
+	 */
 	class IChannel:
 		public GEntity
 	{
@@ -17,8 +21,6 @@ namespace Model
 		virtual void OnRead(const char* data, const size_t len) = 0;
 
 		virtual void Send(const char* data, const size_t len) = 0;
-
-		virtual void Start() = 0;
 
 
 		void Awake();

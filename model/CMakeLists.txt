@@ -170,16 +170,22 @@ LIST(APPEND ALL_OBJECT
 set(NET_FILES "")
 FILE(GLOB NET_FILES "./net/*.cpp" "./net/*.h")
 
+# tcp
+set(NET_TCP_FILES "")
+FILE(GLOB NET_TCP_FILES "./net/tcp/*.cpp" "./net/tcp/*.h")
+
 # wepoll
 set(NET_WEPOLL_FILES "")
 FILE(GLOB NET_WEPOLL_FILES "./net/tcp/wepoll/*.cpp" "./net/tcp/wepoll/*.h")
 
 
 source_group(net						FILES ${NET_FILES})
+source_group(net\\tcp					FILES ${NET_TCP_FILES})
 source_group(net\\tcp\\wepoll			FILES ${NET_WEPOLL_FILES})
 
 LIST(APPEND ALL_OBJECT
 	${NET_FILES}
+	${NET_TCP_FILES}
 	${NET_WEPOLL_FILES})
 
 

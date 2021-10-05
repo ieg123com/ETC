@@ -7,6 +7,7 @@
 
 namespace Model
 {
+
 	class TChannel:
 		public IChannel
 	{
@@ -16,8 +17,6 @@ namespace Model
 		virtual void OnRead(const char* data, const size_t len)override;
 
 		virtual void Send(const char* data, const size_t len)override;
-
-		virtual void Start()override;
 
 		void Awake();
 
@@ -33,8 +32,6 @@ namespace Model
 	private:
 
 		std::shared_ptr<Session>	m_session;
-
-		co::Channel<std::function<void()>>	m_channel;
 
 		MemorySplit	m_memory_split;
 

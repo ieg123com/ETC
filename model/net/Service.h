@@ -9,6 +9,9 @@
 
 namespace Model
 {
+	/**
+	 * @brief	
+	 */
 	class Service :
 		public GEntity
 	{
