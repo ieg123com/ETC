@@ -3,12 +3,13 @@
 #include "base/log/log.h"
 #include "base/init.h"
 #include "etc/etc.h"
-#include "net/NetworkComponent.h"
+//#include "net/NetworkComponent.h"
 #include "module/memory/MemorySplit.h"
 #include "model/module/message/NetInnerComponent.h"
 #include "model/module/message/NetOuterComponent.h"
 #define LIBASYNC_NUM_THREADS 20
 #include "model/base/async/async.h"
+#include "net/tcp/wepoll/AWEpoll.h"
 #include <stdio.h>
 #include <stdint.h>
 //#include "CircularBuffer.h"
@@ -27,54 +28,91 @@ static const uint16_t port = 80;
 
 
 std::shared_ptr<Scene> g_scene;
-
-void network_server()
-{
-	if (g_scene->AddComponent<NetOuterComponent>()->Listen(80))
-	{
-		LOG_INFO("开启成功");
-	}
-	else {
-		LOG_ERROR("失败");
-	}
-}
-
-
-
-void network_client()
-{
-	co_sleep(1000);
-	auto client_net = g_scene->AddComponent<NetInnerComponent>();
-	client_net->Connect("127.0.0.1:80")->Send("Holle this Client!", 19);
-	for (int i = 0; i < 10; ++i)
-	{
-		client_net->Connect("127.0.0.1:80")->Send("Holle this Client!", 19);
-	}
-
-	
-// 	session_3->Dispose();
-// 	session_2->Dispose();
-// 	session_1->Dispose();
-
-	
-}
+// 
+// void network_server()
+// {
+// 	if (g_scene->AddComponent<NetOuterComponent>()->Listen(80))
+// 	{
+// 		LOG_INFO("开启成功");
+// 	}
+// 	else {
+// 		LOG_ERROR("失败");
+// 	}
+// }
 
 
-void network()
-{
-	if (g_scene->AddComponent<NetOuterComponent,const IPEndPoint&>("127.0.0.1:80"))
-	{
-		LOG_INFO("开启成功");
-	}
-	else {
-		LOG_ERROR("失败");
-	}
-	auto client_net = g_scene->AddComponent<NetInnerComponent>();
-	client_net->Connect("127.0.0.1:80")->Send("Holle this Client!", 19);
-}
+
+// void network_client()
+// {
+// 	co_sleep(1000);
+// 	auto client_net = g_scene->AddComponent<NetInnerComponent>();
+// 	client_net->Connect("127.0.0.1:80")->Send("Holle this Client!", 19);
+// 	for (int i = 0; i < 10; ++i)
+// 	{
+// 		client_net->Connect("127.0.0.1:80")->Send("Holle this Client!", 19);
+// 	}
+// 
+// 	
+// // 	session_3->Dispose();
+// // 	session_2->Dispose();
+// // 	session_1->Dispose();
+// 
+// 	
+// }
+
+
+// void network()
+// {
+// 	if (g_scene->AddComponent<NetOuterComponent,const IPEndPoint&>("127.0.0.1:80"))
+// 	{
+// 		LOG_INFO("开启成功");
+// 	}
+// 	else {
+// 		LOG_ERROR("失败");
+// 	}
+// 	auto client_net = g_scene->AddComponent<NetInnerComponent>();
+// 	client_net->Connect("127.0.0.1:80")->Send("Holle this Client!", 19);
+// }
 // std::vector<co::Channel<std::string>>	g_channel;
 // typedef co::ConditionVariableAnyT<void*> cond_t;
 // cond_t g_cond;
+
+
+void EpollAccept(AWEpoll& self,int fd) {
+	LOG_INFO("Accept IP:{}",self.GetIPEndPointTry(fd).ToString());
+}
+
+void EpollRead(AWEpoll& self, int fd, const std::shared_ptr<std::string>& data) {
+	LOG_INFO("Read IP:{}", self.GetIPEndPointTry(fd).ToString());
+}
+
+void EpollWrite(AWEpoll& self, int fd) {
+	LOG_INFO("Write IP:{}", self.GetIPEndPointTry(fd).ToString());
+}
+
+void EpollDisconnect(AWEpoll& self, int fd) {
+	LOG_INFO("Disconnect IP:{}", self.GetIPEndPointTry(fd).ToString());
+}
+
+
+
+
+void CEpollAccept(AWEpoll& self, int fd) {
+	LOG_WARN("Accept IP:{}", self.GetIPEndPointTry(fd).ToString());
+}
+
+void CEpollRead(AWEpoll& self, int fd, const std::shared_ptr<std::string>& data) {
+	LOG_WARN("Read IP:{}", self.GetIPEndPointTry(fd).ToString());
+}
+
+void CEpollWrite(AWEpoll& self, int fd) {
+	LOG_WARN("Write IP:{}", self.GetIPEndPointTry(fd).ToString());
+}
+
+void CEpollDisconnect(AWEpoll& self, int fd) {
+	LOG_WARN("Disconnect IP:{}", self.GetIPEndPointTry(fd).ToString());
+}
+
 int ret_num()
 {
 	return 100;
@@ -83,77 +121,40 @@ int ret_num()
 
 void test()
 {
+	AWEpoll epoll;
+	epoll.OnAccept = EpollAccept;
+	epoll.OnRead = EpollRead;
+	epoll.OnWrite = EpollWrite;
+	epoll.OnDisconnect = EpollDisconnect;
 
 
-	int num = await ret_num;
-	LOG_INFO("reault: {}", num);
-
-
-
-
-
-	LOG_INFO("test");
-	time_t start_time = Game::Time().NowServerMilliseconds();
-
-	time_t end_time = Game::Time().NowServerMilliseconds();
-	LOG_INFO("test 2  cost:{}",end_time-start_time);
-	MemorySplit	split;
-
-	char str[] = "0123456789[]";
-
-	uint16_t pack_size = sizeof(str);
-
-// 	for (int row = 0; row < 10; ++row)
-// 	{
-// 		for (int i = 0; i < 10; ++i)
-// 		{
-// 			//split.AddData((char*)&pack_size, sizeof(pack_size));
-// 			split.AddData(str, sizeof(str));
-// 			split.AddData(str, sizeof(str));
-// 		}
-// 		LOG_INFO("开始解析");
-// 		while (split.Unpack())
-// 		{
-// 			LOG_INFO(" [{}] size:{} data:{}",row, split.Data.size(),split.Data.c_str());
-// 		}
-// 	}
-
-
-	
-
-// 	while (true)
-// 	{
-// 		LOG_INFO("wait...");
-// 		co_sleep(2000);
-// 	}
-
-
-
-
-
-// 	co::FakeLock lock;
-// 
-// 	LOG_INFO("Start");
-// 	g_cond.wait(lock, nullptr, [&](size_t size)-> typename cond_t::CondRet {
-// 		typename cond_t::CondRet ret{ true,true };
-// 
-// 
-// 		return ret;
-// 		});
-// 
-// 	LOG_INFO("End");
+	epoll.Listen("127.0.0.1:80");
+	while (true)
+	{
+		co_sleep(1);
+		epoll.Update();
+	}
 	
 }
-class A
-{
-public:
-	std::mutex m_lock;
 
-	~A() {
-		//m_lock.unlock();
-		assert(m_lock.try_lock());
+void test2()
+{
+	co_sleep(1000);
+	AWEpoll epoll;
+	epoll.OnAccept = CEpollAccept;
+	epoll.OnRead = CEpollRead;
+	epoll.OnWrite = CEpollWrite;
+	epoll.OnDisconnect = CEpollDisconnect;
+
+
+	epoll.Connect("127.0.0.1:80");
+	while (true)
+	{
+		co_sleep(1);
+		epoll.Update();
 	}
-};
+
+}
 
 void channel_test()
 {
@@ -201,7 +202,7 @@ void tick()
 
 	while (true)
 	{
-		LOG_INFO("tick...");
+		//LOG_INFO("tick...");
 		co_sleep(200);
 	}
 }
@@ -218,6 +219,7 @@ int main(int argc, char* argv[])
 //	go network;
 	//go echo_server;
 	go test;
+	go test2;
 	//go channel_test;
 	//go client;
 	go tick;

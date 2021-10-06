@@ -17,15 +17,12 @@
 #include <errno.h>
 #include <string.h>
 #include "string/str.h"
+#include "module/memory/StringLoop.h"
 
 
-#define AWEPOLL_ERROR(err_code,err_msg) \
-{\
-	LastError = err_code;\
-	LastErrorMsg = err_msg;\
-	LastErrorFunction = __FUNCTION__;\
-	LastErrorLine = __LINE__;\
-}
+#define AWEPOLL_ERROR(err_code,err_msg) {LastError = err_code;LastErrorMsg = err_msg;LastErrorFunction = __FUNCTION__;LastErrorLine = __LINE__;}
+
+
 
 namespace Model
 {
@@ -42,12 +39,12 @@ namespace Model
 		unsigned long flags = 1; /* 这里根据需要设置成0或1 */
 		return ioctlsocket(s, FIONBIO, &flags);
 #endif
-	};
+	}
 
 
 	bool AWEpoll::AddSocketCtx(AWEpoll::stSocketContext* ctx)
 	{
-		return m_socket_ctx.emplace(ctx->fd, ctx->Address).second;
+		return m_socket_ctx.emplace(ctx->fd, ctx).second;
 	}
 
 	bool AWEpoll::RemoveSocketCtx(const SOCKET fd)
@@ -71,6 +68,16 @@ namespace Model
 		return found->second;
 	}
 
+	IPEndPoint AWEpoll::GetIPEndPointTry(const int fd)const
+	{
+		auto found = m_socket_ctx.find(fd);
+		if (found == m_socket_ctx.end())
+		{
+			throw std::exception(std::format("没有找到 IPEndPoint ,fd = %d", fd).c_str());
+		}
+		return found->second->Address;
+	}
+
 	AWEpoll::AWEpoll()
 	{
 		m_type = EpollType::Server;
@@ -78,31 +85,167 @@ namespace Model
 		m_socket = SOCKET_ERROR;
 		m_epoll_fd = nullptr;
 		m_is_disposed = false;
-
+		m_events = nullptr;
 	}
 
 	bool AWEpoll::Listen(const IPEndPoint& address)
 	{
-
+		m_type = EpollType::Server;
+		if (!CreateEpoll() ||
+			!BindOnAddress(address) ||
+			!AddListenSocketToEpoll())
+		{
+			__Dispose();
+			return false;
+		}
+		m_status = EpollStatus::RUNNING;
+		return true;
 	}
 
 	bool AWEpoll::Connect(const IPEndPoint& address)
 	{
-
+		m_type = EpollType::Connect;
+		if (!CreateEpoll() ||
+			!ConnectAddress(address) ||
+			!AddListenSocketToEpoll())
+		{
+			__Dispose();
+			return false;
+		}
+		m_status = EpollStatus::RUNNING;
+		return true;
 	}
 
-	void AWEpoll::Close(const SOCKET fd)
+	void AWEpoll::Disconnect(const SOCKET fd)
 	{
+		auto ctx = GetSocketCtx(fd);
+		if (ctx == nullptr)return;
+
+
+		OnEpollCloseEvent(ctx);
+
+		RemoveSocketCtx(fd);
+		delete ctx;
+
+		epoll_event disconnectEvent;
+		disconnectEvent.events = EPOLLIN | EPOLLOUT;
+		epoll_ctl(m_epoll_fd, EPOLL_CTL_DEL, fd, &disconnectEvent);
+
+#ifndef _WIN32
+		int ret = close(fd);
+#else
+		int ret = closesocket(fd);
+#endif
+
+		if (ret != 0)
+		{
+			AWEPOLL_ERROR(errno, std::format("error:(%s) connect close complete which fd: %d, ret: %d", strerror(errno),fd, ret));
+			return;
+		}
+
 
 	}
 
 	void AWEpoll::Dispose()
 	{
+		if (IsDisposed())return;
 		m_is_disposed = true;
+		if (m_status != EpollStatus::RUNNING)return;
+		// 服务开启中
+
+		__Dispose();
+		m_status = EpollStatus::STOPPED;
+	}
+
+	void AWEpoll::Update()
+	{
+		if (m_status == EpollStatus::STOPPED)return;
+		if (m_events == nullptr)
+		{
+			m_events = new epoll_event[MaxEvents];
+		}
+		int num_events = epoll_wait(m_epoll_fd, m_events, MaxEvents, 0);
+		if (num_events == -1)
+		{
+			if (errno == EINTR)
+			{ /*The call was interrupted by a signal handler*/
+				return;
+			}
+		}
+		for (int i = 0; i < num_events; ++i)
+		{
+			HandleEpollEvent(m_events[i]);
+		}
+
 	}
 
 
+	void AWEpoll::OnEpollAcceptEvent(stSocketContext* ctx)
+	{
+		if (OnAccept)OnAccept(*this,ctx->fd);
+	}
 
+	int AWEpoll::OnEpollReadableEvent(stSocketContext* ctx)
+	{
+		auto data = StringLoop::Instance().Fetch();
+		data->resize(READ_BUFFER_SIZE);
+		int read_size = recv(ctx->fd, &(*data)[0], READ_BUFFER_SIZE, 0);
+		if (read_size == SOCKET_ERROR && errno == EINTR) {
+			AWEPOLL_ERROR(errno, strerror(errno));
+			return READ_CONTINUE;
+		}
+		if (read_size == SOCKET_ERROR /* io err*/ || read_size == 0 /* close */)
+		{
+			AWEPOLL_ERROR(errno, strerror(errno));
+			return READ_CLOSE;
+		}
+		if (OnRead)OnRead(*this,ctx->fd, data);
+		return READ_OVER;
+	}
+
+	int AWEpoll::OnEpollWritableEvent(stSocketContext* ctx)
+	{
+		if (OnWrite)OnWrite(*this,ctx->fd);
+		return WRITE_CONN_ALIVE;
+	}
+
+	void AWEpoll::OnEpollCloseEvent(stSocketContext* ctx)
+	{
+		if (OnDisconnect)OnDisconnect(*this,ctx->fd);
+	}
+
+	void AWEpoll::OnEpollErrorEvent()
+	{
+
+	}
+
+
+	void AWEpoll::__Dispose()
+	{
+		if (m_type == EpollType::Server)
+		{
+			// 断开所有连接
+			std::vector<SOCKET> closed_fd;
+			for (auto& ctx : m_socket_ctx)
+			{
+				closed_fd.emplace_back(ctx.first);
+			}
+			for (auto fd : closed_fd)
+			{
+				Disconnect(fd);
+			}
+		}
+		if (m_socket != SOCKET_ERROR)
+		{
+			Disconnect(m_socket);
+			m_socket = SOCKET_ERROR;
+		}
+		if (m_epoll_fd == nullptr)
+		{
+			epoll_close(m_epoll_fd);
+			m_epoll_fd = nullptr;
+		}
+	}
 
 
 
@@ -229,7 +372,7 @@ namespace Model
 		stSocketContext* ctx = (stSocketContext*)event.data.ptr;
 		int fd = ctx->fd;
 
-		Close(fd);
+		Disconnect(fd);
 	}
 
 
@@ -277,7 +420,38 @@ namespace Model
 	
 	bool AWEpoll::ConnectAddress(const IPEndPoint& address)
 	{
-
+		/* listen on sock_fd, new connection on new_fd */
+		m_socket = socket(AF_INET, SOCK_STREAM, 0);
+		if (m_socket == SOCKET_ERROR)
+		{
+			AWEPOLL_ERROR(errno, strerror(errno));
+			return false;
+		}
+		int opt = 1;
+#ifndef _WIN32
+		setsockopt(m_socket, SOL_SOCKET, 0, &opt, sizeof(opt));
+#else
+		setsockopt(m_socket, SOL_SOCKET, 0, (const char*)&opt, sizeof(opt));
+#endif
+		struct sockaddr_in my_addr; /* my address information */
+		memset(&my_addr, 0, sizeof(my_addr));
+		my_addr.sin_family = AF_INET; /* host byte order */
+		my_addr.sin_port = htons(address.Port); /* short, network byte order */
+		if ("" == address.Ip || "localhost" == address.Ip)
+		{
+			my_addr.sin_addr.s_addr = INADDR_ANY;
+		}
+		else
+		{
+			my_addr.sin_addr.s_addr = inet_addr(address.Ip.c_str());
+		}
+		// 连接地址
+		if (connect(m_socket, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) == SOCKET_ERROR)
+		{
+			AWEPOLL_ERROR(errno, strerror(errno));
+			return false;
+		}
+		return true;
 	}
 
 

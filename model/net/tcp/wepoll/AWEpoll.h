@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <unordered_map>
+#include <functional>
 #include "net/IPEndPoint.h"
 
 #ifndef _WIN32
@@ -48,6 +49,8 @@ namespace Model
 			IPEndPoint	Address;
 		};
 
+		const size_t	Backlog = 1000;
+		const size_t	MaxEvents = 1024;
 
 		EpollType		m_type;
 
@@ -61,8 +64,10 @@ namespace Model
 
 		bool		m_is_disposed;
 
-		const size_t	Backlog = 1000;
-		const size_t	MaxEvents = 1024;
+
+		// 事件缓存
+		epoll_event*	m_events;
+
 
 	public:
 		int			LastError;
@@ -70,8 +75,17 @@ namespace Model
 		std::string	LastErrorFunction;
 		int			LastErrorLine;
 
+		// 回调
+		std::function<void(AWEpoll&,int)>			OnConnectComplete;
+		std::function<void(AWEpoll&, int)>			OnAccept;
+		std::function<void(AWEpoll&, int,const std::shared_ptr<std::string>&)>			OnRead;
+		std::function<void(AWEpoll&, int)>			OnWrite;
+		std::function<void(AWEpoll&, int)>			OnDisconnect;
+
 		
 		bool IsDisposed() const { return m_is_disposed; }
+
+		IPEndPoint GetIPEndPointTry(const int fd)const;
 
 
 		AWEpoll();
@@ -81,12 +95,12 @@ namespace Model
 
 		bool Connect(const IPEndPoint& address);
 
-		void Close(const SOCKET fd);
+		void Disconnect(const SOCKET fd);
 
 		void Dispose();
 
 
-
+		void Update();
 
 
 	private:
@@ -99,7 +113,7 @@ namespace Model
 
 	private:
 
-
+		void __Dispose();
 
 		
 		// 处理连接事件

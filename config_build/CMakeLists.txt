@@ -35,7 +35,7 @@ add_executable(config_build
 
 
 if(MSVC)
-	target_link_libraries(config_build xlnt)
+	target_link_libraries(config_build xlnt model)
 	ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS -D_WINSOCK_DEPRECATED_NO_WARNINGS -D_SPDLOG_ACTIVE_LEVEL)
 	
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")

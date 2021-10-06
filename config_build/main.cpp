@@ -9,7 +9,7 @@
 #include <queue>
 #include "xlnt/xlnt.hpp"
 #include "./json/ejson.h"
-#include "./string/str.h"
+#include "model/other/string/str.h"
 
 // key¿‡–Õ
 enum class EKeyType : int32_t 

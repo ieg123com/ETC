@@ -9,7 +9,7 @@
 #include <unordered_map>
 #include <typeindex>
 #include <functional>
-#include "type/type.h"
+#include "type/type_factory.h"
 
 
 namespace Model
