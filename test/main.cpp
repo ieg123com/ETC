@@ -9,6 +9,7 @@
 #include "model/module/message/NetOuterComponent.h"
 #define LIBASYNC_NUM_THREADS 20
 #include "model/base/async/async.h"
+#include "model/other/time/Time.h"
 #include "net/tcp/wepoll/AWEpoll.h"
 #include <stdio.h>
 #include <stdint.h>
@@ -88,7 +89,6 @@ void EpollRead(AWEpoll& self, int fd, const std::shared_ptr<std::string>& data) 
 	LOG_INFO("Read data:{}", data->c_str());
 	char data2[] = "This Server";
 	self.Send(fd, data2, sizeof(data2));
-	self.Disconnect(fd);
 	LOG_INFO("EpollRead end");
 }
 
@@ -118,6 +118,7 @@ void CEpollRead(AWEpoll& self, int fd, const std::shared_ptr<std::string>& data)
 
 void CEpollWrite(AWEpoll& self, int fd) {
 	LOG_WARN("Write");
+	self.Dispose();
 }
 
 void CEpollDisconnect(AWEpoll& self, int fd) {
@@ -150,7 +151,6 @@ void test()
 
 void test2()
 {
-	co_sleep(1000);
 	AWEpoll epoll;
 	epoll.OnAccept = CEpollAccept;
 	epoll.OnRead = CEpollRead;
@@ -224,6 +224,7 @@ void tick()
 
 int main(int argc, char* argv[])
 {
+	Time::TimeBeginPeriod(1);
 	Model::Init(argc,argv);
 	g_scene = ObjectFactory::Create<Scene>();
 	Model::async::Scheduler::Instance->Start();

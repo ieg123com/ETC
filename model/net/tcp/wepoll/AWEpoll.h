@@ -109,12 +109,10 @@ namespace Model
 	private:
 
 		void OnEpollConnectComplete();
-		void OnEpollAcceptEvent(stSocketContext* ctx);
-		int OnEpollReadableEvent(stSocketContext* ctx);
+		void OnEpollAcceptEvent(int fd);
 		int OnEpollReadableEvent(int fd);
-		int OnEpollWritableEvent(stSocketContext* ctx);
 		int OnEpollWritableEvent(int fd);
-		void OnEpollCloseEvent(stSocketContext* ctx);
+		void OnEpollCloseEvent(int fd);
 		void OnEpollErrorEvent();
 
 	private:
