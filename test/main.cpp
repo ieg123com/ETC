@@ -80,10 +80,16 @@ std::shared_ptr<Scene> g_scene;
 
 void EpollAccept(AWEpoll& self,int fd) {
 	LOG_INFO("Accept IP:{}",self.GetIPEndPointTry(fd).ToString());
+
 }
 
 void EpollRead(AWEpoll& self, int fd, const std::shared_ptr<std::string>& data) {
 	LOG_INFO("Read IP:{}", self.GetIPEndPointTry(fd).ToString());
+	LOG_INFO("Read data:{}", data->c_str());
+	char data2[] = "This Server";
+	self.Send(fd, data2, sizeof(data2));
+	self.Disconnect(fd);
+	LOG_INFO("EpollRead end");
 }
 
 void EpollWrite(AWEpoll& self, int fd) {
@@ -96,21 +102,26 @@ void EpollDisconnect(AWEpoll& self, int fd) {
 
 
 
+void CEpollConnectComplete(AWEpoll& self, int fd) {
+
+	LOG_WARN("ConnectComplete");
+}
 
 void CEpollAccept(AWEpoll& self, int fd) {
-	LOG_WARN("Accept IP:{}", self.GetIPEndPointTry(fd).ToString());
+	LOG_WARN("Accept");
 }
 
 void CEpollRead(AWEpoll& self, int fd, const std::shared_ptr<std::string>& data) {
-	LOG_WARN("Read IP:{}", self.GetIPEndPointTry(fd).ToString());
+	LOG_WARN("Read");
+	LOG_WARN("Read data:{}", data->c_str());
 }
 
 void CEpollWrite(AWEpoll& self, int fd) {
-	LOG_WARN("Write IP:{}", self.GetIPEndPointTry(fd).ToString());
+	LOG_WARN("Write");
 }
 
 void CEpollDisconnect(AWEpoll& self, int fd) {
-	LOG_WARN("Disconnect IP:{}", self.GetIPEndPointTry(fd).ToString());
+	LOG_WARN("Disconnect");
 }
 
 int ret_num()
@@ -148,6 +159,9 @@ void test2()
 
 
 	epoll.Connect("127.0.0.1:80");
+
+	char data[] = "hello wepoll";
+	epoll.Send(data, sizeof(data));
 	while (true)
 	{
 		co_sleep(1);

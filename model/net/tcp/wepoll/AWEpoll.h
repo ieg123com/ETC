@@ -76,7 +76,7 @@ namespace Model
 		int			LastErrorLine;
 
 		// 回调
-		std::function<void(AWEpoll&,int)>			OnConnectComplete;
+		std::function<void(AWEpoll&, int)>			OnConnectComplete;
 		std::function<void(AWEpoll&, int)>			OnAccept;
 		std::function<void(AWEpoll&, int,const std::shared_ptr<std::string>&)>			OnRead;
 		std::function<void(AWEpoll&, int)>			OnWrite;
@@ -99,21 +99,28 @@ namespace Model
 
 		void Dispose();
 
+		bool Send(const int fd, const char* data, const size_t len);
+		bool Send(const char* data, const size_t len);
+
 
 		void Update();
 
 
 	private:
 
+		void OnEpollConnectComplete();
 		void OnEpollAcceptEvent(stSocketContext* ctx);
 		int OnEpollReadableEvent(stSocketContext* ctx);
+		int OnEpollReadableEvent(int fd);
 		int OnEpollWritableEvent(stSocketContext* ctx);
+		int OnEpollWritableEvent(int fd);
 		void OnEpollCloseEvent(stSocketContext* ctx);
 		void OnEpollErrorEvent();
 
 	private:
 
 		void __Dispose();
+		void __Disconnect(const int fd);
 
 		
 		// 处理连接事件

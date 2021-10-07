@@ -113,37 +113,22 @@ namespace Model
 			return false;
 		}
 		m_status = EpollStatus::RUNNING;
+		OnEpollConnectComplete();
 		return true;
 	}
 
 	void AWEpoll::Disconnect(const SOCKET fd)
 	{
-		auto ctx = GetSocketCtx(fd);
-		if (ctx == nullptr)return;
+// 		auto ctx = GetSocketCtx(fd);
+// 		if (ctx == nullptr)return;
+// 
+// 
+// 		OnEpollCloseEvent(ctx);
+// 
+// 		RemoveSocketCtx(fd);
+// 		delete ctx;
 
-
-		OnEpollCloseEvent(ctx);
-
-		RemoveSocketCtx(fd);
-		delete ctx;
-
-		epoll_event disconnectEvent;
-		disconnectEvent.events = EPOLLIN | EPOLLOUT;
-		epoll_ctl(m_epoll_fd, EPOLL_CTL_DEL, fd, &disconnectEvent);
-
-#ifndef _WIN32
-		int ret = close(fd);
-#else
-		int ret = closesocket(fd);
-#endif
-
-		if (ret != 0)
-		{
-			AWEPOLL_ERROR(errno, std::format("error:(%s) connect close complete which fd: %d, ret: %d", strerror(errno),fd, ret));
-			return;
-		}
-
-
+		__Disconnect(fd);
 	}
 
 	void AWEpoll::Dispose()
@@ -156,6 +141,26 @@ namespace Model
 		__Dispose();
 		m_status = EpollStatus::STOPPED;
 	}
+
+	bool AWEpoll::Send(const int fd, const char* data, const size_t len)
+	{
+		size_t count = len;
+		const char* pos = data;
+
+		int ret = send(fd, pos, count, 0);
+		if (ret < 0)
+		{
+			AWEPOLL_ERROR(errno, strerror(errno));
+			return false;
+		}
+		return true;
+	}
+
+	bool AWEpoll::Send(const char* data, const size_t len)
+	{
+		return Send(m_socket, data, len);
+	}
+
 
 	void AWEpoll::Update()
 	{
@@ -171,6 +176,7 @@ namespace Model
 			{ /*The call was interrupted by a signal handler*/
 				return;
 			}
+			return;
 		}
 		for (int i = 0; i < num_events; ++i)
 		{
@@ -179,6 +185,10 @@ namespace Model
 
 	}
 
+	void AWEpoll::OnEpollConnectComplete()
+	{
+		if (OnConnectComplete)OnConnectComplete(*this,m_socket);
+	}
 
 	void AWEpoll::OnEpollAcceptEvent(stSocketContext* ctx)
 	{
@@ -187,9 +197,14 @@ namespace Model
 
 	int AWEpoll::OnEpollReadableEvent(stSocketContext* ctx)
 	{
+		return OnEpollReadableEvent(ctx->fd);
+	}
+
+	int AWEpoll::OnEpollReadableEvent(int fd)
+	{
 		auto data = StringLoop::Instance().Fetch();
 		data->resize(READ_BUFFER_SIZE);
-		int read_size = recv(ctx->fd, &(*data)[0], READ_BUFFER_SIZE, 0);
+		int read_size = recv(fd, &(*data)[0], READ_BUFFER_SIZE, 0);
 		if (read_size == SOCKET_ERROR && errno == EINTR) {
 			AWEPOLL_ERROR(errno, strerror(errno));
 			return READ_CONTINUE;
@@ -199,13 +214,18 @@ namespace Model
 			AWEPOLL_ERROR(errno, strerror(errno));
 			return READ_CLOSE;
 		}
-		if (OnRead)OnRead(*this,ctx->fd, data);
+		if (OnRead)OnRead(*this, fd, data);
 		return READ_OVER;
 	}
 
 	int AWEpoll::OnEpollWritableEvent(stSocketContext* ctx)
 	{
-		if (OnWrite)OnWrite(*this,ctx->fd);
+		return OnEpollWritableEvent(ctx->fd);
+	}
+
+	int AWEpoll::OnEpollWritableEvent(int fd)
+	{
+		if (OnWrite)OnWrite(*this, fd);
 		return WRITE_CONN_ALIVE;
 	}
 
@@ -237,7 +257,7 @@ namespace Model
 		}
 		if (m_socket != SOCKET_ERROR)
 		{
-			Disconnect(m_socket);
+			__Disconnect(m_socket);
 			m_socket = SOCKET_ERROR;
 		}
 		if (m_epoll_fd == nullptr)
@@ -247,7 +267,24 @@ namespace Model
 		}
 	}
 
+	void AWEpoll::__Disconnect(const int fd)
+	{
+		epoll_event disconnectEvent;
+		disconnectEvent.events = EPOLLIN | EPOLLOUT;
+		epoll_ctl(m_epoll_fd, EPOLL_CTL_DEL, fd, &disconnectEvent);
 
+#ifndef _WIN32
+		int ret = close(fd);
+#else
+		int ret = closesocket(fd);
+#endif
+
+		if (ret != 0)
+		{
+			AWEPOLL_ERROR(errno, std::format("error:(%s) connect close complete which fd: %d, ret: %d", strerror(errno), fd, ret));
+			return;
+		}
+	}
 
 	void AWEpoll::HandleAcceptEvent(const int epoll_fd, epoll_event& event)
 	{
@@ -301,12 +338,19 @@ namespace Model
 
 	void AWEpoll::HandleEpollReadableEvent(epoll_event& event)
 	{
-		auto ctx = (stSocketContext*)event.data.ptr;
-		int fd = ctx->fd;
-
-
-		int ret = OnEpollReadableEvent(ctx);
-
+		int ret = 0;
+		int fd = 0;
+		if (m_type == EpollType::Server)
+		{
+			auto ctx = (stSocketContext*)event.data.ptr;
+			fd = ctx->fd;
+			ret = OnEpollReadableEvent(ctx);
+		}
+		else {
+			fd = m_socket;
+			ret = OnEpollReadableEvent(fd);
+		}
+		
 		if (ret == READ_CLOSE)
 		{
 			HandleCloseEvent(event);
@@ -332,10 +376,23 @@ namespace Model
 
 	void AWEpoll::HandleWritableEvent(const int epoll_fd, epoll_event& event)
 	{
-		auto ctx = (stSocketContext*)event.data.ptr;
-		int fd = ctx->fd;
+		int ret = 0;
+		int fd = 0;
+		if (m_type == EpollType::Server)
+		{
+			auto ctx = (stSocketContext*)event.data.ptr;
+			fd = ctx->fd;
+			ret = OnEpollWritableEvent(ctx);
+		}
+		else {
+			fd = m_socket;
+			ret = OnEpollWritableEvent(fd);
+		}
 
-		int ret = OnEpollWritableEvent(ctx);
+// 		auto ctx = (stSocketContext*)event.data.ptr;
+// 		int fd = ctx->fd;
+// 
+// 		int ret = OnEpollWritableEvent(ctx);
 		if (ret == WRITE_CONN_CLOSE)
 		{
 			HandleCloseEvent(event);
@@ -372,6 +429,12 @@ namespace Model
 		stSocketContext* ctx = (stSocketContext*)event.data.ptr;
 		int fd = ctx->fd;
 
+		OnEpollCloseEvent(ctx);
+
+		RemoveSocketCtx(fd);
+		delete ctx;
+		printf("delete ctx\n");
+		event.data.ptr = NULL;
 		Disconnect(fd);
 	}
 
@@ -486,13 +549,16 @@ namespace Model
 			AWEPOLL_ERROR(errno, strerror(errno));
 			return false;
 		}
-
 		return true;
 	}
 
 	void AWEpoll::HandleEpollEvent(epoll_event& event)
 	{
-		if (event.data.fd == m_socket)		// 仅仅建立连接的时候进行判断，因为只有此时fd才和server 的监听fd 相等
+		printf("[%s]event.events %d  event.data.ptr %p\n",
+			((m_type == EpollType::Server)?"Server":"Connect"),
+			event.events,
+			event.data.ptr);
+		if (m_type == EpollType::Server && event.data.fd == m_socket)		// 仅仅建立连接的时候进行判断，因为只有此时fd才和server 的监听fd 相等
 		{
 			// accept connection
 			this->HandleAcceptEvent((int&)m_epoll_fd, event);
@@ -500,6 +566,7 @@ namespace Model
 		else if (event.events & EPOLLIN)
 		{
 			// handle readable async
+			printf("EPOLLIN\n");
 			this->HandleEpollReadableEvent(event);
 		}
 		else if (event.events & EPOLLOUT)
