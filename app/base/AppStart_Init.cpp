@@ -15,6 +15,7 @@
 #include "model/module/actorlocation/ActorLocationSenderComponent.h"
 #include "model/module/db/MySQLSchedulerComponent.h"
 #include "model/module/other/SystemEventType.h"
+#include "model/net/NetThreadComponent.h"
 #include "module/entity/AppFactory.h"
 
 
@@ -34,6 +35,7 @@ namespace Hotfix
 			Game::World()->AddComponent<TimerComponent>();
 			Game::World()->AddComponent<StartProcessConfigComponent>();
 			Game::World()->AddComponent<StartConfigComponent>();
+			Game::World()->AddComponent<NetThreadComponent>();
 			// ¼àÌýÄÚÍø¶Ë¿Ú
 			Game::World()->AddComponent<NetInnerComponent, const IPEndPoint&>(Game::Options().InnerAddress);
 			Game::World()->AddComponent<OpcodeTypeComponent>();

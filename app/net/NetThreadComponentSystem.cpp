@@ -8,7 +8,7 @@ namespace Hotfix
 	public:
 		virtual void Awake(const std::shared_ptr<NetThreadComponent>& self)override
 		{
-
+			self->ThreadSynchronizationContext = ThreadSynchronizationContext::Instance;
 		}
 	};
 	REF(NetThreadComponentAwakeSystem, ObjectSystem);
@@ -28,7 +28,10 @@ namespace Hotfix
 	public:
 		virtual void LateUpdate(const std::shared_ptr<NetThreadComponent>& self)override
 		{
-
+			for (auto& service : self->Services)
+			{
+				service->Update();
+			}
 		}
 	};
 	REF(NetThreadComponentLateUpdateSystem, ObjectSystem);
@@ -39,6 +42,7 @@ namespace Hotfix
 		virtual void Destroy(const std::shared_ptr<NetThreadComponent>& self)override
 		{
 			NetThreadComponent::Instance = nullptr;
+			self->ThreadSynchronizationContext = nullptr;
 		}
 	};
 	REF(NetThreadComponentDestroySystem, ObjectSystem);

@@ -22,7 +22,7 @@ namespace Model
 		class GlobalData*			global_data;
 		IdGenerator*				id_generator;
 		async::Scheduler*			async_scheduler;
-		class MainThreadContext*	main_thread_context;
+		class ThreadSynchronizationContext*	thread_synchronization_context;
 	};
 
 
