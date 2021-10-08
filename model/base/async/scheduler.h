@@ -9,6 +9,7 @@ namespace Model
 {
 	namespace async
 	{
+		// 异步事件调度器
 		class Scheduler
 		{
 		public:

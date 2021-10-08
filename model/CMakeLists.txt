@@ -109,6 +109,10 @@ FILE(GLOB BASE_ATTRIBUTE_FILES "./base/attribute/*.cpp" "./base/attribute/*.h")
 set(BASE_ASYNC_FILES "")
 FILE(GLOB BASE_ASYNC_FILES "./base/async/*.cpp" "./base/async/*.h")
 
+#线程
+set(BASE_THREAD_FILES "")
+FILE(GLOB BASE_THREAD_FILES "./base/thread/*.cpp" "./base/thread/*.h")
+
 #单例模式
 set(BASE_SINGLE_FILES "")
 FILE(GLOB BASE_SINGLE_FILES "./base/single/*.cpp" "./base/single/*.h")
@@ -133,6 +137,7 @@ source_group(base\\reflection			FILES ${BASE_REFLECTION_FILES})
 source_group(base\\attribute			FILES ${BASE_ATTRIBUTE_FILES})
 source_group(base\\task					FILES ${BASE_TASK_FILES})
 source_group(base\\async				FILES ${BASE_ASYNC_FILES})
+source_group(base\\thread				FILES ${BASE_THREAD_FILES})
 source_group(base\\single				FILES ${BASE_SINGLE_FILES})
 source_group(base\\helper				FILES ${BASE_HELPER_FILES})
 source_group(base\\helper\\dll			FILES ${BASE_HELPER_DLL_FILES})
@@ -146,6 +151,7 @@ LIST(APPEND ALL_OBJECT
 	${BASE_ATTRIBUTE_FILES}
 	${BASE_TASK_FILES}
 	${BASE_ASYNC_FILES}
+	${BASE_THREAD_FILES}
 	${BASE_SINGLE_FILES}
 	${BASE_HELPER_FILES}
 	${BASE_HELPER_DLL_FILES}

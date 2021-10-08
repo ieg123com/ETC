@@ -4,7 +4,7 @@
 
 namespace Model
 {
-	class ASerivce
+	class AService
 	{
 	public:
 
@@ -14,6 +14,5 @@ namespace Model
 		virtual void Remove(const int channel_id) = 0;
 		virtual void Send(const int channel_id, const char* data, const size_t len) = 0;
 		virtual void Dispose() = 0;
-		virtual void Get(const int channel_id);
 	};
 }
