@@ -17,7 +17,7 @@
 #include <errno.h>
 #include <string.h>
 #include "string/str.h"
-#include "module/memory/StringLoop.h"
+#include "module/memory/Loop.h"
 
 
 #define AWEPOLL_ERROR(err_code,err_msg) {LastError = err_code;LastErrorMsg = err_msg;LastErrorFunction = __FUNCTION__;LastErrorLine = __LINE__;}
@@ -199,7 +199,7 @@ namespace Model
 
 	int AWEpoll::OnEpollReadableEvent(int fd)
 	{
-		auto data = StringLoop::Instance().Fetch();
+		auto data = Loop<std::string>::Instance().Fetch();
 		data->resize(READ_BUFFER_SIZE);
 		int read_size = recv(fd, &(*data)[0], READ_BUFFER_SIZE, 0);
 		if (read_size == SOCKET_ERROR && errno == EINTR) {
