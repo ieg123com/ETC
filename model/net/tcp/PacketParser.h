@@ -15,7 +15,7 @@ namespace Model
 
 
 		// 拆包后的数据
-		std::shared_ptr<std::string> Data;
+		std::shared_ptr<std::vector<char>> Data;
 
 		/**
 		 * @brief	开始拆包

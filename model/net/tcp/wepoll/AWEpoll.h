@@ -74,11 +74,15 @@ namespace Model
 		std::string	LastErrorMsg;
 		std::string	LastErrorFunction;
 		int			LastErrorLine;
+		// 连接或监听地址
+		IPEndPoint	RemoteAddress;
 
 		// 回调
+		// 监听、连接准备完成
+		std::function<void(AWEpoll&)>				OnComplete;
 		std::function<void(AWEpoll&, int)>			OnConnectComplete;
 		std::function<void(AWEpoll&, int)>			OnAccept;
-		std::function<void(AWEpoll&, int,const std::shared_ptr<std::string>&)>			OnRead;
+		std::function<void(AWEpoll&, int,const std::shared_ptr<std::vector<char>>&)>			OnRead;
 		std::function<void(AWEpoll&, int)>			OnWrite;
 		std::function<void(AWEpoll&, int)>			OnDisconnect;
 

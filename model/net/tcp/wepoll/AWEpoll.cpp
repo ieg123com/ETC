@@ -98,7 +98,9 @@ namespace Model
 			__Dispose();
 			return false;
 		}
+		RemoteAddress = address;
 		m_status = EpollStatus::RUNNING;
+		if (OnComplete)OnComplete(*this);
 		return true;
 	}
 
@@ -112,7 +114,9 @@ namespace Model
 			__Dispose();
 			return false;
 		}
+		RemoteAddress = address;
 		m_status = EpollStatus::RUNNING;
+		if (OnComplete)OnComplete(*this);
 		OnEpollConnectComplete();
 		return true;
 	}
@@ -199,9 +203,9 @@ namespace Model
 
 	int AWEpoll::OnEpollReadableEvent(int fd)
 	{
-		auto data = Loop<std::string>::Instance().Fetch();
+		auto data = Loop<std::vector<char>>::Instance().Fetch();
 		data->resize(READ_BUFFER_SIZE);
-		int read_size = recv(fd, &(*data)[0], READ_BUFFER_SIZE, 0);
+		int read_size = recv(fd, data->data(), READ_BUFFER_SIZE, 0);
 		if (read_size == SOCKET_ERROR && errno == EINTR) {
 			AWEPOLL_ERROR(errno, strerror(errno));
 			return READ_CONTINUE;

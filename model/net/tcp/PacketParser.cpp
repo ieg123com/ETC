@@ -37,9 +37,9 @@ namespace Model
 
 		if (m_recv_buffer->Length() >= m_pack_size)
 		{
-			Data = Loop<std::string>::Instance().Fetch();
+			Data = Loop<std::vector<char>>::Instance().Fetch();
 			Data->resize(m_pack_size);
-			m_recv_buffer->Read((char*)Data->data(), m_pack_size);
+			m_recv_buffer->Read(Data->data(), m_pack_size);
 			m_pack_size = -1;
 			return true;
 		}
