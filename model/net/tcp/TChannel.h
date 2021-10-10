@@ -13,29 +13,37 @@ namespace Model
 	class TChannel :
 		public AChannel
 	{
-	public:
 		std::shared_ptr<TService>	__Service;
 
-		AWEpoll* __WEpoll;
+		std::shared_ptr<AWEpoll> __WEpoll;
 
 		// 接收数据缓冲区
-		// 收到数据时，都会添加进RecvBuffer。将在下一帧进行处理
+		// 收到数据时，都会添加进__RecvBuffer。将在下一帧进行处理
+		// 此变量会与__Parser绑定
 		std::shared_ptr<CircularBuffer>	__RecvBuffer;
 		// 发送数据缓冲区
-		// 调用Send，会将需要发送的数据添加到SendBuffer。会在LateUpdate中统一发送
+		// 调用Send，会将需要发送的数据添加到__SendBuffer。会在LateUpdate中统一发送
 		std::shared_ptr<CircularBuffer>	__SendBuffer;
 
 		// 发送的缓存
-		// 用于中转SendBuffer中的发送数据
+		// 用于中转__SendBuffer中的发送数据
 		std::shared_ptr<std::vector<char>>	__SendCache;
 		
 		PacketParser* __Parser;
 
-		IPEndPoint	RemoteAddress;
+		bool	__IsSending;
+		bool	__IsConnected;
 
+	public:
 		SessionID	SessionId;
 
-		TChannel();
+		TChannel(const int64_t id, const std::shared_ptr<TService>& service, const std::shared_ptr<AWEpoll>& epoll);
+		TChannel(const int64_t id, const std::shared_ptr<TService>& service, const IPEndPoint& address);
+
+
+		virtual bool IsDisposed() const override;
+
+
 		
 
 
@@ -43,18 +51,22 @@ namespace Model
 
 
 
-
-
-		void OnRead(const char* data, const size_t len);
-
 		void Send(const char* data, const size_t len);
 
+
+	private:
+
+		void OnConnectComplete();
+
+		void OnDisconnectComplete();
+
+		void OnReadComplete(const char* data, const size_t len);
 
 		void __StartParse();
 		void __StartSend();
 
 
-	private:
+
 
 
 	};

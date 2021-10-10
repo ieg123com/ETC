@@ -1,7 +1,7 @@
 #pragma once
 #include "etc/etc.h"
 #include "AService.h"
-#include "thread/ThreadSynchronizationContext.h"
+#include "thread/ThreadSyncContext.h"
 
 
 namespace Model
@@ -15,7 +15,7 @@ namespace Model
 		using ptr = std::shared_ptr<NetThreadComponent>;
 		static NetThreadComponent* Instance;
 
-		ThreadSynchronizationContext* ThreadSynchronizationContext;
+		ThreadSyncContext* ThreadSyncContext;
 
 		std::unordered_set<std::shared_ptr<AService>>	Services;
 
@@ -24,7 +24,7 @@ namespace Model
 		void Add(const std::shared_ptr<AService>& service)
 		{
 			auto self = Get<NetThreadComponent>();
-			ThreadSynchronizationContext->PostNext([=] {
+			ThreadSyncContext->PostNext([=] {
 				if (service->IsDisposed())return;
 				self->Services.emplace(service);
 				});
@@ -33,7 +33,7 @@ namespace Model
 		void Remove(const std::shared_ptr<AService>& service)
 		{
 			auto self = Get<NetThreadComponent>();
-			ThreadSynchronizationContext->PostNext([=] {
+			ThreadSyncContext->PostNext([=] {
 				if (service->IsDisposed())return;
 				self->Services.erase(service);
 				});

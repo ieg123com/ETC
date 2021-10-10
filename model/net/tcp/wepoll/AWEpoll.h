@@ -80,16 +80,16 @@ namespace Model
 		// 回调
 		// 监听、连接准备完成
 		std::function<void(AWEpoll&)>				OnComplete;
-		std::function<void(AWEpoll&, int)>			OnConnectComplete;
-		std::function<void(AWEpoll&, int)>			OnAccept;
-		std::function<void(AWEpoll&, int,const std::shared_ptr<std::vector<char>>&)>			OnRead;
-		std::function<void(AWEpoll&, int)>			OnWrite;
-		std::function<void(AWEpoll&, int)>			OnDisconnect;
+		std::function<void(AWEpoll&, int32_t)>			OnConnectComplete;
+		std::function<void(AWEpoll&, int32_t)>			OnAccept;
+		std::function<void(AWEpoll&, int32_t,const std::shared_ptr<std::vector<char>>&)>			OnRead;
+		std::function<void(AWEpoll&, int32_t)>			OnWrite;
+		std::function<void(AWEpoll&, int32_t)>			OnDisconnect;
 
 		
 		bool IsDisposed() const { return m_is_disposed; }
 
-		IPEndPoint GetIPEndPointTry(const int fd)const;
+		IPEndPoint GetIPEndPointTry(const int32_t fd)const;
 
 
 		AWEpoll();
@@ -103,7 +103,7 @@ namespace Model
 
 		void Dispose();
 
-		bool Send(const int fd, const char* data, const size_t len);
+		bool Send(const int32_t fd, const char* data, const size_t len);
 		bool Send(const char* data, const size_t len);
 
 
@@ -113,24 +113,24 @@ namespace Model
 	private:
 
 		void OnEpollConnectComplete();
-		void OnEpollAcceptEvent(int fd);
-		int OnEpollReadableEvent(int fd);
-		int OnEpollWritableEvent(int fd);
-		void OnEpollCloseEvent(int fd);
+		void OnEpollAcceptEvent(int32_t fd);
+		int OnEpollReadableEvent(int32_t fd);
+		int OnEpollWritableEvent(int32_t fd);
+		void OnEpollCloseEvent(int32_t fd);
 		void OnEpollErrorEvent();
 
 	private:
 
 		void __Dispose();
-		void __Disconnect(const int fd);
+		void __Disconnect(const int32_t fd);
 
 		
 		// 处理连接事件
-		void HandleAcceptEvent(const int epoll_fd, epoll_event& event);
+		void HandleAcceptEvent(const int32_t epoll_fd, epoll_event& event);
 		// 处理读取事件
 		void HandleEpollReadableEvent(epoll_event& event);
 		// 处理写入事件
-		void HandleWritableEvent(const int epoll_fd, epoll_event& event);
+		void HandleWritableEvent(const int32_t epoll_fd, epoll_event& event);
 		// 处理断开事件
 		void HandleCloseEvent(epoll_event& event);
 
@@ -153,7 +153,7 @@ namespace Model
 		SOCKET	m_socket;
 
 #ifndef _WIN32
-		int	m_epoll_fd;
+		int32_t	m_epoll_fd;
 #else
 		HANDLE	m_epoll_fd;
 #endif

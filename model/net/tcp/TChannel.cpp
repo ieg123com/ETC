@@ -7,22 +7,56 @@
 
 namespace Model
 {
-	TChannel::TChannel():
-		AChannel(0)
+// 	TChannel::TChannel():
+// 		AChannel(0)
+// 	{
+// 		__Service = nullptr;
+// 		__WEpoll = nullptr;
+// 		SessionId = 0;
+// 		__RecvBuffer = Loop<CircularBuffer>::Instance().Fetch();
+// 		__SendBuffer = Loop<CircularBuffer>::Instance().Fetch();
+// 		__SendCache = Loop<std::vector<char>>::Instance().Fetch();
+// 		__Parser = new PacketParser(__RecvBuffer);
+// 	}
+	TChannel::TChannel(const int64_t id, const std::shared_ptr<TService>& service, const std::shared_ptr<AWEpoll>& epoll)
 	{
-		__Service = nullptr;
-		__WEpoll = nullptr;
+		ChannelType = EChannelType::Accept;
+		Id = id;
+		__Service = service;
+		__WEpoll = epoll;
+ 		__RecvBuffer = Loop<CircularBuffer>::Instance().Fetch();
+ 		__SendBuffer = Loop<CircularBuffer>::Instance().Fetch();
+		__SendCache = Loop<std::vector<char>>::Instance().Fetch();
+ 		__Parser = new PacketParser(__RecvBuffer);
+		__IsSending = false;
+		__IsConnected = true;
 		SessionId = 0;
+	}
+
+	TChannel::TChannel(const int64_t id, const std::shared_ptr<TService>& service, const IPEndPoint& address)
+	{
+		ChannelType = EChannelType::Connect;
+		Id = id;
+		__Service = service;
 		__RecvBuffer = Loop<CircularBuffer>::Instance().Fetch();
 		__SendBuffer = Loop<CircularBuffer>::Instance().Fetch();
 		__SendCache = Loop<std::vector<char>>::Instance().Fetch();
 		__Parser = new PacketParser(__RecvBuffer);
+		__WEpoll = std::make_shared<AWEpoll>();
+		RemoteAddress = address;
+		__IsSending = false;
+		__IsConnected = false;
+		SessionId = 0;
 	}
 
-	void TChannel::OnRead(const char* data, const size_t len)
+
+	bool TChannel::IsDisposed() const
 	{
-		__RecvBuffer->Write(data, len);
+		return (__WEpoll == nullptr);
 	}
+
+
+
 
 	void TChannel::Send(const char* data, const size_t len)
 	{
@@ -46,9 +80,30 @@ namespace Model
 		__Service->__NeedStartSend.insert(Id);
 	}
 
-	void TChannel::__StartParse()
+	void TChannel::OnConnectComplete()
 	{
 
+
+	}
+
+	void TChannel::OnDisconnectComplete()
+	{
+
+	}
+
+	void TChannel::OnReadComplete(const char* data, const size_t len)
+	{
+		__RecvBuffer->Write(data, len);
+		__StartParse();
+	}
+
+
+	void TChannel::__StartParse()
+	{
+		while (__Parser->Unpack())
+		{
+			__Service->OnRead(Id, __Parser->Data);
+		}
 	}
 
 	void TChannel::__StartSend()

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <queue>
 #include <string>
 #include <memory>
@@ -8,7 +8,7 @@
 namespace Model
 {
 	template<typename T>
-	class Loop:
+	class Loop :
 		public ISingleton<Loop<T>>
 	{
 		std::queue<T*>	m_loop;
@@ -18,13 +18,13 @@ namespace Model
 			T* data;
 			if (m_loop.empty())
 			{
-				data = new std::string();
+				data = new T();
 			}
 			else {
 				data = m_loop.front();
 				m_loop.pop();
 			}
-			return std::shared_ptr<T>(data, [this](T* self)->void{this->Recycle(self); });
+			return std::shared_ptr<T>(data, [this](T* self)->void {this->Recycle(self); });
 		}
 
 		void Recycle(T* data) {

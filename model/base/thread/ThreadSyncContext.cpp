@@ -1,17 +1,17 @@
-#include "ThreadSynchronizationContext.h"
+#include "ThreadSyncContext.h"
 #include "log/ServerLog.h"
 
 namespace Model 
 {
-	ThreadSynchronizationContext* ThreadSynchronizationContext::Instance = nullptr;
+	ThreadSyncContext* ThreadSyncContext::Instance = nullptr;
 
-	ThreadSynchronizationContext::ThreadSynchronizationContext()
+	ThreadSyncContext::ThreadSyncContext()
 	{
 		m_thread_id = std::this_thread::get_id();
 
 	}
 
-	void ThreadSynchronizationContext::Update()
+	void ThreadSyncContext::Update()
 	{
 		std::function<void()> task;
 		while (!m_tasks.empty())
@@ -36,7 +36,7 @@ namespace Model
 		}
 	}
 
-	void ThreadSynchronizationContext::Post(std::function<void()>&& task)
+	void ThreadSyncContext::Post(std::function<void()>&& task)
 	{
 		if (std::this_thread::get_id() == m_thread_id)
 		{
@@ -59,7 +59,7 @@ namespace Model
 		m_mutex.unlock();
 	}
 
-	void ThreadSynchronizationContext::PostNext(std::function<void()>&& task)
+	void ThreadSyncContext::PostNext(std::function<void()>&& task)
 	{
 		m_mutex.lock();
 		m_tasks.emplace(std::move(task));

@@ -7,7 +7,7 @@
 #include "kernel/ObjectFactory.h"
 #include "kernel/IdGenerator.h"
 #include "async/async.h"
-#include "thread/ThreadSynchronizationContext.h"
+#include "thread/ThreadSyncContext.h"
 #include "GlobalData.h"
 #include "Game.h"
 
@@ -44,7 +44,7 @@ namespace Model
 		GlobalGame::Instance = new GlobalGame();
 		IdGenerator::Instance = new IdGenerator();
 		async::Scheduler::Instance = new async::Scheduler();
-		ThreadSynchronizationContext::Instance = new ThreadSynchronizationContext();
+		ThreadSyncContext::Instance = new ThreadSyncContext();
 		GlobalGame::Instance->Init();
 
 		ParseArguments(argc, argv);
@@ -68,7 +68,7 @@ namespace Model
 		global.game = GlobalGame::Instance;
 		global.id_generator = IdGenerator::Instance;
 		global.async_scheduler = async::Scheduler::Instance;
-		global.thread_synchronization_context = ThreadSynchronizationContext::Instance;
+		global.thread_synchronization_context = ThreadSyncContext::Instance;
 		return global;
 	}
 
@@ -80,6 +80,6 @@ namespace Model
 		GlobalGame::Instance = global.game;
 		IdGenerator::Instance = global.id_generator;
 		async::Scheduler::Instance = global.async_scheduler;
-		ThreadSynchronizationContext::Instance = global.thread_synchronization_context;
+		ThreadSyncContext::Instance = global.thread_synchronization_context;
 	}
 }

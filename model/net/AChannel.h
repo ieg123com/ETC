@@ -4,18 +4,22 @@
 
 namespace Model
 {
+	enum class EChannelType
+	{
+		Connect,
+		Accept,
+	};
+
 	class AChannel
 	{
 	public:
+		EChannelType	ChannelType;
+
 		int64_t	Id;
 
 		IPEndPoint RemoteAddress;
 
-		AChannel(int64_t id):Id(id){}
-
-		virtual bool IsDisposed() {
-			return (Id == 0);
-		}
+		virtual bool IsDisposed() const = 0;
 
 		virtual void Dispose() {
 			Id = 0;

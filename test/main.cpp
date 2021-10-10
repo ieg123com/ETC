@@ -79,8 +79,8 @@ std::shared_ptr<Scene> g_scene;
 // cond_t g_cond;
 
 
-void EpollAccept(AWEpoll& self,int fd) {
-	LOG_INFO("Accept IP:{}",self.GetIPEndPointTry(fd).ToString());
+void EpollAccept(AWEpoll& self, int fd) {
+	LOG_INFO("Accept IP:{}", self.GetIPEndPointTry(fd).ToString());
 
 }
 
@@ -135,7 +135,7 @@ void test()
 {
 	AWEpoll epoll;
 	epoll.OnAccept = EpollAccept;
-	epoll.OnRead = EpollRead;
+	//epoll.OnRead = EpollRead;
 	epoll.OnWrite = EpollWrite;
 	epoll.OnDisconnect = EpollDisconnect;
 
@@ -146,14 +146,14 @@ void test()
 		co_sleep(1);
 		epoll.Update();
 	}
-	
+
 }
 
 void test2()
 {
 	AWEpoll epoll;
 	epoll.OnAccept = CEpollAccept;
-	epoll.OnRead = CEpollRead;
+	//epoll.OnRead = CEpollRead;
 	epoll.OnWrite = CEpollWrite;
 	epoll.OnDisconnect = CEpollDisconnect;
 
@@ -188,13 +188,13 @@ void channel_test()
 		LOG_INFO("ok 4");
 		std::string ctx;
 		//LOG_WARN("TimedPop {}", channel.TimedPop(ctx, std::chrono::milliseconds(1000)));
-		
+
 		//LOG_INFO("ok {}", g_channel.TryPush("123"));
 		//LOG_INFO("ok {}", g_channel.TryPush("123"));
 
 		//LOG_INFO("2");
 		//std::string str;
-		
+
 		//std::mutex lock;
 		//lock.lock();
 		//LOG_INFO("str {}", str.c_str());
@@ -225,14 +225,14 @@ void tick()
 int main(int argc, char* argv[])
 {
 	Time::TimeBeginPeriod(1);
-	Model::Init(argc,argv);
+	Model::Init(argc, argv);
 	g_scene = ObjectFactory::Create<Scene>();
 	Model::async::Scheduler::Instance->Start();
 
-// 	go network_server;
-// 	go network_client;
-//	go network;
-	//go echo_server;
+	// 	go network_server;
+	// 	go network_client;
+	//	go network;
+		//go echo_server;
 	go test;
 	go test2;
 	//go channel_test;
@@ -245,4 +245,3 @@ int main(int argc, char* argv[])
 	LOG_WARN("over");
 	return 0;
 }
-

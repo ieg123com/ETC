@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <queue>
 #include <mutex>
 #include <functional>
@@ -6,16 +6,17 @@
 
 namespace Model
 {
-	// Ïß³ÌÍ¬²½ÉÏÏÂÎÄ´¦Àí
-	// ¿ÉÒÔ½«ÆäËûÏß³ÌÖĞµÄÈÎÎñ£¬·Åµ½Ö¸¶¨Ïß³ÌÖĞÖ´ĞĞ¡£
-	class ThreadSynchronizationContext
+	// çº¿ç¨‹åŒæ­¥ä¸Šä¸‹æ–‡å¤„ç†
+	// å¯ä»¥å°†å…¶ä»–çº¿ç¨‹ä¸­çš„ä»»åŠ¡ï¼Œæ”¾åˆ°æŒ‡å®šçº¿ç¨‹ä¸­æ‰§è¡Œã€‚
+	class ThreadSyncContext
 	{
 		std::queue<std::function<void()>>	m_tasks;
-		std::thread::id	m_thread_id;	// Ö÷Ïß³Ìid
+		std::thread::id	m_thread_id;	// ä¸»çº¿ç¨‹id
 		std::mutex	m_mutex;
 	public:
-		static ThreadSynchronizationContext* Instance;
+		static ThreadSyncContext* Instance;
 
+		ThreadSyncContext();
 
 		void Update();
 		void Post(std::function<void()>&& task);
@@ -24,4 +25,3 @@ namespace Model
 
 
 }
-

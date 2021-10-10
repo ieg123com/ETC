@@ -46,7 +46,7 @@ int main(int argc,char* argv[])
 			while (true)
 			{
 				try {
-					ThreadSynchronizationContext::Instance->Update();
+					ThreadSyncContext::Instance->Update();
 					Model::Game::Event().Update();
 					Model::Game::Event().LateUpdate();
 					co_sleep(1);

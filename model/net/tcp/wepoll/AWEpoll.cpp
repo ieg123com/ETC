@@ -68,7 +68,7 @@ namespace Model
 		return found->second;
 	}
 
-	IPEndPoint AWEpoll::GetIPEndPointTry(const int fd)const
+	IPEndPoint AWEpoll::GetIPEndPointTry(const int32_t fd)const
 	{
 		auto found = m_socket_ctx.find(fd);
 		if (found == m_socket_ctx.end())
@@ -148,7 +148,7 @@ namespace Model
 		m_status = EpollStatus::STOPPED;
 	}
 
-	bool AWEpoll::Send(const int fd, const char* data, const size_t len)
+	bool AWEpoll::Send(const int32_t fd, const char* data, const size_t len)
 	{
 		size_t count = len;
 		const char* pos = data;
@@ -196,12 +196,12 @@ namespace Model
 		if (OnConnectComplete)OnConnectComplete(*this,m_socket);
 	}
 
-	void AWEpoll::OnEpollAcceptEvent(int fd)
+	void AWEpoll::OnEpollAcceptEvent(int32_t fd)
 	{
 		if (OnAccept)OnAccept(*this,fd);
 	}
 
-	int AWEpoll::OnEpollReadableEvent(int fd)
+	int AWEpoll::OnEpollReadableEvent(int32_t fd)
 	{
 		auto data = Loop<std::vector<char>>::Instance().Fetch();
 		data->resize(READ_BUFFER_SIZE);
@@ -219,13 +219,13 @@ namespace Model
 		return READ_OVER;
 	}
 
-	int AWEpoll::OnEpollWritableEvent(int fd)
+	int AWEpoll::OnEpollWritableEvent(int32_t fd)
 	{
 		if (OnWrite)OnWrite(*this, fd);
 		return WRITE_CONN_ALIVE;
 	}
 
-	void AWEpoll::OnEpollCloseEvent(int fd)
+	void AWEpoll::OnEpollCloseEvent(int32_t fd)
 	{
 		if (OnDisconnect)OnDisconnect(*this, fd);
 	}
@@ -267,7 +267,7 @@ namespace Model
 		}
 	}
 
-	void AWEpoll::__Disconnect(const int fd)
+	void AWEpoll::__Disconnect(const int32_t fd)
 	{
 		epoll_event disconnectEvent;
 		disconnectEvent.events = EPOLLIN | EPOLLOUT;
@@ -286,7 +286,7 @@ namespace Model
 		}
 	}
 
-	void AWEpoll::HandleAcceptEvent(const int epoll_fd, epoll_event& event)
+	void AWEpoll::HandleAcceptEvent(const int32_t epoll_fd, epoll_event& event)
 	{
 		int sockfd = event.data.fd;
 
@@ -372,7 +372,7 @@ namespace Model
 		}
 	}
 
-	void AWEpoll::HandleWritableEvent(const int epoll_fd, epoll_event& event)
+	void AWEpoll::HandleWritableEvent(const int32_t epoll_fd, epoll_event& event)
 	{
 		int fd = 0;
 		if (m_type == EpollType::Server)
