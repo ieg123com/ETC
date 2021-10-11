@@ -3,6 +3,7 @@ project(config_build)
 
 
 link_directories(../libs/xlnt)
+link_directories(../libs/mysql)
 
 #=================================基础加载================================
 set(ALL_OBJECT "")

@@ -43,6 +43,7 @@ namespace Model
 		__SendCache = Loop<std::vector<char>>::Instance().Fetch();
 		__Parser = new PacketParser(__RecvBuffer);
 		__WEpoll = std::make_shared<AWEpoll>();
+		__WEpoll->OnComplete = std::bind(&TChannel::OnComplete, this, std::placeholders::_1);
 		RemoteAddress = address;
 		__IsSending = false;
 		__IsConnected = false;
@@ -55,7 +56,21 @@ namespace Model
 		return (__WEpoll == nullptr);
 	}
 
+	void TChannel::Dispose()
+	{
+		if (ChannelType == EChannelType::Connect)
+		{
+			__WEpoll->Dispose();
+		}
+		__WEpoll.reset();
+	}
 
+
+	bool TChannel::Connect()
+	{
+		if (IsDisposed())return false;
+		return __WEpoll->Connect(RemoteAddress);
+	}
 
 
 	void TChannel::Send(const char* data, const size_t len)
@@ -80,21 +95,28 @@ namespace Model
 		__Service->__NeedStartSend.insert(Id);
 	}
 
-	void TChannel::OnConnectComplete()
+	void TChannel::OnComplete(AWEpoll& epoll)
 	{
+		epoll.OnConnect = std::bind(&TChannel::OnConnectComplete, this, std::placeholders::_1, std::placeholders::_2);
+		epoll.OnRead = std::bind(&TChannel::OnReadComplete, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+		epoll.OnDisconnect = std::bind(&TChannel::OnDisconnectComplete, this, std::placeholders::_1, std::placeholders::_2);
+	}
 
+	void TChannel::OnConnectComplete(AWEpoll& epoll, const int32_t fd)
+	{
+		__IsConnected = true;
 
 	}
 
-	void TChannel::OnDisconnectComplete()
+	void TChannel::OnReadComplete(AWEpoll& epoll, const int32_t fd, const std::shared_ptr<std::vector<char>>& data)
 	{
-
-	}
-
-	void TChannel::OnReadComplete(const char* data, const size_t len)
-	{
-		__RecvBuffer->Write(data, len);
+		__RecvBuffer->Write(data->data(), data->size());
 		__StartParse();
+	}
+
+	void TChannel::OnDisconnectComplete(AWEpoll& epoll, const int32_t fd)
+	{
+		__IsConnected = false;
 	}
 
 

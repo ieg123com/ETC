@@ -17,11 +17,11 @@ namespace Model
 			return std::static_pointer_cast<T>(shared_from_this());
 		}
 
-		static int64_t CreateChannelId(const int32_t fd) {
+		inline static int64_t CreateChannelId(const int32_t fd) {
 			return (INT64_MIN | (int64_t)fd);
 		}
 
-		static int32_t ChannelIdToSessionId(const int64_t channel_id) {
+		inline static int32_t ChannelIdToSessionId(const int64_t channel_id) {
 			return (INT64_MIN ^ (int64_t)channel_id);
 		}
 

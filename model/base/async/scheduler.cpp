@@ -23,7 +23,7 @@ namespace Model
 				std::unique_lock<std::mutex> lock(m_mutex);
 				if (m_stop)return;
 				if (!m_taskid.emplace(task->__Id, task).second)
-					std::exception(std::format("Push the same task repeatedly,id = %lld\n", task->__Id).c_str());
+					throw std::exception(std::format("Push the same task repeatedly,id = %lld\n", task->__Id).c_str());
 				m_tasks.push(task);
 				task->__State = TaskState::Pending;
 			}

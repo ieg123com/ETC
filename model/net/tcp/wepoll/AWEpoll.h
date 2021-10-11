@@ -80,7 +80,7 @@ namespace Model
 		// 回调
 		// 监听、连接准备完成
 		std::function<void(AWEpoll&)>				OnComplete;
-		std::function<void(AWEpoll&, int32_t)>			OnConnectComplete;
+		std::function<void(AWEpoll&, int32_t)>			OnConnect;
 		std::function<void(AWEpoll&, int32_t)>			OnAccept;
 		std::function<void(AWEpoll&, int32_t,const std::shared_ptr<std::vector<char>>&)>			OnRead;
 		std::function<void(AWEpoll&, int32_t)>			OnWrite;

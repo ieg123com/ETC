@@ -43,7 +43,10 @@ namespace Model
 
 		virtual bool IsDisposed() const override;
 
+		virtual void Dispose() override;
 
+
+		bool Connect();
 		
 
 
@@ -54,14 +57,13 @@ namespace Model
 		void Send(const char* data, const size_t len);
 
 
+
+		void OnComplete(AWEpoll& epoll);
+		void OnConnectComplete(AWEpoll& epoll, const int32_t fd);
+		void OnReadComplete(AWEpoll& epoll, const int32_t fd, const std::shared_ptr<std::vector<char>>& data);
+		void OnDisconnectComplete(AWEpoll& epoll, const int32_t fd);
+
 	private:
-
-		void OnConnectComplete();
-
-		void OnDisconnectComplete();
-
-		void OnReadComplete(const char* data, const size_t len);
-
 		void __StartParse();
 		void __StartSend();
 

@@ -25,15 +25,17 @@ namespace Model
 
 		TService(ThreadSyncContext* thread_sync);
 
+		bool Listen(const IPEndPoint& address);
+			
 
-
-
-
+		std::shared_ptr<TChannel> GetChannel(const int64_t channel_id);
+		bool CreateChannel(const int64_t channel_id, const IPEndPoint& address);
+		
+		void Send(const int64_t channel_id, const char* data, const size_t len);
 	private:
 		void OnComplete(AWEpoll& epoll);
 		void OnAcceptComplete(AWEpoll& epoll, const int32_t fd);
 		void OnReadComplete(AWEpoll& epoll, const int32_t fd, const std::shared_ptr<std::vector<char>>& data);
-		void OnWriteComplete(AWEpoll& epoll, const int32_t fd);
 		void OnDisconnectComplete(AWEpoll& epoll, const int32_t fd);
 
 

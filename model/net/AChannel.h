@@ -21,8 +21,6 @@ namespace Model
 
 		virtual bool IsDisposed() const = 0;
 
-		virtual void Dispose() {
-			Id = 0;
-		}
+		virtual void Dispose() = 0;
 	};
 }
