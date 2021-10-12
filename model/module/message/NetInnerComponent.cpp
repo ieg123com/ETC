@@ -1,5 +1,7 @@
-#include "NetInnerComponent.h"
-#include "net/TChannel.h"
+﻿#include "NetInnerComponent.h"
+#include "IMessageDispatcher.h"
+#include "net/Session.h"
+#include "net/AService.h"
 
 
 
@@ -7,42 +9,50 @@ namespace Model
 {
 	NetInnerComponent* NetInnerComponent::Instance = nullptr;
 
-	std::shared_ptr<Session> NetInnerComponent::Get(const IPEndPoint& address)
+	void NetInnerComponent::Destroy()
 	{
-		auto found = __m_address_sessions.find(address);
-		if (found != __m_address_sessions.end())
+		__Service->Dispose();
+
+	}
+
+	std::shared_ptr<Session> NetInnerComponent::GetOrCreate(const int64_t channel_id, const IPEndPoint& address)
+	{
+		if (auto session = GetChild<Session>(channel_id))
 		{
-			return found->second;
+			return session;
 		}
-		if (auto session = Connect(address))
+		if (__Service->Create(channel_id, address))
 		{
-			__m_address_sessions.insert(std::make_pair(address, session));
+			// 连接成功
+			// 创建新Session,用来记录连接
+			auto session = ObjectFactory::CreateWithHostAndId<Session, std::shared_ptr<AService>>(Self(), channel_id, __Service);
+			session->RemoteAddress = address;
 			return session;
 		}
 		return nullptr;
 	}
 
-	void NetInnerComponent::Destroy()
+	void NetInnerComponent::__OnAccept(const int64_t channel_id, const IPEndPoint& address)
 	{
-		NetworkComponent::Destroy();
+		auto session = ObjectFactory::CreateWithHostAndId<Session, std::shared_ptr<AService>>(Self(), channel_id, __Service);
+		session->RemoteAddress = address;
+
 	}
 
-	void NetInnerComponent::OnConnectComplete(const std::shared_ptr<Session>& session)
+	void NetInnerComponent::__OnRead(const int64_t channel_id, std::shared_ptr<std::vector<char>> data)
 	{
-		session->__channel = ObjectFactory::CreateWithHost<TChannel>(session);
-		NetworkComponent::OnConnectComplete(session);
+		if (auto session = GetChild<Session>(channel_id))
+		{
+			__MessageDispatcher->Dispatch(session, data->data(), data->size());
+		}
 	}
 
-	void NetInnerComponent::OnAccept(const std::shared_ptr<Session>& session)
+	void NetInnerComponent::__OnDisconnect(const int64_t channel_id)
 	{
-		session->__channel = ObjectFactory::CreateWithHost<TChannel>(session);
-		NetworkComponent::OnAccept(session);
-	}
-
-	void NetInnerComponent::OnDisconnect(const std::shared_ptr<Session>& session)
-	{
-		NetworkComponent::OnDisconnect(session);
-		__m_address_sessions.erase(session->Address);
+		if (auto session = GetChild<Session>(channel_id))
+		{
+			session->Dispose();
+		}
 	}
 
 

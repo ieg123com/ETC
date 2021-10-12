@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "net/AChannel.h"
 #include "net/NetDefines.h"
 #include "other/container/CircularBuffer.h"
@@ -17,18 +17,18 @@ namespace Model
 
 		std::shared_ptr<AWEpoll> __WEpoll;
 
-		// ½ÓÊÕÊı¾İ»º³åÇø
-		// ÊÕµ½Êı¾İÊ±£¬¶¼»áÌí¼Ó½ø__RecvBuffer¡£½«ÔÚÏÂÒ»Ö¡½øĞĞ´¦Àí
-		// ´Ë±äÁ¿»áÓë__Parser°ó¶¨
+		// æ¥æ”¶æ•°æ®ç¼“å†²åŒº
+		// æ”¶åˆ°æ•°æ®æ—¶ï¼Œéƒ½ä¼šæ·»åŠ è¿›__RecvBufferã€‚å°†åœ¨ä¸‹ä¸€å¸§è¿›è¡Œå¤„ç†
+		// æ­¤å˜é‡ä¼šä¸__Parserç»‘å®š
 		std::shared_ptr<CircularBuffer>	__RecvBuffer;
-		// ·¢ËÍÊı¾İ»º³åÇø
-		// µ÷ÓÃSend£¬»á½«ĞèÒª·¢ËÍµÄÊı¾İÌí¼Óµ½__SendBuffer¡£»áÔÚLateUpdateÖĞÍ³Ò»·¢ËÍ
+		// å‘é€æ•°æ®ç¼“å†²åŒº
+		// è°ƒç”¨Sendï¼Œä¼šå°†éœ€è¦å‘é€çš„æ•°æ®æ·»åŠ åˆ°__SendBufferã€‚ä¼šåœ¨LateUpdateä¸­ç»Ÿä¸€å‘é€
 		std::shared_ptr<CircularBuffer>	__SendBuffer;
 
-		// ·¢ËÍµÄ»º´æ
-		// ÓÃÓÚÖĞ×ª__SendBufferÖĞµÄ·¢ËÍÊı¾İ
+		// å‘é€çš„ç¼“å­˜
+		// ç”¨äºä¸­è½¬__SendBufferä¸­çš„å‘é€æ•°æ®
 		std::shared_ptr<std::vector<char>>	__SendCache;
-		
+
 		PacketParser* __Parser;
 
 		bool	__IsSending;
@@ -47,7 +47,7 @@ namespace Model
 
 
 		bool Connect();
-		
+
 
 
 
@@ -63,7 +63,8 @@ namespace Model
 		void OnReadComplete(AWEpoll& epoll, const int32_t fd, const std::shared_ptr<std::vector<char>>& data);
 		void OnDisconnectComplete(AWEpoll& epoll, const int32_t fd);
 
-	private:
+
+		void __StartRecv();
 		void __StartParse();
 		void __StartSend();
 

@@ -1,4 +1,4 @@
-#include "TChannel.h"
+ï»¿#include "TChannel.h"
 #include "log/log.h"
 #include "module/memory/Loop.h"
 #include "wepoll/AWEpoll.h"
@@ -7,27 +7,17 @@
 
 namespace Model
 {
-// 	TChannel::TChannel():
-// 		AChannel(0)
-// 	{
-// 		__Service = nullptr;
-// 		__WEpoll = nullptr;
-// 		SessionId = 0;
-// 		__RecvBuffer = Loop<CircularBuffer>::Instance().Fetch();
-// 		__SendBuffer = Loop<CircularBuffer>::Instance().Fetch();
-// 		__SendCache = Loop<std::vector<char>>::Instance().Fetch();
-// 		__Parser = new PacketParser(__RecvBuffer);
-// 	}
+
 	TChannel::TChannel(const int64_t id, const std::shared_ptr<TService>& service, const std::shared_ptr<AWEpoll>& epoll)
 	{
 		ChannelType = EChannelType::Accept;
 		Id = id;
 		__Service = service;
 		__WEpoll = epoll;
- 		__RecvBuffer = Loop<CircularBuffer>::Instance().Fetch();
- 		__SendBuffer = Loop<CircularBuffer>::Instance().Fetch();
+		__RecvBuffer = Loop<CircularBuffer>::Instance().Fetch();
+		__SendBuffer = Loop<CircularBuffer>::Instance().Fetch();
 		__SendCache = Loop<std::vector<char>>::Instance().Fetch();
- 		__Parser = new PacketParser(__RecvBuffer);
+		__Parser = new PacketParser(__RecvBuffer);
 		__IsSending = false;
 		__IsConnected = true;
 		SessionId = 0;
@@ -62,6 +52,10 @@ namespace Model
 		{
 			__WEpoll->Dispose();
 		}
+		else if (ChannelType == EChannelType::Accept) {
+			__WEpoll->Disconnect(SessionId);
+		}
+
 		__WEpoll.reset();
 	}
 
@@ -77,13 +71,13 @@ namespace Model
 	{
 		if (IsDisposed())
 		{
-			LOG_WARN("»á»°ÒÑÊÍ·Å£¬ÎÞ·¨·¢ËÍÏûÏ¢!(ip = {},channel id = {})",
+			LOG_WARN("ä¼šè¯å·²é‡Šæ”¾ï¼Œæ— æ³•å‘é€æ¶ˆæ¯!(ip = {},channel id = {})",
 				RemoteAddress.ToString(), Id);
 			return;
 		}
 		if (len > UINT16_MAX)
 		{
-			LOG_ERROR("µ¥´Î·¢ËÍµÄÊý¾Ý´óÐ¡³¬³öÏÞÖÆ!({} > {},ip = {},channel id = {})",
+			LOG_ERROR("å•æ¬¡å‘é€çš„æ•°æ®å¤§å°è¶…å‡ºé™åˆ¶!({} > {},ip = {},channel id = {})",
 				len, UINT16_MAX,
 				RemoteAddress.ToString(),
 				Id);
@@ -92,7 +86,10 @@ namespace Model
 		uint16_t pack_size = len;
 		__SendBuffer->Write(&pack_size, sizeof(pack_size));
 		__SendBuffer->Write(data, len);
-		__Service->__NeedStartSend.insert(Id);
+		if (!__IsSending)
+		{
+			__Service->__NeedStartSend.emplace(Get<TChannel>());
+		}
 	}
 
 	void TChannel::OnComplete(AWEpoll& epoll)
@@ -117,8 +114,14 @@ namespace Model
 	void TChannel::OnDisconnectComplete(AWEpoll& epoll, const int32_t fd)
 	{
 		__IsConnected = false;
+		__Service->OnDisconnect(Id);
+		__Service->Remove(Id);
 	}
 
+	void TChannel::__StartRecv()
+	{
+		__WEpoll->Update();
+	}
 
 	void TChannel::__StartParse()
 	{
@@ -130,7 +133,7 @@ namespace Model
 
 	void TChannel::__StartSend()
 	{
-		if (__SendBuffer->Length() == 0)return;	// Ã»ÓÐÐèÒª·¢ËÍµÄÊý¾ÝÁË
+		if (__SendBuffer->Length() == 0)return;	// æ²¡æœ‰éœ€è¦å‘é€çš„æ•°æ®äº†
 		if (__SendCache->empty())
 		{
 			__SendCache->resize(__SendBuffer->Length());
@@ -145,8 +148,8 @@ namespace Model
 			__SendCache->clear();
 		}
 		else {
-			// ·¢ËÍÊ§°Ü
-			LOG_ERROR("·¢ËÍÊý¾ÝÊ§°Ü error:{}", __WEpoll->LastError);
+			// å‘é€å¤±è´¥
+			LOG_ERROR("å‘é€æ•°æ®å¤±è´¥ error:{}", __WEpoll->LastError);
 		}
 	}
 }

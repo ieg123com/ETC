@@ -1,7 +1,6 @@
-#pragma once
-#include "kernel/IdGenerator.h"
-#include "net/NetworkComponent.h"
-
+ï»¿#pragma once
+#include "etc/etc.h"
+#include "net/Session.h"
 
 struct ProcessActorId
 {
@@ -17,32 +16,30 @@ struct ProcessActorId
 
 
 
+class IMessageDispatcher;
 
 namespace Model
 {
-	// ÄÚÍø×é¼þ
+	class AService;
+	// å†…ç½‘ç»„ä»¶
 	class NetInnerComponent :
-		public NetworkComponent
+		public GEntity
 	{
 	public:
 		static NetInnerComponent* Instance;
 
-		std::unordered_map<IPEndPoint, std::shared_ptr<Session>> __m_address_sessions;
+		IMessageDispatcher* __MessageDispatcher;
 
-
-
-		std::shared_ptr<Session> Get(const IPEndPoint& address);
+		std::shared_ptr<AService>	__Service;
 
 
 		void Destroy();
 
 
-	protected:
-		virtual void OnConnectComplete(const std::shared_ptr<Session>& session) override;
+		std::shared_ptr<Session> GetOrCreate(const int64_t channel_id, const IPEndPoint& address);
 
-		virtual void OnAccept(const std::shared_ptr<Session>& session) override;
-
-		virtual void OnDisconnect(const std::shared_ptr<Session>& session) override;
-
+		void __OnAccept(const int64_t channel_id, const IPEndPoint& address);
+		void __OnRead(const int64_t channel_id, std::shared_ptr<std::vector<char>> data);
+		void __OnDisconnect(const int64_t channel_id);
 	};
 }

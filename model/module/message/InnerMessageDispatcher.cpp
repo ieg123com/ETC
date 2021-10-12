@@ -14,7 +14,7 @@ void InnerMessageDispatcher::Dispatch(const std::shared_ptr<Session>& session, c
 	const char* pos = data;
 	size_t size = len;
 	if (len < (sizeof(opcode) + sizeof(actor_id)))
-		throw std::exception(std::format("InnerMessageDispatcher 数据解析错误，因为没法确定消息头格式不合法！(session->Address = '%s')", session->Address.ToString().c_str()).c_str());
+		throw std::exception(std::format("InnerMessageDispatcher 数据解析错误，因为没法确定消息头格式不合法！(session->Address = '%s')", session->RemoteAddress.ToString().c_str()).c_str());
 
 	memcpy(&opcode, pos, sizeof(opcode));
 	pos += sizeof(opcode);

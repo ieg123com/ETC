@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "net/AService.h"
 #include <unordered_set>
 #include <unordered_map>
@@ -14,24 +14,30 @@ namespace Model
 		public AService
 	{
 		std::unordered_map<int64_t, std::shared_ptr<TChannel>>	__IdChannels;
-		// ĞèÒª¸üĞÂµÄ Channel
-		std::unordered_map<int64_t, std::shared_ptr<TChannel>>	__UpdateChannels;
+		// éœ€è¦æ›´æ–°çš„ Channel
+		std::unordered_set<std::shared_ptr<TChannel>>	__UpdateChannels;
 	public:
-		
-		// ĞèÒª·¢ËÍµÄchannel id
-		std::unordered_set<int64_t>		__NeedStartSend;
+
+		// éœ€è¦å‘é€çš„channel id
+		std::unordered_set<std::shared_ptr<TChannel>>	__NeedStartSend;
 
 		std::shared_ptr<AWEpoll> __WEpoll;
 
 		TService(ThreadSyncContext* thread_sync);
 
 		bool Listen(const IPEndPoint& address);
-			
+
 
 		std::shared_ptr<TChannel> GetChannel(const int64_t channel_id);
-		bool CreateChannel(const int64_t channel_id, const IPEndPoint& address);
-		
+
+		virtual void Update() override;
+		virtual void LateUpdate() override;
+		virtual bool Create(const int64_t channel_id, const IPEndPoint& address) override;
+		virtual void Remove(const int64_t channel_id) override;
+
 		void Send(const int64_t channel_id, const char* data, const size_t len);
+
+		virtual void Dispose() override;
 	private:
 		void OnComplete(AWEpoll& epoll);
 		void OnAcceptComplete(AWEpoll& epoll, const int32_t fd);

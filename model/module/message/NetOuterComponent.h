@@ -1,22 +1,31 @@
-#pragma once
-#include "net/NetworkComponent.h"
+ï»¿#pragma once
+#include "etc/etc.h"
+#include "net/IPEndPoint.h"
+#include "net/Session.h"
 
+class IMessageDispatcher;
 
 namespace Model
 {
-	// ÍâÍø×é¼þ
+	class AService;
+
+	// å¤–ç½‘ç»„ä»¶
 	class NetOuterComponent :
-		public NetworkComponent
+		public GEntity
 	{
 	public:
-		static NetOuterComponent* Instance;
+
+		IMessageDispatcher* __MessageDispatcher;
+
+		std::shared_ptr<AService>	__Service;
 
 		void Destroy();
 
 
-	protected:
-		virtual void OnConnectComplete(const std::shared_ptr<Session>& session) override;
+		void __OnAccept(const int64_t channel_id, const IPEndPoint& address);
+		void __OnRead(const int64_t channel_id, std::shared_ptr<std::vector<char>> data);
+		void __OnDisconnect(const int64_t channel_id);
 
-		virtual void OnAccept(const std::shared_ptr<Session>& session) override;
+
 	};
 }

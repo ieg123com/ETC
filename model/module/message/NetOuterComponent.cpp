@@ -1,29 +1,40 @@
-#include "NetOuterComponent.h"
-#include "net/TChannel.h"
+﻿#include "NetOuterComponent.h"
+#include "IMessageDispatcher.h"
+#include "net/AService.h"
+#include "net/Session.h"
 
 
 
 namespace Model
 {
-	NetOuterComponent* NetOuterComponent::Instance = nullptr;
-
-
 	void NetOuterComponent::Destroy()
 	{
-		NetworkComponent::Destroy();
+		__Service->Dispose();
+
 	}
 
-
-	void NetOuterComponent::OnConnectComplete(const std::shared_ptr<Session>& session)
+	void NetOuterComponent::__OnAccept(const int64_t channel_id, const IPEndPoint& address)
 	{
-		session->__channel = ObjectFactory::CreateWithHost<TChannel>(session);
-		NetworkComponent::OnConnectComplete(session);
+		auto session = ObjectFactory::CreateWithHostAndId<Session, std::shared_ptr<AService>>(Self(), channel_id, __Service);
+		session->RemoteAddress = address;
+
 	}
 
-	void NetOuterComponent::OnAccept(const std::shared_ptr<Session>& session)
+	void NetOuterComponent::__OnRead(const int64_t channel_id, std::shared_ptr<std::vector<char>> data)
 	{
-		session->__channel = ObjectFactory::CreateWithHost<TChannel>(session);
-		NetworkComponent::OnAccept(session);
+		if (auto session = GetChild<Session>(channel_id))
+		{
+			__MessageDispatcher->Dispatch(session, data->data(), data->size());
+		}
 	}
+
+	void NetOuterComponent::__OnDisconnect(const int64_t channel_id)
+	{
+		if (auto session = GetChild<Session>(channel_id))
+		{
+			session->Dispose();
+		}
+	}
+
 
 }

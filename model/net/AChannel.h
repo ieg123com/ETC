@@ -1,5 +1,6 @@
-#pragma once
+﻿#pragma once
 #include "net/IPEndPoint.h"
+#include <memory>
 
 
 namespace Model
@@ -10,9 +11,17 @@ namespace Model
 		Accept,
 	};
 
-	class AChannel
+	class AChannel :
+		public std::enable_shared_from_this<AService>
 	{
 	public:
+
+		template<typename T>
+		std::shared_ptr<T> Get() {
+			return std::static_pointer_cast<T>(shared_from_this());
+		}
+
+
 		EChannelType	ChannelType;
 
 		int64_t	Id;

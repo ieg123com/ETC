@@ -119,7 +119,7 @@ void ActorMessageSenderComponent::__Send(const int64_t actor_id, const std::shar
 
 	int32_t process = ProcessActorId(actor_id).Process;
 	auto process_config = StartProcessConfigComponent::Instance->Get(process);
-	if (auto session = NetInnerComponent::Instance->Get(process_config->InnerAddress))
+	if (auto session = NetInnerComponent::Instance->GetOrCreate(process_config->InstanceId,process_config->InnerAddress))
 	{
 		session->Send(actor_id, message.get());
 	}

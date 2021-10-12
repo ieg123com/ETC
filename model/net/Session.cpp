@@ -1,19 +1,18 @@
 ﻿#include "Session.h"
-#include "Service.h"
+#include "net/AService.h"
 #include "module/message/MessageDefines.h"
 #include "module/message/OpcodeTypeComponent.h"
 #include "etc/etc.h"
-#include "IChannel.h"
 #include "other/string/bytes.h"
 
 
 namespace Model
 {
 
-	class SessionAwakeSystem :public AwakeSystem<Session,const std::shared_ptr<Service>&>
+	class SessionAwakeSystem :public AwakeSystem<Session, const std::shared_ptr<AService>&>
 	{
 	public:
-		virtual void Awake(const std::shared_ptr<Session>& self, const std::shared_ptr<Service>& service)override
+		virtual void Awake(const std::shared_ptr<Session>& self, const std::shared_ptr<AService>& service)override
 		{
 			self->Awake(service);
 		}
@@ -31,52 +30,22 @@ namespace Model
 	REF(SessionDestroySystem, ObjectSystem);
 
 
-	void Session::Awake(const std::shared_ptr<Service>& service)
+	void Session::Awake(const std::shared_ptr<AService>& service)
 	{
 		RpcId = 0;
-		__service = service;
+		__Service = service;
 	}
 
 	void Session::Destroy()
 	{
 		// Service
-		if (__service)
-		{
-			if (__service->GetNetworkType() == NetworkType::Server)
-			{
-				// 服务类型为服务器
-				__service->Close(SessionId);
-				__service.reset();
-			}
-			else if (__service->GetNetworkType() == NetworkType::Client)
-			{
-				// 服务类型为客户端
-				__service->Dispose();
-				__service.reset();
-			}
-		}
-		// IChannel
-		if (__channel)
-		{
-			__channel->Dispose();
-			__channel.reset();
-		}
+		__Service.reset();
 	}
 
-	void Session::OnRead(const char* data, const size_t len)
-	{
-		if (__channel)
-		{
-			__channel->OnRead(data, len);
-		}
-	}
 
 	void Session::Send(const char* data, const size_t len)
 	{
-		if (__channel)
-		{
-			__channel->Send(data, len);
-		}
+		__Service->Send(Id, data, len);
 	}
 
 	void Session::Send(const uint16_t opcode, const char* data, const size_t len)

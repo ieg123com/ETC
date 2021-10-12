@@ -193,7 +193,7 @@ namespace Model
 
 	void AWEpoll::OnEpollConnectComplete()
 	{
-		if (OnConnectComplete)OnConnectComplete(*this,m_socket);
+		if (OnConnect)OnConnect(*this,m_socket);
 	}
 
 	void AWEpoll::OnEpollAcceptEvent(int32_t fd)

@@ -10,12 +10,14 @@ namespace Model
 	TService::TService(ThreadSyncContext* thread_sync)
 	{
 		__ThreadSyncContext = thread_sync;
-		__WEpoll = std::make_shared<AWEpoll>();
-		__WEpoll->OnComplete = std::bind(&TService::OnComplete, this, std::placeholders::_1);
+		__WEpoll = nullptr;
 	}
 
 	bool TService::Listen(const IPEndPoint& address)
 	{
+		if (__WEpoll) return false;
+		__WEpoll = std::make_shared<AWEpoll>();
+		__WEpoll->OnComplete = std::bind(&TService::OnComplete, this, std::placeholders::_1);
 		return __WEpoll->Listen(address);
 	}
 
@@ -29,7 +31,28 @@ namespace Model
 		return found->second;
 	}
 
-	bool TService::CreateChannel(const int64_t channel_id, const IPEndPoint& address)
+	void TService::Update()
+	{
+		if (__WEpoll)
+		{
+			__WEpoll->Update();
+		}
+		for (auto& channel : __UpdateChannels)
+		{
+			channel->__StartRecv();
+		}
+	}
+
+	void TService::LateUpdate()
+	{
+		for (auto& channel : __NeedStartSend)
+		{
+			channel->__StartSend();
+		}
+		__NeedStartSend.clear();
+	}
+
+	bool TService::Create(const int64_t channel_id, const IPEndPoint& address)
 	{
 		auto found = __IdChannels.find(channel_id);
 		if (found != __IdChannels.end())
@@ -46,6 +69,18 @@ namespace Model
 		return true;
 	}
 
+	void TService::Remove(const int64_t channel_id)
+	{
+		auto found = __IdChannels.find(channel_id);
+		if (found == __IdChannels.end())
+		{
+			return;
+		}
+		auto channel = found->second;
+		RemoveChannel(channel);
+		channel->Dispose();
+	}
+
 	void TService::Send(const int64_t channel_id, const char* data, const size_t len)
 	{
 		auto found = __IdChannels.find(channel_id);
@@ -55,6 +90,21 @@ namespace Model
 		}
 		found->second->Send(data, len);
 	}
+
+	void TService::Dispose()
+	{
+		auto all_channel = __IdChannels;
+		for (auto& channel : all_channel)
+		{
+			channel.second->Dispose();
+		}
+		__IdChannels.clear();
+		__UpdateChannels.clear();
+		__NeedStartSend.clear();
+		__WEpoll->Dispose();
+		__WEpoll.reset();
+	}
+
 
 	void TService::OnComplete(AWEpoll& epoll)
 	{
@@ -77,7 +127,7 @@ namespace Model
 		}
 		catch (std::exception& e)
 		{
-			LOG_ERROR("接收连接发生错误,fd = {},error = {}",fd,e.what());
+			LOG_ERROR("接收连接发生错误,fd = {},error = {}", fd, e.what());
 		}
 		catch (...)
 		{
@@ -95,7 +145,7 @@ namespace Model
 				// 没找到对应的fd
 				return;
 			}
-			channel->second->OnReadComplete(epoll,fd,data);
+			channel->second->OnReadComplete(epoll, fd, data);
 		}
 		catch (std::exception& e)
 		{
@@ -117,7 +167,7 @@ namespace Model
 				// 没找到对应的fd
 				return;
 			}
-			found->second->OnDisconnectComplete(epoll,fd);
+			found->second->OnDisconnectComplete(epoll, fd);
 			auto channel = found->second;
 			RemoveChannel(found->second);
 			channel->Dispose();
@@ -143,7 +193,7 @@ namespace Model
 		{
 			auto self = Get<TService>();
 			__ThreadSyncContext->PostNext([=] {
-				self->__UpdateChannels.emplace(channel->Id, channel);
+				self->__UpdateChannels.emplace(channel);
 				});
 		}
 
@@ -155,7 +205,7 @@ namespace Model
 		{
 			auto self = Get<TService>();
 			__ThreadSyncContext->PostNext([=] {
-				self->__UpdateChannels.erase(channel->Id);
+				self->__UpdateChannels.erase(channel);
 				});
 		}
 		__IdChannels.erase(channel->Id);

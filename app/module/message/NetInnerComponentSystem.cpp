@@ -1,6 +1,9 @@
-#pragma once
+ï»¿#pragma once
 #include "module/message/NetInnerComponent.h"
 #include "model/module/message/InnerMessageDispatcher.h"
+#include "model/net/tcp/TService.h"
+#include "model/net/NetThreadComponent.h"
+#include "model/base/thread/ThreadSyncContext.h"
 
 using namespace Model;
 
@@ -12,10 +15,18 @@ namespace Hotfix
 		virtual void Awake(const std::shared_ptr<NetInnerComponent>& self, const IPEndPoint& addr) override
 		{
 			self->__MessageDispatcher = new InnerMessageDispatcher();
-			if (!self->Listen(addr))
+			auto service = std::make_shared<TService>(ThreadSyncContext::Instance);
+			self->__Service = service;
+			// ç»‘å®šå›žè°ƒå‡½æ•°
+			service->AcceptCallback = std::bind(&NetInnerComponent::__OnAccept, self.get(), std::placeholders::_1, std::placeholders::_2);
+			service->ReadCallback = std::bind(&NetInnerComponent::__OnRead, self.get(), std::placeholders::_1, std::placeholders::_2);
+			service->DisconnectCallback = std::bind(&NetInnerComponent::__OnDisconnect, self.get(), std::placeholders::_1);
+
+			if (!service->Listen(addr))
 			{
-				throw std::exception(std::format("¼àÌýÄÚÍø¶Ë¿Ú %s Ê§°Ü", addr.ToString().c_str()).c_str());
+				throw std::exception(std::format("ç›‘å¬å†…ç½‘ç«¯å£ %s å¤±è´¥", addr.ToString().c_str()).c_str());
 			}
+			NetThreadComponent::Instance->Add(service);
 		}
 	};
 	REF(NetInnerComponentAwakeSystem, ObjectSystem);
@@ -35,11 +46,10 @@ namespace Hotfix
 	public:
 		virtual void Destroy(const std::shared_ptr<NetInnerComponent>& self)override
 		{
+			NetThreadComponent::Instance->Remove(self->__Service);
 			self->Dispose();
 			delete (InnerMessageDispatcher*)self->__MessageDispatcher;
 		}
 	};
 	REF(NetInnerComonentDestroySystem, ObjectSystem);
 }
-
-

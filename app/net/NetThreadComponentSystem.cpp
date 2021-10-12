@@ -23,6 +23,19 @@ namespace Hotfix
 	};
 	REF(NetThreadComponentLoadSystem, ObjectSystem);
 
+	class NetThreadComponentUpdateSystem :public UpdateSystem<NetThreadComponent>
+	{
+	public:
+		virtual void Update(const std::shared_ptr<NetThreadComponent>& self)override
+		{
+			for (auto& service : self->Services)
+			{
+				service->Update();
+			}
+		}
+	};
+	REF(NetThreadComponentUpdateSystem, ObjectSystem);
+
 	class NetThreadComponentLateUpdateSystem : public LateUpdateSystem<NetThreadComponent>
 	{
 	public:
@@ -30,7 +43,7 @@ namespace Hotfix
 		{
 			for (auto& service : self->Services)
 			{
-				service->Update();
+				service->LateUpdate();
 			}
 		}
 	};

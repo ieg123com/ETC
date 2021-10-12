@@ -12,8 +12,8 @@ namespace Model
 		if (AcceptCallback)AcceptCallback(channel_id, address);
 	}
 
-	void AService::OnError(const int64_t channel_id, const int err)
+	void AService::OnDisconnect(const int64_t channel_id)
 	{
-		if (ErrorCallback)ErrorCallback(channel_id, err);
+		if (DisconnectCallback)DisconnectCallback(channel_id);
 	}
 }

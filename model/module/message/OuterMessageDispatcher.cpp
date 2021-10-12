@@ -13,7 +13,7 @@ void OuterMessageDispatcher::Dispatch(const std::shared_ptr<Session>& session, c
 	const char* pos = data;
 	size_t size = len;
 	if (len < sizeof(opcode))
-		throw std::exception(std::format("OuterMessageDispatcher 数据解析错误，因为没法确定消息id！(session->Address() = '%s')", session->Address.ToString().c_str()).c_str());
+		throw std::exception(std::format("OuterMessageDispatcher 数据解析错误，因为没法确定消息id！(session->Address() = '%s')", session->RemoteAddress.ToString().c_str()).c_str());
 
 	memcpy(&opcode, data, sizeof(opcode));
 	pos += sizeof(opcode);

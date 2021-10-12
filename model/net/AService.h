@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "net/IPEndPoint.h"
 #include <functional>
 #include <memory>
@@ -7,7 +7,7 @@ namespace Model
 {
 	class ThreadSyncContext;
 
-	class AService:
+	class AService :
 		public std::enable_shared_from_this<AService>
 	{
 	public:
@@ -30,18 +30,20 @@ namespace Model
 
 		virtual bool IsDisposed() = 0;
 		virtual void Update() = 0;
+		virtual void LateUpdate() = 0;
+		virtual bool Create(const int64_t channel_id, const IPEndPoint& address) = 0;
 		virtual void Remove(const int64_t channel_id) = 0;
 		virtual void Send(const int64_t channel_id, const char* data, const size_t len) = 0;
 		virtual void Dispose() = 0;
 
-		
+
 		std::function<void(const int64_t, const IPEndPoint&)>	AcceptCallback;
 		std::function<void(const int64_t, std::shared_ptr<std::vector<char>>)>	ReadCallback;
-		std::function<void(const int64_t, const int)>	ErrorCallback;
+		std::function<void(const int64_t)>	DisconnectCallback;
 
 		void OnRead(const int64_t channel_id, const std::shared_ptr<std::vector<char>>& data);
 		void OnAccept(const int64_t channel_id, const IPEndPoint& address);
-		void OnError(const int64_t channel_id, const int err);
+		void OnDisconnect(const int64_t channel_id);
 
 	protected:
 		ThreadSyncContext* __ThreadSyncContext;
