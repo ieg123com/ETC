@@ -25,7 +25,7 @@ namespace Model
 		{
 			// 连接成功
 			// 创建新Session,用来记录连接
-			auto session = ObjectFactory::CreateWithHostAndId<Session, std::shared_ptr<AService>>(Self(), channel_id, __Service);
+			auto session = ObjectFactory::CreateWithHostAndId<Session, const std::shared_ptr<AService>&>(Self(), channel_id, __Service);
 			session->RemoteAddress = address;
 			return session;
 		}
@@ -34,7 +34,7 @@ namespace Model
 
 	void NetInnerComponent::__OnAccept(const int64_t channel_id, const IPEndPoint& address)
 	{
-		auto session = ObjectFactory::CreateWithHostAndId<Session, std::shared_ptr<AService>>(Self(), channel_id, __Service);
+		auto session = ObjectFactory::CreateWithHostAndId<Session,const std::shared_ptr<AService>&>(Self(), channel_id, __Service);
 		session->RemoteAddress = address;
 
 	}

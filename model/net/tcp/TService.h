@@ -37,6 +37,7 @@ namespace Model
 
 		void Send(const int64_t channel_id, const char* data, const size_t len);
 
+		virtual bool IsDisposed() override;
 		virtual void Dispose() override;
 	private:
 		void OnComplete(AWEpoll& epoll);

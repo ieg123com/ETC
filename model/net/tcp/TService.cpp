@@ -91,6 +91,11 @@ namespace Model
 		found->second->Send(data, len);
 	}
 
+	bool TService::IsDisposed()
+	{
+		return (__ThreadSyncContext == nullptr);
+	}
+
 	void TService::Dispose()
 	{
 		auto all_channel = __IdChannels;
@@ -103,6 +108,7 @@ namespace Model
 		__NeedStartSend.clear();
 		__WEpoll->Dispose();
 		__WEpoll.reset();
+		__ThreadSyncContext = nullptr;
 	}
 
 

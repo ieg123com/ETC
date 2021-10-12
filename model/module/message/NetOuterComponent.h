@@ -11,7 +11,7 @@ namespace Model
 
 	// 外网组件
 	class NetOuterComponent :
-		public GEntity
+		public Component
 	{
 	public:
 

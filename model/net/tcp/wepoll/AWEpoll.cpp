@@ -215,6 +215,7 @@ namespace Model
 			AWEPOLL_ERROR(errno, strerror(errno));
 			return READ_CLOSE;
 		}
+		data->resize(read_size);
 		if (OnRead)OnRead(*this, fd, data);
 		return READ_OVER;
 	}
@@ -546,9 +547,6 @@ namespace Model
 
 	void AWEpoll::HandleEpollEvent(epoll_event& event)
 	{
-		printf("[%s]event.events %d\n",
-			((m_type == EpollType::Server)?"Server":"Connect"),
-			event.events);
 		if (m_type == EpollType::Server && event.data.fd == m_socket)		// 仅仅建立连接的时候进行判断，因为只有此时fd才和server 的监听fd 相等
 		{
 			// accept connection

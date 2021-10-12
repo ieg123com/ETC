@@ -12,7 +12,7 @@ namespace Model
 	};
 
 	class AChannel :
-		public std::enable_shared_from_this<AService>
+		public std::enable_shared_from_this<AChannel>
 	{
 	public:
 

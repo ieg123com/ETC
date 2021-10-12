@@ -23,7 +23,7 @@ namespace Model
 	class AService;
 	// 内网组件
 	class NetInnerComponent :
-		public GEntity
+		public Component
 	{
 	public:
 		static NetInnerComponent* Instance;

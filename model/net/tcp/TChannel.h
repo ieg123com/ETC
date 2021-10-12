@@ -39,7 +39,7 @@ namespace Model
 
 		TChannel(const int64_t id, const std::shared_ptr<TService>& service, const std::shared_ptr<AWEpoll>& epoll);
 		TChannel(const int64_t id, const std::shared_ptr<TService>& service, const IPEndPoint& address);
-
+		~TChannel();
 
 		virtual bool IsDisposed() const override;
 

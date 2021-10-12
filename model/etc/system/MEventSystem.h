@@ -89,12 +89,17 @@ namespace Model
 			TypeIndex index = self->GetObjectType().GetTypeIndex();
 			if (m_awake_system.size() <= index)return;
 			auto& all_obj = m_awake_system[index];
+			bool have_action = false;
 			for (auto& item : all_obj)
 			{
 				if (item->GetCallbackType() == to_typeindex<void(Arg...)>())
 				{
+					have_action = true;
 					((IAwake<Arg...>*)(item.get()))->Run(self, arg...);
 				}
+			}
+			if(!all_obj.empty() && !have_action){
+				LOG_WARN("{} not found Awake '{}'", self->GetObjectType().GetName(), typeof(IAwake<Arg...>).full_name());
 			}
 		}
 

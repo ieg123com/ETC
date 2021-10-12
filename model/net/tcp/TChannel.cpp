@@ -5,6 +5,8 @@
 #include "PacketParser.h"
 #include "TService.h"
 
+#include "other/string/bytes.h"
+
 namespace Model
 {
 
@@ -38,6 +40,11 @@ namespace Model
 		__IsSending = false;
 		__IsConnected = false;
 		SessionId = 0;
+	}
+
+	TChannel::~TChannel()
+	{
+		delete __Parser;
 	}
 
 
@@ -102,7 +109,7 @@ namespace Model
 	void TChannel::OnConnectComplete(AWEpoll& epoll, const int32_t fd)
 	{
 		__IsConnected = true;
-
+		SessionId = fd;
 	}
 
 	void TChannel::OnReadComplete(AWEpoll& epoll, const int32_t fd, const std::shared_ptr<std::vector<char>>& data)
@@ -139,8 +146,16 @@ namespace Model
 			__SendCache->resize(__SendBuffer->Length());
 			__SendBuffer->Read((char*)__SendCache->data(), __SendCache->size());
 		}
+		bool result = false;
+		if (ChannelType == EChannelType::Accept)
+		{
+			result = __WEpoll->Send(SessionId, __SendCache->data(), __SendCache->size());
+		}
+		else if(ChannelType == EChannelType::Connect) {
+			result = __WEpoll->Send(__SendCache->data(), __SendCache->size());
+		}
 
-		if (__WEpoll->Send(SessionId, __SendCache->data(), __SendCache->size()))
+		if (result)
 		{
 			uint16_t len, opcode = 0;
 			memcpy(&len, __SendCache->data(), sizeof(len));
@@ -149,7 +164,7 @@ namespace Model
 		}
 		else {
 			// 发送失败
-			LOG_ERROR("发送数据失败 error:{}", __WEpoll->LastError);
+			LOG_ERROR("发送数据失败 error:{}:{}", __WEpoll->LastError,__WEpoll->LastErrorMsg);
 		}
 	}
 }

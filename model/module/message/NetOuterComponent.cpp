@@ -15,7 +15,7 @@ namespace Model
 
 	void NetOuterComponent::__OnAccept(const int64_t channel_id, const IPEndPoint& address)
 	{
-		auto session = ObjectFactory::CreateWithHostAndId<Session, std::shared_ptr<AService>>(Self(), channel_id, __Service);
+		auto session = ObjectFactory::CreateWithHostAndId<Session,const std::shared_ptr<AService>&>(Self(), channel_id, __Service);
 		session->RemoteAddress = address;
 
 	}
