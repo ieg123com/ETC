@@ -24,6 +24,8 @@ ECS 参考了 [ET](https://github.com/egametang/ET) 设计思路。(将计划使
 Win [下载Cmake](https://cmake.org/download/)
 
     安装 cmake 3.0+ 生成项目
+	
+cmake后，将 conf目录 libs\mysql\libmysql.dll 复制到build\app\目录下
 
 Linux(未来会支持)
 
