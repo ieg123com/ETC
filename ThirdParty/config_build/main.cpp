@@ -9,7 +9,8 @@
 #include <queue>
 #include "xlnt/xlnt.hpp"
 #include "./json/ejson.h"
-#include "model/other/string/str.h"
+#include "./string/str.h"
+#include "./md5/md5.h"
 
 // keyÀàÐÍ
 enum class EKeyType : int32_t 
@@ -103,10 +104,33 @@ int32_t CreateDirectory(const char* directoryPath)
 	return 0;
 }
 
-void WriteToFile(const std::string& path, const std::string& data)
+void WriteToFile(const std::string& path, const std::string& data,const bool compare = false)
 {
 	CreateDirectory(path.c_str());
-	FILE* pf = fopen(path.c_str(), "wb");
+	FILE* pf = nullptr;
+	if (compare)
+	{
+		pf = fopen(path.c_str(), "rb");
+		if (pf)
+		{
+			struct stat file_stat;
+			fstat(fileno(pf), &file_stat);
+			if (file_stat.st_size > 0)
+			{
+				std::string file_data;
+				file_data.resize(file_stat.st_size);
+				fread(&file_data[0], file_stat.st_size, 1, pf);
+				if (GS::StringToMD5(file_data) == GS::StringToMD5(data))
+				{
+					printf("[info] The script files are the same.\n");
+					fclose(pf);
+					return;
+				}
+			}
+			fclose(pf);
+		}
+	}
+	pf = fopen(path.c_str(), "wb");
 	if (pf == nullptr)
 	{
 		throw std::exception(("failed to open the file to be saved!(" + data + ")").c_str());
@@ -422,7 +446,7 @@ void XlsxToCpp(xlnt::workbook& wb, const std::string& cpp_path,const std::string
 	{
 		throw std::exception("Not be exist key 'Id'");
 	}
-	WriteToFile(cpp_path, code);
+	WriteToFile(cpp_path, code,true);
 }
 
 void GenInitCpp(const std::vector<stGenState>& all_state, const std::string& code_path)
@@ -465,7 +489,7 @@ void GenInitCpp(const std::vector<stGenState>& all_state, const std::string& cod
 	code.append("};\r\n");
 
 
-	WriteToFile(code_path +"Config_Init.h", code);
+	WriteToFile(code_path +"Config_Init.h", code,true);
 
 
 }
@@ -473,9 +497,13 @@ void GenInitCpp(const std::vector<stGenState>& all_state, const std::string& cod
 void GetWorkBook(xlnt::workbook& wb,const std::string& path)
 {
 	try {
+		if (!IsFolderExist(path.c_str()))
+		{
+			throw std::exception("file not exist!");
+		}
 		wb.load(path);
 	}
-	catch (xlnt::exception e)
+	catch (xlnt::exception& e)
 	{
 		throw std::exception(e.what());
 	}
@@ -631,31 +659,35 @@ int main(int argc, char* argv[])
 		}
 	}
 
-
-	switch (_CastType)
-	{
-	case ECastType::XLSX_TO_JSON:
-	{
-		xlnt::workbook wb;
-		GetWorkBook(wb, _FilePath);
-		XlsxToJson(wb, _FileSave);
-		if (gen_cpp)XlsxToCpp(wb, cpp_path, class_name);
-	}
+	try {
+		switch (_CastType)
+		{
+		case ECastType::XLSX_TO_JSON:
+		{
+			xlnt::workbook wb;
+			GetWorkBook(wb, _FilePath);
+			XlsxToJson(wb, _FileSave);
+			if (gen_cpp)XlsxToCpp(wb, cpp_path, class_name);
+		}
 		break;
-	case ECastType::XLSX_AUTO_GEN_CPP:
-		try {
+		case ECastType::XLSX_AUTO_GEN_CPP:
+
 
 			AutoGenCode(_FilePath, _FileSave, cpp_path);
-		}
-		catch (std::exception & e)
-		{
-			printf("[error]:%s\r\n", e.what());
-		}
-		break;
-	default:
-		std::cout << "Unknown command" << std::endl;
-		break;
-	}
 
+			break;
+		default:
+			std::cout << "Unknown command" << std::endl;
+			break;
+		}
+	}
+	catch (std::exception& e)
+	{
+		printf("[error] %s\n", e.what());
+	}
+	catch (...)
+	{
+		printf("[error] Unknown\n");
+	}
 	return 0;
 }
