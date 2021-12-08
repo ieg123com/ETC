@@ -14,7 +14,7 @@ ECS 参考了 [ET](https://github.com/egametang/ET) 设计思路。(将计划使
 
 
 ## 继承关系
-![继承关系图](book/class_model_1_1_object__inherit__graph.png)
+![继承关系图](Book/class_model_1_1_object__inherit__graph.png)
 
 ## 缺少的功能
 

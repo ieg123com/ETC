@@ -1,3 +1,4 @@
+set_property(GLOBAL PROPERTY USE_FOLDERS On)
 cmake_minimum_required(VERSION 2.8.9)
 project(EtcServer)
 set(CMAKE_VERBOSE_MAKEFILE OFF)
@@ -5,22 +6,29 @@ set(CMAKE_VERBOSE_MAKEFILE OFF)
 aux_source_directory(. DIRSRCS)
 
 # Add header file include directories
-include_directories(./ ./include ./hotfix ./libgo ./redis ./module ./protobuf ./config_build)
-include_directories(./wepoll/include ./wepoll/src ./wepoll/src/regular ./wepoll/src/combined ./model)
+include_directories(./)
+include_directories(./Libs ./Libs/include ./Libs/libgo ./Libs/redis ./Libs/protobuf )
+include_directories(./Libs/wepoll/include ./Libs/wepoll/src ./Libs/wepoll/src/regular ./Libs/wepoll/src/combined )
+include_directories(./Server ./Server/app ./Server/hotfix ./Server/model)
+include_directories(./ThirdParty ./ThirdParty/config_build)
+
+
 
 # Add block directories
-add_subdirectory(libgo)
-add_subdirectory(model)
-add_subdirectory(hotfix)
-add_subdirectory(app)
-add_subdirectory(protobuf)
-add_subdirectory(redis)
-add_subdirectory(config_build)
-add_subdirectory(test)
+add_subdirectory(Libs/libgo)
+add_subdirectory(Libs/protobuf)
+add_subdirectory(Libs/redis)
+
+add_subdirectory(Server/model)
+add_subdirectory(Server/hotfix)
+add_subdirectory(Server/app)
+
+add_subdirectory(ThirdParty/config_build)
+add_subdirectory(Test)
 
 
 if(MSVC)
-	add_subdirectory(wepoll)
+	add_subdirectory(Libs/wepoll)
 
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")

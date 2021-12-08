@@ -2,12 +2,12 @@ cmake_minimum_required(VERSION 2.8.9)
 project(test)
 
 
-include_directories(./ ../libgo)
-link_directories(../libs/mysql)
+#include_directories(./ ../libgo)
+link_directories(../Libs/libs/mysql)
 
-include_directories(../model/etc ../model/etc/common ../model/etc/interface ../model/etc/kernel ../model/etc/system)
-include_directories(../model/base)
-include_directories(../model/config)
+include_directories(../Server/model/etc ../Server/model/etc/common ../Server/model/etc/interface ../Server/model/etc/kernel ../Server/model/etc/system)
+include_directories(../Server/model/base)
+include_directories(../Server/model/config)
 
 
 #=================================基础服务加载================================
