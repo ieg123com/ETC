@@ -10,7 +10,7 @@ include_directories(./)
 include_directories(./Libs ./Libs/include ./Libs/libgo ./Libs/redis ./Libs/protobuf )
 include_directories(./Libs/wepoll/include ./Libs/wepoll/src ./Libs/wepoll/src/regular ./Libs/wepoll/src/combined )
 include_directories(./Server ./Server/app ./Server/hotfix ./Server/model)
-include_directories(./ThirdParty ./ThirdParty/config_build)
+#include_directories(./ThirdParty ./ThirdParty/config_build)
 
 
 

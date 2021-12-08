@@ -2,8 +2,7 @@ cmake_minimum_required(VERSION 2.8.9)
 project(test)
 
 
-#include_directories(./ ../libgo)
-link_directories(../Libs/libs/mysql)
+link_directories(../Libs/libs/mysql ../Libs/libs/libgo)
 
 include_directories(../Server/model/etc ../Server/model/etc/common ../Server/model/etc/interface ../Server/model/etc/kernel ../Server/model/etc/system)
 include_directories(../Server/model/base)
